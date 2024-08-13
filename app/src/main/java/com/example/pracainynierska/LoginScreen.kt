@@ -148,8 +148,6 @@ fun LoginScreen(){
                     imeAction = ImeAction.Done
                 )
             )
-
-            //Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }
