@@ -10,6 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.pracainynierska.ui.theme.PracaInżynierskaTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,9 +27,27 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginScreen()
+                    val navController = rememberNavController()
+                    SetupNavGraph(navController = navController)
                 }
             }
         }
     }
 }
+
+
+@Composable
+fun SetupNavGraph(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = "LoginScreen"
+    ) {
+        composable("LoginScreen") {
+            LoginScreen(navController = navController)
+        }
+        composable("RegisterScreen") {
+            RegisterScreen(navController = navController)
+        }
+    }
+}
+

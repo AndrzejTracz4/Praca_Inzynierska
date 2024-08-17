@@ -35,9 +35,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.navigation.NavController
 
 @Composable
-fun LoginScreen(){
+fun LoginScreen(navController: NavController){
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
@@ -160,7 +161,9 @@ fun LoginScreen(){
             Spacer(modifier = Modifier.height(8.dp))
             
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                      navController.navigate("RegisterScreen")
+                },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .height(OutlinedTextFieldDefaults.MinHeight)
