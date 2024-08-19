@@ -2,6 +2,7 @@ package com.example.pracainynierska
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,24 +30,43 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.navigation.NavController
 
+fun validateUsername(username: String): String?{
+    return if (username.isBlank()) "Username cannot be empty!" else null
+}
+
+fun validatePassword(password: String): String?{
+    return if (password.isBlank()) "Password cannot be empty" else null
+}
+
 @Composable
 fun LoginScreen(navController: NavController){
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
+    val usernameError = remember { mutableStateOf<String?>(null) }
+    val passwordError = remember { mutableStateOf<String?>(null) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+            .pointerInput(Unit){
+                detectTapGestures(onTap = {focusManager.clearFocus()})
+            }
     ) {
         
         Column (
@@ -85,8 +105,11 @@ fun LoginScreen(navController: NavController){
             
             OutlinedTextField(
                 value = username.value,
-                onValueChange = {username.value = it},
+                onValueChange = {
+                    username.value = it
+                    usernameError.value = validateUsername(it) },
                 label = { Text(text = "Username")},
+                isError = usernameError.value != null,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Black,
@@ -95,6 +118,11 @@ fun LoginScreen(navController: NavController){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
+                    if (usernameError.value != null){
+                        Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
+                    }
+                    else
+                    {
                     Image(
                         painter = painterResource(id = R.drawable.username),
                         contentDescription = "Username",
@@ -102,6 +130,7 @@ fun LoginScreen(navController: NavController){
                             .size(24.dp)
                             .alpha(0.5f)
                         )
+                    }
                 },
                 keyboardActions = KeyboardActions(
                     onNext = {
@@ -113,12 +142,20 @@ fun LoginScreen(navController: NavController){
                 )
             )
             
+            if (usernameError.value != null){
+                Text(text = usernameError.value!!, color = Color.Red, fontSize = 12.sp)
+            }
+            
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
                 value = password.value,
-                onValueChange = {password.value = it},
+                onValueChange = {
+                    password.value = it
+                    passwordError.value = validatePassword(it)
+                                },
                 label = { Text(text = "Password")},
+                isError = passwordError.value != null,
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -128,13 +165,17 @@ fun LoginScreen(navController: NavController){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
-                    Image(
-                        painter = painterResource(id = R.drawable.password),
-                        contentDescription = "Password",
-                        modifier = Modifier
-                            .size(24.dp)
-                            .alpha(0.5f)
-                        )
+                    if(passwordError.value != null){
+                        Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
+                    } else {
+                        Image(
+                            painter = painterResource(id = R.drawable.password),
+                            contentDescription = "Password",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .alpha(0.5f)
+                            )
+                        }
                 },
                 keyboardActions = KeyboardActions(
                     onDone = {
@@ -146,10 +187,25 @@ fun LoginScreen(navController: NavController){
                 )
             )
 
+            if (passwordError.value != null){
+                Text(text = passwordError.value!!, color = Color.Red, fontSize = 12.sp)
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    val usernameValidation = validateUsername(username.value)
+                    val passwordValidation = validatePassword(password.value)
+
+                    if (usernameValidation == null && passwordValidation == null){
+                        //todo
+                    } else {
+                        usernameError.value = usernameValidation
+                        passwordError.value = passwordValidation
+                    }
+
+                },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .height(OutlinedTextFieldDefaults.MinHeight)
@@ -172,7 +228,7 @@ fun LoginScreen(navController: NavController){
                 Text(text = "Register")
             }
 
-            Spacer(modifier = Modifier.height(120.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Text(
                 text = "Forgot password",
