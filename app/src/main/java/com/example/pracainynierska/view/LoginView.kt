@@ -1,4 +1,5 @@
-package com.example.pracainynierska
+package com.example.pracainynierska.view
+import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,8 +19,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -35,30 +34,25 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-
-fun validateUsername(username: String): String?{
-    return if (username.isBlank()) "Username cannot be empty!" else null
-}
-
-fun validatePassword(password: String): String?{
-    return if (password.isBlank()) "Password cannot be empty" else null
-}
+import com.example.pracainynierska.R
+import com.example.pracainynierska.repository.UserRepository
+import com.example.pracainynierska.viewmodel.LoginViewModel
 
 @Composable
-fun LoginScreen(navController: NavController){
-    val username = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
+fun LoginView(navController: NavController, userRepository: UserRepository){
+
     val focusManager = LocalFocusManager.current
-    val usernameError = remember { mutableStateOf<String?>(null) }
-    val passwordError = remember { mutableStateOf<String?>(null) }
+
+    val loginViewModel: LoginViewModel = viewModel(
+        factory = LoginViewModelFactory(userRepository)
+    )
 
     Box(
         modifier = Modifier
@@ -80,7 +74,7 @@ fun LoginScreen(navController: NavController){
             Spacer(modifier = Modifier.height(40.dp))
             
             Image(
-                painter = painterResource(id = R.drawable.questa_logo), 
+                painter = painterResource(id = R.drawable.questa_logo),
                 contentDescription = "Logo Questa",
                 modifier = Modifier.size(450.dp, 150.dp)
                 )
@@ -104,12 +98,11 @@ fun LoginScreen(navController: NavController){
             Spacer(modifier = Modifier.height(30.dp))
             
             OutlinedTextField(
-                value = username.value,
+                value = loginViewModel.username,
                 onValueChange = {
-                    username.value = it
-                    usernameError.value = validateUsername(it) },
+                    loginViewModel.onUsernameChange(it)},
                 label = { Text(text = "Username")},
-                isError = usernameError.value != null,
+                isError = loginViewModel.errorMessage != null,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Black,
@@ -118,7 +111,7 @@ fun LoginScreen(navController: NavController){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
-                    if (usernameError.value != null){
+                    if (loginViewModel.errorMessage != null){
                         Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
                     }
                     else
@@ -142,20 +135,17 @@ fun LoginScreen(navController: NavController){
                 )
             )
             
-            if (usernameError.value != null){
-                Text(text = usernameError.value!!, color = Color.Red, fontSize = 12.sp)
+            if (loginViewModel.errorMessage != null){
+                Text(text = loginViewModel.errorMessage!!, color = Color.Red, fontSize = 12.sp)
             }
             
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
-                value = password.value,
-                onValueChange = {
-                    password.value = it
-                    passwordError.value = validatePassword(it)
-                                },
+                value = loginViewModel.password,
+                onValueChange = {loginViewModel.onPasswordChange(it)},
                 label = { Text(text = "Password")},
-                isError = passwordError.value != null,
+                isError = loginViewModel.errorMessage != null,
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -165,7 +155,7 @@ fun LoginScreen(navController: NavController){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
-                    if(passwordError.value != null){
+                    if(loginViewModel.errorMessage != null){
                         Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
                     } else {
                         Image(
@@ -187,24 +177,15 @@ fun LoginScreen(navController: NavController){
                 )
             )
 
-            if (passwordError.value != null){
-                Text(text = passwordError.value!!, color = Color.Red, fontSize = 12.sp)
+            if (loginViewModel.errorMessage != null){
+                Text(text = loginViewModel.errorMessage!!, color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
-                    val usernameValidation = validateUsername(username.value)
-                    val passwordValidation = validatePassword(password.value)
-
-                    if (usernameValidation == null && passwordValidation == null){
-                        //todo
-                    } else {
-                        usernameError.value = usernameValidation
-                        passwordError.value = passwordValidation
-                    }
-
+                    loginViewModel.login(navController)
                 },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
@@ -218,7 +199,7 @@ fun LoginScreen(navController: NavController){
             
             Button(
                 onClick = {
-                      navController.navigate("RegisterScreen")
+                      navController.navigate("RegisterView")
                 },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
@@ -235,7 +216,7 @@ fun LoginScreen(navController: NavController){
                 color = Color.Black,
                 fontSize = 14.sp,
                 modifier = Modifier.clickable {
-                    //TODO
+                    navController.navigate("ForgotPasswordView")
                 },
                 textDecoration = TextDecoration.Underline
                 )

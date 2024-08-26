@@ -6,20 +6,28 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.pracainynierska.database.UserDatabase
+import com.example.pracainynierska.repository.UserRepository
 import com.example.pracainynierska.ui.theme.PracaInżynierskaTheme
+import com.example.pracainynierska.view.ForgotPasswordView
+import com.example.pracainynierska.view.HomepageView
+import com.example.pracainynierska.view.LoginView
+import com.example.pracainynierska.view.RegisterView
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var userRepository: UserRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val userDao = UserDatabase.getDatabase(applicationContext).dao
+        userRepository = UserRepository(userDao)
+
         setContent {
             PracaInżynierskaTheme {
                 // A surface container using the 'background' color from the theme
@@ -28,7 +36,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    SetupNavGraph(navController = navController)
+                    SetupNavGraph(navController = navController, userRepository = userRepository)
                 }
             }
         }
@@ -37,16 +45,22 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun SetupNavGraph(navController: NavHostController) {
+fun SetupNavGraph(navController: NavHostController, userRepository: UserRepository) {
     NavHost(
         navController = navController,
-        startDestination = "LoginScreen"
+        startDestination = "LoginView"
     ) {
-        composable("LoginScreen") {
-            LoginScreen(navController = navController)
+        composable("LoginView") {
+            LoginView(navController = navController, userRepository = userRepository)
         }
-        composable("RegisterScreen") {
-            RegisterScreen(navController = navController)
+        composable("RegisterView") {
+            RegisterView(navController = navController)
+        }
+        composable("HomepageView") {
+            HomepageView(navController = navController)
+        }
+        composable("ForgotPasswordView") {
+            ForgotPasswordView(navController = navController)
         }
     }
 }
