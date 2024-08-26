@@ -102,7 +102,7 @@ fun LoginView(navController: NavController, userRepository: UserRepository){
                 onValueChange = {
                     loginViewModel.onUsernameChange(it)},
                 label = { Text(text = "Username")},
-                isError = loginViewModel.errorMessage != null,
+                isError = loginViewModel.usernameErrorMessage != null,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Black,
@@ -111,7 +111,7 @@ fun LoginView(navController: NavController, userRepository: UserRepository){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
-                    if (loginViewModel.errorMessage != null){
+                    if (loginViewModel.usernameErrorMessage != null){
                         Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
                     }
                     else
@@ -135,8 +135,8 @@ fun LoginView(navController: NavController, userRepository: UserRepository){
                 )
             )
             
-            if (loginViewModel.errorMessage != null){
-                Text(text = loginViewModel.errorMessage!!, color = Color.Red, fontSize = 12.sp)
+            if (loginViewModel.usernameErrorMessage != null){
+                Text(text = loginViewModel.usernameErrorMessage!!, color = Color.Red, fontSize = 12.sp)
             }
             
             Spacer(modifier = Modifier.height(8.dp))
@@ -145,7 +145,7 @@ fun LoginView(navController: NavController, userRepository: UserRepository){
                 value = loginViewModel.password,
                 onValueChange = {loginViewModel.onPasswordChange(it)},
                 label = { Text(text = "Password")},
-                isError = loginViewModel.errorMessage != null,
+                isError = loginViewModel.passwordErrorMessage != null,
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -155,7 +155,7 @@ fun LoginView(navController: NavController, userRepository: UserRepository){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
-                    if(loginViewModel.errorMessage != null){
+                    if(loginViewModel.passwordErrorMessage != null){
                         Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
                     } else {
                         Image(
@@ -177,8 +177,8 @@ fun LoginView(navController: NavController, userRepository: UserRepository){
                 )
             )
 
-            if (loginViewModel.errorMessage != null){
-                Text(text = loginViewModel.errorMessage!!, color = Color.Red, fontSize = 12.sp)
+            if (loginViewModel.passwordErrorMessage != null){
+                Text(text = loginViewModel.passwordErrorMessage!!, color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))

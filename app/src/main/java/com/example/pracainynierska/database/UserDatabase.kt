@@ -7,7 +7,8 @@ import androidx.room.Room
 import com.example.pracainynierska.model.User
 @Database(
     entities = [User::class],
-    version = 1
+    version = 6,
+    exportSchema = false
 )
 abstract class UserDatabase: RoomDatabase() {
 
@@ -23,7 +24,9 @@ abstract class UserDatabase: RoomDatabase() {
                     context.applicationContext,
                     UserDatabase::class.java,
                     "user_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }

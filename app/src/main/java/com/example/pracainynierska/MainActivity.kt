@@ -54,7 +54,7 @@ fun SetupNavGraph(navController: NavHostController, userRepository: UserReposito
             LoginView(navController = navController, userRepository = userRepository)
         }
         composable("RegisterView") {
-            RegisterView(navController = navController)
+            RegisterView(navController = navController, userRepository = userRepository)
         }
         composable("HomepageView") {
             HomepageView(navController = navController)
