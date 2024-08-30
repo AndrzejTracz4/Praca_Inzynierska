@@ -48,7 +48,6 @@ import com.example.pracainynierska.R
 import com.example.pracainynierska.repository.UserRepository
 import com.example.pracainynierska.viewmodel.LoginViewModel
 import com.example.pracainynierska.viewmodel.LoginViewModelFactory
-import kotlin.math.log
 
 @Composable
 fun ForgotPasswordView(navController: NavController, userRepository: UserRepository) {
