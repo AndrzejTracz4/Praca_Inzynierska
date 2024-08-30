@@ -216,6 +216,7 @@ fun LoginView(navController: NavController, userRepository: UserRepository){
                 color = Color.Black,
                 fontSize = 14.sp,
                 modifier = Modifier.clickable {
+
                     navController.navigate("ForgotPasswordView")
                 },
                 textDecoration = TextDecoration.Underline
