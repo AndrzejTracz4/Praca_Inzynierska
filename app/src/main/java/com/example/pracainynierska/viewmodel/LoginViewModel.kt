@@ -1,6 +1,5 @@
 package com.example.pracainynierska.viewmodel
 
-import android.content.Context
 import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,6 +11,7 @@ import com.example.pracainynierska.model.User
 import com.example.pracainynierska.repository.UserRepository
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
+import java.util.UUID
 
 class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 
@@ -158,4 +158,44 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
 
+    fun forgotPassword(email: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val existingUser = userRepository.getUserByEmail(email)
+
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    onError("Invalid email address format")
+                    return@launch
+                }
+
+                if (existingUser == null) {
+                    onError("Email not found in the database.")
+                    return@launch
+                }
+
+                val newPassword = generateRandomPassword()
+
+                val hashedForgotPassword = hashPassword(newPassword)
+
+                existingUser.password = hashedForgotPassword
+                userRepository.upsertUser(existingUser)
+
+                sendEmailWithNewPassword(email, newPassword)
+
+                onSuccess()
+            } catch (e: Exception) {
+                onError("Wystąpił błąd: ${e.message}")
+            }
+        }
+    }
+
+    // Funkcja generująca nowe hasło
+    private fun generateRandomPassword(): String {
+        return UUID.randomUUID().toString().take(12) // Generuje losowe hasło o długości 12 znaków
+    }
+
+    // Funkcja wysyłająca email z nowym hasłem
+    private fun sendEmailWithNewPassword(email: String, newPassword: String) {
+        // Implementacja wysyłania emaila z nowym hasłem
+    }
 }

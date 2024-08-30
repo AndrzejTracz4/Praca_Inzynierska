@@ -60,7 +60,7 @@ fun SetupNavGraph(navController: NavHostController, userRepository: UserReposito
             HomepageView(navController = navController)
         }
         composable("ForgotPasswordView") {
-            ForgotPasswordView(navController = navController)
+            ForgotPasswordView(navController = navController, userRepository = userRepository)
         }
     }
 }
