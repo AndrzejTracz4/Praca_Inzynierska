@@ -2,7 +2,6 @@ package com.example.pracainynierska.view
 import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,8 +30,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,7 +44,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
@@ -294,7 +294,25 @@ fun RegisterView(navController: NavController, userRepository: UserRepository){
                     .height(OutlinedTextFieldDefaults.MinHeight)
                     .width(OutlinedTextFieldDefaults.MinWidth)
             ) {
-                Text(text = "Register")
+                Text(text = "Register", fontSize = 16.sp)
+            }
+
+            if (showDialog) {
+                AlertDialog(
+                    onDismissRequest = { showDialog = false },
+                    title = { Text(text = "Registration Status") },
+                    text = { Text(text = registrationMessage) },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            showDialog = false
+                            if (registrationMessage == "Registration successful") {
+                                navController.navigate("HomepageView")
+                            }
+                        }) {
+                            Text("OK")
+                        }
+                    }
+                )
             }
         }
     }

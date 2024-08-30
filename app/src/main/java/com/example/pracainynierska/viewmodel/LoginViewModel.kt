@@ -1,6 +1,7 @@
 package com.example.pracainynierska.viewmodel
 
 import android.content.Context
+import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,6 +11,7 @@ import androidx.navigation.NavController
 import com.example.pracainynierska.model.User
 import com.example.pracainynierska.repository.UserRepository
 import kotlinx.coroutines.launch
+import java.security.MessageDigest
 
 class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 
@@ -115,9 +117,33 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
             return
         }
 
-        val user = User(username = username, email = email, password = password)
+        // Sprawdzenie, czy email jest prawidłowy
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            onError("Invalid email format")
+            return
+        }
+
         viewModelScope.launch {
             try {
+                // Sprawdzenie, czy użytkownik z podanym username lub email już istnieje
+                val existingUserByUsername = userRepository.getUserByUsername(username)
+                val existingUserByEmail = userRepository.getUserByEmail(email)
+
+                if (existingUserByUsername != null) {
+                    onError("Username is already taken")
+                    return@launch
+                }
+
+                if (existingUserByEmail != null) {
+                    onError("Email is already registered")
+                    return@launch
+                }
+
+                // Hashowanie hasła przed zapisaniem do bazy
+                val hashedPassword = hashPassword(password)
+
+                // Tworzenie nowego użytkownika i zapisanie go do bazy
+                val user = User(username = username, email = email, password = hashedPassword)
                 userRepository.upsertUser(user)
                 onSuccess()
             } catch (e: Exception) {
@@ -125,4 +151,11 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
             }
         }
     }
+    // Funkcja do hashowania hasła
+    private fun hashPassword(password: String): String {
+        val digest = MessageDigest.getInstance("SHA-256")
+        val hashBytes = digest.digest(password.toByteArray())
+        return hashBytes.joinToString("") { "%02x".format(it) }
+    }
+
 }
