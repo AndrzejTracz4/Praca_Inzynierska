@@ -15,68 +15,81 @@ import java.util.UUID
 
 class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 
+    // Zmienna przechowująca wartość nazwy użytkownika
     var username by mutableStateOf("")
         private set
 
+    // Zmienna przechowująca wartość hasła użytkownika
     var password by mutableStateOf("")
         private set
 
+    // Zmienna przechowująca wartość potwierdzenia hasła użytkownika
     var confirmPassword by mutableStateOf("")
         private set
 
+    // Zmienna przechowująca wartość email użytkownika
     var email by mutableStateOf("")
         private set
 
-    var test by mutableStateOf("")
-        private set
-
+    // Flaga określająca, czy logowanie się powiodło
     var loginSuccess by mutableStateOf(false)
         private set
 
-
+    // Zmienna przechowująca komunikat o błędzie nazwy użytkownika
     var usernameErrorMessage by mutableStateOf<String?>(null)
         private set
 
+    // Zmienna przechowująca komunikat o błędzie hasła
     var passwordErrorMessage by mutableStateOf<String?>(null)
         private set
 
+    // Zmienna przechowująca komunikat o błędzie potwierdzenia hasła
     var confirmPasswordErrorMessage by mutableStateOf<String?>(null)
         private set
 
+    // Zmienna przechowująca komunikat o błędzie emaila
     var emailErrorMessage by mutableStateOf<String?>(null)
         private set
 
+    // Ogólna zmienna przechowująca komunikaty o błędach
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
+    // Funkcja do zmiany nazwy użytkownika i walidacji tej nazwy
     fun onUsernameChange(newUsername: String) {
         username = newUsername
         usernameErrorMessage = validateUsername(newUsername)
     }
 
+    // Funkcja do zmiany hasła i walidacji hasła
     fun onPasswordChange(newPassword: String) {
         password = newPassword
         passwordErrorMessage = validatePassword(newPassword)
     }
 
+    // Funkcja do zmiany emaila i walidacji emaila
     fun onEmailChange(newEmail: String) {
         email = newEmail
         emailErrorMessage = validateEmail(newEmail)
     }
 
+    // Funkcja do zmiany potwierdzenia hasła i walidacji, czy hasła się zgadzają
     fun onConfirmPasswordChange(newConfirmPassword: String) {
         confirmPassword = newConfirmPassword
         validatePasswords()
     }
 
+    // Funkcja do walidacji nazwy użytkownika
     private fun validateUsername(username: String): String? {
         return if (username.isBlank()) "Username cannot be empty!" else null
     }
 
+    // Funkcja do walidacji hasła
     private fun validatePassword(password: String): String? {
         return if (password.isBlank()) "Password cannot be empty" else null
     }
 
+    // Funkcja do walidacji zgodności haseł
     private fun validatePasswords() {
         confirmPasswordErrorMessage = if (password != confirmPassword) {
             "Passwords do not match!"
@@ -85,10 +98,12 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         }
     }
 
+    // Funkcja do walidacji emaila
     private fun validateEmail(email: String): String? {
         return if (email.isBlank()) "Email cannot be empty" else null
     }
 
+    // Funkcja do logowania użytkownika
     fun login(navController: NavController) {
         viewModelScope.launch {
             usernameErrorMessage = null
@@ -104,6 +119,7 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         }
     }
 
+    // Funkcja do rejestracji użytkownika
     fun registerUser(onSuccess: () -> Unit, onError: (String) -> Unit) {
         // Sprawdzenie, czy którekolwiek pole jest puste
         if (username.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
@@ -129,11 +145,13 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
                 val existingUserByUsername = userRepository.getUserByUsername(username)
                 val existingUserByEmail = userRepository.getUserByEmail(email)
 
+                // Sprawdzenie czy Username jest już w bazie
                 if (existingUserByUsername != null) {
                     onError("Username is already taken")
                     return@launch
                 }
 
+                // Sprawdzenie czy Email jest już w bazie
                 if (existingUserByEmail != null) {
                     onError("Email is already registered")
                     return@launch
@@ -158,6 +176,7 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
 
+    // Funkcja do resetowania hasła
     fun forgotPassword(email: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             try {
@@ -196,6 +215,6 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 
     // Funkcja wysyłająca email z nowym hasłem
     private fun sendEmailWithNewPassword(email: String, newPassword: String) {
-        // Implementacja wysyłania emaila z nowym hasłem
+        // Implementacja wysyłania emaila z nowym hasłem todo
     }
 }
