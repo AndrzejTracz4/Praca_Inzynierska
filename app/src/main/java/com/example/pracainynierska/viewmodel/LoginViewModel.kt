@@ -1,9 +1,13 @@
 package com.example.pracainynierska.viewmodel
 
+import android.util.Log
 import android.util.Patterns
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -12,6 +16,7 @@ import com.example.pracainynierska.repository.UserRepository
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import java.util.UUID
+
 
 class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 
@@ -50,6 +55,10 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
     // Zmienna przechowująca komunikat o błędzie emaila
     var emailErrorMessage by mutableStateOf<String?>(null)
         private set
+
+    // Zmienna przechowująca "username" aktualnie zalogowanego użytkownika
+    private val _loggedInUser = mutableStateOf<User?>(null)
+    val loggedInUser: State<User?> get() = _loggedInUser
 
     // Ogólna zmienna przechowująca komunikaty o błędach
     var errorMessage by mutableStateOf<String?>(null)
@@ -108,16 +117,25 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         viewModelScope.launch {
             usernameErrorMessage = null
             passwordErrorMessage = null
-            val user = userRepository.getUser(username, password)
+
+            val hashedInputPassword = hashPassword(password)
+
+            val user = userRepository.getUser(username, hashedInputPassword)
+
             if (user != null) {
+                // Pobierz dane użytkownika
+                fetchLoggedInUser(username)
                 loginSuccess = true
-                navController.navigate("HomepageView")
+
+                // Przekazanie nazwy użytkownika do HomepageView
+                navController.navigate("HomepageView/${user.username}")
             } else {
                 usernameErrorMessage = "Invalid username or password"
                 passwordErrorMessage = "Invalid username or password"
             }
         }
     }
+
 
     // Funkcja do rejestracji użytkownika
     fun registerUser(onSuccess: () -> Unit, onError: (String) -> Unit) {
@@ -216,5 +234,16 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
     // Funkcja wysyłająca email z nowym hasłem
     private fun sendEmailWithNewPassword(email: String, newPassword: String) {
         // Implementacja wysyłania emaila z nowym hasłem todo
+    }
+
+    //Pobiera dane zalogowanego użytkownika z bazy danych na podstawie podanego username,
+    //viewModelScope to korutyna która działa asynchronicznie, czyli po prostu działa w tle
+    private fun fetchLoggedInUser(username: String) {
+        viewModelScope.launch {
+            val user = userRepository.getUserByUsername(username)
+            Log.d("LoginViewModel", "Fetched user: $user")
+            _loggedInUser.value = user
+            Log.d("LoginViewModel", "Logged in user set to: ${_loggedInUser.value}")
+        }
     }
 }

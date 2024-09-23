@@ -306,7 +306,7 @@ fun RegisterView(navController: NavController, userRepository: UserRepository){
                         TextButton(onClick = {
                             showDialog = false
                             if (registrationMessage == "Registration successful") {
-                                navController.navigate("HomepageView")
+                                navController.navigate("LoginView")
                             }
                         }) {
                             Text("OK")
