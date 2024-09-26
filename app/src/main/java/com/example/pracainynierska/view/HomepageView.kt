@@ -7,7 +7,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -62,30 +64,16 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
     ) {
         Scaffold(
             topBar = {
+
                 TopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color(0xFF334166) // Ustawienie koloru tła topbara na czarny
+                        containerColor = Color(0xFF5b6d9d)
                     ),
+
                     modifier = Modifier
-                        .clip(
-                            RoundedCornerShape(
-                                topStart = 0.dp,
-                                topEnd = 0.dp,
-                                bottomStart = 16.dp,
-                                bottomEnd = 16.dp
-                            )
-                        )
-//                        .border(
-//                            width = 2.dp,
-//                            color = Color(0xFF495D92),
-//                            shape = RoundedCornerShape(
-//                                topStart = 0.dp,
-//                                topEnd = 0.dp,
-//                                bottomStart = 16.dp,
-//                                bottomEnd = 16.dp
-//                            )
-//                        ),
-                            ,
+                        .padding(10.dp)
+                        .clip(RoundedCornerShape(20.dp)),
+
                     title = {
                         Text(
                             text = username ?: "Loading...",
@@ -94,12 +82,13 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                             style = TextStyle(
                                 shadow = Shadow(
                                     color = Color.Black,
-                                    offset = Offset(10f, 12f),
+                                    offset = Offset(6f, 6f),
                                     blurRadius = 3f
                                 )
                             )
                         )
                     },
+
                     navigationIcon = {
                         IconButton(onClick = {
                             // Akcja, np. wylogowanie
