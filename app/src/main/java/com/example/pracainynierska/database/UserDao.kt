@@ -36,4 +36,8 @@ interface UserDao {
     // Zwraca pierwszy znaleziony rekord (lub `null`, jeśli użytkownik nie istnieje)
     @Query("SELECT * FROM user_table WHERE email = :email LIMIT 1")
     suspend fun getUserByEmail(email: String): User?
+
+    // Funkcja aktualizująca ścieżkę zdjęcia użytkownika
+    @Query("UPDATE user_table SET userPhotoPath = :photoPath WHERE id = :userId")
+    suspend fun updateUserPhotoPath(userId: Long, photoPath: String)
 }

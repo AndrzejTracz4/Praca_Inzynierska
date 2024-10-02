@@ -29,4 +29,14 @@ class UserRepository (private val userDao: UserDao) {
     suspend fun getUserByEmail(email: String): User? {
         return userDao.getUserByEmail(email)
     }
+
+    // Metoda do aktualizacji ścieżki zdjęcia użytkownika
+    suspend fun updateUserPhotoPath(userId: Long, photoPath: String) {
+        val user = userDao.getUserById(userId)
+        if (user != null) {
+            user.userPhotoPath = photoPath
+            userDao.upsertUser(user)
+        }
+    }
+
 }

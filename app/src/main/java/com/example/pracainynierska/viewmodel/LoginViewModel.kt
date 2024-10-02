@@ -57,8 +57,10 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         private set
 
     // Zmienna przechowująca "username" aktualnie zalogowanego użytkownika
-    private val _loggedInUser = mutableStateOf<User?>(null)
-    val loggedInUser: State<User?> get() = _loggedInUser
+    private val _loggedInUser = MutableLiveData<User?>()
+    var loggedInUser: LiveData<User?> = _loggedInUser
+
+
 
     // Ogólna zmienna przechowująca komunikaty o błędach
     var errorMessage by mutableStateOf<String?>(null)
@@ -179,7 +181,7 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
                 val hashedPassword = hashPassword(password)
 
                 // Tworzenie nowego użytkownika i zapisanie go do bazy
-                val user = User(username = username, email = email, password = hashedPassword)
+                val user = User(username = username, email = email, password = hashedPassword, userPhotoPath = "app/src/main/res/raw/user_photo_1.json")
                 userRepository.upsertUser(user)
                 onSuccess()
             } catch (e: Exception) {
@@ -243,7 +245,33 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
             val user = userRepository.getUserByUsername(username)
             Log.d("LoginViewModel", "Fetched user: $user")
             _loggedInUser.value = user
-            Log.d("LoginViewModel", "Logged in user set to: ${_loggedInUser.value}")
+
+            if (user != null) {
+                Log.d("LoginViewModel", "_loggedInUser set to: ${_loggedInUser.value}")
+                Log.d("LoginViewModel", "loggedInUser set to: ${loggedInUser.value}")
+
+            } else {
+                Log.d("LoginViewModel", "No user found for username: $username")
+            }
         }
     }
+
+
+    // Metoda do aktualizacji ścieżki zdjęcia użytkownika
+    fun updateUserPhotoPath(photoPath: String) {
+        val userId = loggedInUser.value?.id
+        Log.d("UserImagePicker", "User ID before updating photo path: ${loggedInUser.value?.id}")
+        Log.d("UserImagePicker", "New photo path: $photoPath")
+
+        if (userId != null) {
+            Log.d("LoginViewModel", "Updating user photo path for userId: $userId with photoPath: $photoPath")
+            viewModelScope.launch {
+                //userRepository.updateUserPhotoPath(userId, photoPath)
+            }
+        } else {
+            Log.d("LoginViewModel", "User ID is null, cannot update photo path.")
+        }
+    }
+
+
 }

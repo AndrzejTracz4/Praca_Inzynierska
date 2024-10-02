@@ -18,5 +18,8 @@ data class User (
     var password: String,
 
     // Adres e-mail użytkownika
-    val email: String
+    val email: String,
+
+    //Zdjęcie użytkownika
+    var userPhotoPath: String?
 )
