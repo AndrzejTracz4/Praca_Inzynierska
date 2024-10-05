@@ -131,11 +131,11 @@ fun ForgotPasswordView(navController: NavController, userRepository: UserReposit
                 },
                 keyboardActions = KeyboardActions(
                     onNext = {
-                        focusManager.moveFocus(FocusDirection.Down)
+                        focusManager.clearFocus()
                     }
                 ),
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Next
+                    imeAction = ImeAction.Done
                 )
             )
 

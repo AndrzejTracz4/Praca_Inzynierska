@@ -1,5 +1,6 @@
 package com.example.pracainynierska.repository
 
+import androidx.lifecycle.LiveData
 import com.example.pracainynierska.database.UserDao
 import com.example.pracainynierska.model.User
 
@@ -20,6 +21,10 @@ class UserRepository (private val userDao: UserDao) {
 
     // Pobiera użytkownika na podstawie podanego username
     // Zwraca obiekt User, jeśli użytkownik zostanie znaleziony, w przeciwnym razie zwraca null
+    fun getUserByUsernameLiveData(username: String): LiveData<User> {
+        return userDao.getUserByUsernameLiveData(username)
+    }
+
     suspend fun getUserByUsername(username: String): User? {
         return userDao.getUserByUsername(username)
     }
@@ -31,7 +36,7 @@ class UserRepository (private val userDao: UserDao) {
     }
 
     // Metoda do aktualizacji ścieżki zdjęcia użytkownika
-    suspend fun updateUserPhotoPath(userId: Long, photoPath: String) {
+    suspend fun updateUserPhotoPath(userId: Int?, photoPath: String) {
         val user = userDao.getUserById(userId)
         if (user != null) {
             user.userPhotoPath = photoPath

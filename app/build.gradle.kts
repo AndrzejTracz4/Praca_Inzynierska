@@ -89,6 +89,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
     // Testing
     testImplementation(libs.junit)

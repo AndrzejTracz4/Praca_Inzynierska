@@ -262,7 +262,7 @@ fun RegisterView(navController: NavController, userRepository: UserRepository){
                 },
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        focusManager.moveFocus(FocusDirection.Enter)
+                        focusManager.clearFocus()
                     }
                 ),
                 keyboardOptions = KeyboardOptions.Default.copy(

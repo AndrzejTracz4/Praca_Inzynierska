@@ -1,4 +1,5 @@
 package com.example.pracainynierska.database
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
@@ -25,12 +26,16 @@ interface UserDao {
 
     // Funkcja zwracająca użytkownika z tabeli user_table na podstawie jego unikalnego identyfikatora (ID)
     @Query("SELECT * FROM user_table WHERE id = :userId")
-    suspend fun getUserById(userId: Long): User?
+    suspend fun getUserById(userId: Int?): User?
 
     // Funkcja zwracająca użytkownika z tabeli user_table na podstawie nazwy użytkownika.
     // Zwraca pierwszy znaleziony rekord (lub `null`, jeśli użytkownik nie istnieje)
     @Query("SELECT * FROM user_table WHERE username = :username LIMIT 1")
+    fun getUserByUsernameLiveData(username: String): LiveData<User>
+
+    @Query("SELECT * FROM user_table WHERE username = :username LIMIT 1")
     suspend fun getUserByUsername(username: String): User?
+
 
     // Funkcja zwracająca użytkownika z tabeli user_table na podstawie adresu e-mail.
     // Zwraca pierwszy znaleziony rekord (lub `null`, jeśli użytkownik nie istnieje)

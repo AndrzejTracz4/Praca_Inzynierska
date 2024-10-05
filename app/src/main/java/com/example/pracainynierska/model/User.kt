@@ -9,7 +9,7 @@ data class User (
     // Unikalny identyfikator użytkownika, który jest kluczem głównym w tabeli
     // autoGenerate = true oznacza, że identyfikator będzie automatycznie generowany przez bazę danych
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0L,
+    val id: Int = 0,
 
     // Nazwa użytkownika, unikalny identyfikator przypisany przez użytkownika
     val username: String,

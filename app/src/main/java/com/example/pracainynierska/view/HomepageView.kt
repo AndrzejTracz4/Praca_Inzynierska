@@ -32,6 +32,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
@@ -59,6 +61,7 @@ import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.example.pracainynierska.R
+import kotlinx.coroutines.flow.collect
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,17 +69,25 @@ import com.example.pracainynierska.R
 fun HomepageView(navController: NavController, userRepository: UserRepository, username: String?) {
 
     val focusManager = LocalFocusManager.current
+    var initialUserPhotoPath = ""
 
     // Pobranie instancji LoginViewModel przy użyciu LoginViewModelFactory
     val loginViewModel: LoginViewModel = viewModel(
         factory = LoginViewModelFactory(userRepository)
     )
 
+
+    loginViewModel.user.observeAsState().value.let {
+        if (username != null) {
+            loginViewModel.fetchUser(username)
+        }
+        Log.d("Observer", "$it")
+        if (it != null) {
+            initialUserPhotoPath = it.userPhotoPath.toString()
+        }
+    }
+
     // Obserwowanie danych z LiveData jako Compose State
-    val loggedInUser by loginViewModel.loggedInUser.observeAsState()
-
-    val initialUserPhotoPath = loggedInUser?.userPhotoPath
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -147,9 +158,9 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                     ) {
 
                         //val loggedInUser = loginViewModel.loggedInUser.value
-                        Log.d("Homepage", "Logged in user: $loggedInUser")
+                        //Log.d("Homepage", "Logged in user: $loggedInUser")
                         // Miejsce na zdjęcie użytkownika
-                        UserImagePicker(userRepository, initialUserPhotoPath = initialUserPhotoPath)
+                        UserImagePicker(userRepository, initialUserPhotoPath = initialUserPhotoPath, username)
 
                         Spacer(modifier = Modifier.width(16.dp))
 
@@ -207,89 +218,5 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                 }
             }
         }
-    }
-}
-
-@Composable
-fun GradientProgressBar(progress: Float) {
-    val gradient = Brush.horizontalGradient(
-        colors = listOf(Color.Green, Color.Yellow, Color.Red),
-        startX = 0.0f,
-        endX = 600.0f * progress
-    )
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(8.dp)
-            .clip(RoundedCornerShape(4.dp))
-            .background(Color.LightGray)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(progress)
-                .height(8.dp)
-                .background(gradient)
-        )
-    }
-}
-
-@Composable
-fun UserImagePicker(userRepository: UserRepository, initialUserPhotoPath: String?) {
-
-    val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(userRepository)
-    )
-
-    val loggedInUser by loginViewModel.loggedInUser.observeAsState()
-
-    // Lista plików Lottie jako stałe ścieżki
-    val lottieFiles = listOf(
-        "app/src/main/res/raw/user_photo_1.json",
-        "app/src/main/res/raw/user_photo_2.json"
-    )
-
-    // Zmienna do przechowywania wybranej animacji
-    var selectedAnimationIndex by remember { mutableIntStateOf(initialUserPhotoPath?.let { lottieFiles.indexOf(it) } ?: 0) }
-
-    // Pobranie animacji Lottie na podstawie ścieżki
-    val composition by rememberLottieComposition(
-        LottieCompositionSpec.RawRes(
-            when (selectedAnimationIndex) {
-                0 -> R.raw.user_photo_1
-                1 -> R.raw.user_photo_2
-                else -> R.raw.user_photo_1 // Default in case of out of bounds
-            }
-        )
-    )
-
-    // Box dla zdjęcia użytkownika
-    Box(
-        modifier = Modifier
-            .size(100.dp)
-            .background(Color.Gray, shape = RoundedCornerShape(50.dp))
-            .clickable {
-                // Zmiana animacji po kliknięciu
-                selectedAnimationIndex = (selectedAnimationIndex + 1) % lottieFiles.size
-
-                // Przypisz nową ścieżkę na podstawie indeksu
-                val newPhotoPath = lottieFiles[selectedAnimationIndex]
-                Log.d("UserImagePicker", "Selected new photo path: $newPhotoPath")
-
-                // Zaktualizowanie ścieżki w bazie danych za pomocą ViewModel
-                //val loggedInUser = loginViewModel.loggedInUser.value
-                Log.d("HomepageView", "loggedInUser before calling updateUserPhotoPath: $loggedInUser")
-
-                loginViewModel.updateUserPhotoPath(newPhotoPath)
-
-//                if (loggedInUser != null) {
-//                    loginViewModel.updateUserPhotoPath(newPhotoPath)
-//                } else {
-//                    Log.d("UserImagePicker", "Logged in user is null, cannot update photo.")
-//                }
-            }
-    ) {
-        // Wyświetlanie wybranej animacji Lottie
-        LottieAnimation(composition = composition)
     }
 }

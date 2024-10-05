@@ -2,7 +2,6 @@ package com.example.pracainynierska.viewmodel
 
 import android.util.Log
 import android.util.Patterns
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,6 +12,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.pracainynierska.model.User
 import com.example.pracainynierska.repository.UserRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import java.util.UUID
@@ -57,10 +59,8 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         private set
 
     // Zmienna przechowująca "username" aktualnie zalogowanego użytkownika
-    private val _loggedInUser = MutableLiveData<User?>()
-    var loggedInUser: LiveData<User?> = _loggedInUser
-
-
+    private val _user = MutableLiveData<User>()
+    val user: LiveData<User> get() = _user
 
     // Ogólna zmienna przechowująca komunikaty o błędach
     var errorMessage by mutableStateOf<String?>(null)
@@ -126,9 +126,8 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 
             if (user != null) {
                 // Pobierz dane użytkownika
-                fetchLoggedInUser(username)
                 loginSuccess = true
-
+                fetchUser(username)
                 // Przekazanie nazwy użytkownika do HomepageView
                 navController.navigate("HomepageView/${user.username}")
             } else {
@@ -240,38 +239,26 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 
     //Pobiera dane zalogowanego użytkownika z bazy danych na podstawie podanego username,
     //viewModelScope to korutyna która działa asynchronicznie, czyli po prostu działa w tle
-    private fun fetchLoggedInUser(username: String) {
-        viewModelScope.launch {
-            val user = userRepository.getUserByUsername(username)
-            Log.d("LoginViewModel", "Fetched user: $user")
-            _loggedInUser.value = user
-
-            if (user != null) {
-                Log.d("LoginViewModel", "_loggedInUser set to: ${_loggedInUser.value}")
-                Log.d("LoginViewModel", "loggedInUser set to: ${loggedInUser.value}")
-
-            } else {
-                Log.d("LoginViewModel", "No user found for username: $username")
-            }
+    fun fetchUser(username: String) {
+        userRepository.getUserByUsernameLiveData(username).observeForever { fetchedUser ->
+            _user.value = fetchedUser
+            Log.d("fetchUser", "fetchUser: ${_user.value}")
         }
     }
-
 
     // Metoda do aktualizacji ścieżki zdjęcia użytkownika
     fun updateUserPhotoPath(photoPath: String) {
-        val userId = loggedInUser.value?.id
-        Log.d("UserImagePicker", "User ID before updating photo path: ${loggedInUser.value?.id}")
-        Log.d("UserImagePicker", "New photo path: $photoPath")
+        // Obserwacja userId, aby uzyskać aktualne ID zalogowanego użytkownika
+        val currentUserId = _user.value?.id
+        Log.d("updateUserPhotoPath", "UserId: $currentUserId")
 
-        if (userId != null) {
-            Log.d("LoginViewModel", "Updating user photo path for userId: $userId with photoPath: $photoPath")
+        if (currentUserId != null) {
             viewModelScope.launch {
-                //userRepository.updateUserPhotoPath(userId, photoPath)
+                try {
+                    // Aktualizacja ścieżki zdjęcia użytkownika
+                    userRepository.updateUserPhotoPath(currentUserId, photoPath)
+                } catch (_: Exception) { }
             }
-        } else {
-            Log.d("LoginViewModel", "User ID is null, cannot update photo path.")
         }
     }
-
-
 }
