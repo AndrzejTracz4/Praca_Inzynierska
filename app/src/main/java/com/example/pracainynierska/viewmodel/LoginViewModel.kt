@@ -62,6 +62,7 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
     private val _user = MutableLiveData<User>()
     val user: LiveData<User> get() = _user
 
+
     // Ogólna zmienna przechowująca komunikaty o błędach
     var errorMessage by mutableStateOf<String?>(null)
         private set
@@ -180,7 +181,7 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
                 val hashedPassword = hashPassword(password)
 
                 // Tworzenie nowego użytkownika i zapisanie go do bazy
-                val user = User(username = username, email = email, password = hashedPassword, userPhotoPath = "app/src/main/res/raw/user_photo_1.json")
+                val user = User(username = username, email = email, password = hashedPassword, userPhotoPath = "app/src/main/res/raw/user_photo_1.json", level = 1)
                 userRepository.upsertUser(user)
                 onSuccess()
             } catch (e: Exception) {
@@ -261,4 +262,5 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
             }
         }
     }
+
 }

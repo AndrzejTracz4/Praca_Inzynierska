@@ -70,6 +70,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
 
     val focusManager = LocalFocusManager.current
     var initialUserPhotoPath = ""
+    var userLevel = 1
 
     // Pobranie instancji LoginViewModel przy użyciu LoginViewModelFactory
     val loginViewModel: LoginViewModel = viewModel(
@@ -81,11 +82,48 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
         if (username != null) {
             loginViewModel.fetchUser(username)
         }
-        Log.d("Observer", "$it")
         if (it != null) {
             initialUserPhotoPath = it.userPhotoPath.toString()
         }
+        if (it != null) {
+            userLevel = it.level
+        }
     }
+
+    val levelNames = mapOf(
+        1 to "Rekrut",
+        2 to "Szeregowy",
+        3 to "Starszy Szeregowy",
+        4 to "Kapral",
+        5 to "Starszy Kapral",
+        6 to "Plutonowy",
+        7 to "Sierżant",
+        8 to "Starszy Sierżant",
+        9 to "Major Sierżant",
+        10 to "Chorąży",
+        11 to "Starszy Chorąży",
+        12 to "Sztabowy Chorąży",
+        13 to "Podporucznik",
+        14 to "Porucznik",
+        15 to "Starszy Porucznik",
+        16 to "Kapitan",
+        17 to "Sztabowy Kapitan",
+        18 to "Major",
+        19 to "Starszy Major",
+        20 to "Podpułkownik",
+        21 to "Pułkownik",
+        22 to "Starszy Pułkownik",
+        23 to "Generał Brygady",
+        24 to "Generał Dywizji",
+        25 to "Generał Broni",
+        26 to "Generał Armii",
+        27 to "Marszałek",
+        28 to "Marszałek Polowy",
+        29 to "Naczelny Wódz",
+        30 to "Mistrz Strategii"
+    )
+
+    val userRank = levelNames[userLevel] ?: "Nieznany poziom"
 
     // Obserwowanie danych z LiveData jako Compose State
     Box(
@@ -157,8 +195,6 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        //val loggedInUser = loginViewModel.loggedInUser.value
-                        //Log.d("Homepage", "Logged in user: $loggedInUser")
                         // Miejsce na zdjęcie użytkownika
                         UserImagePicker(userRepository, initialUserPhotoPath = initialUserPhotoPath, username)
 
@@ -170,7 +206,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                         ) {
 
                             Text(
-                                text = "Szeregowy", // Ranga użytkownika
+                                text = userRank, // Ranga użytkownika
                                 fontSize = 20.sp,
                                 color = Color.White,
                                 style = TextStyle(
@@ -183,7 +219,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                             )
 
                             Text(
-                                text = "Poziom 5", // Poziom użytkownika
+                                text = "Poziom $userLevel", // Poziom użytkownika
                                 fontSize = 16.sp,
                                 color = Color.White,
                                 style = TextStyle(
@@ -201,18 +237,35 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
 
                             Spacer(modifier = Modifier.height(4.dp))
 
-                            Text(
-                                text = "0/10", // Doświadczenie
-                                fontSize = 12.sp,
-                                color = Color.White,
-                                style = TextStyle(
-                                    shadow = Shadow(
-                                        color = Color.Black,
-                                        offset = Offset(3f, 1f),
-                                        blurRadius = 3f
+                            Row {
+                                Text(
+                                    text = "Doświadczenie",
+                                    fontSize = 12.sp,
+                                    color = Color.White,
+                                    style = TextStyle(
+                                        shadow = Shadow(
+                                            color = Color.Black,
+                                            offset = Offset(3f, 1f),
+                                            blurRadius = 3f
+                                        )
                                     )
                                 )
-                            )
+
+                                Spacer(modifier = Modifier.width(120.dp))
+
+                                Text(
+                                    text = "0/10", // Doświadczenie
+                                    fontSize = 12.sp,
+                                    color = Color.White,
+                                    style = TextStyle(
+                                        shadow = Shadow(
+                                            color = Color.Black,
+                                            offset = Offset(3f, 1f),
+                                            blurRadius = 3f
+                                        )
+                                    )
+                                )
+                            }
                         }
                     }
                 }

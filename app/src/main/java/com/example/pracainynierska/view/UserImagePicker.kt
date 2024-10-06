@@ -42,7 +42,12 @@ fun UserImagePicker(userRepository: UserRepository, initialUserPhotoPath: String
     // Lista plików Lottie jako stałe ścieżki
     val lottieFiles = listOf(
         "app/src/main/res/raw/user_photo_1.json",
-        "app/src/main/res/raw/user_photo_2.json"
+        "app/src/main/res/raw/user_photo_2.json",
+        "app/src/main/res/raw/user_photo_3.json",
+        "app/src/main/res/raw/user_photo_5.json",
+        "app/src/main/res/raw/user_photo_6.json",
+        "app/src/main/res/raw/user_photo_7.json",
+        "app/src/main/res/raw/user_photo_8.json"
     )
 
     // Pobranie animacji Lottie na podstawie ścieżki
@@ -51,7 +56,12 @@ fun UserImagePicker(userRepository: UserRepository, initialUserPhotoPath: String
             when (selectedAnimationIndex) {
                 0 -> R.raw.user_photo_1
                 1 -> R.raw.user_photo_2
-                else -> R.raw.user_photo_1 // Default in case of out of bounds
+                2 -> R.raw.user_photo_3
+                3 -> R.raw.user_photo_5
+                4 -> R.raw.user_photo_6
+                5 -> R.raw.user_photo_7
+                6 -> R.raw.user_photo_8
+                else -> R.raw.user_photo_1
             }
         )
     )
@@ -74,7 +84,7 @@ fun UserImagePicker(userRepository: UserRepository, initialUserPhotoPath: String
     Box(
         modifier = Modifier
             .size(100.dp)
-            .background(Color.Gray, shape = RoundedCornerShape(50.dp))
+            .background(Color.Transparent, shape = RoundedCornerShape(50.dp))
             .clickable {
                 // Zmiana animacji po kliknięciu
                 selectedAnimationIndex = (selectedAnimationIndex + 1) % lottieFiles.size
