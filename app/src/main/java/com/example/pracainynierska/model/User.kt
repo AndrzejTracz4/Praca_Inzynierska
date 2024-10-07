@@ -30,5 +30,17 @@ data class User (
     var experience: Float,
 
     //UUID do identyfikacji usera
-    var userUUID: String
+    var userUUID: String,
+
+    //Determinacja użytkownika
+    var determination: Float,
+
+    //Sprawność fizyczna użytkownika
+    var physical_fitness: Float,
+
+    //Inteligencja użytkownika
+    var intelligence: Float,
+
+    //Wiedza użytkownika
+    var knowledge: Float
 )

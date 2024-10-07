@@ -30,7 +30,7 @@ import com.example.pracainynierska.R
 import kotlinx.coroutines.delay
 
 @Composable
-fun UserImagePicker(userRepository: UserRepository, initialUserPhotoPath: String?, userUUID: String?) {
+fun UserImagePicker(userRepository: UserRepository, userUUID: String?) {
 
     val loginViewModel: LoginViewModel = viewModel(
         factory = LoginViewModelFactory(userRepository)

@@ -19,13 +19,12 @@ import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 
 
 @Composable
-fun GradientProgressBar(userRepository: UserRepository,userUUID: String?, progress: Float) {
+fun GradientLevelProgressBar(userRepository: UserRepository,userUUID: String?) {
 
     val loginViewModel: LoginViewModel = viewModel(
         factory = LoginViewModelFactory(userRepository)
     )
 
-    var userLevel = 1
     var userExperience = 0f
 
     loginViewModel.user.observeAsState().value.let {
@@ -33,13 +32,12 @@ fun GradientProgressBar(userRepository: UserRepository,userUUID: String?, progre
             loginViewModel.fetchUser(userUUID)
         }
         if (it != null) {
-            userLevel = it.level
             userExperience = it.experience
         }
     }
 
     // Ograniczenie wartości progress do zakresu 0-100
-    val normalizedProgress = progress.coerceIn(0f, 100f) / 100f
+    val normalizedProgress = userExperience.coerceIn(0f, 100f) / 100f
 
     // Tworzenie gradientu w zależności od wartości progress
     val gradient = Brush.horizontalGradient(

@@ -187,7 +187,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(130.dp) // 2x wysokość TopBar
+                        .height(120.dp) // 2x wysokość TopBar
                         .clip(RoundedCornerShape(20.dp))
                         .background(Color(0x33FFFFFF))
                         .padding(16.dp)
@@ -198,7 +198,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                     ) {
 
                         // Miejsce na zdjęcie użytkownika
-                        UserImagePicker(userRepository, initialUserPhotoPath = initialUserPhotoPath, userUUID = userUUID)
+                        UserImagePicker(userRepository, userUUID = userUUID)
 
                         Spacer(modifier = Modifier.width(16.dp))
 
@@ -235,7 +235,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                            GradientProgressBar(userRepository, progress = userExperience, userUUID = userUUID) // Procent doświadczenia
+                            GradientLevelProgressBar(userRepository, userUUID = userUUID) // Procent doświadczenia
 
                             Spacer(modifier = Modifier.height(4.dp))
 
@@ -270,6 +270,19 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                             }
                         }
                     }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(240.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(Color(0x33FFFFFF))
+                        .padding(4.dp)
+                ){
+                    GradientStatsProgressBars(userRepository, userUUID)
                 }
             }
         }
