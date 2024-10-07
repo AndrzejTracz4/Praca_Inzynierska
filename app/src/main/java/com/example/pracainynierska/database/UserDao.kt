@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
 import com.example.pracainynierska.model.User
+import java.util.UUID
 
 // Interfejs definiujący operacje na bazie danych (DAO - Data Access Object) dla tabeli User
 @Dao
@@ -45,4 +46,7 @@ interface UserDao {
     // Funkcja aktualizująca ścieżkę zdjęcia użytkownika
     @Query("UPDATE user_table SET userPhotoPath = :photoPath WHERE id = :userId")
     suspend fun updateUserPhotoPath(userId: Long, photoPath: String)
+
+    @Query("SELECT * FROM user_table WHERE userUUID = :userUUID LIMIT 1")
+    fun getUserByUUIDLiveData(userUUID: String): LiveData<User>
 }

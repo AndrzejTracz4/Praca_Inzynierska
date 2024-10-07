@@ -61,32 +61,34 @@ import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.example.pracainynierska.R
+import com.example.pracainynierska.model.User
 import kotlinx.coroutines.flow.collect
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomepageView(navController: NavController, userRepository: UserRepository, username: String?) {
+fun HomepageView(navController: NavController, userRepository: UserRepository, userUUID: String?) {
 
     val focusManager = LocalFocusManager.current
     var initialUserPhotoPath = ""
     var userLevel = 1
+    var userExperience = 0f
+    var username = ""
 
     // Pobranie instancji LoginViewModel przy użyciu LoginViewModelFactory
     val loginViewModel: LoginViewModel = viewModel(
         factory = LoginViewModelFactory(userRepository)
     )
 
-
     loginViewModel.user.observeAsState().value.let {
-        if (username != null) {
-            loginViewModel.fetchUser(username)
+        if (userUUID != null) {
+            loginViewModel.fetchUser(userUUID)
         }
         if (it != null) {
             initialUserPhotoPath = it.userPhotoPath.toString()
-        }
-        if (it != null) {
             userLevel = it.level
+            userExperience = it.experience
+            username = it.username
         }
     }
 
@@ -162,7 +164,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
 
                     navigationIcon = {
                         IconButton(onClick = {
-                            // Akcja, np. wylogowanie todo
+                            // Akcja todo
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Menu,
@@ -196,7 +198,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                     ) {
 
                         // Miejsce na zdjęcie użytkownika
-                        UserImagePicker(userRepository, initialUserPhotoPath = initialUserPhotoPath, username)
+                        UserImagePicker(userRepository, initialUserPhotoPath = initialUserPhotoPath, userUUID = userUUID)
 
                         Spacer(modifier = Modifier.width(16.dp))
 
@@ -233,7 +235,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                            GradientProgressBar(progress = 100f) // Procent doświadczenia
+                            GradientProgressBar(userRepository, progress = userExperience, userUUID = userUUID) // Procent doświadczenia
 
                             Spacer(modifier = Modifier.height(4.dp))
 
@@ -251,10 +253,10 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                                     )
                                 )
 
-                                Spacer(modifier = Modifier.width(115.dp))
+                                Spacer(modifier = Modifier.width(105.dp))
 
                                 Text(
-                                    text = "0/100", // Doświadczenie
+                                    text = "${userExperience.toInt()}/100", // Doświadczenie
                                     fontSize = 12.sp,
                                     color = Color.White,
                                     style = TextStyle(

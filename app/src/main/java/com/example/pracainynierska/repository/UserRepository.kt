@@ -25,6 +25,10 @@ class UserRepository (private val userDao: UserDao) {
         return userDao.getUserByUsernameLiveData(username)
     }
 
+    fun getUserByUserUUIDLiveData(userUUID: String): LiveData<User> {
+        return userDao.getUserByUUIDLiveData(userUUID)
+    }
+
     suspend fun getUserByUsername(username: String): User? {
         return userDao.getUserByUsername(username)
     }

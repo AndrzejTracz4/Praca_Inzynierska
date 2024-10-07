@@ -6,15 +6,38 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pracainynierska.repository.UserRepository
+import com.example.pracainynierska.viewmodel.LoginViewModel
+import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 
 
 @Composable
-fun GradientProgressBar(progress: Float) {
+fun GradientProgressBar(userRepository: UserRepository,userUUID: String?, progress: Float) {
+
+    val loginViewModel: LoginViewModel = viewModel(
+        factory = LoginViewModelFactory(userRepository)
+    )
+
+    var userLevel = 1
+    var userExperience = 0f
+
+    loginViewModel.user.observeAsState().value.let {
+        if (userUUID != null) {
+            loginViewModel.fetchUser(userUUID)
+        }
+        if (it != null) {
+            userLevel = it.level
+            userExperience = it.experience
+        }
+    }
+
     // Ograniczenie wartości progress do zakresu 0-100
     val normalizedProgress = progress.coerceIn(0f, 100f) / 100f
 

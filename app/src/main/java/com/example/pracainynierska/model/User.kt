@@ -27,5 +27,8 @@ data class User (
     var level: Int,
 
     //Doświadczenie użytkownika
-    var experience: Float
+    var experience: Float,
+
+    //UUID do identyfikacji usera
+    var userUUID: String
 )

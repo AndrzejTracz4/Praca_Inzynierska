@@ -126,11 +126,12 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
             val user = userRepository.getUser(username, hashedInputPassword)
 
             if (user != null) {
+                val userUUID = user.userUUID
                 // Pobierz dane użytkownika
                 loginSuccess = true
-                fetchUser(username)
+                fetchUser(userUUID)
                 // Przekazanie nazwy użytkownika do HomepageView
-                navController.navigate("HomepageView/${user.username}")
+                navController.navigate("HomepageView/$userUUID")
             } else {
                 usernameErrorMessage = "Invalid username or password"
                 passwordErrorMessage = "Invalid username or password"
@@ -180,8 +181,10 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
                 // Hashowanie hasła przed zapisaniem do bazy
                 val hashedPassword = hashPassword(password)
 
+                val userUUID = generateRandomUserUUID()
+
                 // Tworzenie nowego użytkownika i zapisanie go do bazy
-                val user = User(username = username, email = email, password = hashedPassword, userPhotoPath = "app/src/main/res/raw/user_photo_1.json", level = 1, experience = 0f)
+                val user = User(username = username, email = email, password = hashedPassword, userPhotoPath = "app/src/main/res/raw/user_photo_1.json", level = 1, experience = 0f, userUUID = userUUID)
                 userRepository.upsertUser(user)
                 onSuccess()
             } catch (e: Exception) {
@@ -233,6 +236,11 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         return UUID.randomUUID().toString().take(12) // Generuje losowe hasło o długości 12 znaków
     }
 
+    //Funkcja generuje UUID użytkownika
+    private fun generateRandomUserUUID(): String {
+        return UUID.randomUUID().toString().take(12)
+    }
+
     // Funkcja wysyłająca email z nowym hasłem
     private fun sendEmailWithNewPassword(email: String, newPassword: String) {
         // Implementacja wysyłania emaila z nowym hasłem todo
@@ -240,8 +248,8 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 
     //Pobiera dane zalogowanego użytkownika z bazy danych na podstawie podanego username,
     //viewModelScope to korutyna która działa asynchronicznie, czyli po prostu działa w tle
-    fun fetchUser(username: String) {
-        userRepository.getUserByUsernameLiveData(username).observeForever { fetchedUser ->
+    fun fetchUser(userUUID: String) {
+        userRepository.getUserByUserUUIDLiveData(userUUID).observeForever { fetchedUser ->
             _user.value = fetchedUser
             Log.d("fetchUser", "fetchUser: ${_user.value}")
         }

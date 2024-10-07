@@ -56,9 +56,9 @@ fun SetupNavGraph(navController: NavHostController, userRepository: UserReposito
         composable("RegisterView") {
             RegisterView(navController = navController, userRepository = userRepository)
         }
-        composable("HomepageView/{username}") { backStackEntry ->
-            val username = backStackEntry.arguments?.getString("username")
-            HomepageView(navController, userRepository, username)
+        composable("HomepageView/{userUUID}") { backStackEntry ->
+            val userUUID = backStackEntry.arguments?.getString("userUUID")
+            HomepageView(navController, userRepository, userUUID)
         }
         composable("ForgotPasswordView") {
             ForgotPasswordView(navController = navController, userRepository = userRepository)
