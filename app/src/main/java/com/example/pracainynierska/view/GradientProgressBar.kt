@@ -15,12 +15,17 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun GradientProgressBar(progress: Float) {
+    // Ograniczenie wartości progress do zakresu 0-100
+    val normalizedProgress = progress.coerceIn(0f, 100f) / 100f
+
+    // Tworzenie gradientu w zależności od wartości progress
     val gradient = Brush.horizontalGradient(
         colors = listOf(Color.Green, Color.Yellow, Color.Red),
         startX = 0.0f,
-        endX = 600.0f * progress
+        endX = 1000f * normalizedProgress // dostosowanie skali dla efektu gradientu
     )
 
+    // Tło paska
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -28,9 +33,10 @@ fun GradientProgressBar(progress: Float) {
             .clip(RoundedCornerShape(4.dp))
             .background(Color.LightGray)
     ) {
+        // Pasek postępu
         Box(
             modifier = Modifier
-                .fillMaxWidth(progress)
+                .fillMaxWidth(normalizedProgress) // Skaluje szerokość paska proporcjonalnie do wartości progress
                 .height(8.dp)
                 .background(gradient)
         )

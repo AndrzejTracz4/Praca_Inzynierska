@@ -24,5 +24,8 @@ data class User (
     var userPhotoPath: String?,
 
     //Poziom użytkownika
-    var level: Int
+    var level: Int,
+
+    //Doświadczenie użytkownika
+    var experience: Float
 )

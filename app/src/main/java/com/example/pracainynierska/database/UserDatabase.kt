@@ -7,7 +7,7 @@ import com.example.pracainynierska.model.User
 
 // Definiuje bazę danych Room, która przechowuje obiekty typu User
 @Database(
-    version = 3, // Wersja bazy danych, istotna przy migracjach
+    version = 4, // Wersja bazy danych, istotna przy migracjach
     entities = [User::class], // Lista encji (tabel), które są częścią tej bazy danych
     exportSchema = false // Jeśli true, eksportuje schemat bazy danych jako plik JSON (pomocne przy migracjach)
 )

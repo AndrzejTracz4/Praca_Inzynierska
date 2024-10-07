@@ -233,7 +233,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                            GradientProgressBar(progress = 1f) // Procent doświadczenia
+                            GradientProgressBar(progress = 100f) // Procent doświadczenia
 
                             Spacer(modifier = Modifier.height(4.dp))
 
@@ -251,10 +251,10 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                                     )
                                 )
 
-                                Spacer(modifier = Modifier.width(120.dp))
+                                Spacer(modifier = Modifier.width(115.dp))
 
                                 Text(
-                                    text = "0/10", // Doświadczenie
+                                    text = "0/100", // Doświadczenie
                                     fontSize = 12.sp,
                                     color = Color.White,
                                     style = TextStyle(

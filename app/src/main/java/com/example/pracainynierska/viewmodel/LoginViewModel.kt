@@ -181,7 +181,7 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
                 val hashedPassword = hashPassword(password)
 
                 // Tworzenie nowego użytkownika i zapisanie go do bazy
-                val user = User(username = username, email = email, password = hashedPassword, userPhotoPath = "app/src/main/res/raw/user_photo_1.json", level = 1)
+                val user = User(username = username, email = email, password = hashedPassword, userPhotoPath = "app/src/main/res/raw/user_photo_1.json", level = 1, experience = 0f)
                 userRepository.upsertUser(user)
                 onSuccess()
             } catch (e: Exception) {
