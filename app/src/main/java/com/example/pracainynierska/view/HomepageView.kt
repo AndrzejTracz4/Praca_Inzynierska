@@ -128,7 +128,6 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
 
     val userRank = levelNames[userLevel] ?: "Nieznany poziom"
 
-    // Obserwowanie danych z LiveData jako Compose State
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -138,43 +137,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
     ) {
         Scaffold(
             topBar = {
-
-                TopAppBar(
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color(0x4DFFFFFF)
-                    ),
-
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .clip(RoundedCornerShape(20.dp)),
-
-                    title = {
-                        Text(
-                            text = username ?: "Loading...",
-                            fontSize = 30.sp,
-                            color = Color.White,
-                            style = TextStyle(
-                                shadow = Shadow(
-                                    color = Color.Black,
-                                    offset = Offset(3f, 1f),
-                                    blurRadius = 3f
-                                )
-                            )
-                        )
-                    },
-
-                    navigationIcon = {
-                        IconButton(onClick = {
-                            // Akcja todo
-                        }) {
-                            Icon(
-                                imageVector = Icons.Filled.Menu,
-                                contentDescription = "Menu",
-                                tint = Color.White
-                                )
-                        }
-                    }
-                )
+                TopMenu(username = username)
             },
 
             containerColor = Color(0xFF5b6d9d),
@@ -191,6 +154,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
             ) {
                 Spacer(modifier = Modifier.height(70.dp))
 
+                // użytkownik
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -281,6 +245,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // statystyki
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -290,6 +255,90 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                         .padding(4.dp)
                 ){
                     GradientStatsProgressBars(userRepository, userUUID)
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Aktywne boostery
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(130.dp) // 2x wysokość TopBar
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(Color(0x33FFFFFF))
+                        .padding(horizontal = 10.dp, vertical = 3.dp)
+                ) {
+                    Column (
+                        modifier = Modifier.fillMaxHeight(),
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        Text(
+                            text = "Aktywne boostery",
+                            fontSize = 13.sp,
+                            color = Color.White,
+                            style = TextStyle(
+                                shadow = Shadow(
+                                    color = Color.Black,
+                                    offset = Offset(3f, 1f),
+                                    blurRadius = 3f
+                                )
+                            ),
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+
+                        Spacer(modifier = Modifier.height(1.dp))
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(100.dp) // 2x wysokość TopBar
+                                .clip(RoundedCornerShape(20.dp))
+                                .background(Color(0x33FFFFFF))
+                                .padding(16.dp)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Zadanie dnia
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(130.dp) // 2x wysokość TopBar
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(Color(0x33FFFFFF))
+                        .padding(horizontal = 10.dp, vertical = 1.dp)
+                ) {
+                    Column (
+                        modifier = Modifier.fillMaxHeight(),
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        Text(
+                            text = "Wyzwanie dnia!",
+                            fontSize = 13.sp,
+                            color = Color.White,
+                            style = TextStyle(
+                                shadow = Shadow(
+                                    color = Color.Black,
+                                    offset = Offset(3f, 1f),
+                                    blurRadius = 3f
+                                )
+                            ),
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+
+                        Spacer(modifier = Modifier.height(1.dp))
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(100.dp) // 2x wysokość TopBar
+                                .clip(RoundedCornerShape(20.dp))
+                                .background(Color(0x33FFFFFF))
+                                .padding(16.dp)
+                        )
+                    }
                 }
 
             }

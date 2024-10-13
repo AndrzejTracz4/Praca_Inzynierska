@@ -1,4 +1,5 @@
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,160 +29,175 @@ fun BottomMenu(userRepository: UserRepository, userUUID: String?) {
     val loginViewModel: LoginViewModel = viewModel(
         factory = LoginViewModelFactory(userRepository)
     )
-    BottomAppBar(
-        containerColor = Color(0x4DFFFFFF),
-        contentColor = Color.White,
-        modifier = Modifier
-            .padding(10.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .height(60.dp)
+
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.BottomCenter
     ) {
-        Spacer(modifier = Modifier.width(10.dp))
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+        BottomAppBar(
+            containerColor = Color(0x4DFFFFFF),
+            contentColor = Color.White,
             modifier = Modifier
-                .weight(1f)
-                .clickable { /*TODO*/ }
+                .padding(horizontal = 10.dp, vertical = 5.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .height(60.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.stats),
-                contentDescription = "Stats",
+            Spacer(modifier = Modifier.width(10.dp))
+
+            // przycisk statystyk
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .size(24.dp),
-                colorFilter = ColorFilter.tint(Color.White)
-            )
-
-            Spacer(modifier = Modifier.height(5.dp))
-
-            Text(
-                text = "Statystyki",
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = 9.sp,
-                    shadow = Shadow(
-                        color = Color.Black,
-                        offset = Offset(3f, 1f),
-                        blurRadius = 3f
+                    .weight(1f)
+                    .clickable { /*TODO*/ }
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.stats),
+                    contentDescription = "Stats",
+                    modifier = Modifier
+                        .size(24.dp),
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = "Statystyki",
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 9.sp,
+                        shadow = Shadow(
+                            color = Color.Black,
+                            offset = Offset(3f, 1f),
+                            blurRadius = 3f
+                        )
                     )
                 )
-            )
-        }
+            }
 
-        Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .weight(1f)
-                .clickable { /*TODO*/ }
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.book_alt),
-                contentDescription = "Stats",
+            // przycisk zadania
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .size(24.dp),
-                colorFilter = ColorFilter.tint(Color.White)
-            )
-
-            Spacer(modifier = Modifier.height(5.dp))
-
-            Text(
-                text = "Zadania",
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = 9.sp,
-                    shadow = Shadow(
-                        color = Color.Black,
-                        offset = Offset(3f, 1f),
-                        blurRadius = 3f
+                    .weight(1f)
+                    .clickable { /*TODO*/ }
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.book_alt),
+                    contentDescription = "Tasks",
+                    modifier = Modifier
+                        .size(24.dp),
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = "Zadania",
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 9.sp,
+                        shadow = Shadow(
+                            color = Color.Black,
+                            offset = Offset(3f, 1f),
+                            blurRadius = 3f
+                        )
                     )
                 )
-            )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            // kolumna do plusa
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .weight(1f)
+            ) {
+                Spacer(modifier = Modifier.height(40.dp))
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            // przycisk do kalendarza
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { /*TODO*/ }
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.calendar),
+                    contentDescription = "Calendar",
+                    modifier = Modifier
+                        .size(24.dp),
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = "Kalendarz",
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 9.sp,
+                        shadow = Shadow(
+                            color = Color.Black,
+                            offset = Offset(3f, 1f),
+                            blurRadius = 3f
+                        )
+                    )
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            //przycisk do sklepu
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { /*TODO*/ }
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.shopping_cart),
+                    contentDescription = "Shop",
+                    modifier = Modifier
+                        .size(24.dp),
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = "Sklep",
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 9.sp,
+                        shadow = Shadow(
+                            color = Color.Black,
+                            offset = Offset(3f, 1f),
+                            blurRadius = 3f
+                        )
+                    )
+                )
+            }
+
+            Spacer(modifier = Modifier.width(10.dp))
         }
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+        // przyscisk do dodawania zadania
+        Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
-                .weight(1f)
+                .offset(y = (-35).dp)
+                .size(60.dp)
+                .clip(RoundedCornerShape(30.dp))
+                .background(Color(0xff8b99b9))
         ) {
             IconButton(onClick = { /*TODO*/ }) {
                 Image(
                     painter = painterResource(id = R.drawable.plus),
                     contentDescription = "AddTask",
                     modifier = Modifier
-                        .size(24.dp),
+                        .size(30.dp),
                     colorFilter = ColorFilter.tint(Color.White)
                 )
             }
         }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .weight(1f)
-                .clickable { /*TODO*/ }
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.calendar),
-                contentDescription = "Calendar",
-                modifier = Modifier
-                    .size(24.dp),
-                colorFilter = ColorFilter.tint(Color.White)
-            )
-
-            Spacer(modifier = Modifier.height(5.dp))
-
-            Text(
-                text = "Kalendarz",
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = 9.sp,
-                    shadow = Shadow(
-                        color = Color.Black,
-                        offset = Offset(3f, 1f),
-                        blurRadius = 3f
-                    )
-                )
-            )
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .weight(1f)
-                .clickable { /*TODO*/ }
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.shopping_cart),
-                contentDescription = "Shop",
-                modifier = Modifier
-                    .size(24.dp),
-                colorFilter = ColorFilter.tint(Color.White)
-            )
-
-            Spacer(modifier = Modifier.height(5.dp))
-
-            Text(
-                text = "Sklep",
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = 9.sp,
-                    shadow = Shadow(
-                        color = Color.Black,
-                        offset = Offset(3f, 1f),
-                        blurRadius = 3f
-                    )
-                )
-            )
-        }
-
-        Spacer(modifier = Modifier.width(10.dp))
     }
 }
