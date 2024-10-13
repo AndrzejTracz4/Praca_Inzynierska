@@ -1,6 +1,7 @@
 package com.example.pracainynierska.view
 
 import BottomMenu
+import GradientLevelProgressBar
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
@@ -266,7 +267,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                         .height(130.dp) // 2x wysokość TopBar
                         .clip(RoundedCornerShape(20.dp))
                         .background(Color(0x33FFFFFF))
-                        .padding(horizontal = 10.dp, vertical = 3.dp)
+                        .padding(horizontal = 10.dp, vertical = 1.dp)
                 ) {
                     Column (
                         modifier = Modifier.fillMaxHeight(),

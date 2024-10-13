@@ -1,5 +1,7 @@
 package com.example.pracainynierska.view
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -91,6 +93,11 @@ fun GradientStatsProgressBars(userRepository: UserRepository, userUUID: String?)
             val gradient = gradients[index % gradients.size]
             // Normalizacja wartości postępu do zakresu 0-1
             val normalizedProgress = progress.coerceIn(0f, 100f) / 100f
+            // Animacja wartości postępu
+            val animatedProgress by animateFloatAsState(
+                targetValue = normalizedProgress,
+                animationSpec = tween(durationMillis = 1000)
+            )
 
             // Tworzenie pojedynczego paska postępu
             Column {
@@ -105,7 +112,7 @@ fun GradientStatsProgressBars(userRepository: UserRepository, userUUID: String?)
                     // Pasek postępu z gradientem
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth(normalizedProgress)
+                            .fillMaxWidth(animatedProgress)
                             .height(12.dp)
                             .background(gradient)
                     )
