@@ -12,10 +12,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.pracainynierska.model.User
 import com.example.pracainynierska.repository.UserRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.openapitools.client.apis.UserApi
+import org.openapitools.client.infrastructure.ApiClient
 import java.security.MessageDigest
 import java.util.UUID
 
@@ -124,6 +128,18 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
             val hashedInputPassword = hashPassword(password)
 
             val user = userRepository.getUser(username, hashedInputPassword)
+
+//            viewModelScope.launch {
+//                try {
+//                    val apiUser = UserApi("http://127.0.0.1")
+//                    val testUser = withContext(Dispatchers.IO) {
+//                        apiUser.apiUsersIdGet("1")
+//                    }
+//                    Log.d("LoginViewModel", "testApiUser: $testUser")
+//                } catch (e: Exception) {
+//                    Log.e("LoginViewModel", "Error fetching user: ${e.message}")
+//                }
+//            }
 
             if (user != null) {
                 val userUUID = user.userUUID

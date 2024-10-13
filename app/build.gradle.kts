@@ -52,7 +52,8 @@ android {
 
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/{AL2.0,LGPL2.1,LICENSE.md,LICENSE.txt,LICENSE-notice.md,NOTICE.md,NOTICE.txt}"
+
         }
     }
 
@@ -102,4 +103,13 @@ dependencies {
 
     //Lottie
     implementation ("com.airbnb.android:lottie-compose:6.0.0")
+
+    //API
+    implementation ("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10")
+    implementation ("org.jetbrains.kotlin:kotlin-reflect:1.9.10")
+    implementation ("com.squareup.moshi:moshi-kotlin:1.15.1")
+    implementation ("com.squareup.moshi:moshi-adapters:1.15.1")
+    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation ("io.kotlintest:kotlintest-runner-junit5:3.4.2")
+    implementation ("io.kotlintest:kotlintest-assertions:3.4.2")
 }

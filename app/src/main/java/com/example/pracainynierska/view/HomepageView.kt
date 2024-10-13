@@ -1,5 +1,6 @@
 package com.example.pracainynierska.view
 
+import BottomMenu
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
@@ -175,7 +176,13 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                     }
                 )
             },
-            containerColor = Color(0xFF5b6d9d)
+
+            containerColor = Color(0xFF5b6d9d),
+
+            bottomBar = {
+                BottomMenu(userRepository = userRepository, userUUID = userUUID)
+
+            }
         ) {
             Column(
                 modifier = Modifier
@@ -284,7 +291,9 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                 ){
                     GradientStatsProgressBars(userRepository, userUUID)
                 }
+
             }
         }
+
     }
 }
