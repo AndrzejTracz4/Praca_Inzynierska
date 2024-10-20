@@ -35,7 +35,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             PracaInżynierskaTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -44,7 +43,7 @@ class MainActivity : ComponentActivity() {
                     val loginViewModel: LoginViewModel = viewModel(
                         factory = LoginViewModelFactory(userRepository)
                     )
-                    SetupNavGraph(navController = navController, userRepository = userRepository, loginViewModel = loginViewModel)
+                    SetupNavGraph(navController = navController, loginViewModel = loginViewModel)
                 }
             }
         }
@@ -53,7 +52,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun SetupNavGraph(navController: NavHostController, userRepository: UserRepository, loginViewModel: LoginViewModel) {
+fun SetupNavGraph(navController: NavHostController, loginViewModel: LoginViewModel) {
     NavHost(
         navController = navController,
         startDestination = "LoginView"
