@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -22,14 +23,24 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pracainynierska.viewmodel.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopMenu (username: String?) {
+fun TopMenu (loginViewModel: LoginViewModel) {
+
+    var username = ""
+
+    loginViewModel.user.observeAsState().value.let {
+        if (it != null) {
+            username = it.username
+        }
+    }
+
     Box(
         modifier = Modifier
             .padding(0.dp)
-            .clip(RoundedCornerShape(0.dp))
+            .clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp))
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
@@ -55,7 +66,7 @@ fun TopMenu (username: String?) {
             },
             title = {
                 Text(
-                    text = username ?: "Loading...",
+                    text = username,
                     fontSize = 24.sp,
                     color = Color.White,
                     modifier = Modifier.padding(start = 8.dp),

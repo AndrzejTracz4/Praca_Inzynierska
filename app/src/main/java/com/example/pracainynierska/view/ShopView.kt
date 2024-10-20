@@ -53,18 +53,18 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
     var selectedStat by remember { mutableStateOf("") }
     var sliderValue by remember { mutableStateOf(5f) }
 
-    var username = ""
-
-    loginViewModel.user.observeAsState().value.let {
-        if (it != null) {
-            username = it.username
-        }
-    }
+//    var username = ""
+//
+//    loginViewModel.user.observeAsState().value.let {
+//        if (it != null) {
+//            username = it.username
+//        }
+//    }
 
     Box () {
         Scaffold(
             topBar = {
-                TopMenu(username = username)
+                TopMenu(loginViewModel)
             },
 
             containerColor = Color.Transparent,

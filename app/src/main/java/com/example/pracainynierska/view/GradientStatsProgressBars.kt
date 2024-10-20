@@ -43,9 +43,6 @@ fun GradientStatsProgressBars(loginViewModel: LoginViewModel) {
 
     // Obserwacja zmian w danych użytkownika
     loginViewModel.user.observeAsState().value.let {
-//        if (userUUID != null) {
-//            loginViewModel.fetchUser(userUUID)
-//        }
         if (it != null) {
             userDetermination = it.determination
             userPhysicalFitness = it.physical_fitness

@@ -38,7 +38,7 @@ fun BottomMenu(navController: NavController) {
             contentColor = Color.White,
             modifier = Modifier
                 .padding(horizontal = 0.dp, vertical = 0.dp)
-                .clip(RoundedCornerShape(15.dp))
+                .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                 .height(60.dp)
                 .background(
                     brush = Brush.linearGradient(

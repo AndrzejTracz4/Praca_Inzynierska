@@ -72,17 +72,13 @@ import kotlinx.coroutines.flow.collect
 fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
 
     val focusManager = LocalFocusManager.current
-    var initialUserPhotoPath = ""
     var userLevel = 1
     var userExperience = 0f
-    var username = ""
 
     loginViewModel.user.observeAsState().value.let {
         if (it != null) {
-            initialUserPhotoPath = it.userPhotoPath.toString()
             userLevel = it.level
             userExperience = it.experience
-            username = it.username
         }
     }
 
@@ -140,7 +136,7 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
     ) {
         Scaffold(
             topBar = {
-                TopMenu(username = username)
+                TopMenu(loginViewModel)
             },
 
             containerColor = Color.Transparent,
