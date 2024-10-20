@@ -207,7 +207,7 @@ fun BottomMenu(navController: NavController) {
                     )
                 )
         ) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navController.navigate("AddTaskView") }) {
                 Image(
                     painter = painterResource(id = R.drawable.plus),
                     contentDescription = "AddTask",

@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pracainynierska.database.UserDatabase
 import com.example.pracainynierska.repository.UserRepository
 import com.example.pracainynierska.ui.theme.PracaInżynierskaTheme
+import com.example.pracainynierska.view.AddTaskView
 import com.example.pracainynierska.view.ChangeForgotPasswordView
 import com.example.pracainynierska.view.ForgotPasswordView
 import com.example.pracainynierska.view.HomepageView
@@ -76,7 +77,9 @@ fun SetupNavGraph(navController: NavHostController, loginViewModel: LoginViewMod
         composable("ShopView") {
             ShopView(navController = navController, loginViewModel = loginViewModel)
         }
-
+        composable("AddTaskView") {
+            AddTaskView(navController = navController, loginViewModel = loginViewModel)
+        }
     }
 }
 

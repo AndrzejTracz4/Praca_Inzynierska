@@ -62,13 +62,6 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
     var isHidden by remember { mutableStateOf(true) }
     var costValue by remember { mutableStateOf(5) }
 
-//    var username = ""
-//
-//    loginViewModel.user.observeAsState().value.let {
-//        if (it != null) {
-//            username = it.username
-//        }
-//    }
 
     val costText = buildAnnotatedString {
         // Dodaj normalny tekst
