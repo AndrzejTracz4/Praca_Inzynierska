@@ -71,6 +71,95 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
+    var isResetCodeSent by mutableStateOf<Boolean?>(null)
+
+    // Zmienna przechowująca nowe hasło
+    var newPassword by mutableStateOf("")
+        private set
+
+    // Zmienna przechowująca potwierdzenie nowego hasła
+    var confirmNewPassword by mutableStateOf("")
+        private set
+
+    // Zmienna przechowująca komunikat o błędzie nowego hasła
+    var newPasswordErrorMessage by mutableStateOf<String?>(null)
+        private set
+
+    // Zmienna przechowująca komunikat o błędzie potwierdzenia nowego hasła
+    var confirmNewPasswordErrorMessage by mutableStateOf<String?>(null)
+        private set
+
+    // Funkcja do zmiany nowego hasła i walidacji hasła
+    fun onNewPasswordChange(newPassword: String) {
+        this.newPassword = newPassword
+        newPasswordErrorMessage = validatePassword(newPassword)
+    }
+
+    // Funkcja do zmiany potwierdzenia nowego hasła i walidacji, czy hasła się zgadzają
+    fun onConfirmNewPasswordChange(newConfirmPassword: String) {
+        confirmNewPassword = newConfirmPassword
+        validateNewPasswords()
+    }
+
+    // Funkcja do walidacji zgodności nowych haseł
+    private fun validateNewPasswords() {
+        confirmNewPasswordErrorMessage = if (newPassword != confirmNewPassword) {
+            "Passwords do not match!"
+        } else {
+            null
+        }
+    }
+
+    // Funkcja do zmiany hasła po zalogowaniu
+    fun changePassword(onSuccess: () -> Unit, onError: (String) -> Unit) {
+        if (newPassword.isBlank() || confirmNewPassword.isBlank()) {
+            onError("All fields must be filled!")
+            return
+        }
+
+        if (newPasswordErrorMessage != null || confirmNewPasswordErrorMessage != null) {
+            onError("Please fix the errors before submitting.")
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                val hashedNewPassword = hashPassword(newPassword)
+
+                val currentUser = _user.value
+                if (currentUser != null) {
+                    currentUser.password = hashedNewPassword // Zaktualizuj hasło
+                    userRepository.upsertUser(currentUser) // Zapisz zaktualizowanego użytkownika
+                    onSuccess()
+                } else {
+                    onError("User not found.")
+                }
+            } catch (e: Exception) {
+                onError("Failed to change password: ${e.message}")
+            }
+        }
+    }
+
+    fun changePasswordByEmail(email: String, newPassword: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val hashedNewPassword = hashPassword(newPassword)
+
+                val existingUser = userRepository.getUserByEmail(email) // Znajdź użytkownika po e-mailu
+                if (existingUser != null) {
+                    existingUser.password = hashedNewPassword // Zaktualizuj hasło
+                    userRepository.upsertUser(existingUser) // Zapisz zaktualizowanego użytkownika
+                    onSuccess()
+                } else {
+                    onError("User not found.")
+                }
+            } catch (e: Exception) {
+                onError("Failed to change password: ${e.message}")
+            }
+        }
+    }
+
+
     // Funkcja do zmiany nazwy użytkownika i walidacji tej nazwy
     fun onUsernameChange(newUsername: String) {
         username = newUsername
@@ -264,14 +353,14 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
                     return@launch
                 }
 
-                val newPassword = generateRandomPassword()
+//                val newPassword = generateRandomPassword()
 
-                val hashedForgotPassword = hashPassword(newPassword)
+//                val hashedForgotPassword = hashPassword(newPassword)
 
-                existingUser.password = hashedForgotPassword
-                userRepository.upsertUser(existingUser)
+//                existingUser.password = hashedForgotPassword
+//                userRepository.upsertUser(existingUser)
 
-                sendEmailWithNewPassword(email, newPassword)
+//                sendEmailWithNewPassword(email, newPassword)
 
                 onSuccess()
             } catch (e: Exception) {
