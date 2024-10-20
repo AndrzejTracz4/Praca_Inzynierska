@@ -1,13 +1,16 @@
 package com.example.pracainynierska.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,9 +41,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -55,6 +61,10 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
     var showDialog by remember { mutableStateOf(false) }
     var forgotPasswordMessage by remember { mutableStateOf("") }
     var isDialogError by remember { mutableStateOf(false) }
+
+    var isResetCodeSent by remember { mutableStateOf(false) }
+
+    val codeInputs = remember { mutableStateListOf("", "", "", "", "", "") }
 
     val focusManager = LocalFocusManager.current
 
@@ -100,69 +110,131 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            OutlinedTextField(
-                value = loginViewModel.email,
-                onValueChange = {loginViewModel.onEmailChange(it)},
-                label = { Text(text = "Email")},
-                isError = loginViewModel.emailErrorMessage != null,
-                singleLine = true,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color.Gray,
-                    errorTextColor = Color.Red
-                ),
-                shape = RoundedCornerShape(16.dp),
-                trailingIcon = {
-                    if(loginViewModel.emailErrorMessage != null){
-                        Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
-                    } else {
-                        Image(
-                            painter = painterResource(id = R.drawable.email),
-                            contentDescription = "Email",
-                            modifier = Modifier
-                                .size(24.dp)
-                                .alpha(0.5f)
-                        )
-                    }
-                },
-                keyboardActions = KeyboardActions(
-                    onNext = {
-                        focusManager.clearFocus()
-                    }
-                ),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done
-                )
-            )
+            if (isResetCodeSent == true) {
+                // Dodaj kafelki do wprowadzenia kodu
+                Column(
+                    modifier = Modifier.padding(top = 16.dp)
+                ) {
+                    Text("Wprowadź kod resetujący:", color = Color.Black, fontSize = 16.sp)
+                    Spacer(modifier = Modifier.height(8.dp))
 
-            if (loginViewModel.emailErrorMessage != null){
-                Text(text = loginViewModel.emailErrorMessage!!, color = Color.Red, fontSize = 12.sp)
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = {
-                    loginViewModel.forgotPassword(
-                        loginViewModel.email,
-                        onSuccess = {
-                            forgotPasswordMessage = "A new password has been sent to your email."
-                            isDialogError = false
-                            showDialog = true
-                        },
-                        onError = {
-                            forgotPasswordMessage = it
-                            isDialogError = true
-                            showDialog = true
+                    // Kafelki do wprowadzenia kodu
+                    Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
+                        repeat(6) { index -> // 6 kafelków dla 6-cyfrowego kodu
+                            OutlinedTextField(
+                                value = codeInputs[index],
+                                onValueChange = {
+                                    if (it.length <= 1) {
+                                        codeInputs[index] = it
+                                        if (it.isNotEmpty() && index < 5) {
+                                            // Przenieś fokus do następnego pola
+                                            focusManager.moveFocus(FocusDirection.Next)
+                                        }
+                                    }
+                                    Log.d("CodeInputs", codeInputs.joinToString(""))
+                                },
+                                modifier = Modifier.width(50.dp),
+                                textStyle = TextStyle(fontSize = 24.sp, color = Color.Black, textAlign = TextAlign.Center),
+                                singleLine = true,
+                                shape = RoundedCornerShape(8.dp),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = Color.Black,
+                                    unfocusedBorderColor = Color.Gray,
+                                    errorTextColor = Color.Red
+                                ),
+                            )
                         }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = {
+                            // Logika weryfikacji kodu
+                            val enteredCode = codeInputs.joinToString("")
+                            if (enteredCode == "111111") { // Weryfikacja kodu
+                                // Kod poprawny, przejdź do zmiany hasła
+                                navController.navigate("ChangeForgotPasswordView")
+                            } else {
+                                forgotPasswordMessage = "Niepoprawny kod resetujący."
+                                isDialogError = true
+                                showDialog = true
+                            }
+                        },
+                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier
+                            .height(OutlinedTextFieldDefaults.MinHeight)
+                            .fillMaxWidth()
+                    ) {
+                        Text(text = "Potwierdź kod")
+                    }
+
+                }
+            } else {
+                OutlinedTextField(
+                    value = loginViewModel.email,
+                    onValueChange = {loginViewModel.onEmailChange(it)},
+                    label = { Text(text = "Email")},
+                    isError = loginViewModel.emailErrorMessage != null,
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Black,
+                        unfocusedBorderColor = Color.Gray,
+                        errorTextColor = Color.Red
+                    ),
+                    shape = RoundedCornerShape(16.dp),
+                    trailingIcon = {
+                        if(loginViewModel.emailErrorMessage != null){
+                            Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
+                        } else {
+                            Image(
+                                painter = painterResource(id = R.drawable.email),
+                                contentDescription = "Email",
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .alpha(0.5f)
+                            )
+                        }
+                    },
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            focusManager.clearFocus()
+                        }
+                    ),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done
                     )
-                },
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .height(OutlinedTextFieldDefaults.MinHeight)
-                    .width(OutlinedTextFieldDefaults.MinWidth)
-            ) {
-                Text(text = "Forgot password")
+                )
+
+                if (loginViewModel.emailErrorMessage != null){
+                    Text(text = loginViewModel.emailErrorMessage!!, color = Color.Red, fontSize = 12.sp)
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = {
+                        loginViewModel.forgotPassword(
+                            loginViewModel.email,
+                            onSuccess = {
+                                forgotPasswordMessage = "Na twój adres email został wysłany tymczasowy kod resetujący hasło."
+                                isDialogError = false
+                                showDialog = true
+                            },
+                            onError = {
+                                forgotPasswordMessage = it
+                                isDialogError = true
+                                showDialog = true
+                            }
+                        )
+                    },
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier
+                        .height(OutlinedTextFieldDefaults.MinHeight)
+                        .width(OutlinedTextFieldDefaults.MinWidth)
+                ) {
+                    Text(text = "Zresetuj hasło")
+                }
             }
 
             if (showDialog) {
@@ -170,10 +242,13 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                     onDismissRequest = {
                         showDialog = false
                     },
-                    title = { Text(text = if (isDialogError) "Error" else "Success") },
+                    title = { Text(text = if (isDialogError) "Błąd" else "Sukces") },
                     text = { Text(text = forgotPasswordMessage) },
                     confirmButton = {
-                        TextButton(onClick = { showDialog = false }) {
+                        TextButton(onClick = {
+                            showDialog = false
+                            isResetCodeSent = true
+                        }) {
                             Text("OK")
                         }
                     }

@@ -117,7 +117,7 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp) // Odstęp pod przyciskiem
-                        .clickable(onClick = { navController.popBackStack() }), // Umożliwienie klikania na cały wiersz
+                        .clickable(onClick = { navController.navigate("HomepageView") }),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
