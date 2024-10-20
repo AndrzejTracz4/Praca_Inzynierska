@@ -19,15 +19,11 @@ import com.example.pracainynierska.viewmodel.LoginViewModel
 import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 
 @Composable
-fun GradientLevelProgressBar(userRepository: UserRepository, userUUID: String?) {
-    val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(userRepository)
-    )
+fun GradientLevelProgressBar(loginViewModel: LoginViewModel) {
+
     var userExperience = 0f
+
     loginViewModel.user.observeAsState().value.let {
-        if (userUUID != null) {
-            loginViewModel.fetchUser(userUUID)
-        }
         if (it != null) {
             userExperience = it.experience
         }

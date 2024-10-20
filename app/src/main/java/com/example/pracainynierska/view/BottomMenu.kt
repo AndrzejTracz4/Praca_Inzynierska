@@ -27,10 +27,7 @@ import com.example.pracainynierska.viewmodel.LoginViewModel
 import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 
 @Composable
-fun BottomMenu(navController: NavController, userRepository: UserRepository, userUUID: String?) {
-    val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(userRepository)
-    )
+fun BottomMenu(navController: NavController) {
 
     Box(
         modifier = Modifier.fillMaxWidth(),
@@ -41,7 +38,7 @@ fun BottomMenu(navController: NavController, userRepository: UserRepository, use
             contentColor = Color.White,
             modifier = Modifier
                 .padding(horizontal = 0.dp, vertical = 0.dp)
-                .clip(RoundedCornerShape(15.dp))
+                .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                 .height(60.dp)
                 .background(
                     brush = Brush.linearGradient(

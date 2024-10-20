@@ -69,28 +69,16 @@ import kotlinx.coroutines.flow.collect
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomepageView(navController: NavController, userRepository: UserRepository, userUUID: String?) {
+fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
 
     val focusManager = LocalFocusManager.current
-    var initialUserPhotoPath = ""
     var userLevel = 1
     var userExperience = 0f
-    var username = ""
-
-    // Pobranie instancji LoginViewModel przy użyciu LoginViewModelFactory
-    val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(userRepository)
-    )
 
     loginViewModel.user.observeAsState().value.let {
-        if (userUUID != null) {
-            loginViewModel.fetchUser(userUUID)
-        }
         if (it != null) {
-            initialUserPhotoPath = it.userPhotoPath.toString()
             userLevel = it.level
             userExperience = it.experience
-            username = it.username
         }
     }
 
@@ -148,13 +136,13 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
     ) {
         Scaffold(
             topBar = {
-                TopMenu(username = username)
+                TopMenu(loginViewModel)
             },
 
             containerColor = Color.Transparent,
 
             bottomBar = {
-                BottomMenu(navController = navController,userRepository = userRepository, userUUID = userUUID)
+                BottomMenu(navController = navController)
             }
         ) {
             Column(
@@ -179,7 +167,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                     ) {
 
                         // Miejsce na zdjęcie użytkownika
-                        UserImagePicker(userRepository, userUUID = userUUID)
+                        UserImagePicker(loginViewModel)
 
                         Spacer(modifier = Modifier.width(16.dp))
 
@@ -216,7 +204,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                            GradientLevelProgressBar(userRepository, userUUID = userUUID) // Procent doświadczenia
+                            GradientLevelProgressBar(loginViewModel) // Procent doświadczenia
 
                             Spacer(modifier = Modifier.height(4.dp))
 
@@ -264,7 +252,7 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                         .background(Color(0x19FFFFFF))
                         .padding(4.dp)
                 ){
-                    GradientStatsProgressBars(userRepository, userUUID)
+                    GradientStatsProgressBars(loginViewModel)
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))

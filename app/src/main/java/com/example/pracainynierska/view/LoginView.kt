@@ -33,6 +33,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
@@ -46,13 +51,21 @@ import com.example.pracainynierska.repository.UserRepository
 import com.example.pracainynierska.viewmodel.LoginViewModel
 
 @Composable
-fun LoginView(navController: NavController, userRepository: UserRepository){
+fun LoginView(navController: NavController, loginViewModel: LoginViewModel){
 
     val focusManager = LocalFocusManager.current
 
-    val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(userRepository)
-    )
+    // State do śledzenia wyniku logowania
+    var loginResult by remember { mutableStateOf(false) }
+
+    // Jeśli logowanie się udało, nawiguj do HomepageView
+    if (loginResult) {
+        LaunchedEffect(loginResult) {
+            navController.navigate("HomepageView") {
+                popUpTo("LoginView") { inclusive = true }
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -185,7 +198,13 @@ fun LoginView(navController: NavController, userRepository: UserRepository){
 
             Button(
                 onClick = {
-                    loginViewModel.login(navController)
+                    loginViewModel.login { success ->
+                        if (success) {
+                            loginResult = true
+                        } else {
+                            loginResult = false
+                        }
+                    }
                 },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier

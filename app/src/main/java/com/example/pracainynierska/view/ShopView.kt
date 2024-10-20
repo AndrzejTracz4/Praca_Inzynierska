@@ -2,6 +2,7 @@ package com.example.pracainynierska.view
 
 import BottomMenu
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -53,7 +54,7 @@ import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ShopView(navController: NavController, userRepository: UserRepository, userUUID: String?) {
+fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
     var selectedStat by remember { mutableStateOf("Determinacja") }
     var selectedShopMode by remember { mutableStateOf("Oslona") }
     var sliderValueTime by remember { mutableFloatStateOf(10f) }
@@ -61,21 +62,13 @@ fun ShopView(navController: NavController, userRepository: UserRepository, userU
     var isHidden by remember { mutableStateOf(true) }
     var costValue by remember { mutableStateOf(5) }
 
-    var username = ""
-
-    // Pobranie instancji LoginViewModel przy użyciu LoginViewModelFactory
-    val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(userRepository)
-    )
-
-    loginViewModel.user.observeAsState().value.let {
-        if (userUUID != null) {
-            loginViewModel.fetchUser(userUUID)
-        }
-        if (it != null) {
-            username = it.username
-        }
-    }
+//    var username = ""
+//
+//    loginViewModel.user.observeAsState().value.let {
+//        if (it != null) {
+//            username = it.username
+//        }
+//    }
 
     val costText = buildAnnotatedString {
         // Dodaj normalny tekst
@@ -104,13 +97,13 @@ fun ShopView(navController: NavController, userRepository: UserRepository, userU
     ) {
         Scaffold(
             topBar = {
-                TopMenu(username = username)
+                TopMenu(loginViewModel)
             },
 
             containerColor = Color.Transparent,
 
             bottomBar = {
-                BottomMenu(navController = navController,userRepository = userRepository, userUUID = userUUID)
+                BottomMenu(navController = navController)
             }
         ) {
             Column(

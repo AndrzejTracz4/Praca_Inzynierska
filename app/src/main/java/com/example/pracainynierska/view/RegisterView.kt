@@ -52,13 +52,9 @@ import com.example.pracainynierska.viewmodel.LoginViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun RegisterView(navController: NavController, userRepository: UserRepository){
+fun RegisterView(navController: NavController, loginViewModel: LoginViewModel){
 
     val focusManager = LocalFocusManager.current
-
-    val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(userRepository)
-    )
 
     var showDialog by remember { mutableStateOf(false) }
     var registrationMessage by remember { mutableStateOf("") }

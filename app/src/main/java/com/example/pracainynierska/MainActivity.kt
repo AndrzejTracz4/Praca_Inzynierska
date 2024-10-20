@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,6 +21,8 @@ import com.example.pracainynierska.view.HomepageView
 import com.example.pracainynierska.view.LoginView
 import com.example.pracainynierska.view.RegisterView
 import com.example.pracainynierska.view.ShopView
+import com.example.pracainynierska.viewmodel.LoginViewModel
+import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 
 class MainActivity : ComponentActivity() {
 
@@ -29,15 +32,18 @@ class MainActivity : ComponentActivity() {
         val userDao = UserDatabase.getDatabase(applicationContext).dao
         userRepository = UserRepository(userDao)
 
+
         setContent {
             PracaInżynierskaTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    SetupNavGraph(navController = navController, userRepository = userRepository)
+                    val loginViewModel: LoginViewModel = viewModel(
+                        factory = LoginViewModelFactory(userRepository)
+                    )
+                    SetupNavGraph(navController = navController, loginViewModel = loginViewModel)
                 }
             }
         }
@@ -46,30 +52,25 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun SetupNavGraph(navController: NavHostController, userRepository: UserRepository) {
+fun SetupNavGraph(navController: NavHostController, loginViewModel: LoginViewModel) {
     NavHost(
         navController = navController,
         startDestination = "LoginView"
     ) {
         composable("LoginView") {
-            // 75b671f7-c73
-            LoginView(navController = navController, userRepository = userRepository)
-//            ShopView(navController = navController, userRepository = userRepository, "75b671f7-c73")
-//            HomepageView(navController, userRepository, "75b671f7-c73")
+            LoginView(navController = navController, loginViewModel = loginViewModel)
         }
         composable("RegisterView") {
-            RegisterView(navController = navController, userRepository = userRepository)
+            RegisterView(navController = navController, loginViewModel = loginViewModel)
         }
-        composable("HomepageView/{userUUID}") { backStackEntry ->
-            val userUUID = backStackEntry.arguments?.getString("userUUID")
-            HomepageView(navController, userRepository, userUUID)
+        composable("HomepageView") {
+            HomepageView(navController = navController, loginViewModel = loginViewModel)
         }
         composable("ForgotPasswordView") {
-            ForgotPasswordView(navController = navController, userRepository = userRepository)
+            ForgotPasswordView(navController = navController, loginViewModel = loginViewModel)
         }
-        composable("ShopView") {backStackEntry ->
-            val userUUID = backStackEntry.arguments?.getString("userUUID")
-            ShopView(navController = navController, userRepository = userRepository, userUUID)
+        composable("ShopView") {
+            ShopView(navController = navController, loginViewModel = loginViewModel)
         }
 
     }

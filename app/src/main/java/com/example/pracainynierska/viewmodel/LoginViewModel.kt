@@ -120,15 +120,15 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
     }
 
     // Funkcja do logowania użytkownika
-    fun login(navController: NavController) {
-        viewModelScope.launch {
-            usernameErrorMessage = null
-            passwordErrorMessage = null
-
-            val hashedInputPassword = hashPassword(password)
-
-            val user = userRepository.getUser(username, hashedInputPassword)
-
+//    fun login(navController: NavController) {
+//        viewModelScope.launch {
+//            usernameErrorMessage = null
+//            passwordErrorMessage = null
+//
+//            val hashedInputPassword = hashPassword(password)
+//
+//            val user = userRepository.getUser(username, hashedInputPassword)
+//
 //            viewModelScope.launch {
 //                try {
 //                    val apiUser = UserApi("http://127.0.0.1")
@@ -140,20 +140,43 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 //                    Log.e("LoginViewModel", "Error fetching user: ${e.message}")
 //                }
 //            }
+//
+//            if (user != null) {
+//                val userUUID = user.userUUID
+//                // Pobierz dane użytkownika
+//                loginSuccess = true
+//                fetchUser(userUUID)
+//                // Przekazanie nazwy użytkownika do HomepageView
+//                navController.navigate("HomepageView/$userUUID")
+//            } else {
+//                usernameErrorMessage = "Invalid username or password"
+//                passwordErrorMessage = "Invalid username or password"
+//            }
+//        }
+//    }
+
+    fun login(onLoginResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            usernameErrorMessage = null
+            passwordErrorMessage = null
+
+            val hashedInputPassword = hashPassword(password)
+            val user = userRepository.getUser(username, hashedInputPassword)
 
             if (user != null) {
                 val userUUID = user.userUUID
-                // Pobierz dane użytkownika
+                // Pobranie danych użytkownika
                 loginSuccess = true
                 fetchUser(userUUID)
-                // Przekazanie nazwy użytkownika do HomepageView
-                navController.navigate("HomepageView/$userUUID")
+                onLoginResult(true) // Zwrócenie informacji o udanym logowaniu
             } else {
                 usernameErrorMessage = "Invalid username or password"
                 passwordErrorMessage = "Invalid username or password"
+                onLoginResult(false) // Logowanie nieudane
             }
         }
     }
+
 
 
     // Funkcja do rejestracji użytkownika
