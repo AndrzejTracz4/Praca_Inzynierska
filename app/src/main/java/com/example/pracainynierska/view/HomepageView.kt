@@ -135,23 +135,32 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
             .pointerInput(Unit) {
                 detectTapGestures(onTap = { focusManager.clearFocus() })
             }
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        Color(0xFF4C0949), // Bottom color
+                        Color(0xFF470B93)  // Top color
+                    ),
+                    start = Offset(0f, Float.POSITIVE_INFINITY), // Start at the bottom
+                    end = Offset(0f, 0f)  // End at the top
+                )
+            )
     ) {
         Scaffold(
             topBar = {
                 TopMenu(username = username)
             },
 
-            containerColor = Color(0xFF5b6d9d),
+            containerColor = Color.Transparent,
 
             bottomBar = {
-                BottomMenu(userRepository = userRepository, userUUID = userUUID)
-
+                BottomMenu(navController = navController,userRepository = userRepository, userUUID = userUUID)
             }
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(12.dp)
             ) {
                 Spacer(modifier = Modifier.height(70.dp))
 
@@ -160,8 +169,8 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(120.dp) // 2x wysokość TopBar
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(Color(0x33FFFFFF))
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0x19FFFFFF))
                         .padding(16.dp)
                 ) {
                     Row(
@@ -251,8 +260,8 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(240.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(Color(0x33FFFFFF))
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0x19FFFFFF))
                         .padding(4.dp)
                 ){
                     GradientStatsProgressBars(userRepository, userUUID)
@@ -264,9 +273,9 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(130.dp) // 2x wysokość TopBar
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(Color(0x33FFFFFF))
+                        .height(140.dp) // 2x wysokość TopBar
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0x19FFFFFF))
                         .padding(horizontal = 10.dp, vertical = 1.dp)
                 ) {
                     Column (
@@ -284,7 +293,9 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                                     blurRadius = 3f
                                 )
                             ),
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(vertical = 5.dp)
                         )
 
                         Spacer(modifier = Modifier.height(1.dp))
@@ -293,8 +304,8 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(100.dp) // 2x wysokość TopBar
-                                .clip(RoundedCornerShape(20.dp))
-                                .background(Color(0x33FFFFFF))
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(Color(0x14FFFFFF))
                                 .padding(16.dp)
                         )
                     }
@@ -306,9 +317,9 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(130.dp) // 2x wysokość TopBar
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(Color(0x33FFFFFF))
+                        .height(140.dp) // 2x wysokość TopBar
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0x19FFFFFF))
                         .padding(horizontal = 10.dp, vertical = 1.dp)
                 ) {
                     Column (
@@ -326,7 +337,9 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                                     blurRadius = 3f
                                 )
                             ),
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(vertical = 5.dp)
                         )
 
                         Spacer(modifier = Modifier.height(1.dp))
@@ -335,8 +348,8 @@ fun HomepageView(navController: NavController, userRepository: UserRepository, u
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(100.dp) // 2x wysokość TopBar
-                                .clip(RoundedCornerShape(20.dp))
-                                .background(Color(0x33FFFFFF))
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(Color(0x14FFFFFF))
                                 .padding(16.dp)
                         )
                     }

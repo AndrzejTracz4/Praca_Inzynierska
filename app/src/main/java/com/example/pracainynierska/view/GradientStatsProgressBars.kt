@@ -106,8 +106,8 @@ fun GradientStatsProgressBars(userRepository: UserRepository, userUUID: String?)
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(12.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(Color.LightGray)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0x11FFFFFF))
                 ) {
                     // Pasek postępu z gradientem
                     Box(

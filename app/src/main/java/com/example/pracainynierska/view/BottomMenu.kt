@@ -18,14 +18,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.repository.UserRepository
 import com.example.pracainynierska.viewmodel.LoginViewModel
 import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 
 @Composable
-fun BottomMenu(userRepository: UserRepository, userUUID: String?) {
+fun BottomMenu(navController: NavController, userRepository: UserRepository, userUUID: String?) {
     val loginViewModel: LoginViewModel = viewModel(
         factory = LoginViewModelFactory(userRepository)
     )
@@ -35,12 +37,22 @@ fun BottomMenu(userRepository: UserRepository, userUUID: String?) {
         contentAlignment = Alignment.BottomCenter
     ) {
         BottomAppBar(
-            containerColor = Color(0x4DFFFFFF),
+            containerColor = Color.Transparent, // Set to transparent to apply custom background
             contentColor = Color.White,
             modifier = Modifier
-                .padding(horizontal = 10.dp, vertical = 5.dp)
-                .clip(RoundedCornerShape(20.dp))
+                .padding(horizontal = 0.dp, vertical = 0.dp)
+                .clip(RoundedCornerShape(15.dp))
                 .height(60.dp)
+                .background(
+                    brush = Brush.linearGradient(
+                        colors = listOf(
+                            Color(0xFF070709), // Start color (Center)
+                            Color(0xFF1B1871)  // End color (Bottom-right)
+                        ),
+                        start = Offset(0f, 0f), // Start near the center (x, y)
+                        end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY) // End at the bottom-right
+                    )
+                )
         ) {
             Spacer(modifier = Modifier.width(10.dp))
 
@@ -112,7 +124,7 @@ fun BottomMenu(userRepository: UserRepository, userUUID: String?) {
                 modifier = Modifier
                     .weight(1f)
             ) {
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(20.dp))
             }
 
             Spacer(modifier = Modifier.weight(1f))
@@ -153,7 +165,7 @@ fun BottomMenu(userRepository: UserRepository, userUUID: String?) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .weight(1f)
-                    .clickable { /*TODO*/ }
+                    .clickable { navController.navigate("ShopView")}
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.shopping_cart),
@@ -184,10 +196,19 @@ fun BottomMenu(userRepository: UserRepository, userUUID: String?) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .offset(y = (-35).dp)
+                .offset(y = (-25).dp)
                 .size(60.dp)
                 .clip(RoundedCornerShape(30.dp))
-                .background(Color(0xff8b99b9))
+                .background(
+                    brush = Brush.linearGradient(
+                        colors = listOf(
+                            Color(0xFF070709), // Start color (center-ish)
+                            Color(0xFF1B1871)  // End color (bottom-right)
+                        ),
+                        start = Offset(-10f, 0f), // Adjusted to start from near center
+                        end = Offset(200f, 50f)    // End at the bottom-right
+                    )
+                )
         ) {
             IconButton(onClick = { /*TODO*/ }) {
                 Image(

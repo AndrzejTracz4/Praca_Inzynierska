@@ -55,7 +55,7 @@ fun GradientLevelProgressBar(userRepository: UserRepository, userUUID: String?) 
             .fillMaxWidth()
             .height(8.dp)
             .clip(RoundedCornerShape(4.dp))
-            .background(Color.LightGray)
+            .background(Color(0x11FFFFFF))
     ) {
         // Pasek postępu
         Box(
