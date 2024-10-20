@@ -19,6 +19,7 @@ import com.example.pracainynierska.view.ForgotPasswordView
 import com.example.pracainynierska.view.HomepageView
 import com.example.pracainynierska.view.LoginView
 import com.example.pracainynierska.view.RegisterView
+import com.example.pracainynierska.view.ShopView
 
 class MainActivity : ComponentActivity() {
 
@@ -51,7 +52,10 @@ fun SetupNavGraph(navController: NavHostController, userRepository: UserReposito
         startDestination = "LoginView"
     ) {
         composable("LoginView") {
+            // 75b671f7-c73
             LoginView(navController = navController, userRepository = userRepository)
+//            ShopView(navController = navController, userRepository = userRepository)
+//            HomepageView(navController, userRepository, "75b671f7-c73")
         }
         composable("RegisterView") {
             RegisterView(navController = navController, userRepository = userRepository)
@@ -62,6 +66,10 @@ fun SetupNavGraph(navController: NavHostController, userRepository: UserReposito
         }
         composable("ForgotPasswordView") {
             ForgotPasswordView(navController = navController, userRepository = userRepository)
+        }
+        composable("ShopView") {backStackEntry ->
+            val userUUID = backStackEntry.arguments?.getString("userUUID")
+            ShopView(navController = navController, userRepository = userRepository, userUUID)
         }
 
     }
