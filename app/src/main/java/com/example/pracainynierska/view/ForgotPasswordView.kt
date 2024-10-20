@@ -50,17 +50,13 @@ import com.example.pracainynierska.viewmodel.LoginViewModel
 import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 
 @Composable
-fun ForgotPasswordView(navController: NavController, userRepository: UserRepository) {
+fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewModel) {
 
     var showDialog by remember { mutableStateOf(false) }
     var forgotPasswordMessage by remember { mutableStateOf("") }
     var isDialogError by remember { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
-
-    val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(userRepository)
-    )
 
     Box(
         modifier = Modifier

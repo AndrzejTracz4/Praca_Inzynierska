@@ -30,11 +30,7 @@ import com.example.pracainynierska.R
 import kotlinx.coroutines.delay
 
 @Composable
-fun UserImagePicker(userRepository: UserRepository, userUUID: String?) {
-
-    val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(userRepository)
-    )
+fun UserImagePicker(loginViewModel: LoginViewModel) {
 
     // Zmienna do przechowywania wybranej animacji
     var selectedAnimationIndex by remember { mutableIntStateOf(0) }
@@ -68,10 +64,10 @@ fun UserImagePicker(userRepository: UserRepository, userUUID: String?) {
 
     //Obserwer do LiveData
     loginViewModel.user.observeAsState().value.let {
-        if (userUUID != null) {
-            loginViewModel.fetchUser(userUUID)
-            Log.d("UserImagePicker", "fetcheduser: $it")
-        }
+//        if (userUUID != null) {
+//            loginViewModel.fetchUser(userUUID)
+//            Log.d("UserImagePicker", "fetcheduser: $it")
+//        }
         if (it != null) {
             val userPhotoPath = it.userPhotoPath
             selectedAnimationIndex = lottieFiles.indexOf(userPhotoPath).takeIf { it >= 0 } ?: 0

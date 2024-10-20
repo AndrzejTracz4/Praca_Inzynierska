@@ -33,11 +33,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.LottieAnimation
 
 @Composable
-fun GradientStatsProgressBars(userRepository: UserRepository, userUUID: String?) {
-    // Inicjalizacja ViewModelu
-    val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(userRepository)
-    )
+fun GradientStatsProgressBars(loginViewModel: LoginViewModel) {
 
     // Zmienne do przechowywania wartości statystyk użytkownika
     var userDetermination = 0f
@@ -47,9 +43,9 @@ fun GradientStatsProgressBars(userRepository: UserRepository, userUUID: String?)
 
     // Obserwacja zmian w danych użytkownika
     loginViewModel.user.observeAsState().value.let {
-        if (userUUID != null) {
-            loginViewModel.fetchUser(userUUID)
-        }
+//        if (userUUID != null) {
+//            loginViewModel.fetchUser(userUUID)
+//        }
         if (it != null) {
             userDetermination = it.determination
             userPhysicalFitness = it.physical_fitness

@@ -2,6 +2,7 @@ package com.example.pracainynierska.view
 
 import BottomMenu
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -48,21 +49,13 @@ import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ShopView(navController: NavController, userRepository: UserRepository, userUUID: String?) {
+fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
     var selectedStat by remember { mutableStateOf("") }
     var sliderValue by remember { mutableStateOf(5f) }
 
     var username = ""
 
-    // Pobranie instancji LoginViewModel przy użyciu LoginViewModelFactory
-    val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(userRepository)
-    )
-
     loginViewModel.user.observeAsState().value.let {
-        if (userUUID != null) {
-            loginViewModel.fetchUser(userUUID)
-        }
         if (it != null) {
             username = it.username
         }
@@ -77,7 +70,7 @@ fun ShopView(navController: NavController, userRepository: UserRepository, userU
             containerColor = Color.Transparent,
 
             bottomBar = {
-                BottomMenu(navController = navController,userRepository = userRepository, userUUID = userUUID)
+                BottomMenu(navController = navController)
             }
         ) {
             Column(

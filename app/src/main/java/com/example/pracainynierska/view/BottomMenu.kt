@@ -27,10 +27,7 @@ import com.example.pracainynierska.viewmodel.LoginViewModel
 import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 
 @Composable
-fun BottomMenu(navController: NavController, userRepository: UserRepository, userUUID: String?) {
-    val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(userRepository)
-    )
+fun BottomMenu(navController: NavController) {
 
     Box(
         modifier = Modifier.fillMaxWidth(),
