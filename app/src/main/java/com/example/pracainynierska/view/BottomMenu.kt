@@ -162,7 +162,12 @@ fun BottomMenu(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .weight(1f)
-                    .clickable { navController.navigate("ShopView")}
+                    .clickable {
+                        val currentRoute = navController.currentDestination?.route
+                        if (currentRoute != "ShopView") {
+                            navController.navigate("ShopView")
+                        }
+                    }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.shopping_cart),
@@ -207,7 +212,12 @@ fun BottomMenu(navController: NavController) {
                     )
                 )
         ) {
-            IconButton(onClick = { navController.navigate("AddTaskView") }) {
+            IconButton(onClick = {
+                val currentRoute = navController.currentDestination?.route
+                if (currentRoute != "AddTaskView") {
+                    navController.navigate("AddTaskView")
+                }
+            }) {
                 Image(
                     painter = painterResource(id = R.drawable.plus),
                     contentDescription = "AddTask",
