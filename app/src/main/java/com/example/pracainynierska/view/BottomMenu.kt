@@ -131,7 +131,12 @@ fun BottomMenu(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .weight(1f)
-                    .clickable { /*TODO*/ }
+                    .clickable {
+                        val currentRoute = navController.currentDestination?.route
+                        if (currentRoute != "CalendarsView") {
+                            navController.navigate("CalendarsView")
+                        }
+                    }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.calendar),
