@@ -64,9 +64,14 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerDialog(onDateSelected: (String) -> Unit, onDismissRequest: () -> Unit) {
+fun DateTimePickerDialog(onDateTimeSelected: (String) -> Unit, onDismissRequest: () -> Unit) {
     val dateState = rememberDatePickerState()
-    val formatter = remember { SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()) }
+    val formatter = remember { SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault()) }
+    val context = LocalContext.current
+
+    var selectedHour by remember { mutableStateOf(0) }
+    var selectedMinute by remember { mutableStateOf(0) }
+
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(
             modifier = Modifier.padding(16.dp),
@@ -82,13 +87,30 @@ fun DatePickerDialog(onDateSelected: (String) -> Unit, onDismissRequest: () -> U
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {
+                    // Sprawdzamy, czy wybrano datę
                     dateState.selectedDateMillis?.let { millis ->
-                        val date = Date(millis)
-                        val formattedDate = formatter.format(date)
-                        onDateSelected(formattedDate)
-                    } ?: onDateSelected("Nie wybrano daty")
+                        // Po wyborze daty otwiera się okno dialogowe z wyborem godziny
+                        val timePickerDialog = android.app.TimePickerDialog(
+                            context,
+                            { _, hour, minute ->
+                                selectedHour = hour
+                                selectedMinute = minute
+
+                                // Formatujemy wybraną datę i godzinę
+                                val date = Date(millis)
+                                date.hours = selectedHour
+                                date.minutes = selectedMinute
+                                val formattedDateTime = formatter.format(date)
+                                onDateTimeSelected(formattedDateTime)
+                            },
+                            selectedHour,
+                            selectedMinute,
+                            true
+                        )
+                        timePickerDialog.show()
+                    } ?: onDateTimeSelected("Nie wybrano daty")
                 }) {
-                    Text("Wybierz")
+                    Text("Wybierz datę i godzinę")
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 TextButton(onClick = onDismissRequest) {
