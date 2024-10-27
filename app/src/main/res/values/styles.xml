@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Główny styl dla CalendarView -->
+    <style name="CustomCalendarView" parent="android:Widget.CalendarView">
+
+        <!-- Kolor tekstu dla dni miesiąca -->
+        <item name="android:textColor">#FFFFFF</item>
+
+        <!-- Kolor tekstu dla dni tygodnia (np. Poniedziałek, Wtorek) -->
+        <item name="android:textColorPrimary">#FFFFFF</item>
+
+        <!-- Kolor podświetlonej daty -->
+        <item name="android:selectedDateVerticalBar">@color/white</item>
+
+        <!-- Kolor i styl tekstu dla dni miesiąca -->
+        <item name="android:dateTextAppearance">@style/CustomDateTextAppearance</item>
+
+        <!-- Kolor i styl dla tekstu nazw dni tygodnia (np. Pn, Wt) -->
+        <item name="android:weekDayTextAppearance">@style/CustomWeekDayTextAppearance</item>
+
+        <!-- Kolor dla dni spoza miesiąca (np. poprzedni/następny miesiąc) -->
+        <item name="android:headerDayOfMonthTextAppearance">@style/CustomDayOfMonthTextAppearance</item>
+
+    </style>
+
+    <!-- Dostosowanie wyglądu tekstu dla dni miesiąca -->
+    <style name="CustomDateTextAppearance" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">#FFFFFF</item> <!-- Wybrany kolor tekstu dla dni -->
+        <item name="android:textSize">18sp</item> <!-- Rozmiar tekstu -->
+    </style>
+
+    <!-- Dostosowanie wyglądu tekstu dla dni tygodnia -->
+    <style name="CustomWeekDayTextAppearance" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">#FFFFFF</item> <!-- Kolor tekstu dla nazw dni tygodnia -->
+        <item name="android:textSize">14sp</item> <!-- Rozmiar tekstu dla dni tygodnia -->
+    </style>
+
+    <!-- Dostosowanie wyglądu tekstu dla dni spoza miesiąca -->
+    <style name="CustomDayOfMonthTextAppearance" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">#FFFFFF</item> <!-- Kolor tekstu dla dni spoza miesiąca -->
+        <item name="android:textSize">16sp</item> <!-- Rozmiar tekstu dla dni spoza miesiąca -->
+    </style>
+
+</resources>
