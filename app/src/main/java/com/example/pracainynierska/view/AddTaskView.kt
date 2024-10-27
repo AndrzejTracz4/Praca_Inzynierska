@@ -71,21 +71,21 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
 
 
 Box (
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        Color(0xFF4C0949),
-                        Color(0xFF470B93)
-                    ),
-                    start = Offset(0f, Float.POSITIVE_INFINITY),
-                    end = Offset(0f, 0f)
-                )
+    modifier = Modifier
+        .fillMaxSize()
+        .background(
+            brush = Brush.linearGradient(
+                colors = listOf(
+                    Color(0xFF4C0949),
+                    Color(0xFF470B93)
+                ),
+                start = Offset(0f, Float.POSITIVE_INFINITY),
+                end = Offset(0f, 0f)
             )
-            .pointerInput(Unit){
-                detectTapGestures(onTap = {focusManager.clearFocus()})
-            }
+        )
+        .pointerInput(Unit){
+            detectTapGestures(onTap = {focusManager.clearFocus()})
+        }
     ) {
         Scaffold(
             topBar = {
@@ -253,7 +253,7 @@ Box (
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(
-                        text = "Co ile dni?",
+                        text = "Poziom trudności",
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
@@ -329,48 +329,6 @@ Box (
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun CustomAddTaskButton(
-    text: String,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-    iconResId: Int,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .height(50.dp)
-            .padding(vertical = 4.dp)
-            .background(
-                color = if (isSelected) Color(0x4DFFFFFF) else Color(0x19FFFFFF),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(id = iconResId),
-                contentDescription = null,
-                modifier = Modifier.size(20.dp),
-                tint = Color.White
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Text(
-                text = text,
-                color = Color.White,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.ExtraBold
-            )
         }
     }
 }
