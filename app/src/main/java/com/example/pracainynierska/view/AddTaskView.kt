@@ -2,14 +2,12 @@ package com.example.pracainynierska.view
 
 import BottomMenu
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,7 +26,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -61,15 +58,15 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
     var selectedAddTaskMode by remember { mutableStateOf("Jednorazowe") }
     var isHidden by remember { mutableStateOf(true) }
     var taskName by remember { mutableStateOf("") }
-    var taskDuration by remember { mutableStateOf("") }
-    var taskStartDate by remember { mutableStateOf("") }
     var selectedDifficulty by remember { mutableStateOf("Łatwy") }
     var selectedCategory by remember { mutableStateOf("Samorozwój") }
-    var showDatePicker by remember { mutableStateOf(false) }
-    var showTimePicker by remember { mutableStateOf(false) }
-    var selectedDate by remember { mutableStateOf("") }
-    var selectedTime by remember { mutableStateOf("") }
+    var showStartDatePicker by remember { mutableStateOf(false) }
+    var showEndDatePicker by remember { mutableStateOf(false) }
+    var showNumberPicker by remember { mutableStateOf(false) }
+    var selectedStartDate by remember { mutableStateOf("") }
+    var selectedEndDate by remember { mutableStateOf("") }
     val context = LocalContext.current
+    var dayCycle by remember { mutableIntStateOf(0) }
 
 
 
@@ -145,7 +142,7 @@ Box (
                             isHidden = true
                         },
                         iconResId = R.drawable.disposable_icon,
-                        width = 180.dp
+                        modifier = Modifier.weight(1f)
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -158,7 +155,7 @@ Box (
                             isHidden = false
                         },
                         iconResId = R.drawable.cyclical_icon,
-                        width = 180.dp
+                        modifier = Modifier.weight(1f)
                     )
                 }
 
@@ -205,25 +202,90 @@ Box (
 
                 }
 
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Text(
+                        text = "Data rozpoczęcia",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    //Spacer(modifier = Modifier.height(4.dp))
+                    CustomDatePickerField(
+                        text = "",
+                        value = selectedStartDate,
+                        onValueChange = { selectedStartDate = it },
+                        onClick = { showStartDatePicker = true }
+                    )
+                }
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
 
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        Text(
-                            text = "Data rozpoczęcia",
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.ExtraBold
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Text(
+                        text = "Data zakończenia",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    //Spacer(modifier = Modifier.height(4.dp))
+                    CustomDatePickerField(
+                        text = "",
+                        value = selectedEndDate,
+                        onValueChange = { selectedEndDate = it },
+                        onClick = { showEndDatePicker = true }
+                    )
+                }
+
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Text(
+                        text = "Co ile dni?",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    //Spacer(modifier = Modifier.height(4.dp))
+                    CustomNumberPickerField(
+                        text = "",
+                        value = dayCycle,
+                        onValueChange = { dayCycle = it },
+                        onClick = { showNumberPicker = true }
+                    )
+                }
+
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Text(
+                        text = "Co ile dni?",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        CustomAddTaskButton(
+                            text = "Łatwy",
+                            isSelected = selectedDifficulty == "Łatwe",
+                            onClick = { selectedDifficulty = "Łatwe" },
+                            iconResId = R.drawable.disposable_icon,
+                            modifier = Modifier.weight(1f)
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        CustomDatePickerField(
-                            text = "",
-                            value = selectedDate,
-                            onValueChange = { selectedDate = it },
-                            onClick = { showDatePicker = true }
+
+                        CustomAddTaskButton(
+                            text = "Średni",
+                            isSelected = selectedDifficulty == "Średni",
+                            onClick = { selectedDifficulty = "Średni" },
+                            iconResId = R.drawable.cyclical_icon,
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        CustomAddTaskButton(
+                            text = "Trudny",
+                            isSelected = selectedDifficulty == "Trudny",
+                            onClick = { selectedDifficulty = "Trudny" },
+                            iconResId = R.drawable.cyclical_icon,
+                            modifier = Modifier.weight(1f)
                         )
                     }
                 }
@@ -236,28 +298,51 @@ Box (
 
 
 
-                // DatePickerDialog and TimePickerDialog implementation
-                if (showDatePicker) {
-                    DatePickerDialog(
-                        onDateSelected = { date ->
-                            selectedDate = date
-                            showDatePicker = false
+
+
+
+                if (showStartDatePicker) {
+                    DateTimePickerDialog(
+                        onDateTimeSelected = { dateTime ->
+                            selectedStartDate = dateTime
+                            showStartDatePicker = false
                         },
-                        onDismissRequest = { showDatePicker = false }
+                        onDismissRequest = { showStartDatePicker = false }
+                    )
+                }else if (showEndDatePicker){
+                    DateTimePickerDialog(
+                        onDateTimeSelected = { dateTime ->
+                            selectedEndDate = dateTime
+                            showEndDatePicker = false
+                        },
+                        onDismissRequest = { showEndDatePicker = false }
                     )
                 }
-
-
+                if (showNumberPicker) {
+                    NumberPickerDialog(
+                        selectedNumber = dayCycle,
+                        onNumberSelected = { number ->
+                            dayCycle = number
+                            showNumberPicker = false
+                        },
+                        onDismissRequest = { showNumberPicker = false }
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun CustomAddTaskButton(text: String, isSelected: Boolean, onClick: () -> Unit, iconResId: Int, width: Dp) {
+fun CustomAddTaskButton(
+    text: String,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    iconResId: Int,
+    modifier: Modifier = Modifier
+) {
     Box(
-        modifier = Modifier
-            .width(width)
+        modifier = modifier
             .height(50.dp)
             .padding(vertical = 4.dp)
             .background(
@@ -290,6 +375,7 @@ fun CustomAddTaskButton(text: String, isSelected: Boolean, onClick: () -> Unit, 
     }
 }
 
+
 @Composable
 fun CustomDatePickerField(
     text: String,
@@ -313,6 +399,36 @@ fun CustomDatePickerField(
     ) {
         Text(
             text = value.ifEmpty { text },
+            color = Color.White,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.ExtraBold
+        )
+    }
+}
+
+@Composable
+fun CustomNumberPickerField(
+    text: String,
+    value: Int,
+    onValueChange: (Int) -> Unit,
+    onClick: () -> Unit,
+    height: Dp = 50.dp
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(height)
+            .padding(vertical = 4.dp)
+            .background(
+                color = Color(0x4DFFFFFF),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable { onClick() }
+            .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = if (value != 0) value.toString() else text,
             color = Color.White,
             fontSize = 14.sp,
             fontWeight = FontWeight.ExtraBold
