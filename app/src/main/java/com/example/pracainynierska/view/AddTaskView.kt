@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
@@ -24,11 +25,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +51,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.viewmodel.LoginViewModel
+import kotlinx.coroutines.launch
+
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -67,6 +72,9 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
     var selectedEndDate by remember { mutableStateOf("") }
     val context = LocalContext.current
     var dayCycle by remember { mutableIntStateOf(0) }
+
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+    val scope = rememberCoroutineScope();
 
 
 
@@ -89,7 +97,15 @@ Box (
     ) {
         Scaffold(
             topBar = {
-                TopMenu(loginViewModel)
+                TopMenu(
+                    loginViewModel = loginViewModel,
+                    drawerState = drawerState,
+                    onDrawerOpen = {
+                        scope.launch {
+                            drawerState.open()
+                        }
+                    }
+                )
             },
 
             containerColor = Color.Transparent,
