@@ -128,7 +128,7 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
                     ) {
                         Icon(
                             modifier = Modifier.size(20.dp), // Ustaw rozmiar ikony
-                            painter = painterResource(id = R.drawable.powrot), // Użyj odpowiedniej ikony strzałki
+                            painter = painterResource(id = R.drawable.back), // Użyj odpowiedniej ikony strzałki
                             contentDescription = "Powrót",
                             tint = Color.White // Kolor ikony
                         )
@@ -150,7 +150,7 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
                             onClick = {
                                 selectedShopMode = "Oslona"
                                 isHidden = true },
-                            iconResId = R.drawable.oslona
+                            iconResId = R.drawable.shield
                         )
                         CustomButton(
                             text = "Modyfikator czasowy",
@@ -158,7 +158,7 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
                             onClick = {
                                 selectedShopMode = "Modyfikator"
                                 isHidden = false },
-                            iconResId = R.drawable.modyfikator
+                            iconResId = R.drawable.timeout
                         )
                     }
 
@@ -357,7 +357,7 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
                         ) {
                             // Image
                             Icon(
-                                painter = painterResource(R.drawable.zakup),
+                                painter = painterResource(R.drawable.buy),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(24.dp), // Size of the icon

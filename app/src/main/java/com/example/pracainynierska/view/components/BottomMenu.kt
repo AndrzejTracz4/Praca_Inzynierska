@@ -175,7 +175,7 @@ fun BottomMenu(navController: NavController) {
                     }
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.shopping_cart),
+                    painter = painterResource(id = R.drawable.shop),
                     contentDescription = "Shop",
                     modifier = Modifier
                         .size(24.dp),

@@ -111,7 +111,7 @@ fun CalendarsView(navController: NavController, loginViewModel: LoginViewModel) 
                     ) {
                         Icon(
                             modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.powrot),
+                            painter = painterResource(id = R.drawable.back),
                             contentDescription = "Powrót",
                             tint = Color.White
                         )

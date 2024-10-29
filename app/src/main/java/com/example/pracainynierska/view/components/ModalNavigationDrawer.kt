@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -45,13 +46,13 @@ fun ModalDrawer(
     val currentRoute = navBackStackEntry.value?.destination?.route
 
     val items = listOf(
-        DrawerItem("Strona Główna", Icons.Default.Home, "HomepageView"),
-        DrawerItem("Profil", Icons.Default.AccountBox, "HomepageView" /* TODO: Profil */),
-        DrawerItem("Statystyki", Icons.Default.AddCircle, "HomepageView" /* TODO: Statystyki */),
-        DrawerItem("Kalendarz", Icons.Default.Face, "CalendarsView"),
-        DrawerItem("Sklep", Icons.Default.MailOutline, "ShopView"),
-        DrawerItem("Ustawienia", Icons.Default.Settings, "HomepageView" /* TODO: Ustawienia */),
-        DrawerItem("Wyloguj", Icons.Default.Lock, "LogoutView" /* TODO: Wylogowanie */)
+        DrawerItem("Strona Główna", R.drawable.home, "HomepageView"),
+        DrawerItem("Profil", R.drawable.profile, "HomepageView"),
+        DrawerItem("Statystyki", R.drawable.stats, "HomepageView"),
+        DrawerItem("Kalendarz", R.drawable.calendar, "CalendarsView"),
+        DrawerItem("Sklep", R.drawable.shop, "ShopView"),
+        DrawerItem("Ustawienia", R.drawable.settings, "HomepageView"),
+        DrawerItem("Wyloguj", R.drawable.logout, "HomepageView")
     )
 
     // Zmienna do śledzenia zaznaczonego elementu
@@ -127,11 +128,11 @@ fun ModalDrawer(
                             }
                         },
                         icon = {
-                            Icon(
-                                imageVector = item.icon,
+                            Image(
+                                painter = painterResource(id = item.iconRes),
                                 contentDescription = item.text,
                                 modifier = Modifier.size(20.dp),
-                                tint = Color.White
+                                colorFilter = ColorFilter.tint(Color.White)
                             )
                         }
                     )
@@ -152,11 +153,11 @@ fun ModalDrawer(
                             }
                         },
                         icon = {
-                            Icon(
-                                imageVector = item.icon,
+                            Image(
+                                painter = painterResource(id = item.iconRes),
                                 contentDescription = item.text,
                                 modifier = Modifier.size(20.dp),
-                                tint = Color.White
+                                colorFilter = ColorFilter.tint(Color.White)
                             )
                         }
                     )
