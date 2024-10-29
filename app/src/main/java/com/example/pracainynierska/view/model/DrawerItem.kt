@@ -1,4 +1,4 @@
-package com.example.pracainynierska.view
+package com.example.pracainynierska.view.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

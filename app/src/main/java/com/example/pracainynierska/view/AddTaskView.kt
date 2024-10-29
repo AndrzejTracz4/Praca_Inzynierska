@@ -50,6 +50,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.ui.components.ModalDrawer
+import com.example.pracainynierska.view.components.CustomAddTaskButton
+import com.example.pracainynierska.view.components.DateTimePickerDialog
+import com.example.pracainynierska.view.components.NumberPickerDialog
+import com.example.pracainynierska.view.components.TopMenu
 import com.example.pracainynierska.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
 
@@ -73,28 +78,11 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
     val context = LocalContext.current
     var dayCycle by remember { mutableIntStateOf(0) }
 
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope();
 
 
-
-Box (
-    modifier = Modifier
-        .fillMaxSize()
-        .background(
-            brush = Brush.linearGradient(
-                colors = listOf(
-                    Color(0xFF4C0949),
-                    Color(0xFF470B93)
-                ),
-                start = Offset(0f, Float.POSITIVE_INFINITY),
-                end = Offset(0f, 0f)
-            )
-        )
-        .pointerInput(Unit){
-            detectTapGestures(onTap = {focusManager.clearFocus()})
-        }
-    ) {
+    ModalDrawer(navController = navController, drawerState = drawerState) {
         Scaffold(
             topBar = {
                 TopMenu(
@@ -107,242 +95,248 @@ Box (
                     }
                 )
             },
-
-            containerColor = Color.Transparent,
-
             bottomBar = {
                 BottomMenu(navController = navController)
-            }
-        ) {
-            Column(
+            },
+            containerColor = Color.Transparent
+        ) { innerPadding ->
+            Box (
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
-            ){
-                Spacer(modifier = Modifier.height(55.dp))
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .clickable(onClick = { navController.navigate("HomepageView") }),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(id = R.drawable.powrot),
-                        contentDescription = "Powrót",
-                        tint = Color.White
-                    )
-
-                    Spacer(modifier = Modifier.width(4.dp))
-
-                    Text(
-                        text = "Powrót",
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    CustomAddTaskButton(
-                        text = "Jednorazowe",
-                        isSelected = selectedAddTaskMode == "Jednorazowe",
-                        onClick = {
-                            selectedAddTaskMode = "Jednorazowe"
-                            isHidden = true
-                        },
-                        iconResId = R.drawable.disposable_icon,
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    CustomAddTaskButton(
-                        text = "Cykliczne",
-                        isSelected = selectedAddTaskMode == "Cykliczne",
-                        onClick = {
-                            selectedAddTaskMode = "Cykliczne"
-                            isHidden = false
-                        },
-                        iconResId = R.drawable.cyclical_icon,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-
-                Column(modifier = Modifier.padding(8.dp)) {
-                    Text(
-                        text = "Nazwa",
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.ExtraBold
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(55.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(Color(0x4DFFFFFF)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        TextField(
-                            value = taskName,
-                            onValueChange = { taskName = it },
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(vertical = 0.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = Color.Transparent,
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                cursorColor = Color.White,
-                                focusedTextColor = Color.White,
-                                unfocusedTextColor = Color.White
+                    .background(
+                        brush = Brush.linearGradient(
+                            colors = listOf(
+                                Color(0xFF4C0949),
+                                Color(0xFF470B93)
                             ),
-                            singleLine = true,
-                            textStyle = LocalTextStyle.current.copy(
-                                color = Color.White,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                textAlign = TextAlign.Center
-                            )
+                            start = Offset(0f, Float.POSITIVE_INFINITY),
+                            end = Offset(0f, 0f)
                         )
+                    )
+                    .pointerInput(Unit){
+                        detectTapGestures(onTap = {focusManager.clearFocus()})
                     }
+            ) {
 
-                }
-
-                Column(modifier = Modifier.padding(8.dp)) {
-                    Text(
-                        text = "Data rozpoczęcia",
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.ExtraBold
-                    )
-                    //Spacer(modifier = Modifier.height(4.dp))
-                    CustomDatePickerField(
-                        text = "",
-                        value = selectedStartDate,
-                        onValueChange = { selectedStartDate = it },
-                        onClick = { showStartDatePicker = true }
-                    )
-                }
-
-
-                Column(modifier = Modifier.padding(8.dp)) {
-                    Text(
-                        text = "Data zakończenia",
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.ExtraBold
-                    )
-                    //Spacer(modifier = Modifier.height(4.dp))
-                    CustomDatePickerField(
-                        text = "",
-                        value = selectedEndDate,
-                        onValueChange = { selectedEndDate = it },
-                        onClick = { showEndDatePicker = true }
-                    )
-                }
-
-                Column(modifier = Modifier.padding(8.dp)) {
-                    Text(
-                        text = "Co ile dni?",
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.ExtraBold
-                    )
-                    //Spacer(modifier = Modifier.height(4.dp))
-                    CustomNumberPickerField(
-                        text = "",
-                        value = dayCycle,
-                        onValueChange = { dayCycle = it },
-                        onClick = { showNumberPicker = true }
-                    )
-                }
-
-                Column(modifier = Modifier.padding(8.dp)) {
-                    Text(
-                        text = "Poziom trudności",
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.ExtraBold
-                    )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ){
+                    Spacer(modifier = Modifier.height(55.dp))
 
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable(onClick = { navController.navigate("HomepageView") }),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.powrot),
+                            contentDescription = "Powrót",
+                            tint = Color.White
+                        )
+
+                        Spacer(modifier = Modifier.width(4.dp))
+
+                        Text(
+                            text = "Powrót",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
                     ) {
                         CustomAddTaskButton(
-                            text = "Łatwy",
-                            isSelected = selectedDifficulty == "Łatwe",
-                            onClick = { selectedDifficulty = "Łatwe" },
+                            text = "Jednorazowe",
+                            isSelected = selectedAddTaskMode == "Jednorazowe",
+                            onClick = {
+                                selectedAddTaskMode = "Jednorazowe"
+                                isHidden = true
+                            },
                             iconResId = R.drawable.disposable_icon,
                             modifier = Modifier.weight(1f)
                         )
 
-                        CustomAddTaskButton(
-                            text = "Średni",
-                            isSelected = selectedDifficulty == "Średni",
-                            onClick = { selectedDifficulty = "Średni" },
-                            iconResId = R.drawable.cyclical_icon,
-                            modifier = Modifier.weight(1f)
-                        )
+                        Spacer(modifier = Modifier.width(8.dp))
 
                         CustomAddTaskButton(
-                            text = "Trudny",
-                            isSelected = selectedDifficulty == "Trudny",
-                            onClick = { selectedDifficulty = "Trudny" },
+                            text = "Cykliczne",
+                            isSelected = selectedAddTaskMode == "Cykliczne",
+                            onClick = {
+                                selectedAddTaskMode = "Cykliczne"
+                                isHidden = false
+                            },
                             iconResId = R.drawable.cyclical_icon,
                             modifier = Modifier.weight(1f)
                         )
                     }
-                }
+
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        Text(
+                            text = "Nazwa",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(55.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(Color(0x4DFFFFFF)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            TextField(
+                                value = taskName,
+                                onValueChange = { taskName = it },
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(vertical = 0.dp),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    containerColor = Color.Transparent,
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    cursorColor = Color.White,
+                                    focusedTextColor = Color.White,
+                                    unfocusedTextColor = Color.White
+                                ),
+                                singleLine = true,
+                                textStyle = LocalTextStyle.current.copy(
+                                    color = Color.White,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    textAlign = TextAlign.Center
+                                )
+                            )
+                        }
+
+                    }
+
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        Text(
+                            text = "Data rozpoczęcia",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                        //Spacer(modifier = Modifier.height(4.dp))
+                        CustomDatePickerField(
+                            text = "",
+                            value = selectedStartDate,
+                            onValueChange = { selectedStartDate = it },
+                            onClick = { showStartDatePicker = true }
+                        )
+                    }
 
 
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        Text(
+                            text = "Data zakończenia",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                        //Spacer(modifier = Modifier.height(4.dp))
+                        CustomDatePickerField(
+                            text = "",
+                            value = selectedEndDate,
+                            onValueChange = { selectedEndDate = it },
+                            onClick = { showEndDatePicker = true }
+                        )
+                    }
 
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        Text(
+                            text = "Co ile dni?",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                        //Spacer(modifier = Modifier.height(4.dp))
+                        CustomNumberPickerField(
+                            text = "",
+                            value = dayCycle,
+                            onValueChange = { dayCycle = it },
+                            onClick = { showNumberPicker = true }
+                        )
+                    }
 
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        Text(
+                            text = "Poziom trudności",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
 
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            CustomAddTaskButton(
+                                text = "Łatwy",
+                                isSelected = selectedDifficulty == "Łatwe",
+                                onClick = { selectedDifficulty = "Łatwe" },
+                                iconResId = R.drawable.disposable_icon,
+                                modifier = Modifier.weight(1f)
+                            )
 
+                            CustomAddTaskButton(
+                                text = "Średni",
+                                isSelected = selectedDifficulty == "Średni",
+                                onClick = { selectedDifficulty = "Średni" },
+                                iconResId = R.drawable.cyclical_icon,
+                                modifier = Modifier.weight(1f)
+                            )
 
+                            CustomAddTaskButton(
+                                text = "Trudny",
+                                isSelected = selectedDifficulty == "Trudny",
+                                onClick = { selectedDifficulty = "Trudny" },
+                                iconResId = R.drawable.cyclical_icon,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
 
-
-
-
-
-                if (showStartDatePicker) {
-                    DateTimePickerDialog(
-                        onDateTimeSelected = { dateTime ->
-                            selectedStartDate = dateTime
-                            showStartDatePicker = false
-                        },
-                        onDismissRequest = { showStartDatePicker = false }
-                    )
-                }else if (showEndDatePicker){
-                    DateTimePickerDialog(
-                        onDateTimeSelected = { dateTime ->
-                            selectedEndDate = dateTime
-                            showEndDatePicker = false
-                        },
-                        onDismissRequest = { showEndDatePicker = false }
-                    )
-                }
-                if (showNumberPicker) {
-                    NumberPickerDialog(
-                        selectedNumber = dayCycle,
-                        onNumberSelected = { number ->
-                            dayCycle = number
-                            showNumberPicker = false
-                        },
-                        onDismissRequest = { showNumberPicker = false }
-                    )
+                    if (showStartDatePicker) {
+                        DateTimePickerDialog(
+                            onDateTimeSelected = { dateTime ->
+                                selectedStartDate = dateTime
+                                showStartDatePicker = false
+                            },
+                            onDismissRequest = { showStartDatePicker = false }
+                        )
+                    }else if (showEndDatePicker){
+                        DateTimePickerDialog(
+                            onDateTimeSelected = { dateTime ->
+                                selectedEndDate = dateTime
+                                showEndDatePicker = false
+                            },
+                            onDismissRequest = { showEndDatePicker = false }
+                        )
+                    }
+                    if (showNumberPicker) {
+                        NumberPickerDialog(
+                            selectedNumber = dayCycle,
+                            onNumberSelected = { number ->
+                                dayCycle = number
+                                showNumberPicker = false
+                            },
+                            onDismissRequest = { showNumberPicker = false }
+                        )
+                    }
                 }
             }
         }

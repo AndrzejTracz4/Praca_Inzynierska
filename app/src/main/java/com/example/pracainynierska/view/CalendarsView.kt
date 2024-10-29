@@ -41,6 +41,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.ui.components.ModalDrawer
+import com.example.pracainynierska.view.components.TopMenu
 import com.example.pracainynierska.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -55,26 +57,10 @@ fun CalendarsView(navController: NavController, loginViewModel: LoginViewModel) 
 
     val selectedDate = remember { mutableStateOf("") }
 
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope();
 
-    Box (
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        Color(0xFF4C0949),
-                        Color(0xFF470B93)
-                    ),
-                    start = Offset(0f, Float.POSITIVE_INFINITY),
-                    end = Offset(0f, 0f)
-                )
-            )
-            .pointerInput(Unit){
-                detectTapGestures(onTap = {focusManager.clearFocus()})
-            }
-    ) {
+    ModalDrawer(navController = navController, drawerState = drawerState) {
         Scaffold(
             topBar = {
                 TopMenu(
@@ -87,74 +73,90 @@ fun CalendarsView(navController: NavController, loginViewModel: LoginViewModel) 
                     }
                 )
             },
-
-            containerColor = Color.Transparent,
-
             bottomBar = {
                 BottomMenu(navController = navController)
-            }
-        ) {
-            Column(
+            },
+            containerColor = Color.Transparent
+        ) { innerPadding ->
+            Box (
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
-            ){
-                Spacer(modifier = Modifier.height(55.dp))
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .clickable(onClick = { navController.navigate("HomepageView") }),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(id = R.drawable.powrot),
-                        contentDescription = "Powrót",
-                        tint = Color.White
+                    .background(
+                        brush = Brush.linearGradient(
+                            colors = listOf(
+                                Color(0xFF4C0949),
+                                Color(0xFF470B93)
+                            ),
+                            start = Offset(0f, Float.POSITIVE_INFINITY),
+                            end = Offset(0f, 0f)
+                        )
                     )
-
-                    Spacer(modifier = Modifier.width(4.dp))
-
-                    Text(
-                        text = "Powrót",
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                // Wyświetlanie natywnego widoku CalendarView
-                AndroidView(
-                    factory = { context ->
-                        // Zmana na polską lokalizację
-                        val locale = Locale("pl", "PL")
-                        Locale.setDefault(locale)
-                        val config = context.resources.configuration
-                        config.setLocale(locale)
-                        val localizedContext = context.createConfigurationContext(config)
-
-                        CalendarView(ContextThemeWrapper(localizedContext, R.style.CustomCalendarView)).apply {
-                            firstDayOfWeek = Calendar.MONDAY
-
-                            // Ustawienia dla widoku kalendarza
-                            setOnDateChangeListener { _, year, month, dayOfMonth ->
-                                selectedDate.value = "$dayOfMonth/${month + 1}/$year"
-                            }
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
+                    .pointerInput(Unit){
+                        detectTapGestures(onTap = {focusManager.clearFocus()})
+                    }
+            ) {
                 Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(text = "Selected Date: ${selectedDate.value}")
-                }
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ){
+                    Spacer(modifier = Modifier.height(55.dp))
 
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable(onClick = { navController.navigate("HomepageView") }),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.powrot),
+                            contentDescription = "Powrót",
+                            tint = Color.White
+                        )
+
+                        Spacer(modifier = Modifier.width(4.dp))
+
+                        Text(
+                            text = "Powrót",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    // Wyświetlanie natywnego widoku CalendarView
+                    AndroidView(
+                        factory = { context ->
+                            // Zmana na polską lokalizację
+                            val locale = Locale("pl", "PL")
+                            Locale.setDefault(locale)
+                            val config = context.resources.configuration
+                            config.setLocale(locale)
+                            val localizedContext = context.createConfigurationContext(config)
+
+                            CalendarView(ContextThemeWrapper(localizedContext, R.style.CustomCalendarView)).apply {
+                                firstDayOfWeek = Calendar.MONDAY
+
+                                // Ustawienia dla widoku kalendarza
+                                setOnDateChangeListener { _, year, month, dayOfMonth ->
+                                    selectedDate.value = "$dayOfMonth/${month + 1}/$year"
+                                }
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(text = "Selected Date: ${selectedDate.value}")
+                    }
+
+                }
             }
         }
     }

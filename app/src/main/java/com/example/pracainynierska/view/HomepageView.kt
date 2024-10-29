@@ -1,14 +1,9 @@
 package com.example.pracainynierska.view
 
 import BottomMenu
-import GradientLevelProgressBar
+import com.example.pracainynierska.view.components.GradientLevelProgressBar
 import android.annotation.SuppressLint
-import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,70 +14,33 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RenderEffect
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.airbnb.lottie.compose.LottieAnimation
-import com.example.pracainynierska.repository.UserRepository
 import com.example.pracainynierska.viewmodel.LoginViewModel
-import com.example.pracainynierska.viewmodel.LoginViewModelFactory
-import com.airbnb.lottie.compose.rememberLottieComposition
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.example.pracainynierska.R
-import com.example.pracainynierska.model.User
-import kotlinx.coroutines.flow.collect
+import com.example.pracainynierska.ui.components.ModalDrawer
+import com.example.pracainynierska.view.components.GradientStatsProgressBars
+import com.example.pracainynierska.view.components.TopMenu
+import com.example.pracainynierska.view.components.UserImagePicker
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -137,123 +95,9 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
     val userRank = levelNames[userLevel] ?: "Nieznany poziom"
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope();
-    val selectedItem = remember { mutableStateOf(0) }
+    val scope = rememberCoroutineScope()
 
-    val items = listOf(
-        DrawerItem("Strona Główna", Icons.Default.Home, "HomepageView"),
-        DrawerItem("Profil", Icons.Default.AccountBox, "ProfileView"),
-        DrawerItem("Statystyki", Icons.Default.AddCircle, "StatisticsView"),
-        DrawerItem("Kalendarz", Icons.Default.Face, "CalendarView"),
-        DrawerItem("Sklep", Icons.Default.MailOutline, "ShopView"),
-        DrawerItem("Ustawienia", Icons.Default.Settings, "SettingsView"),
-        DrawerItem("Wyloguj", Icons.Default.Lock, "LogoutView")
-    )
-
-
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .fillMaxHeight()
-                    .background(
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                Color(0xFF4C0949),
-                                Color(0xFF470B93)
-                            ),
-                            start = Offset(0f, Float.POSITIVE_INFINITY),
-                            end = Offset(0f, 0f)
-                        )
-                    )
-                    .padding(horizontal = 16.dp, vertical = 48.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 24.dp), // Dodaj margines na dole
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Ikona aplikacji
-                    Image(
-                        painter = painterResource(id = R.drawable.questa_logo), // Zmień 'your_image' na nazwę swojego pliku
-                        contentDescription = "App Icon",
-                        modifier = Modifier.size(40.dp) // Rozmiar ikony
-                    )
-
-                    Spacer(modifier = Modifier.width(8.dp)) // Odstęp między ikoną a nazwą
-
-                    // Nazwa aplikacji
-                    Text(
-                        text = "Questa", // Wprowadź nazwę aplikacji
-                        color = Color.White,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Text(
-                    text = "Wersja: 1.0.0",
-                    color = Color.White.copy(alpha = 0.7f),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Normal,
-                    modifier = Modifier.padding(bottom = 24.dp)
-                )
-
-                items.take(items.size - 2).forEachIndexed { index, item ->
-                    CustomDrawerItem(
-                        text = item.text,
-                        isSelected = selectedItem.value == index,
-                        onClick = {
-                            selectedItem.value = index
-                            navController.navigate(item.route) // Użyj trasy z klasy DrawerItem
-                            scope.launch {
-                                drawerState.close()
-                            }
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = item.icon,
-                                contentDescription = item.text,
-                                modifier = Modifier.size(20.dp), // Ustawienie rozmiaru ikony
-                                tint = Color.White // Ustawienie koloru ikony
-                            )
-                        }
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                items.takeLast(2).forEachIndexed { index, item ->
-                    CustomDrawerItem(
-                        text = item.text,
-                        isSelected = selectedItem.value == (items.size - 2 + index),
-                        onClick = {
-                            selectedItem.value = items.size - 2 + index
-                            scope.launch {
-                                drawerState.close()
-                            }
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = item.icon,
-                                contentDescription = item.text,
-                                modifier = Modifier.size(20.dp), // Ustawienie rozmiaru ikony
-                                tint = Color.White // Ustawienie koloru ikony
-                            )
-                        }
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-            }
-        }
-    ) {
-        // Scaffold jako zawartość wewnątrz ModalNavigationDrawer
+    ModalDrawer(navController = navController, drawerState = drawerState) {
         Scaffold(
             topBar = {
                 TopMenu(
