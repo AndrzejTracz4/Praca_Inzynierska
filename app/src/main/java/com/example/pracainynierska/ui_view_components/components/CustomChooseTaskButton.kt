@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun CustomAddTaskButton(
+fun CustomChooseTaskButton(
     text: String,
     isSelected: Boolean,
     onClick: () -> Unit,

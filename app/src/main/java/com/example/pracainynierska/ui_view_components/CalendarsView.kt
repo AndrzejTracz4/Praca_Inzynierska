@@ -153,7 +153,10 @@ fun CalendarsView(navController: NavController, loginViewModel: LoginViewModel) 
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Spacer(modifier = Modifier.height(16.dp))
-                        Text(text = "Selected Date: ${selectedDate.value}")
+                        Text(
+                            text = "Data: ${selectedDate.value}",
+                            color = Color.White
+                        )
                     }
 
                 }

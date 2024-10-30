@@ -2,6 +2,7 @@ package com.example.pracainynierska.ui_view_components
 
 import BottomMenu
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -10,13 +11,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -45,15 +49,20 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.ui.components.ModalDrawer
-import com.example.pracainynierska.ui_view_components.components.CustomAddTaskButton
+import com.example.pracainynierska.ui_view_components.components.CustomChooseTaskButton
+import com.example.pracainynierska.ui_view_components.components.CustomCreateTaskButton
+import com.example.pracainynierska.ui_view_components.components.CustomDatePickerField
+import com.example.pracainynierska.ui_view_components.components.CustomMeasurePickerField
+import com.example.pracainynierska.ui_view_components.components.CustomNumberPickerField
+import com.example.pracainynierska.ui_view_components.components.CustomTaskTextField
 import com.example.pracainynierska.ui_view_components.components.DateTimePickerDialog
 import com.example.pracainynierska.ui_view_components.components.NumberPickerDialog
+import com.example.pracainynierska.ui_view_components.components.TaskMode
 import com.example.pracainynierska.ui_view_components.components.TopMenu
 import com.example.pracainynierska.view_model.LoginViewModel
 import kotlinx.coroutines.launch
@@ -65,21 +74,23 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
 
     val focusManager = LocalFocusManager.current
 
-    var selectedAddTaskMode by remember { mutableStateOf("Jednorazowe") }
+    var selectedAddTaskMode by remember { mutableStateOf(TaskMode.JEDNORAZOWE) }
     var isHidden by remember { mutableStateOf(true) }
     var taskName by remember { mutableStateOf("") }
-    var selectedDifficulty by remember { mutableStateOf("Łatwy") }
-    var selectedCategory by remember { mutableStateOf("Samorozwój") }
+    var selectedDifficulty by remember { mutableStateOf("") }
+    var selectedCategory by remember { mutableStateOf("") }
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }
     var showNumberPicker by remember { mutableStateOf(false) }
+    var selectedMeasureUnit by remember { mutableStateOf("") }
+    var showMeasurePicker by remember { mutableStateOf(false) }
     var selectedStartDate by remember { mutableStateOf("") }
     var selectedEndDate by remember { mutableStateOf("") }
-    val context = LocalContext.current
-    var dayCycle by remember { mutableIntStateOf(0) }
+    var interval by remember { mutableIntStateOf(0) }
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope();
+    val scope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
 
 
     ModalDrawer(navController = navController, drawerState = drawerState) {
@@ -99,7 +110,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                 BottomMenu(navController = navController)
             },
             containerColor = Color.Transparent
-        ) { innerPadding ->
+        ) {
             Box (
                 modifier = Modifier
                     .fillMaxSize()
@@ -113,15 +124,17 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                             end = Offset(0f, 0f)
                         )
                     )
-                    .pointerInput(Unit){
-                        detectTapGestures(onTap = {focusManager.clearFocus()})
+                    .pointerInput(Unit) {
+                        detectTapGestures(onTap = { focusManager.clearFocus() })
                     }
             ) {
 
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
+                        .fillMaxHeight()
                         .padding(16.dp)
+                        .verticalScroll(scrollState)
                 ){
                     Spacer(modifier = Modifier.height(55.dp))
 
@@ -154,11 +167,11 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                             .fillMaxWidth()
                             .padding(8.dp)
                     ) {
-                        CustomAddTaskButton(
+                        CustomChooseTaskButton(
                             text = "Jednorazowe",
-                            isSelected = selectedAddTaskMode == "Jednorazowe",
+                            isSelected = selectedAddTaskMode == TaskMode.JEDNORAZOWE,
                             onClick = {
-                                selectedAddTaskMode = "Jednorazowe"
+                                selectedAddTaskMode = TaskMode.JEDNORAZOWE
                                 isHidden = true
                             },
                             iconResId = R.drawable.disposable_icon,
@@ -167,11 +180,11 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
 
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        CustomAddTaskButton(
+                        CustomChooseTaskButton(
                             text = "Cykliczne",
-                            isSelected = selectedAddTaskMode == "Cykliczne",
+                            isSelected = selectedAddTaskMode == TaskMode.CYKLICZNE,
                             onClick = {
-                                selectedAddTaskMode = "Cykliczne"
+                                selectedAddTaskMode = TaskMode.CYKLICZNE
                                 isHidden = false
                             },
                             iconResId = R.drawable.cyclical_icon,
@@ -196,27 +209,9 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                                 .background(Color(0x4DFFFFFF)),
                             contentAlignment = Alignment.Center
                         ) {
-                            TextField(
-                                value = taskName,
-                                onValueChange = { taskName = it },
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(vertical = 0.dp),
-                                colors = TextFieldDefaults.textFieldColors(
-                                    containerColor = Color.Transparent,
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent,
-                                    cursorColor = Color.White,
-                                    focusedTextColor = Color.White,
-                                    unfocusedTextColor = Color.White
-                                ),
-                                singleLine = true,
-                                textStyle = LocalTextStyle.current.copy(
-                                    color = Color.White,
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    textAlign = TextAlign.Center
-                                )
+                            CustomTaskTextField(
+                                taskName = taskName,
+                                onTaskNameChange = { taskName = it }
                             )
                         }
 
@@ -253,23 +248,61 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                             onValueChange = { selectedEndDate = it },
                             onClick = { showEndDatePicker = true }
                         )
-                    }
 
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        Text(
-                            text = "Co ile dni?",
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-                        //Spacer(modifier = Modifier.height(4.dp))
-                        CustomNumberPickerField(
-                            text = "",
-                            value = dayCycle,
-                            onValueChange = { dayCycle = it },
-                            onClick = { showNumberPicker = true }
-                        )
                     }
+                if(!isHidden) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                        ) {
+                            Text(
+                                text = "Interwał",
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.ExtraBold
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+
+                            CustomNumberPickerField(
+                                text = "",
+                                value = interval,
+                                onValueChange = { interval = it },
+                                onClick = { showNumberPicker = true },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                        ) {
+                            Text(
+                                text = "Miara",
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.ExtraBold
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+
+                            CustomMeasurePickerField(
+                                selectedMeasureUnit = selectedMeasureUnit,
+                                onMeasureUnitSelected = { unit -> selectedMeasureUnit = unit },
+                                showMeasurePicker = showMeasurePicker,
+                                setShowMeasurePicker = { showMeasurePicker = it },
+                                onClick = { showMeasurePicker = true },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    }
+                }
+
 
                     Column(modifier = Modifier.padding(8.dp)) {
                         Text(
@@ -284,7 +317,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                                 .fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            CustomAddTaskButton(
+                            CustomChooseTaskButton(
                                 text = "Łatwy",
                                 isSelected = selectedDifficulty == "Łatwe",
                                 onClick = { selectedDifficulty = "Łatwe" },
@@ -292,7 +325,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                                 modifier = Modifier.weight(1f)
                             )
 
-                            CustomAddTaskButton(
+                            CustomChooseTaskButton(
                                 text = "Średni",
                                 isSelected = selectedDifficulty == "Średni",
                                 onClick = { selectedDifficulty = "Średni" },
@@ -300,7 +333,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                                 modifier = Modifier.weight(1f)
                             )
 
-                            CustomAddTaskButton(
+                            CustomChooseTaskButton(
                                 text = "Trudny",
                                 isSelected = selectedDifficulty == "Trudny",
                                 onClick = { selectedDifficulty = "Trudny" },
@@ -309,6 +342,80 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                             )
                         }
                     }
+
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        Text(
+                            text = "Kategorie",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+
+                        CustomChooseTaskButton(
+                            text = "Samorozwój",
+                            isSelected = selectedCategory == "Samorozwój",
+                            onClick = { selectedCategory = "Samorozwój" },
+                            iconResId = R.drawable.disposable_icon,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        CustomChooseTaskButton(
+                            text = "Ćwiczenia",
+                            isSelected = selectedCategory == "Ćwiczenia",
+                            onClick = { selectedCategory = "Ćwiczenia" },
+                            iconResId = R.drawable.disposable_icon,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        CustomChooseTaskButton(
+                            text = "Edukacja",
+                            isSelected = selectedCategory == "Edukacja",
+                            onClick = { selectedCategory = "Edukacja" },
+                            iconResId = R.drawable.disposable_icon,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        CustomChooseTaskButton(
+                            text = "Praca",
+                            isSelected = selectedCategory == "Praca",
+                            onClick = { selectedCategory = "Praca" },
+                            iconResId = R.drawable.disposable_icon,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        
+                    }
+
+                    Column(modifier = Modifier.padding(8.dp)) {
+                    CustomCreateTaskButton(
+                        text = "Utwórz",
+                        taskName = taskName,
+                        selectedDifficulty = selectedDifficulty,
+                        selectedCategory = selectedCategory,
+                        selectedStartDate = selectedStartDate,
+                        selectedEndDate = selectedEndDate,
+                        interval = interval,
+                        selectedMeasureUnit = selectedMeasureUnit,
+                        selectedAddTaskMode = selectedAddTaskMode, // Przekaż tryb
+                        modifier = Modifier.fillMaxWidth(),
+                        onTaskCreated = {
+                            taskName = ""
+                            selectedDifficulty = ""
+                            selectedCategory = ""
+                            selectedStartDate = ""
+                            selectedEndDate = ""
+                            interval = 0
+                            selectedMeasureUnit = ""
+                        }
+                    )
+                    }
+                    
+                    Spacer(modifier = Modifier.height(90.dp))
 
                     if (showStartDatePicker) {
                         DateTimePickerDialog(
@@ -329,9 +436,9 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                     }
                     if (showNumberPicker) {
                         NumberPickerDialog(
-                            selectedNumber = dayCycle,
+                            selectedNumber = interval,
                             onNumberSelected = { number ->
-                                dayCycle = number
+                                interval = number
                                 showNumberPicker = false
                             },
                             onDismissRequest = { showNumberPicker = false }
@@ -340,66 +447,5 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                 }
             }
         }
-    }
-}
-
-
-@Composable
-fun CustomDatePickerField(
-    text: String,
-    value: String,
-    onValueChange: (String) -> Unit,
-    onClick: () -> Unit,
-    height: Dp = 50.dp
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(height)
-            .padding(vertical = 4.dp)
-            .background(
-                color = Color(0x4DFFFFFF),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = value.ifEmpty { text },
-            color = Color.White,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.ExtraBold
-        )
-    }
-}
-
-@Composable
-fun CustomNumberPickerField(
-    text: String,
-    value: Int,
-    onValueChange: (Int) -> Unit,
-    onClick: () -> Unit,
-    height: Dp = 50.dp
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(height)
-            .padding(vertical = 4.dp)
-            .background(
-                color = Color(0x4DFFFFFF),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = if (value != 0) value.toString() else text,
-            color = Color.White,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.ExtraBold
-        )
     }
 }

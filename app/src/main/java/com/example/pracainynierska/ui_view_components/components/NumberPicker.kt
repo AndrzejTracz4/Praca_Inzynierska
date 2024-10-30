@@ -57,7 +57,7 @@ fun NumberPickerDialog(
                                 .padding(8.dp),
                             textAlign = TextAlign.Center,
                             fontSize = 20.sp,
-                            color = if (value == selectedNumber) Color.Blue else Color.Black,
+                            color = Color.Black,
                             fontWeight = if (value == selectedNumber) FontWeight.Bold else FontWeight.Normal
                         )
                     }
