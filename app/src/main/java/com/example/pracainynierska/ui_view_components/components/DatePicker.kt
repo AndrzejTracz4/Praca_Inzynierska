@@ -1,4 +1,4 @@
-package com.example.pracainynierska.view.components
+package com.example.pracainynierska.ui_view_components.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

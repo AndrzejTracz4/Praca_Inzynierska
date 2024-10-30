@@ -1,4 +1,4 @@
-package com.example.pracainynierska.view
+package com.example.pracainynierska.ui_view_components
 
 import BottomMenu
 import android.annotation.SuppressLint
@@ -51,11 +51,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.ui.components.ModalDrawer
-import com.example.pracainynierska.view.components.CustomAddTaskButton
-import com.example.pracainynierska.view.components.DateTimePickerDialog
-import com.example.pracainynierska.view.components.NumberPickerDialog
-import com.example.pracainynierska.view.components.TopMenu
-import com.example.pracainynierska.viewmodel.LoginViewModel
+import com.example.pracainynierska.ui_view_components.components.CustomAddTaskButton
+import com.example.pracainynierska.ui_view_components.components.DateTimePickerDialog
+import com.example.pracainynierska.ui_view_components.components.NumberPickerDialog
+import com.example.pracainynierska.ui_view_components.components.TopMenu
+import com.example.pracainynierska.view_model.LoginViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

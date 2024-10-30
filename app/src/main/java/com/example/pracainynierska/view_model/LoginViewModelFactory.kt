@@ -1,9 +1,8 @@
-package com.example.pracainynierska.viewmodel
+package com.example.pracainynierska.view_model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.pracainynierska.repository.UserRepository
-import com.example.pracainynierska.viewmodel.LoginViewModel
 
 // Fabryka ViewModeli, która dostarcza LoginViewModel z odpowiednim repozytorium użytkownika
 class LoginViewModelFactory(

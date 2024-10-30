@@ -1,4 +1,4 @@
-package com.example.pracainynierska.view
+package com.example.pracainynierska.ui_view_components
 
 import BottomMenu
 import android.annotation.SuppressLint
@@ -42,8 +42,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.ui.components.ModalDrawer
-import com.example.pracainynierska.view.components.TopMenu
-import com.example.pracainynierska.viewmodel.LoginViewModel
+import com.example.pracainynierska.ui_view_components.components.TopMenu
+import com.example.pracainynierska.view_model.LoginViewModel
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale

@@ -1,7 +1,7 @@
-package com.example.pracainynierska.view
+package com.example.pracainynierska.ui_view_components
 
 import BottomMenu
-import com.example.pracainynierska.view.components.GradientLevelProgressBar
+import com.example.pracainynierska.ui_view_components.components.GradientLevelProgressBar
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,11 +36,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.pracainynierska.viewmodel.LoginViewModel
+import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.ui.components.ModalDrawer
-import com.example.pracainynierska.view.components.GradientStatsProgressBars
-import com.example.pracainynierska.view.components.TopMenu
-import com.example.pracainynierska.view.components.UserImagePicker
+import com.example.pracainynierska.ui_view_components.components.GradientStatsProgressBars
+import com.example.pracainynierska.ui_view_components.components.TopMenu
+import com.example.pracainynierska.ui_view_components.components.UserImagePicker
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

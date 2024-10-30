@@ -1,5 +1,4 @@
-package com.example.pracainynierska.view
-import com.example.pracainynierska.viewmodel.LoginViewModelFactory
+package com.example.pracainynierska.ui_view_components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,11 +43,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
-import com.example.pracainynierska.repository.UserRepository
-import com.example.pracainynierska.viewmodel.LoginViewModel
+import com.example.pracainynierska.view_model.LoginViewModel
 
 @Composable
 fun LoginView(navController: NavController, loginViewModel: LoginViewModel){

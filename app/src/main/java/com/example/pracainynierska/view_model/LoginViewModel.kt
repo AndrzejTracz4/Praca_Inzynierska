@@ -1,4 +1,4 @@
-package com.example.pracainynierska.viewmodel
+package com.example.pracainynierska.view_model
 
 import android.util.Log
 import android.util.Patterns
@@ -9,17 +9,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import com.example.pracainynierska.model.User
 import com.example.pracainynierska.repository.UserRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.openapitools.client.apis.UserApi
-import org.openapitools.client.infrastructure.ApiClient
 import java.security.MessageDigest
 import java.util.UUID
 

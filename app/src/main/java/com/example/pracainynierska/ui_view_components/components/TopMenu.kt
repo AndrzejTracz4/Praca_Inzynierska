@@ -1,4 +1,4 @@
-package com.example.pracainynierska.view.components
+package com.example.pracainynierska.ui_view_components.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -25,7 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.pracainynierska.viewmodel.LoginViewModel
+import com.example.pracainynierska.view_model.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

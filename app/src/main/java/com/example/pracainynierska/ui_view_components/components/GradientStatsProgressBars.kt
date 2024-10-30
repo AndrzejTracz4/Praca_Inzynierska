@@ -1,4 +1,4 @@
-package com.example.pracainynierska.view.components
+package com.example.pracainynierska.ui_view_components.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -22,7 +22,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pracainynierska.R
-import com.example.pracainynierska.viewmodel.LoginViewModel
+import com.example.pracainynierska.view_model.LoginViewModel
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants

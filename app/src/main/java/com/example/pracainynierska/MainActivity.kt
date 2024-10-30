@@ -16,16 +16,16 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pracainynierska.database.UserDatabase
 import com.example.pracainynierska.repository.UserRepository
 import com.example.pracainynierska.ui.theme.PracaInżynierskaTheme
-import com.example.pracainynierska.view.AddTaskView
-import com.example.pracainynierska.view.CalendarsView
-import com.example.pracainynierska.view.ChangeForgotPasswordView
-import com.example.pracainynierska.view.ForgotPasswordView
-import com.example.pracainynierska.view.HomepageView
-import com.example.pracainynierska.view.LoginView
-import com.example.pracainynierska.view.RegisterView
-import com.example.pracainynierska.view.ShopView
-import com.example.pracainynierska.viewmodel.LoginViewModel
-import com.example.pracainynierska.viewmodel.LoginViewModelFactory
+import com.example.pracainynierska.ui_view_components.AddTaskView
+import com.example.pracainynierska.ui_view_components.CalendarsView
+import com.example.pracainynierska.ui_view_components.ChangeForgotPasswordView
+import com.example.pracainynierska.ui_view_components.ForgotPasswordView
+import com.example.pracainynierska.ui_view_components.HomepageView
+import com.example.pracainynierska.ui_view_components.LoginView
+import com.example.pracainynierska.ui_view_components.RegisterView
+import com.example.pracainynierska.ui_view_components.ShopView
+import com.example.pracainynierska.view_model.LoginViewModel
+import com.example.pracainynierska.view_model.LoginViewModelFactory
 
 class MainActivity : ComponentActivity() {
 

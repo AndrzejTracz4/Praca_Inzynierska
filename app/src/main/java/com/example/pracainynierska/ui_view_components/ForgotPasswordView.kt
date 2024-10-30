@@ -1,4 +1,4 @@
-package com.example.pracainynierska.view
+package com.example.pracainynierska.ui_view_components
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -48,12 +48,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
-import com.example.pracainynierska.repository.UserRepository
-import com.example.pracainynierska.viewmodel.LoginViewModel
-import com.example.pracainynierska.viewmodel.LoginViewModelFactory
+import com.example.pracainynierska.view_model.LoginViewModel
 
 @Composable
 fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewModel) {
