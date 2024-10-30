@@ -1,4 +1,4 @@
-package com.example.pracainynierska.view
+package com.example.pracainynierska.view.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -9,6 +9,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,7 +29,9 @@ import com.example.pracainynierska.viewmodel.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopMenu (loginViewModel: LoginViewModel) {
+fun TopMenu (loginViewModel: LoginViewModel, drawerState: DrawerState? = null, onDrawerOpen: () -> Unit) {
+
+    val context = LocalContext.current
 
     var username = ""
 
@@ -55,7 +59,7 @@ fun TopMenu (loginViewModel: LoginViewModel) {
         TopAppBar(
             navigationIcon = {
                 IconButton(onClick = {
-                    // Akcja todo
+                    onDrawerOpen()
                 }) {
                     Icon(
                         imageVector = Icons.Filled.Menu,
@@ -83,5 +87,6 @@ fun TopMenu (loginViewModel: LoginViewModel) {
                 containerColor = Color.Transparent // Ustaw przezroczystość, żeby tło nie nadpisywało gradientu
             )
         )
+
     }
 }

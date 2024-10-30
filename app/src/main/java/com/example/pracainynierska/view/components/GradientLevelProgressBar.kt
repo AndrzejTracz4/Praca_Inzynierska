@@ -1,3 +1,5 @@
+package com.example.pracainynierska.view.components
+
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,11 +14,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.animation.core.animateFloatAsState
-import com.example.pracainynierska.repository.UserRepository
 import com.example.pracainynierska.viewmodel.LoginViewModel
-import com.example.pracainynierska.viewmodel.LoginViewModelFactory
 
 @Composable
 fun GradientLevelProgressBar(loginViewModel: LoginViewModel) {

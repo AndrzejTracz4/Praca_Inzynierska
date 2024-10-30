@@ -122,7 +122,7 @@ fun RegisterView(navController: NavController, loginViewModel: LoginViewModel){
                     else
                     {
                         Image(
-                            painter = painterResource(id = R.drawable.username),
+                            painter = painterResource(id = R.drawable.user),
                             contentDescription = "Username",
                             modifier = Modifier
                                 .size(24.dp)
