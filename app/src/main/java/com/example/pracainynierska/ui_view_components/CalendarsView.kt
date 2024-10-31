@@ -64,6 +64,7 @@ fun CalendarsView(navController: NavController, loginViewModel: LoginViewModel) 
         Scaffold(
             topBar = {
                 TopMenu(
+                    navController = navController,
                     loginViewModel = loginViewModel,
                     drawerState = drawerState,
                     onDrawerOpen = {
@@ -101,30 +102,6 @@ fun CalendarsView(navController: NavController, loginViewModel: LoginViewModel) 
                         .padding(16.dp)
                 ){
                     Spacer(modifier = Modifier.height(55.dp))
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .clickable(onClick = { navController.navigate("HomepageView") }),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.back),
-                            contentDescription = "Powrót",
-                            tint = Color.White
-                        )
-
-                        Spacer(modifier = Modifier.width(4.dp))
-
-                        Text(
-                            text = "Powrót",
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
 
                     // Wyświetlanie natywnego widoku CalendarView
                     AndroidView(

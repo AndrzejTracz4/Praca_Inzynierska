@@ -101,6 +101,7 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
         Scaffold(
             topBar = {
                 TopMenu(
+                    navController = navController,
                     loginViewModel = loginViewModel,
                     drawerState = drawerState,
                     onDrawerOpen = {
