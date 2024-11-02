@@ -27,6 +27,7 @@ fun CustomChooseTaskButton(
     isSelected: Boolean,
     onClick: () -> Unit,
     iconResId: Int,
+    color: Boolean,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -48,7 +49,7 @@ fun CustomChooseTaskButton(
                 painter = painterResource(id = iconResId),
                 contentDescription = null,
                 modifier = Modifier.size(20.dp),
-                tint = Color.White
+                tint = if (color) Color.Unspecified else Color.White
             )
 
             Spacer(modifier = Modifier.width(8.dp))
