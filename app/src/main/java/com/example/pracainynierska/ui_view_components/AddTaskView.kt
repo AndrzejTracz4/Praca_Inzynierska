@@ -97,6 +97,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
         Scaffold(
             topBar = {
                 TopMenu(
+                    navController = navController,
                     loginViewModel = loginViewModel,
                     drawerState = drawerState,
                     onDrawerOpen = {
@@ -142,30 +143,6 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
-                            .clickable(onClick = { navController.navigate("HomepageView") }),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.back),
-                            contentDescription = "Powrót",
-                            tint = Color.White
-                        )
-
-                        Spacer(modifier = Modifier.width(4.dp))
-
-                        Text(
-                            text = "Powrót",
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
                     ) {
                         CustomChooseTaskButton(
                             text = "Jednorazowe",
@@ -174,8 +151,9 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                                 selectedAddTaskMode = TaskMode.JEDNORAZOWE
                                 isHidden = true
                             },
-                            iconResId = R.drawable.disposable_icon,
-                            modifier = Modifier.weight(1f)
+                            iconResId = R.drawable.repeat_single,
+                            modifier = Modifier.weight(1f),
+                            color = false
                         )
 
                         Spacer(modifier = Modifier.width(8.dp))
@@ -187,8 +165,9 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                                 selectedAddTaskMode = TaskMode.CYKLICZNE
                                 isHidden = false
                             },
-                            iconResId = R.drawable.cyclical_icon,
-                            modifier = Modifier.weight(1f)
+                            iconResId = R.drawable.repeat,
+                            modifier = Modifier.weight(1f),
+                            color = false
                         )
                     }
 
@@ -321,24 +300,27 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                                 text = "Łatwy",
                                 isSelected = selectedDifficulty == "Łatwe",
                                 onClick = { selectedDifficulty = "Łatwe" },
-                                iconResId = R.drawable.disposable_icon,
-                                modifier = Modifier.weight(1f)
+                                iconResId = R.drawable.water,
+                                modifier = Modifier.weight(1f),
+                                color = true
                             )
 
                             CustomChooseTaskButton(
                                 text = "Średni",
                                 isSelected = selectedDifficulty == "Średni",
                                 onClick = { selectedDifficulty = "Średni" },
-                                iconResId = R.drawable.cyclical_icon,
-                                modifier = Modifier.weight(1f)
+                                iconResId = R.drawable.leaf,
+                                modifier = Modifier.weight(1f),
+                                color = true
                             )
 
                             CustomChooseTaskButton(
                                 text = "Trudny",
                                 isSelected = selectedDifficulty == "Trudny",
                                 onClick = { selectedDifficulty = "Trudny" },
-                                iconResId = R.drawable.cyclical_icon,
-                                modifier = Modifier.weight(1f)
+                                iconResId = R.drawable.flame,
+                                modifier = Modifier.weight(1f),
+                                color = true
                             )
                         }
                     }
@@ -356,7 +338,8 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                             isSelected = selectedCategory == "Samorozwój",
                             onClick = { selectedCategory = "Samorozwój" },
                             iconResId = R.drawable.disposable_icon,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            color = false
                         )
 
                         Spacer(modifier = Modifier.height(4.dp))
@@ -366,7 +349,8 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                             isSelected = selectedCategory == "Ćwiczenia",
                             onClick = { selectedCategory = "Ćwiczenia" },
                             iconResId = R.drawable.disposable_icon,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            color = false
                         )
 
                         Spacer(modifier = Modifier.height(4.dp))
@@ -376,7 +360,8 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                             isSelected = selectedCategory == "Edukacja",
                             onClick = { selectedCategory = "Edukacja" },
                             iconResId = R.drawable.disposable_icon,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            color = false
                         )
 
                         Spacer(modifier = Modifier.height(4.dp))
@@ -386,7 +371,8 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                             isSelected = selectedCategory == "Praca",
                             onClick = { selectedCategory = "Praca" },
                             iconResId = R.drawable.disposable_icon,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            color = false
                         )
                         
                     }

@@ -1,5 +1,6 @@
 package com.example.pracainynierska.ui_view_components.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,6 +9,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
@@ -16,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -25,15 +28,25 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.pracainynierska.view_model.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopMenu (loginViewModel: LoginViewModel, drawerState: DrawerState? = null, onDrawerOpen: () -> Unit) {
+fun TopMenu (navController: NavController, loginViewModel: LoginViewModel, drawerState: DrawerState? = null, onDrawerOpen: () -> Unit) {
 
     val context = LocalContext.current
 
     var username = ""
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
+    val isHomepage = currentDestination?.hierarchy?.any { it.route == "HomepageView" } == true
+
+    Log.i("TopMenu", "isHomepage: $isHomepage")
 
     loginViewModel.user.observeAsState().value.let {
         if (it != null) {
@@ -82,6 +95,19 @@ fun TopMenu (loginViewModel: LoginViewModel, drawerState: DrawerState? = null, o
                         )
                     )
                 )
+            },
+            actions = {
+                if (!isHomepage) {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
+                    }
+                }
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.Transparent // Ustaw przezroczystość, żeby tło nie nadpisywało gradientu

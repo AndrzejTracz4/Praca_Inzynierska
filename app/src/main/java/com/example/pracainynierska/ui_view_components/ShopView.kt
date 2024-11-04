@@ -84,6 +84,7 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
         Scaffold(
             topBar = {
                 TopMenu(
+                    navController = navController,
                     loginViewModel = loginViewModel,
                     drawerState = drawerState,
                     onDrawerOpen = {
@@ -118,30 +119,6 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
                         .padding(16.dp)
                 ) {
                     Spacer(modifier = Modifier.height(55.dp))
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp) // Odstęp pod przyciskiem
-                            .clickable(onClick = { navController.navigate("HomepageView") }),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(20.dp), // Ustaw rozmiar ikony
-                            painter = painterResource(id = R.drawable.back), // Użyj odpowiedniej ikony strzałki
-                            contentDescription = "Powrót",
-                            tint = Color.White // Kolor ikony
-                        )
-
-                        Spacer(modifier = Modifier.width(4.dp)) // Odstęp między ikoną a tekstem
-
-                        Text(
-                            text = "Powrót",
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
 
                     Column {
                         CustomButton(

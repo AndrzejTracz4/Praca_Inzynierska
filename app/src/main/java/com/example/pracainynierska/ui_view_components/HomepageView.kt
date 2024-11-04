@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -97,10 +100,13 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
+    val scrollState = rememberScrollState()
+
     ModalDrawer(navController = navController, drawerState = drawerState) {
         Scaffold(
             topBar = {
                 TopMenu(
+                    navController = navController,
                     loginViewModel = loginViewModel,
                     drawerState = drawerState,
                     onDrawerOpen = {
@@ -242,92 +248,109 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Aktywne boostery
-                    Box(
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(140.dp) // 2x wysokość TopBar
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(Color(0x19FFFFFF))
-                            .padding(horizontal = 10.dp, vertical = 1.dp)
+                            .fillMaxSize()
+                            .padding(0.dp)
+                            .verticalScroll(scrollState)
                     ) {
-                        Column (
-                            modifier = Modifier.fillMaxHeight(),
-                            verticalArrangement = Arrangement.Top
+                        Spacer(modifier = Modifier.height(0.dp))
+
+                        // ...Kod dla użytkownika i statystyk
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        // Aktywne boostery
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f, fill = true)
+                                .heightIn(min = 140.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(Color(0x19FFFFFF))
+                                .padding(horizontal = 10.dp, vertical = 1.dp)
                         ) {
-                            Text(
-                                text = "Aktywne boostery",
-                                fontSize = 13.sp,
-                                color = Color.White,
-                                style = TextStyle(
-                                    shadow = Shadow(
-                                        color = Color.Black,
-                                        offset = Offset(3f, 1f),
-                                        blurRadius = 3f
-                                    )
-                                ),
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(vertical = 5.dp)
-                            )
+                            Column(
+                                modifier = Modifier.fillMaxHeight(),
+                                verticalArrangement = Arrangement.Top
+                            ) {
+                                Text(
+                                    text = "Aktywne boostery",
+                                    fontSize = 13.sp,
+                                    color = Color.White,
+                                    style = TextStyle(
+                                        shadow = Shadow(
+                                            color = Color.Black,
+                                            offset = Offset(3f, 1f),
+                                            blurRadius = 3f
+                                        )
+                                    ),
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(vertical = 5.dp)
+                                )
 
-                            Spacer(modifier = Modifier.height(1.dp))
+                                Spacer(modifier = Modifier.height(1.dp))
 
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(100.dp) // 2x wysokość TopBar
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .background(Color(0x14FFFFFF))
-                                    .padding(16.dp)
-                            )
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .fillMaxHeight(0.9f)
+                                        .height(100.dp)
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .background(Color(0x14FFFFFF))
+                                        .padding(16.dp)
+                                )
+                            }
                         }
-                    }
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
 
-                    // Zadanie dnia
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(140.dp) // 2x wysokość TopBar
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(Color(0x19FFFFFF))
-                            .padding(horizontal = 10.dp, vertical = 1.dp)
-                    ) {
-                        Column (
-                            modifier = Modifier.fillMaxHeight(),
-                            verticalArrangement = Arrangement.Top
+                        // Zadanie dnia
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f, fill = true)
+                                .heightIn(min = 140.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(Color(0x19FFFFFF))
+                                .padding(horizontal = 10.dp, vertical = 1.dp)
                         ) {
-                            Text(
-                                text = "Wyzwanie dnia!",
-                                fontSize = 13.sp,
-                                color = Color.White,
-                                style = TextStyle(
-                                    shadow = Shadow(
-                                        color = Color.Black,
-                                        offset = Offset(3f, 1f),
-                                        blurRadius = 3f
-                                    )
-                                ),
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(vertical = 5.dp)
-                            )
+                            Column(
+                                modifier = Modifier.fillMaxHeight(),
+                                verticalArrangement = Arrangement.Top
+                            ) {
+                                Text(
+                                    text = "Wyzwanie dnia!",
+                                    fontSize = 13.sp,
+                                    color = Color.White,
+                                    style = TextStyle(
+                                        shadow = Shadow(
+                                            color = Color.Black,
+                                            offset = Offset(3f, 1f),
+                                            blurRadius = 3f
+                                        )
+                                    ),
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(vertical = 5.dp)
+                                )
 
-                            Spacer(modifier = Modifier.height(1.dp))
+                                Spacer(modifier = Modifier.height(1.dp))
 
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(100.dp) // 2x wysokość TopBar
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .background(Color(0x14FFFFFF))
-                                    .padding(16.dp)
-                            )
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .fillMaxHeight(0.9f)
+                                        .height(100.dp)
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .background(Color(0x14FFFFFF))
+                                        .padding(16.dp)
+                                )
+                            }
                         }
+                        Spacer(modifier = Modifier.height(20.dp))
                     }
-
                 }
             }
         }
