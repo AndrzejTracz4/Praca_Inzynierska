@@ -52,7 +52,6 @@ fun DateTimePickerDialog(onDateTimeSelected: (String) -> Unit, onDismissRequest:
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {
-                    // Sprawdzamy, czy wybrano datę
                     dateState.selectedDateMillis?.let { millis ->
                         // Po wyborze daty otwiera się okno dialogowe z wyborem godziny
                         val timePickerDialog = android.app.TimePickerDialog(
@@ -61,7 +60,7 @@ fun DateTimePickerDialog(onDateTimeSelected: (String) -> Unit, onDismissRequest:
                                 selectedHour = hour
                                 selectedMinute = minute
 
-                                // Formatujemy wybraną datę i godzinę
+                                // Formatowanie wybranej daty i godziny
                                 val date = Date(millis)
                                 date.hours = selectedHour
                                 date.minutes = selectedMinute

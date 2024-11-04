@@ -1,5 +1,6 @@
 package com.example.pracainynierska.ui_view_components.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pracainynierska.R
+import com.example.pracainynierska.model.Task
+import com.example.pracainynierska.view_model.LoginViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -41,12 +44,18 @@ fun CustomCreateTaskButton(
     selectedMeasureUnit: String,
     selectedAddTaskMode: TaskMode,
     modifier: Modifier = Modifier,
-    onTaskCreated: () -> Unit
+    onTaskCreated: () -> Unit,
+    loginViewModel: LoginViewModel
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf("") }
     var showErrorDialog by remember { mutableStateOf(false) }
     var showDateErrorDialog by remember { mutableStateOf(false) }
+    var taskList by remember { mutableStateOf(emptyList<Task>()) }
+
+    loginViewModel.tasks.observeForever { tasks ->
+        taskList = tasks
+    }
 
     Box(
         modifier = modifier
@@ -84,7 +93,29 @@ fun CustomCreateTaskButton(
                     dialogMessage = "Data końcowa nie może być wcześniejsza niż data startowa."
                     showDateErrorDialog = true
                 } else {
-                    //logika tworzenia zadania todo
+                    val lastTaskId = taskList.maxOfOrNull { it.id } ?: 0
+                    val task = Task(
+                        id = lastTaskId + 1,
+                        name = taskName,
+                        difficulty = selectedDifficulty,
+                        category = selectedCategory,
+                        startDate = selectedStartDate,
+                        endDate = selectedEndDate,
+                        interval = if (selectedAddTaskMode == TaskMode.CYKLICZNE) interval else 0,
+                        measureUnit = if (selectedAddTaskMode == TaskMode.CYKLICZNE) selectedMeasureUnit else "",
+                        mode = selectedAddTaskMode,
+                        status = "Pending"
+                    )
+                    loginViewModel.addTask(task)
+
+                    // logi logi
+                    loginViewModel.tasks.observeForever { taskList ->
+                        taskList.forEach { task ->
+                            Log.d("Tasks", "Task: $task")
+                        }
+                    }
+
+
                     dialogMessage = "Pomyślnie utworzono zadanie"
                     showDialog = true
                 }
@@ -99,8 +130,8 @@ fun CustomCreateTaskButton(
                 painter = painterResource(R.drawable.plus_square),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(24.dp), // Size of the icon
-                tint = Color.White // Tint the icon with white color
+                    .size(24.dp),
+                tint = Color.White
             )
 
             Text(

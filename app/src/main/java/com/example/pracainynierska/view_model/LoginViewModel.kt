@@ -9,12 +9,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pracainynierska.model.Task
 import com.example.pracainynierska.model.User
 import com.example.pracainynierska.repository.UserRepository
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
-
 
 class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 
@@ -361,19 +365,9 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         }
     }
 
-    // Funkcja generująca nowe hasło
-    private fun generateRandomPassword(): String {
-        return UUID.randomUUID().toString().take(12) // Generuje losowe hasło o długości 12 znaków
-    }
-
     //Funkcja generuje UUID użytkownika
     private fun generateRandomUserUUID(): String {
         return UUID.randomUUID().toString().take(12)
-    }
-
-    // Funkcja wysyłająca email z nowym hasłem
-    private fun sendEmailWithNewPassword(email: String, newPassword: String) {
-        // Implementacja wysyłania emaila z nowym hasłem todo
     }
 
     //Pobiera dane zalogowanego użytkownika z bazy danych na podstawie podanego username,
@@ -399,6 +393,54 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
                 } catch (_: Exception) { }
             }
         }
+    }
+
+
+    //Obsługa zadań
+    private val _tasks = MutableLiveData<List<Task>>(emptyList())
+    val tasks: LiveData<List<Task>> = _tasks
+
+    fun addTask(task: Task) {
+        _tasks.value = _tasks.value?.plus(task)
+    }
+
+    fun completeTask(taskId: Int) {
+        _tasks.value = _tasks.value?.map { if (it.id == taskId) it.copy(status = "Completed") else it }
+    }
+
+    fun editTask(task: Task) {
+        _tasks.value = _tasks.value?.map { if (it.id == task.id) task else it }
+    }
+
+    fun deleteTask(taskId: Int) {
+        _tasks.value = _tasks.value?.filter { it.id != taskId }
+    }
+
+    fun getTasksForDate(selectedDate: String): List<Task>? {
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val selectedDateParsed = dateFormat.parse(selectedDate) ?: return emptyList()
+
+        // Format daty dla startDate i endDate
+        val taskDateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault())
+
+        return tasks.value?.filter { task ->
+            val taskStartDate = taskDateFormat.parse(task.startDate)
+            val taskEndDate = taskDateFormat.parse(task.endDate)
+
+            // Sprawdzenie czy zadanie jest w zakresie wybranej daty
+            taskStartDate != null && taskEndDate != null &&
+                    selectedDateParsed.isSameDay(taskStartDate) ||
+                    selectedDateParsed.isSameDay(taskEndDate) ||
+                    (selectedDateParsed.after(taskStartDate) && selectedDateParsed.before(taskEndDate))
+        }
+    }
+
+    // Porównanie dat bez godzin
+    private fun Date.isSameDay(other: Date): Boolean {
+        val calendar1 = Calendar.getInstance().apply { time = this@isSameDay }
+        val calendar2 = Calendar.getInstance().apply { time = other }
+        return calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR) &&
+                calendar1.get(Calendar.DAY_OF_YEAR) == calendar2.get(Calendar.DAY_OF_YEAR)
     }
 
 }

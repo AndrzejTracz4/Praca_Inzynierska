@@ -387,7 +387,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                         selectedEndDate = selectedEndDate,
                         interval = interval,
                         selectedMeasureUnit = selectedMeasureUnit,
-                        selectedAddTaskMode = selectedAddTaskMode, // Przekaż tryb
+                        selectedAddTaskMode = selectedAddTaskMode,
                         modifier = Modifier.fillMaxWidth(),
                         onTaskCreated = {
                             taskName = ""
@@ -397,7 +397,8 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                             selectedEndDate = ""
                             interval = 0
                             selectedMeasureUnit = ""
-                        }
+                        },
+                        loginViewModel = loginViewModel
                     )
                     }
                     
