@@ -3,18 +3,25 @@ package com.example.pracainynierska.ui_view_components
 import BottomMenu
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -26,11 +33,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -130,7 +139,32 @@ fun StatisticView(navController: NavController, loginViewModel: LoginViewModel) 
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState()) // Włączamy przewijanie
             ) {
-                Spacer(modifier = Modifier.height(60.dp))
+                Spacer(modifier = Modifier.height(55.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp), // Adds space below the buttons
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    CustomButton(
+                        text = "Dodaj kategorię",
+                        onClick = { /* Handle button click */ },
+                        iconResId = R.drawable.plus,
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                    
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    CustomButton(
+                        text = "Dodaj statystykę",
+                        onClick = { /* Handle button click */ },
+                        iconResId = R.drawable.plus,
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                }
 
                 // Search bar
                 TextField(
@@ -244,6 +278,43 @@ fun StatisticView(navController: NavController, loginViewModel: LoginViewModel) 
 
                 Spacer(modifier = Modifier.height(50.dp))
             }
+        }
+    }
+}
+@Composable
+fun CustomButton(text: String, onClick: () -> Unit, iconResId: Int, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .height(50.dp)
+            .padding(vertical = 4.dp)
+            .background(
+                color = Color(0x19FFFFFF),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable { onClick() }
+            .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Image
+            Icon(
+                painter = painterResource(id = iconResId),
+                contentDescription = null,
+                modifier = Modifier.size(20.dp), // Size of the icon
+                tint = Color.White // Tint the icon with white color
+            )
+
+            Spacer(modifier = Modifier.width(8.dp)) // Space between icon and text
+
+            // Text
+            Text(
+                text = text,
+                color = Color.White,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
         }
     }
 }
