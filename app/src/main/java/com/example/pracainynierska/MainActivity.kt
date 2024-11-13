@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pracainynierska.database.UserDatabase
 import com.example.pracainynierska.repository.UserRepository
 import com.example.pracainynierska.ui.theme.PracaInżynierskaTheme
+import com.example.pracainynierska.ui_view_components.AddCategoryView
 import com.example.pracainynierska.ui_view_components.AddTaskView
 import com.example.pracainynierska.ui_view_components.CalendarsView
 import com.example.pracainynierska.ui_view_components.ChangeForgotPasswordView
@@ -24,6 +25,7 @@ import com.example.pracainynierska.ui_view_components.HomepageView
 import com.example.pracainynierska.ui_view_components.LoginView
 import com.example.pracainynierska.ui_view_components.RegisterView
 import com.example.pracainynierska.ui_view_components.ShopView
+import com.example.pracainynierska.ui_view_components.StatisticView
 import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.view_model.LoginViewModelFactory
 
@@ -83,6 +85,12 @@ fun SetupNavGraph(navController: NavHostController, loginViewModel: LoginViewMod
         }
         composable("CalendarsView") {
             CalendarsView(navController = navController, loginViewModel = loginViewModel)
+        }
+        composable("StatisticView") {
+            StatisticView(navController = navController, loginViewModel = loginViewModel)
+        }
+        composable("AddCategoryView") {
+            AddCategoryView(navController = navController, loginViewModel = loginViewModel)
         }
     }
 }

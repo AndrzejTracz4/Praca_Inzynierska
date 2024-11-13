@@ -22,16 +22,16 @@ import androidx.compose.ui.text.input.ImeAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomTaskTextField(
-    taskName: String,
-    onTaskNameChange: (String) -> Unit
+fun CustomTextField(
+    name: String,
+    onNameChange: (String) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
     TextField(
-        value = taskName,
+        value = name,
         onValueChange = {
-            onTaskNameChange(it)
+            onNameChange(it)
         },
         modifier = Modifier
             .fillMaxSize()
@@ -39,7 +39,7 @@ fun CustomTaskTextField(
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
-                        if (taskName.isNotBlank()) {
+                        if (name.isNotBlank()) {
                             focusManager.clearFocus()
                         }
                     }

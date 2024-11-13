@@ -62,7 +62,7 @@ fun CustomCreateTaskButton(
             .height(75.dp)
             .padding(vertical = 4.dp)
             .background(
-                color = Color(0x4DFFFFFF),
+                color = Color(0x19FFFFFF),
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable {

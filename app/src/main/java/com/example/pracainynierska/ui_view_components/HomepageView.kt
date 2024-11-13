@@ -39,6 +39,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.pracainynierska.R
 import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.ui.components.ModalDrawer
 import com.example.pracainynierska.ui_view_components.components.GradientStatsProgressBars
@@ -96,6 +97,29 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
     )
 
     val userRank = levelNames[userLevel] ?: "Nieznany poziom"
+
+    // Stats and Gradients
+    val stats = listOf(
+        "Determinacja" to (loginViewModel.user.value?.determination ?: 0f),
+        "Sprawność fizyczna" to (loginViewModel.user.value?.physical_fitness ?: 0f),
+        "Inteligencja" to (loginViewModel.user.value?.intelligence ?: 0f),
+        "Wiedza" to (loginViewModel.user.value?.knowledge ?: 0f)
+    )
+
+
+    val gradients = listOf(
+        Brush.horizontalGradient(colors = listOf(Color(0xFFFFA726), Color(0xFFFF7043))),
+        Brush.horizontalGradient(colors = listOf(Color(0xFF66BB6A), Color(0xFF43A047))),
+        Brush.horizontalGradient(colors = listOf(Color(0xFFAB47BC), Color(0xFF8E24AA))),
+        Brush.horizontalGradient(colors = listOf(Color(0xFF29B6F6), Color(0xFF0288D1)))
+    )
+
+    val icons = listOf(
+        R.raw.determination_bar,
+        R.raw.physical_fitness_bar,
+        R.raw.intelligence_bar,
+        R.raw.knowledge_bar
+    )
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -241,9 +265,13 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
                             .height(240.dp)
                             .clip(RoundedCornerShape(10.dp))
                             .background(Color(0x19FFFFFF))
-                            .padding(4.dp)
+                            .padding(20.dp)
                     ){
-                        GradientStatsProgressBars(loginViewModel)
+                        GradientStatsProgressBars(
+                            stats = stats,
+                            gradients = gradients,
+                            icons = icons
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
