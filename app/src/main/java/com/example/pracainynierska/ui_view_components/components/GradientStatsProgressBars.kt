@@ -8,7 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -21,84 +20,47 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.pracainynierska.R
-import com.example.pracainynierska.view_model.LoginViewModel
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.airbnb.lottie.compose.LottieConstants
 
 @Composable
-fun GradientStatsProgressBars(loginViewModel: LoginViewModel) {
-
-    // Zmienne do przechowywania wartości statystyk użytkownika
-    var userDetermination = 0f
-    var userPhysicalFitness = 0f
-    var userIntelligence = 0f
-    var userKnowledge = 0f
-
-    // Obserwacja zmian w danych użytkownika
-    loginViewModel.user.observeAsState().value.let {
-        if (it != null) {
-            userDetermination = it.determination
-            userPhysicalFitness = it.physical_fitness
-            userIntelligence = it.intelligence
-            userKnowledge = it.knowledge
-        }
-    }
-
-    // Lista statystyk i ich wartości
-    val stats = listOf(
-        "Determinacja" to userDetermination,
-        "Sprawność fizyczna" to userPhysicalFitness,
-        "Inteligencja" to userIntelligence,
-        "Wiedza" to userKnowledge
-    )
-
-    // Lista gradientów dla pasków postępu
-    val gradients = listOf(
-        Brush.horizontalGradient(colors = listOf(Color(0xFFFFA726), Color(0xFFFF7043))),
-        Brush.horizontalGradient(colors = listOf(Color(0xFF66BB6A), Color(0xFF43A047))),
-        Brush.horizontalGradient(colors = listOf(Color(0xFFAB47BC), Color(0xFF8E24AA))),
-        Brush.horizontalGradient(colors = listOf(Color(0xFF29B6F6), Color(0xFF0288D1)))
-    )
-
-    // Lista plików Lottie dla etykiet
-    val icons = listOf(
-        R.raw.determination_bar,
-        R.raw.physical_fitness_bar,
-        R.raw.intelligence_bar,
-        R.raw.knowledge_bar
-    )
-
-    // Tworzenie kolumny z paskami postępu
+fun GradientStatsProgressBars(
+    stats: List<Pair<String, Float>>, // Lista etykiet i wartości postępu
+    gradients: List<Brush>, // Lista gradientów dla każdego paska
+    icons: List<Int> // Lista plików Lottie (ID zasobów) dla każdego paska
+) {
     Column(modifier = Modifier
         .fillMaxWidth()
-        .padding(16.dp)) {
-        // Iteracja przez listę statystyk
+        .padding(0.dp)) {
+
         stats.forEachIndexed { index, stat ->
             val (label, progress) = stat
-            // Wybór gradientu na podstawie indeksu
-            val gradient = gradients[index % gradients.size]
-            // Normalizacja wartości postępu do zakresu 0-1
+
+            // Wybór gradientu dla danego paska na podstawie indeksu
+            val gradient = gradients.getOrNull(index % gradients.size) ?: gradients.first()
+
+            // Normalizacja postępu (przekształcenie wartości na zakres 0-1)
             val normalizedProgress = progress.coerceIn(0f, 100f) / 100f
-            // Animacja wartości postępu
+
+            // Animacja postępu
             val animatedProgress by animateFloatAsState(
                 targetValue = normalizedProgress,
                 animationSpec = tween(durationMillis = 1000)
             )
 
-            // Tworzenie pojedynczego paska postępu
+            // Tworzenie paska postępu
             Column {
-                // Tło paska
+                // Pasek postępu
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(12.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(Color(0x11FFFFFF))
+                        .background(Color(0x11FFFFFF)) // Tło paska
                 ) {
-                    // Pasek postępu z gradientem
+                    // Pasek wypełnienia z animacją
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(animatedProgress)
@@ -106,13 +68,15 @@ fun GradientStatsProgressBars(loginViewModel: LoginViewModel) {
                             .background(gradient)
                     )
                 }
+
                 Spacer(modifier = Modifier.height(1.dp))
+
                 // Etykieta i wartość postępu
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Box z animacją Lottie
+                    // Animacja Lottie
                     Box(
                         modifier = Modifier
                             .size(24.dp)
@@ -140,8 +104,10 @@ fun GradientStatsProgressBars(loginViewModel: LoginViewModel) {
                         )
                     )
 
+
                     Spacer(modifier = Modifier.weight(1f))
 
+                    // Wartość postępu
                     Text(
                         text = "${progress.toInt()} / 100",
                         fontSize = 13.sp,

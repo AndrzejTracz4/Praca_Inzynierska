@@ -52,7 +52,12 @@ fun BottomMenu(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .weight(1f)
-                    .clickable { /*TODO*/ }
+                    .clickable {
+                        val currentRoute = navController.currentDestination?.route
+                        if (currentRoute != "StatisticView") {
+                            navController.navigate("StatisticView")
+                        }
+                    }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.stats),
