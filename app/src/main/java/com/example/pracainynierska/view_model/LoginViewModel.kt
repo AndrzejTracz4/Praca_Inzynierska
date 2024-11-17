@@ -9,6 +9,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import com.example.pracainynierska.API.authorization.PlayerAuthorizationHandler
 import com.example.pracainynierska.model.Task
 import com.example.pracainynierska.model.User
 import com.example.pracainynierska.repository.UserRepository
@@ -204,65 +206,21 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         return if (email.isBlank()) "Email cannot be empty" else null
     }
 
-    // Funkcja do logowania użytkownika
-//    fun login(navController: NavController) {
-//        viewModelScope.launch {
-//            usernameErrorMessage = null
-//            passwordErrorMessage = null
-//
-//            val hashedInputPassword = hashPassword(password)
-//
-//            val user = userRepository.getUser(username, hashedInputPassword)
-//
-//            viewModelScope.launch {
-//                try {
-//                    val apiUser = UserApi("http://127.0.0.1")
-//                    val testUser = withContext(Dispatchers.IO) {
-//                        apiUser.apiUsersIdGet("1")
-//                    }
-//                    Log.d("LoginViewModel", "testApiUser: $testUser")
-//                } catch (e: Exception) {
-//                    Log.e("LoginViewModel", "Error fetching user: ${e.message}")
-//                }
-//            }
-//
-//            if (user != null) {
-//                val userUUID = user.userUUID
-//                // Pobierz dane użytkownika
-//                loginSuccess = true
-//                fetchUser(userUUID)
-//                // Przekazanie nazwy użytkownika do HomepageView
-//                navController.navigate("HomepageView/$userUUID")
-//            } else {
-//                usernameErrorMessage = "Invalid username or password"
-//                passwordErrorMessage = "Invalid username or password"
-//            }
-//        }
-//    }
-
     fun login(onLoginResult: (Boolean) -> Unit) {
         viewModelScope.launch {
-            usernameErrorMessage = null
-            passwordErrorMessage = null
-
-            val hashedInputPassword = hashPassword(password)
-            val user = userRepository.getUser(username, hashedInputPassword)
-
-            if (user != null) {
-                val userUUID = user.userUUID
-                // Pobranie danych użytkownika
+            val player = PlayerAuthorizationHandler().authorize(email, password)
+            if (player != null) {
+                Log.d("LoginViewModel", "Player: $player")
                 loginSuccess = true
-                fetchUser(userUUID)
-                onLoginResult(true) // Zwrócenie informacji o udanym logowaniu
+                onLoginResult(true)
             } else {
+                Log.d("LoginViewModel", "Player is null")
                 usernameErrorMessage = "Invalid username or password"
                 passwordErrorMessage = "Invalid username or password"
-                onLoginResult(false) // Logowanie nieudane
+                onLoginResult(false)
             }
         }
     }
-
-
 
     // Funkcja do rejestracji użytkownika
     fun registerUser(onSuccess: () -> Unit, onError: (String) -> Unit) {
