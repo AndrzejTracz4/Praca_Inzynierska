@@ -9,8 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
-import com.example.pracainynierska.API.authorization.PlayerAuthorizationHandler
+import com.example.pracainynierska.API.handler.authorization.PlayerAuthorizationHandler
 import com.example.pracainynierska.model.Task
 import com.example.pracainynierska.model.User
 import com.example.pracainynierska.repository.UserRepository
@@ -20,7 +19,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import java.util.UUID
 
 class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 
@@ -108,36 +106,6 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         }
     }
 
-    // Funkcja do zmiany hasła po zalogowaniu
-    fun changePassword(onSuccess: () -> Unit, onError: (String) -> Unit) {
-        if (newPassword.isBlank() || confirmNewPassword.isBlank()) {
-            onError("All fields must be filled!")
-            return
-        }
-
-        if (newPasswordErrorMessage != null || confirmNewPasswordErrorMessage != null) {
-            onError("Please fix the errors before submitting.")
-            return
-        }
-
-        viewModelScope.launch {
-            try {
-                val hashedNewPassword = hashPassword(newPassword)
-
-                val currentUser = _user.value
-                if (currentUser != null) {
-                    currentUser.password = hashedNewPassword // Zaktualizuj hasło
-                    userRepository.upsertUser(currentUser) // Zapisz zaktualizowanego użytkownika
-                    onSuccess()
-                } else {
-                    onError("User not found.")
-                }
-            } catch (e: Exception) {
-                onError("Failed to change password: ${e.message}")
-            }
-        }
-    }
-
     fun changePasswordByEmail(email: String, newPassword: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             try {
@@ -215,75 +183,13 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
                 onLoginResult(true)
             } else {
                 Log.d("LoginViewModel", "Player is null")
-                usernameErrorMessage = "Invalid username or password"
+                emailErrorMessage = "Invalid username or password"
                 passwordErrorMessage = "Invalid username or password"
                 onLoginResult(false)
             }
         }
     }
 
-    // Funkcja do rejestracji użytkownika
-    fun registerUser(onSuccess: () -> Unit, onError: (String) -> Unit) {
-        // Sprawdzenie, czy którekolwiek pole jest puste
-        if (username.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
-            onError("All fields must be filled!")
-            return
-        }
-
-        // Sprawdzenie, czy hasła pasują do siebie
-        if (password != confirmPassword) {
-            onError("Passwords do not match")
-            return
-        }
-
-        // Sprawdzenie, czy email jest prawidłowy
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            onError("Invalid email format")
-            return
-        }
-
-        viewModelScope.launch {
-            try {
-                // Sprawdzenie, czy użytkownik z podanym username lub email już istnieje
-                val existingUserByUsername = userRepository.getUserByUsername(username)
-                val existingUserByEmail = userRepository.getUserByEmail(email)
-
-                // Sprawdzenie czy Username jest już w bazie
-                if (existingUserByUsername != null) {
-                    onError("Username is already taken")
-                    return@launch
-                }
-
-                // Sprawdzenie czy Email jest już w bazie
-                if (existingUserByEmail != null) {
-                    onError("Email is already registered")
-                    return@launch
-                }
-
-                // Hashowanie hasła przed zapisaniem do bazy
-                val hashedPassword = hashPassword(password)
-
-                val userUUID = generateRandomUserUUID()
-
-                // Tworzenie nowego użytkownika i zapisanie go do bazy
-                val user = User(
-                    username = username,
-                    email = email,
-                    password = hashedPassword,
-                    userPhotoPath = "app/src/main/res/raw/user_photo_1.json",
-                    level = 1, experience = 0f,
-                    userUUID = userUUID,
-                    determination = 0f,
-                    physical_fitness = 0f,
-                    intelligence = 0f,
-                    knowledge = 0f)
-                userRepository.upsertUser(user)
-                onSuccess()
-            } catch (e: Exception) {
-                onError("Registration failed: ${e.message}")
-            }
-        }
-    }
     // Funkcja do hashowania hasła
     private fun hashPassword(password: String): String {
         val digest = MessageDigest.getInstance("SHA-256")
@@ -307,15 +213,6 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
                     return@launch
                 }
 
-//                val newPassword = generateRandomPassword()
-
-//                val hashedForgotPassword = hashPassword(newPassword)
-
-//                existingUser.password = hashedForgotPassword
-//                userRepository.upsertUser(existingUser)
-
-//                sendEmailWithNewPassword(email, newPassword)
-
                 onSuccess()
             } catch (e: Exception) {
                 onError("Wystąpił błąd: ${e.message}")
@@ -323,19 +220,6 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         }
     }
 
-    //Funkcja generuje UUID użytkownika
-    private fun generateRandomUserUUID(): String {
-        return UUID.randomUUID().toString().take(12)
-    }
-
-    //Pobiera dane zalogowanego użytkownika z bazy danych na podstawie podanego username,
-    //viewModelScope to korutyna która działa asynchronicznie, czyli po prostu działa w tle
-    fun fetchUser(userUUID: String) {
-        userRepository.getUserByUserUUIDLiveData(userUUID).observeForever { fetchedUser ->
-            _user.value = fetchedUser
-            Log.d("fetchUser", "fetchUser: ${_user.value}")
-        }
-    }
 
     // Metoda do aktualizacji ścieżki zdjęcia użytkownika
     fun updateUserPhotoPath(photoPath: String) {
@@ -353,7 +237,7 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         }
     }
 
-
+    //todo obsługa zadań powinna być osobnym view modelem
     //Obsługa zadań
     private val _tasks = MutableLiveData<List<Task>>(emptyList())
     val tasks: LiveData<List<Task>> = _tasks
@@ -394,6 +278,7 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
     }
 
     // Porównanie dat bez godzin
+    //todo powinno być w osobnym serwisie (np sameDateChecker)
     private fun Date.isSameDay(other: Date): Boolean {
         val calendar1 = Calendar.getInstance().apply { time = this@isSameDay }
         val calendar2 = Calendar.getInstance().apply { time = other }

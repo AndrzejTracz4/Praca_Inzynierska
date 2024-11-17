@@ -1,4 +1,4 @@
-package com.example.pracainynierska.API.authorization
+package com.example.pracainynierska.API.handler.authorization
 
 import com.example.pracainynierska.API.model.Player
 

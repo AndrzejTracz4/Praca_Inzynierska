@@ -1,4 +1,4 @@
-package com.example.pracainynierska.API.authorization
+package com.example.pracainynierska.API.handler.authorization
 
 import android.util.Log
 import com.example.pracainynierska.API.Exception.AuthorizationFailedException
@@ -7,7 +7,7 @@ import com.example.pracainynierska.API.model.Player
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PlayerAuthorizationHandler : AuthorizationHandlerInterface{
+class PlayerAuthorizationHandler : AuthorizationHandlerInterface {
     private val playerApi = PlayerApi()
 
     override suspend fun authorize(email: String, password: String): Player? {
