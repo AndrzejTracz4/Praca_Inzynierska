@@ -57,10 +57,6 @@ fun UserImagePicker(loginViewModel: LoginViewModel) {
 
     //Obserwer do LiveData
     loginViewModel.user.observeAsState().value.let {
-//        if (userUUID != null) {
-//            loginViewModel.fetchUser(userUUID)
-//            Log.d("UserImagePicker", "fetcheduser: $it")
-//        }
         if (it != null) {
             val userPhotoPath = it.userPhotoPath
             selectedAnimationIndex = lottieFiles.indexOf(userPhotoPath).takeIf { it >= 0 } ?: 0
@@ -78,13 +74,13 @@ fun UserImagePicker(loginViewModel: LoginViewModel) {
                 // Zmiana animacji po kliknięciu
                 selectedAnimationIndex = (selectedAnimationIndex + 1) % lottieFiles.size
 
-                // Przypisz nową ścieżkę na podstawie indeksu
+                // Przypisanie nowej ścieżki na podstawie indeksu
                 val newPhotoPath = lottieFiles[selectedAnimationIndex]
 
                 // Zmiana stanu odtwarzania animacji
                 isAnimationPlaying = true
 
-                // Zaktualizowanie ścieżki w bazie danych za pomocą ViewModel
+                // Zaktualizowanie ścieżki w bazie danych za pomocą ViewModelu
                 loginViewModel.updateUserPhotoPath(newPhotoPath)
 
             }
@@ -92,7 +88,7 @@ fun UserImagePicker(loginViewModel: LoginViewModel) {
         // Wyświetlanie wybranej animacji Lottie
         LottieAnimation(
             composition = composition,
-            iterations = if (isAnimationPlaying) LottieConstants.IterateForever else 1 // Odtwarzaj w nieskończoność, jeśli stan jest włączony
+            iterations = if (isAnimationPlaying) LottieConstants.IterateForever else 1 // Odtwarzanie w nieskończoność, jeśli stan jest włączony
         )
     }
 }

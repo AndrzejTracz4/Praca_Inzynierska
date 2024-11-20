@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 
@@ -47,7 +48,6 @@ fun BottomMenu(navController: NavController) {
         ) {
             Spacer(modifier = Modifier.width(10.dp))
 
-            // przycisk statystyk
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -61,23 +61,25 @@ fun BottomMenu(navController: NavController) {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.stats),
-                    contentDescription = "Stats",
+                    contentDescription = "Kategorie",
                     modifier = Modifier
                         .size(24.dp),
                     colorFilter = ColorFilter.tint(Color.White)
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = "Statystyki",
+                    text = "Kategorie",
                     style = TextStyle(
                         color = Color.White,
-                        fontSize = 9.sp,
+                        fontSize = 8.sp,
                         shadow = Shadow(
                             color = Color.Black,
                             offset = Offset(3f, 1f),
                             blurRadius = 3f
                         )
-                    )
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Visible
                 )
             }
 
@@ -91,18 +93,18 @@ fun BottomMenu(navController: NavController) {
                     .clickable { /*TODO*/ }
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.book_alt),
-                    contentDescription = "Tasks",
+                    painter = painterResource(id = R.drawable.achievements),
+                    contentDescription = "Osiągnięcia",
                     modifier = Modifier
                         .size(24.dp),
                     colorFilter = ColorFilter.tint(Color.White)
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = "Zadania",
+                    text = "Osiągnięcia",
                     style = TextStyle(
                         color = Color.White,
-                        fontSize = 9.sp,
+                        fontSize = 8.sp,
                         shadow = Shadow(
                             color = Color.Black,
                             offset = Offset(3f, 1f),
@@ -149,7 +151,7 @@ fun BottomMenu(navController: NavController) {
                     text = "Kalendarz",
                     style = TextStyle(
                         color = Color.White,
-                        fontSize = 9.sp,
+                        fontSize = 8.sp,
                         shadow = Shadow(
                             color = Color.Black,
                             offset = Offset(3f, 1f),
@@ -185,7 +187,7 @@ fun BottomMenu(navController: NavController) {
                     text = "Sklep",
                     style = TextStyle(
                         color = Color.White,
-                        fontSize = 9.sp,
+                        fontSize = 8.sp,
                         shadow = Shadow(
                             color = Color.Black,
                             offset = Offset(3f, 1f),

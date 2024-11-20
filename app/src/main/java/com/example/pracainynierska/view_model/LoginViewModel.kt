@@ -12,7 +12,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.pracainynierska.model.Task
 import com.example.pracainynierska.model.User
 import com.example.pracainynierska.repository.UserRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Response
+import org.openapitools.client.apis.LoginCheckApi
+import org.openapitools.client.apis.PlayerApi
+import org.openapitools.client.infrastructure.ApiClient
+import org.openapitools.client.models.LoginCheckPost200Response
+import org.openapitools.client.models.LoginCheckPostRequest
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -20,6 +30,14 @@ import java.util.Date
 import java.util.Locale
 import java.util.UUID
 
+class AuthInterceptor(private val token: String) : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val request = chain.request().newBuilder()
+            .addHeader("Authorization", "Bearer $token")
+            .build()
+        return chain.proceed(request)
+    }
+}
 class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 
     // Zmienna przechowująca wartość nazwy użytkownika
@@ -205,7 +223,7 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
     }
 
     // Funkcja do logowania użytkownika
-//    fun login(navController: NavController) {
+//    fun loginAPI() {
 //        viewModelScope.launch {
 //            usernameErrorMessage = null
 //            passwordErrorMessage = null
@@ -216,16 +234,32 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
 //
 //            viewModelScope.launch {
 //                try {
-//                    val apiUser = UserApi("http://127.0.0.1")
+//                    val APIpath = "https://5cf7-83-31-164-178.ngrok-free.app"
+//                    val OkHttpClient = OkHttpClient
+//                    val APIclient = ApiClient(APIpath, OkHttpClient)
+//                    val apiUser = LoginCheckApi(APIpath)
+//                    val loginCheckPostRequest = LoginCheckPostRequest("UserEmail", "user_password")
 //                    val testUser = withContext(Dispatchers.IO) {
-//                        apiUser.apiUsersIdGet("1")
+//                        apiUser.loginCheckPost(loginCheckPostRequest)
 //                    }
+//                    if(testUser is LoginCheckPost200Response) {
+//                        val token = testUser.token
+//                        val OkHttpClient = OkHttpClient
+//                        val APIclient = ApiClient(APIpath, OkHttpClient)
+////                        val okHttpClient = OkHttpClient.Builder()
+////                            .addInterceptor(AuthInterceptor(token))
+////                            .build()
+//                        val APIuser = PlayerApi(APIpath, APIclient)
+//
+//                        val getPlayerByIDRequest = APIuser.apiPlayersIdGet("5")
+//                    }
+//
 //                    Log.d("LoginViewModel", "testApiUser: $testUser")
 //                } catch (e: Exception) {
-//                    Log.e("LoginViewModel", "Error fetching user: ${e.message}")
+//                    Log.e("LoginViewModel", "Error fetching API user: ${e.message}")
 //                }
 //            }
-//
+
 //            if (user != null) {
 //                val userUUID = user.userUUID
 //                // Pobierz dane użytkownika
