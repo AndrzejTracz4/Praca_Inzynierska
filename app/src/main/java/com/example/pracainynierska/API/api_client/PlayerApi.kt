@@ -4,10 +4,10 @@ import android.util.Log
 import com.example.pracainynierska.API.model.Token
 import com.example.pracainynierska.API.ApiDetails
 import com.example.pracainynierska.API.Exception.AuthorizationFailedException
-import com.example.pracainynierska.API.Exception.RequestValidationException
+import com.example.pracainynierska.API.Exception.RequestFailedException
 import com.example.pracainynierska.API.factory.RequestValidationExceptionFactory
 import com.example.pracainynierska.API.model.Player
-import com.example.pracainynierska.API.model.error_response.ErrorResponse
+import com.example.pracainynierska.API.model.error_response.ValidationErrorResponse
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -50,11 +50,14 @@ class PlayerApi : ApiDetails() {
             val json = responseBody.toString();
             Log.d("Registration API Failed", json)
             val jsonBuilder = Json { ignoreUnknownKeys = true }
-            val errorResponse = jsonBuilder.decodeFromString<ErrorResponse>(json)
-            val exception = RequestValidationExceptionFactory.create(errorResponse.detail)
-            Log.d("Registration API Failed", response.code.toString())
+            if (422 == response.code) {
+                val errorResponse = jsonBuilder.decodeFromString<ValidationErrorResponse>(json)
+                val exception = RequestValidationExceptionFactory.create(errorResponse)
+                throw exception
+            }
 
-            throw exception
+            Log.d("Registration API Failed", response.code.toString())
+            throw RequestFailedException(responseBody.toString());
         }
     }
 

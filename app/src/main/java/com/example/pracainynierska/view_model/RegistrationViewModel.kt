@@ -7,6 +7,7 @@ import androidx.lifecycle.*
 import com.example.pracainynierska.API.Exception.RequestValidationException
 import com.example.pracainynierska.API.handler.registration.RegistrationHandler
 import com.example.pracainynierska.API.handler.registration.RegistrationHandlerInterface
+import com.example.pracainynierska.API.model.error_response.ValidationErrorResponse
 import com.example.pracainynierska.validator.PlayerDataValidator
 import kotlinx.coroutines.launch
 
@@ -19,7 +20,7 @@ class RegistrationViewModel : ViewModel() {
     var confirmPassword by mutableStateOf("")
     var email by mutableStateOf("")
 
-    val usernameProperty : String = "username"
+    val usernameProperty : String = "name"
     val emailProperty : String = "email"
     val passwordProperty : String = "password"
     val confirmPasswordProperty : String = "confirmPassword"
@@ -71,13 +72,27 @@ class RegistrationViewModel : ViewModel() {
                 registrationHandler.handle(username, email, password)
                 onSuccess()
             } catch (e: RequestValidationException) {
-                Log.d("RegistrationViewModel - Registration failed", e.getErrorDetailsMessage())
-                onError("Registration failed. \n ${e.getErrorDetailsMessage()}")
+                Log.e("RegistrationViewModel", "Registration failed - validation exception")
+                addValidationMessages(e.validation)
+                onError("Registration failed.")
             } catch (e: Exception) {
                 Log.e("RegistrationViewModel - Registration failed", e.message.toString())
                 onError("Registration failed")
             }
         }
+    }
+
+    private fun addValidationMessages(validation: ValidationErrorResponse) {
+        validation.violations.forEach {
+            when (it.propertyPath) {
+                usernameProperty -> errorMessages[usernameProperty]?.value = it.message
+                emailProperty -> errorMessages[emailProperty]?.value = it.message
+                passwordProperty -> errorMessages[passwordProperty]?.value = it.message
+                confirmPasswordProperty -> errorMessages[confirmPasswordProperty]?.value = it.message
+            }
+        }
+
+        Log.d("RegistrationViewModel", "Validation messages added : ${errorMessages}")
     }
 
     private fun fieldsAreEmpty() = username.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()
