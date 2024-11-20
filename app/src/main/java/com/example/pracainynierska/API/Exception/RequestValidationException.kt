@@ -1,17 +1,11 @@
 package com.example.pracainynierska.API.Exception
 
+import com.example.pracainynierska.API.model.error_response.ValidationErrorResponse
+
 class RequestValidationException : Exception {
-    var errorDetails : Map<String, String>
+    val validation : ValidationErrorResponse
 
-    constructor(errorDetails: Map<String, String>) : super("Error: Validation failed") {
-        this.errorDetails = errorDetails
-    }
-
-    fun getErrorDetailsMessage() : String {
-        var message = ""
-        for ((key, value) in errorDetails) {
-            message += "$value\n"
-        }
-        return message
+    constructor(validationErrorResponse: ValidationErrorResponse) : super("Error: Validation failed") {
+        this.validation = validationErrorResponse
     }
 }

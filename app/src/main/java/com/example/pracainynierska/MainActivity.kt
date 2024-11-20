@@ -23,7 +23,6 @@ import com.example.pracainynierska.ui_view_components.ChangeForgotPasswordView
 import com.example.pracainynierska.ui_view_components.ForgotPasswordView
 import com.example.pracainynierska.ui_view_components.HomepageView
 import com.example.pracainynierska.ui_view_components.LoginView
-import com.example.pracainynierska.ui_view_components.RegisterView as OldRegisterView
 import com.example.pracainynierska.ui_view_components.view.RegisterView as RegisterView
 import com.example.pracainynierska.ui_view_components.ShopView
 import com.example.pracainynierska.ui_view_components.StatisticView
@@ -78,9 +77,6 @@ fun SetupNavGraph(
     ) {
         composable("LoginView") {
             LoginView(navController = navController, loginViewModel = loginViewModel)
-        }
-        composable("OldRegisterView") {
-            OldRegisterView(navController = navController, loginViewModel = loginViewModel)
         }
         composable("RegisterView") {
             RegisterView(navController = navController, registrationViewModel = registrationViewModel)
