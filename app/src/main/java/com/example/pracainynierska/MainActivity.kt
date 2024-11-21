@@ -23,6 +23,7 @@ import com.example.pracainynierska.ui_view_components.ChangeForgotPasswordView
 import com.example.pracainynierska.ui_view_components.ForgotPasswordView
 import com.example.pracainynierska.ui_view_components.HomepageView
 import com.example.pracainynierska.ui_view_components.LoginView
+import com.example.pracainynierska.ui_view_components.ProfileView
 import com.example.pracainynierska.ui_view_components.RegisterView
 import com.example.pracainynierska.ui_view_components.ShopView
 import com.example.pracainynierska.ui_view_components.StatisticView
@@ -91,6 +92,9 @@ fun SetupNavGraph(navController: NavHostController, loginViewModel: LoginViewMod
         }
         composable("AddCategoryView") {
             AddCategoryView(navController = navController, loginViewModel = loginViewModel)
+        }
+        composable("ProfileView") {
+            ProfileView(navController = navController, loginViewModel = loginViewModel)
         }
     }
 }

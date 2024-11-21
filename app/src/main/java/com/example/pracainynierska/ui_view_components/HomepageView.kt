@@ -25,8 +25,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -126,6 +130,24 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
 
     val scrollState = rememberScrollState()
 
+    var selectedAnimationIndex by remember { mutableStateOf(0) }
+
+    val lottieFiles = listOf(
+        "app/src/main/res/raw/user_photo_1.json",
+        "app/src/main/res/raw/user_photo_2.json",
+        "app/src/main/res/raw/user_photo_3.json",
+        "app/src/main/res/raw/user_photo_4.json",
+        "app/src/main/res/raw/user_photo_5.json",
+        "app/src/main/res/raw/user_photo_6.json",
+        "app/src/main/res/raw/user_photo_7.json",
+        "app/src/main/res/raw/user_photo_8.json"
+    )
+
+    loginViewModel.user.observeAsState().value?.let { user ->
+        val userPhotoPath = user.userPhotoPath
+        selectedAnimationIndex = lottieFiles.indexOf(userPhotoPath).takeIf { it >= 0 } ?: 0
+    }
+
     ModalDrawer(navController = navController, drawerState = drawerState) {
         Scaffold(
             topBar = {
@@ -182,7 +204,10 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
                         ) {
 
                             // Miejsce na zdjęcie użytkownika
-                            UserImagePicker(loginViewModel)
+                            UserImagePicker(
+                                selectedAnimationIndex = selectedAnimationIndex,
+                                onImageChanged = {}
+                            )
 
                             Spacer(modifier = Modifier.width(16.dp))
 
