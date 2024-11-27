@@ -1,4 +1,4 @@
-package com.example.pracainynierska.ui_view_components
+package com.example.pracainynierska.ui_view_components.view
 
 import BottomMenu
 import com.example.pracainynierska.ui_view_components.components.GradientLevelProgressBar
@@ -98,7 +98,6 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
 
     val userRank = levelNames[userLevel] ?: "Nieznany poziom"
 
-    // Stats and Gradients
     val stats = listOf(
         "Determinacja" to (loginViewModel.user.value?.determination ?: 0f),
         "Sprawność fizyczna" to (loginViewModel.user.value?.physical_fitness ?: 0f),
@@ -171,7 +170,7 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(120.dp) // 2x wysokość TopBar
+                            .height(120.dp)
                             .clip(RoundedCornerShape(10.dp))
                             .background(Color(0x19FFFFFF))
                             .padding(16.dp)
@@ -283,8 +282,6 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
                             .verticalScroll(scrollState)
                     ) {
                         Spacer(modifier = Modifier.height(0.dp))
-
-                        // ...Kod dla użytkownika i statystyk
 
                         Spacer(modifier = Modifier.height(8.dp))
 

@@ -1,4 +1,4 @@
-package com.example.pracainynierska.ui_view_components
+package com.example.pracainynierska.ui_view_components.view
 
 import BottomMenu
 import android.annotation.SuppressLint

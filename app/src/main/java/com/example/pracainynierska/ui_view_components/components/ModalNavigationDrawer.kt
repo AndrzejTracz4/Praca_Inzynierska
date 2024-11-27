@@ -19,7 +19,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.pracainynierska.R
 import com.example.pracainynierska.ui_view_components.components.CustomDrawerItem
-import com.example.pracainynierska.ui_view_components.view.DrawerItem
+import com.example.pracainynierska.ui_view_components.components.DrawerItem
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
