@@ -16,19 +16,20 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pracainynierska.database.UserDatabase
 import com.example.pracainynierska.repository.UserRepository
 import com.example.pracainynierska.ui.theme.PracaInżynierskaTheme
-import com.example.pracainynierska.ui_view_components.view.AchievementsView
-import com.example.pracainynierska.ui_view_components.view.AddCategoryView
-import com.example.pracainynierska.ui_view_components.view.AddTaskView
-import com.example.pracainynierska.ui_view_components.view.CalendarsView
-import com.example.pracainynierska.ui_view_components.view.ChangeForgotPasswordView
-import com.example.pracainynierska.ui_view_components.view.ForgotPasswordView
-import com.example.pracainynierska.ui_view_components.view.HomepageView
-import com.example.pracainynierska.ui_view_components.view.LoginView
-import com.example.pracainynierska.ui_view_components.view.RegisterView
-import com.example.pracainynierska.ui_view_components.view.ShopView
-import com.example.pracainynierska.ui_view_components.view.StatisticView
+import com.example.pracainynierska.ui_view_components.AddCategoryView
+import com.example.pracainynierska.ui_view_components.AddTaskView
+import com.example.pracainynierska.ui_view_components.CalendarsView
+import com.example.pracainynierska.ui_view_components.ChangeForgotPasswordView
+import com.example.pracainynierska.ui_view_components.ForgotPasswordView
+import com.example.pracainynierska.ui_view_components.HomepageView
+import com.example.pracainynierska.ui_view_components.LoginView
+import com.example.pracainynierska.ui_view_components.view.RegisterView as RegisterView
+import com.example.pracainynierska.ui_view_components.ShopView
+import com.example.pracainynierska.ui_view_components.StatisticView
 import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.view_model.LoginViewModelFactory
+import com.example.pracainynierska.view_model.RegistrationViewModel
+import com.example.pracainynierska.view_model.RegistrationViewModelFactory
 
 class MainActivity : ComponentActivity() {
 
@@ -49,7 +50,14 @@ class MainActivity : ComponentActivity() {
                     val loginViewModel: LoginViewModel = viewModel(
                         factory = LoginViewModelFactory(userRepository)
                     )
-                    SetupNavGraph(navController = navController, loginViewModel = loginViewModel)
+                    val registrationViewModel : RegistrationViewModel = viewModel(
+                        factory = RegistrationViewModelFactory()
+                    )
+                    SetupNavGraph(
+                        navController = navController,
+                        loginViewModel = loginViewModel,
+                        registrationViewModel = registrationViewModel
+                    )
                 }
             }
         }
@@ -58,7 +66,11 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun SetupNavGraph(navController: NavHostController, loginViewModel: LoginViewModel) {
+fun SetupNavGraph(
+    navController: NavHostController,
+    loginViewModel: LoginViewModel,
+    registrationViewModel: RegistrationViewModel
+) {
     NavHost(
         navController = navController,
         startDestination = "LoginView"
@@ -67,7 +79,7 @@ fun SetupNavGraph(navController: NavHostController, loginViewModel: LoginViewMod
             LoginView(navController = navController, loginViewModel = loginViewModel)
         }
         composable("RegisterView") {
-            RegisterView(navController = navController, loginViewModel = loginViewModel)
+            RegisterView(navController = navController, registrationViewModel = registrationViewModel)
         }
         composable("HomepageView") {
             HomepageView(navController = navController, loginViewModel = loginViewModel)
@@ -92,9 +104,6 @@ fun SetupNavGraph(navController: NavHostController, loginViewModel: LoginViewMod
         }
         composable("AddCategoryView") {
             AddCategoryView(navController = navController, loginViewModel = loginViewModel)
-        }
-        composable("AchievementsView") {
-            AchievementsView(navController = navController, loginViewModel = loginViewModel)
         }
     }
 }

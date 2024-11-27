@@ -45,11 +45,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
-import com.example.pracainynierska.view_model.LoginViewModel
+import com.example.pracainynierska.view_model.RegistrationViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun RegisterView(navController: NavController, loginViewModel: LoginViewModel){
+fun RegisterView(navController: NavController, registrationViewModel: RegistrationViewModel){
 
     val focusManager = LocalFocusManager.current
 
@@ -100,11 +100,11 @@ fun RegisterView(navController: NavController, loginViewModel: LoginViewModel){
             Spacer(modifier = Modifier.height(30.dp))
 
             OutlinedTextField(
-                value = loginViewModel.username,
+                value = registrationViewModel.username,
                 onValueChange = {
-                    loginViewModel.onUsernameChange(it)},
+                    registrationViewModel.onUsernameChange(it)},
                 label = { Text(text = "Username")},
-                isError = loginViewModel.usernameErrorMessage != null,
+                isError = registrationViewModel.getUserNameErrorMessage() != null,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Black,
@@ -113,7 +113,7 @@ fun RegisterView(navController: NavController, loginViewModel: LoginViewModel){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
-                    if (loginViewModel.usernameErrorMessage != null){
+                    if (registrationViewModel.getUserNameErrorMessage() != null){
                         Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
                     }
                     else
@@ -137,18 +137,18 @@ fun RegisterView(navController: NavController, loginViewModel: LoginViewModel){
                 )
             )
 
-            if (loginViewModel.usernameErrorMessage != null){
-                Text(text = loginViewModel.usernameErrorMessage!!, color = Color.Red, fontSize = 12.sp)
+            if (registrationViewModel.getUserNameErrorMessage() != null){
+                Text(text = registrationViewModel.getUserNameErrorMessage()!!, color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
-                value = loginViewModel.email,
+                value = registrationViewModel.email,
                 onValueChange = {
-                    loginViewModel.onEmailChange(it)},
+                    registrationViewModel.onEmailChange(it)},
                 label = { Text(text = "Email")},
-                isError = loginViewModel.emailErrorMessage != null,
+                isError = registrationViewModel.getEmailErrorMessage() != null,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Black,
@@ -157,7 +157,7 @@ fun RegisterView(navController: NavController, loginViewModel: LoginViewModel){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
-                    if(loginViewModel.emailErrorMessage != null){
+                    if(registrationViewModel.getEmailErrorMessage() != null){
                         Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
                     } else {
                         Image(
@@ -179,17 +179,17 @@ fun RegisterView(navController: NavController, loginViewModel: LoginViewModel){
                 )
             )
 
-            if (loginViewModel.emailErrorMessage != null){
-                Text(text = loginViewModel.emailErrorMessage!!, color = Color.Red, fontSize = 12.sp)
+            if (registrationViewModel.getEmailErrorMessage() != null){
+                Text(text = registrationViewModel.getEmailErrorMessage()!!, color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
-                value = loginViewModel.password,
-                onValueChange = {loginViewModel.onPasswordChange(it)},
+                value = registrationViewModel.password,
+                onValueChange = {registrationViewModel.onPasswordChange(it)},
                 label = { Text(text = "Password")},
-                isError = loginViewModel.passwordErrorMessage != null,
+                isError = registrationViewModel.getPasswordErrorMessage() != null,
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -199,7 +199,7 @@ fun RegisterView(navController: NavController, loginViewModel: LoginViewModel){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
-                    if(loginViewModel.passwordErrorMessage != null){
+                    if(registrationViewModel.getPasswordErrorMessage() != null){
                         Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
                     } else {
                         Image(
@@ -221,17 +221,17 @@ fun RegisterView(navController: NavController, loginViewModel: LoginViewModel){
                 )
             )
 
-            if (loginViewModel.passwordErrorMessage != null){
-                Text(text = loginViewModel.passwordErrorMessage!!, color = Color.Red, fontSize = 12.sp)
+            if (registrationViewModel.getPasswordErrorMessage() != null){
+                Text(text = registrationViewModel.getPasswordErrorMessage()!!, color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
-                value = loginViewModel.confirmPassword,
-                onValueChange = {loginViewModel.onConfirmPasswordChange(it)},
+                value = registrationViewModel.confirmPassword,
+                onValueChange = {registrationViewModel.onConfirmPasswordChange(it)},
                 label = { Text(text = "Confirm password")},
-                isError = loginViewModel.confirmPasswordErrorMessage != null,
+                isError = registrationViewModel.getConfirmPasswordErrorMessage() != null,
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -241,7 +241,7 @@ fun RegisterView(navController: NavController, loginViewModel: LoginViewModel){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
-                    if(loginViewModel.confirmPasswordErrorMessage != null){
+                    if(registrationViewModel.getConfirmPasswordErrorMessage() != null){
                         Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
                     } else {
                         Image(
@@ -263,15 +263,15 @@ fun RegisterView(navController: NavController, loginViewModel: LoginViewModel){
                 )
             )
 
-            if (loginViewModel.confirmPasswordErrorMessage != null){
-                Text(text = loginViewModel.confirmPasswordErrorMessage!!, color = Color.Red, fontSize = 12.sp)
+            if (registrationViewModel.getConfirmPasswordErrorMessage() != null){
+                Text(text = registrationViewModel.getConfirmPasswordErrorMessage()!!, color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
-                    loginViewModel.registerUser(
+                    registrationViewModel.registerUser(
                         onSuccess = {
                             registrationMessage = "Registration successful"
                             showDialog = true

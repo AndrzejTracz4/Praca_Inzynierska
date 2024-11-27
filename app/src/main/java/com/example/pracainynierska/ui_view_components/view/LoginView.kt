@@ -108,11 +108,11 @@ fun LoginView(navController: NavController, loginViewModel: LoginViewModel){
             Spacer(modifier = Modifier.height(30.dp))
             
             OutlinedTextField(
-                value = loginViewModel.username,
+                value = loginViewModel.email,
                 onValueChange = {
-                    loginViewModel.onUsernameChange(it)},
-                label = { Text(text = "Username")},
-                isError = loginViewModel.usernameErrorMessage != null,
+                    loginViewModel.onEmailChange(it)},
+                label = { Text(text = "Email")},
+                isError = loginViewModel.emailErrorMessage != null,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Black,
@@ -121,14 +121,14 @@ fun LoginView(navController: NavController, loginViewModel: LoginViewModel){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
-                    if (loginViewModel.usernameErrorMessage != null){
+                    if (loginViewModel.emailErrorMessage != null){
                         Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
                     }
                     else
                     {
                     Image(
                         painter = painterResource(id = R.drawable.user),
-                        contentDescription = "Username",
+                        contentDescription = "Email",
                         modifier = Modifier
                             .size(24.dp)
                             .alpha(0.5f)
@@ -145,8 +145,8 @@ fun LoginView(navController: NavController, loginViewModel: LoginViewModel){
                 )
             )
             
-            if (loginViewModel.usernameErrorMessage != null){
-                Text(text = loginViewModel.usernameErrorMessage!!, color = Color.Red, fontSize = 12.sp)
+            if (loginViewModel.emailErrorMessage != null){
+                Text(text = loginViewModel.emailErrorMessage!!, color = Color.Red, fontSize = 12.sp)
             }
             
             Spacer(modifier = Modifier.height(8.dp))

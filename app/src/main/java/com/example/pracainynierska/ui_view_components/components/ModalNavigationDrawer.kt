@@ -42,7 +42,7 @@ fun ModalDrawer(
         DrawerItem("Kalendarz", R.drawable.calendar, "CalendarsView"),
         DrawerItem("Sklep", R.drawable.shop, "ShopView"),
         DrawerItem("Ustawienia", R.drawable.settings, "HomepageView"),
-        DrawerItem("Wyloguj", R.drawable.logout, "HomepageView")
+        DrawerItem("Wyloguj", R.drawable.logout, "LoginView")
     )
 
     // Zmienna do śledzenia zaznaczonego elementu

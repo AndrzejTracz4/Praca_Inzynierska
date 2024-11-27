@@ -1,8 +1,9 @@
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid) version "1.9.10"
+    alias(libs.plugins.jetbrainsKotlinAndroid) version "1.9.21"
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
+    kotlin("plugin.serialization") version "1.9.21"
 }
 
 android {
@@ -47,7 +48,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.5.7"
     }
 
     packaging {
@@ -75,6 +76,7 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2024.08.00"))
 
     // Compose libraries
+    implementation ("androidx.core:core")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -107,12 +109,14 @@ dependencies {
     implementation ("com.airbnb.android:lottie-compose:6.0.0")
 
     //API
-    implementation ("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10")
-    implementation ("org.jetbrains.kotlin:kotlin-reflect:1.9.10")
+    implementation ("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.21")
+    implementation ("org.jetbrains.kotlin:kotlin-reflect:1.9.21")
     implementation ("com.squareup.moshi:moshi-kotlin:1.15.1")
     implementation ("com.squareup.moshi:moshi-adapters:1.15.1")
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
     implementation ("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     implementation ("io.kotlintest:kotlintest-assertions:3.4.2")
 
+    //Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }
