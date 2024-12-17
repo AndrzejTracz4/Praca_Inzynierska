@@ -8,7 +8,6 @@ data class Player(
     val name: String?,
     val email: String?,
     val enabled: Boolean?,
-    val roles: List<String>?
-) {
-
-}
+    val roles: List<String>?,
+    val playerStatistics: PlayerStatistics?
+)
