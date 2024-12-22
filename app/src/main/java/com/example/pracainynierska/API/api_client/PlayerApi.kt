@@ -8,11 +8,11 @@ import com.example.pracainynierska.API.Exception.RequestFailedException
 import com.example.pracainynierska.API.factory.RequestValidationExceptionFactory
 import com.example.pracainynierska.API.model.Player
 import com.example.pracainynierska.API.model.error_response.ValidationErrorResponse
+import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import kotlinx.serialization.json.Json
 
 class PlayerApi : ApiDetails() {
     private val loginCheckPath : String = "api/auth"

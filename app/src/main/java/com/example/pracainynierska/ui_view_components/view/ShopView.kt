@@ -1,4 +1,4 @@
-package com.example.pracainynierska.ui_view_components
+package com.example.pracainynierska.ui_view_components.view
 
 import BottomMenu
 import android.annotation.SuppressLint
@@ -255,7 +255,7 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Statystyki (Determination, Physical fitness, Intelligence, Knowledge)
+                    // Statystyki
                     Text(
                         text = "Statystyka",
                         color = Color.White,
@@ -265,7 +265,6 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Buttons for stats
                     Column {
                         CustomButton(
                             text = "Determinacja",

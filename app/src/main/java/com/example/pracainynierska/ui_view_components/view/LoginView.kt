@@ -1,4 +1,4 @@
-package com.example.pracainynierska.ui_view_components
+package com.example.pracainynierska.ui_view_components.view
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -202,6 +202,8 @@ fun LoginView(navController: NavController, loginViewModel: LoginViewModel){
                             loginResult = false
                         }
                     }
+
+                    //loginViewModel.loginAPI()
                 },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier

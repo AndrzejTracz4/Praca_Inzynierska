@@ -1,4 +1,4 @@
-package com.example.pracainynierska.ui_view_components.view
+package com.example.pracainynierska.ui_view_components.components
 
 data class DrawerItem(
     val text: String,
