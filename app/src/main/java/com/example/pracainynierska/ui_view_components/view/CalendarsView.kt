@@ -97,7 +97,6 @@ fun CalendarsView(navController: NavController, loginViewModel: LoginViewModel) 
                 ) {
                     Spacer(modifier = Modifier.height(55.dp))
 
-                    // CalendarView
                     AndroidView(
                         factory = { context ->
                             val locale = Locale("pl", "PL")
