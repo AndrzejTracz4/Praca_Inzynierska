@@ -2,8 +2,11 @@ package com.example.pracainynierska.ui_view_components.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,10 +25,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import java.util.Date
 import java.text.SimpleDateFormat
 import java.util.Locale
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,14 +40,20 @@ fun DateTimePickerDialog(onDateTimeSelected: (String) -> Unit, onDismissRequest:
     var selectedHour by remember { mutableStateOf(0) }
     var selectedMinute by remember { mutableStateOf(0) }
 
-    Dialog(onDismissRequest = onDismissRequest) {
+    Dialog(
+        onDismissRequest = onDismissRequest,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
         Surface(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth(1f),
             shape = MaterialTheme.shapes.medium,
             color = MaterialTheme.colorScheme.surface
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(1f)
             ) {
                 DatePicker(
                     state = dateState,
