@@ -73,7 +73,7 @@ fun SetupNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "LoginView"
+        startDestination = "HomepageView"
     ) {
         composable("LoginView") {
             LoginView(navController = navController, loginViewModel = loginViewModel)
