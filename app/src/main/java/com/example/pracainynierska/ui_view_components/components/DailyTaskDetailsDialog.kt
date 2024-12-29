@@ -1,5 +1,6 @@
 package com.example.pracainynierska.ui_view_components.components
 
+import DailyTaskDetailsButton
 import TaskDetailsButton
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,18 +21,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.navigation.NavController
 import com.example.pracainynierska.model.Task
-import com.example.pracainynierska.view_model.LoginViewModel
 
 @Composable
-fun TaskDetailsDialog(
-    navController: NavController,
-    loginViewModel: LoginViewModel,
-    task: Task,
-    onDismiss: () -> Unit,
-    onEdit: () -> Unit
-) {
+fun DailyTaskDetailsDialog(task: Task, onDismiss: () -> Unit) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -83,26 +76,18 @@ fun TaskDetailsDialog(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        TaskDetailsButton(
+                        DailyTaskDetailsButton(
                             text = "Wykonaj",
                             color = Color(0xFF3CB043),
-                            onClick = { /* Obsługa wykonania zadania todo */ }
+                            onClick = { /* Obsługa wykonania zadania todo */ },
+                            modifier = Modifier.weight(1f)
                         )
 
-                        TaskDetailsButton(
-                            text = "Edytuj",
-                            color = Color(0xFFFFFF00),
-                            onClick = onEdit
-                        )
-
-                        TaskDetailsButton(
+                        DailyTaskDetailsButton(
                             text = "Anuluj",
                             color = Color(0xFFFF0000),
-                            onClick = {
-                                loginViewModel.deleteTask(task.id)
-                                //navController.navigate("CalendarsView")
-                                onDismiss()
-                            }
+                            onClick = onDismiss,
+                            modifier = Modifier.weight(1f)
                         )
                     }
                 }
