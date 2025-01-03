@@ -18,17 +18,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import com.example.pracainynierska.view_model.LoginViewModel
 
 @Composable
-fun GradientLevelProgressBar(loginViewModel: LoginViewModel) {
-
-    var userExperience = 0f
-
-    loginViewModel.user.observeAsState().value.let {
-        if (it != null) {
-            userExperience = it.experience
-        }
-    }
-
-    // Ograniczenie wartości progress do zakresu 0-100
+fun GradientLevelProgressBar(userExperience: Float) {
+        // Ograniczenie wartości progress do zakresu 0-100
     val normalizedProgress = userExperience.coerceIn(0f, 100f) / 100f
 
     // Animacja wartości progress

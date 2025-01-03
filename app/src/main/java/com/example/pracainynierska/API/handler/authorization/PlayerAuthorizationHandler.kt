@@ -7,12 +7,10 @@ import com.example.pracainynierska.API.model.Player
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PlayerAuthorizationHandler : AuthorizationHandlerInterface {
-    private val playerApi = PlayerApi()
+class PlayerAuthorizationHandler(private val playerApi : PlayerApi) : AuthorizationHandlerInterface {
 
     override suspend fun authorize(email: String, password: String): Player? {
         return withContext(Dispatchers.IO) {
-            val playerApi = PlayerApi()
             try {
                 if (playerApi.authorized()) {
                     return@withContext playerApi.getPlayer()
@@ -25,6 +23,7 @@ class PlayerAuthorizationHandler : AuthorizationHandlerInterface {
 
             } catch (e: Exception) {
                 Log.e("PlayerAuthorization::authorize", e.message.toString())
+                throw e
                 return@withContext null
             }
         }

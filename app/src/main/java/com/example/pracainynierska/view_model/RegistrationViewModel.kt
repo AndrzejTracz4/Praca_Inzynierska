@@ -5,15 +5,17 @@ import android.util.Patterns
 import androidx.compose.runtime.*
 import androidx.lifecycle.*
 import com.example.pracainynierska.API.Exception.RequestValidationException
-import com.example.pracainynierska.API.handler.registration.RegistrationHandler
 import com.example.pracainynierska.API.handler.registration.RegistrationHandlerInterface
 import com.example.pracainynierska.API.model.error_response.ValidationErrorResponse
+import com.example.pracainynierska.context.PlayerContextInterface
 import com.example.pracainynierska.validator.PlayerDataValidator
 import kotlinx.coroutines.launch
 
-class RegistrationViewModel : ViewModel() {
-
-    private val registrationHandler : RegistrationHandlerInterface = RegistrationHandler()
+class RegistrationViewModel(
+    playerContext: PlayerContextInterface,
+    private val registrationHandler: RegistrationHandlerInterface,
+    private val validator: PlayerDataValidator
+) : AbstractViewModel(playerContext) {
 
     var username by mutableStateOf("")
     var password by mutableStateOf("")
@@ -24,8 +26,6 @@ class RegistrationViewModel : ViewModel() {
     val emailProperty : String = "email"
     val passwordProperty : String = "password"
     val confirmPasswordProperty : String = "confirmPassword"
-
-    private val validator = PlayerDataValidator()
 
     private val errorMessages = mutableMapOf(
         usernameProperty to mutableStateOf<String?>(null),

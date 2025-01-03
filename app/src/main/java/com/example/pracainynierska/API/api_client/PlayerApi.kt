@@ -8,13 +8,15 @@ import com.example.pracainynierska.API.Exception.RequestFailedException
 import com.example.pracainynierska.API.factory.RequestValidationExceptionFactory
 import com.example.pracainynierska.API.model.Player
 import com.example.pracainynierska.API.model.error_response.ValidationErrorResponse
+import com.example.pracainynierska.context.PlayerContext
+import com.example.pracainynierska.context.PlayerContextInterface
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
-class PlayerApi : ApiDetails() {
+class PlayerApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext) {
     private val loginCheckPath : String = "api/auth"
 
     private val getPlayerFromTokenPath : String = "api/player-from-token"

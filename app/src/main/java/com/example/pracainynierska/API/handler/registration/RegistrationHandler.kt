@@ -4,9 +4,7 @@ import com.example.pracainynierska.API.api_client.PlayerApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class RegistrationHandler : RegistrationHandlerInterface {
-    private val playerApi: PlayerApi = PlayerApi()
-
+class RegistrationHandler(private val playerApi: PlayerApi) : RegistrationHandlerInterface {
     override suspend fun handle(name: String, email: String, password: String) {
         return withContext(Dispatchers.IO) {
             playerApi.registerPlayer(name, email, password)

@@ -35,11 +35,15 @@ import com.example.pracainynierska.view_model.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopMenu (navController: NavController, loginViewModel: LoginViewModel, drawerState: DrawerState? = null, onDrawerOpen: () -> Unit) {
+fun TopMenu (
+    navController: NavController,
+    username: String = "",
+    loginViewModel: LoginViewModel? = null,
+    drawerState: DrawerState? = null,
+    onDrawerOpen: () -> Unit
+) {
 
     val context = LocalContext.current
-
-    var username = ""
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -47,12 +51,6 @@ fun TopMenu (navController: NavController, loginViewModel: LoginViewModel, drawe
     val isHomepage = currentDestination?.hierarchy?.any { it.route == "HomepageView" } == true
 
     Log.i("TopMenu", "isHomepage: $isHomepage")
-
-    loginViewModel.user.observeAsState().value.let {
-        if (it != null) {
-            username = it.username
-        }
-    }
 
     Box(
         modifier = Modifier

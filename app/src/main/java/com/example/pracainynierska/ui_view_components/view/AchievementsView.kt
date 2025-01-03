@@ -41,7 +41,6 @@ fun AchievementsView(navController: NavController, loginViewModel: LoginViewMode
             topBar = {
                 TopMenu(
                     navController = navController,
-                    loginViewModel = loginViewModel,
                     drawerState = drawerState,
                     onDrawerOpen = {
                         scope.launch {
