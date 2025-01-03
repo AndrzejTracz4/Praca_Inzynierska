@@ -25,8 +25,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,9 +44,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.model.Task
 import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.ui.components.ModalDrawer
+import com.example.pracainynierska.ui_view_components.components.DailyTaskCard
+import com.example.pracainynierska.ui_view_components.components.DailyTaskDetailsDialog
 import com.example.pracainynierska.ui_view_components.components.GradientStatsProgressBars
+import com.example.pracainynierska.ui_view_components.components.TaskCard
+import com.example.pracainynierska.ui_view_components.components.TaskDetailsDialog
+import com.example.pracainynierska.ui_view_components.components.TaskMode
 import com.example.pracainynierska.ui_view_components.components.TopMenu
 import com.example.pracainynierska.ui_view_components.components.UserImagePicker
 import kotlinx.coroutines.launch
@@ -62,6 +72,19 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
             userExperience = it.experience
         }
     }
+
+    val fakeTask = Task(
+        id = 1,
+        name = "Przebiegnij maraton",
+        difficulty = "Trudny",
+        category = "Trening",
+        startDate = "2024-12-01",
+        endDate = "2024-12-31",
+        interval = 7,
+        measureUnit = "dni",
+        mode = TaskMode.CYKLICZNE,
+        status = "Aktywne"
+    )
 
     val levelNames = mapOf(
         1 to "Rekrut",
@@ -124,6 +147,8 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
     val scope = rememberCoroutineScope()
 
     val scrollState = rememberScrollState()
+    var showTaskDetailsDialog by remember { mutableStateOf(false) }
+
 
     ModalDrawer(navController = navController, drawerState = drawerState) {
         Scaffold(
@@ -325,7 +350,9 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
                                         .clip(RoundedCornerShape(10.dp))
                                         .background(Color(0x14FFFFFF))
                                         .padding(16.dp)
-                                )
+                                ) {
+
+                                }
                             }
                         }
 
@@ -367,12 +394,21 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .fillMaxHeight(0.9f)
-                                        .height(100.dp)
                                         .clip(RoundedCornerShape(10.dp))
-                                        .background(Color(0x14FFFFFF))
-                                        .padding(16.dp)
-                                )
+                                ){
+                                    DailyTaskCard(
+                                        task = fakeTask,
+                                        onClick = { showTaskDetailsDialog = true },
+                                    )
+                                }
                             }
+                        }
+
+                        if (showTaskDetailsDialog) {
+                            DailyTaskDetailsDialog(
+                                task = fakeTask,
+                                onDismiss = { showTaskDetailsDialog = false }
+                            )
                         }
                         Spacer(modifier = Modifier.height(20.dp))
                     }

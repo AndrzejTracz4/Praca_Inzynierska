@@ -58,7 +58,6 @@ fun CalendarsView(navController: NavController, loginViewModel: LoginViewModel) 
     val scope = rememberCoroutineScope()
     var selectedTask by remember { mutableStateOf<Task?>(null) }
 
-
     ModalDrawer(navController = navController, drawerState = drawerState) {
         Scaffold(
             topBar = {
@@ -118,7 +117,6 @@ fun CalendarsView(navController: NavController, loginViewModel: LoginViewModel) 
 
                                     // Pobranie zadania dla wybranej daty
                                     selectedTasks.value = loginViewModel.getTasksForDate(selectedDate.value)
-
                                 }
                             }
                         },
@@ -148,11 +146,15 @@ fun CalendarsView(navController: NavController, loginViewModel: LoginViewModel) 
                 }
                 selectedTask?.let { task ->
                     TaskDetailsDialog(
+                        navController = navController,
+                        loginViewModel = loginViewModel,
                         task = task,
-                        onDismiss = { selectedTask = null }
+                        onDismiss = { selectedTask = null },
+                        onEdit = {
+                            navController.navigate("EditTaskView/${task.id}")
+                        }
                     )
                 }
-
             }
         }
     }

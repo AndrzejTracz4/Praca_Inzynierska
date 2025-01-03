@@ -20,6 +20,7 @@ import com.example.pracainynierska.ui_view_components.view.AddCategoryView
 import com.example.pracainynierska.ui_view_components.view.AddTaskView
 import com.example.pracainynierska.ui_view_components.view.CalendarsView
 import com.example.pracainynierska.ui_view_components.view.ChangeForgotPasswordView
+import com.example.pracainynierska.ui_view_components.view.EditTaskView
 import com.example.pracainynierska.ui_view_components.view.ForgotPasswordView
 import com.example.pracainynierska.ui_view_components.view.HomepageView
 import com.example.pracainynierska.ui_view_components.view.LoginView
@@ -105,6 +106,18 @@ fun SetupNavGraph(
         composable("AddCategoryView") {
             AddCategoryView(navController = navController, loginViewModel = loginViewModel)
         }
+        composable("EditTaskView/{taskId}") { backStackEntry ->
+            val taskId = backStackEntry.arguments?.getString("taskId")
+            val taskToEdit = loginViewModel.getTaskById(taskId)
+            if (taskToEdit != null) {
+                EditTaskView(
+                    taskToEdit = taskToEdit,
+                    navController = navController,
+                    loginViewModel = loginViewModel
+                )
+            }
+        }
+
     }
 }
 

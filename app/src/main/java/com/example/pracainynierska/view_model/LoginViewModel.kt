@@ -250,13 +250,19 @@ class LoginViewModel(private val userRepository: UserRepository): ViewModel() {
         _tasks.value = _tasks.value?.map { if (it.id == taskId) it.copy(status = "Completed") else it }
     }
 
-    fun editTask(task: Task) {
+    fun updateTask(task: Task) {
         _tasks.value = _tasks.value?.map { if (it.id == task.id) task else it }
     }
 
     fun deleteTask(taskId: Int) {
+        Log.d("LoginViewModel", "Usunięcie zadania z ID: $taskId")
         _tasks.value = _tasks.value?.filter { it.id != taskId }
     }
+
+    fun getTaskById(taskId: String?): Task? {
+        return _tasks.value?.firstOrNull { it.id.toString() == taskId }
+    }
+
 
     fun getTasksForDate(selectedDate: String): List<Task>? {
         val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
