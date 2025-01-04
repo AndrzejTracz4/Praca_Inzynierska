@@ -70,7 +70,7 @@ fun ShopView(
     boosterViewModel: BoosterViewModel
 ) {
     var selectedCategory by remember { mutableStateOf("Determinacja") }
-    var selectedShopMode by remember { mutableStateOf("Osłona antyredukcjna statystyk") }
+    var selectedShopMode by remember { mutableStateOf("Osłona antyredukcyjna statystyk") }
     var sliderValueTime by remember { mutableFloatStateOf(10f) }
     var sliderValueMultiplier by remember { mutableFloatStateOf(10f) }
     var isHidden by remember { mutableStateOf(true) }
@@ -132,10 +132,10 @@ fun ShopView(
 
                     Column {
                         ShopSelectButton(
-                            text = "Osłona antyredukcjna statystyk",
-                            isSelected = selectedShopMode == "Osłona antyredukcjna statystyk",
+                            text = "Osłona antyredukcyjna statystyk",
+                            isSelected = selectedShopMode == "Osłona antyredukcyjna statystyk",
                             onClick = {
-                                selectedShopMode = "Osłona antyredukcjna statystyk"
+                                selectedShopMode = "Osłona antyredukcyjna statystyk"
                                 isHidden = true },
                             iconResId = R.drawable.shield
                         )

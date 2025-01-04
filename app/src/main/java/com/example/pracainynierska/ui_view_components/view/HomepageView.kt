@@ -47,19 +47,26 @@ import com.example.pracainynierska.R
 import com.example.pracainynierska.model.FakeData.fakeTask
 import com.example.pracainynierska.model.Task
 import com.example.pracainynierska.ui.components.ModalDrawer
+import com.example.pracainynierska.ui_view_components.components.BoosterCard
+import com.example.pracainynierska.ui_view_components.components.BoosterList
 import com.example.pracainynierska.ui_view_components.components.DailyTaskCard
 import com.example.pracainynierska.ui_view_components.components.DailyTaskDetailsDialog
 import com.example.pracainynierska.ui_view_components.components.GradientStatsProgressBars
 import com.example.pracainynierska.ui_view_components.components.TaskMode
 import com.example.pracainynierska.ui_view_components.components.TopMenu
 import com.example.pracainynierska.ui_view_components.components.UserImagePicker
+import com.example.pracainynierska.view_model.BoosterViewModel
 import com.example.pracainynierska.view_model.HomepageViewModel
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomepageView(navController: NavController, homepageViewModel: HomepageViewModel) {
+fun HomepageView(
+    navController: NavController,
+    homepageViewModel: HomepageViewModel,
+    boosterViewModel: BoosterViewModel
+) {
 
     val focusManager = LocalFocusManager.current
     var userLevel = 1
@@ -328,13 +335,11 @@ fun HomepageView(navController: NavController, homepageViewModel: HomepageViewMo
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .fillMaxHeight(0.9f)
-                                        .height(100.dp)
                                         .clip(RoundedCornerShape(10.dp))
-                                        .background(Color(0x14FFFFFF))
-                                        .padding(16.dp)
-                                ) {
-
+                                ){
+                                    BoosterList(boosterViewModel = boosterViewModel)
                                 }
+
                             }
                         }
 

@@ -68,11 +68,11 @@ fun AddBoosterButton(
                     shopMode = selectedShopMode,
                     category = selectedCategory,
                     multiplier = if (selectedShopMode == "Osłona antyredukcjna statystyk") {
-                        0f
+                        0
                     } else {
-                        sliderValueMultiplier
+                        (sliderValueMultiplier.toInt())/10
                     },
-                    duration = sliderValueTime,
+                    duration = (sliderValueTime.toInt())/10,
                     price = costValue,
                     startDate = startDate,
                     isActive = isActive
