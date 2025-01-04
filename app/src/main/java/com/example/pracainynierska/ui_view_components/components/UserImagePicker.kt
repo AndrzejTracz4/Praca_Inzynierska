@@ -15,18 +15,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import com.airbnb.lottie.compose.LottieAnimation
 import com.example.pracainynierska.view_model.LoginViewModel
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
+import com.example.pracainynierska.API.model.Player
 import com.example.pracainynierska.R
 
 @Composable
-fun UserImagePicker(loginViewModel: LoginViewModel) {
+fun UserImagePicker(playerModel: LiveData<Player>) {
 
     // Zmienna do przechowywania wybranej animacji
     var selectedAnimationIndex by remember { mutableIntStateOf(0) }
+
 
     // Lista plików Lottie jako stałe ścieżki
     val lottieFiles = listOf(
@@ -38,6 +41,7 @@ fun UserImagePicker(loginViewModel: LoginViewModel) {
         "app/src/main/res/raw/user_photo_7.json",
         "app/src/main/res/raw/user_photo_8.json"
     )
+
 
     // Pobranie animacji Lottie na podstawie ścieżki
     val composition by rememberLottieComposition(
@@ -55,14 +59,7 @@ fun UserImagePicker(loginViewModel: LoginViewModel) {
         )
     )
 
-    //Obserwer do LiveData
-    loginViewModel.user.observeAsState().value.let {
-        if (it != null) {
-            val userPhotoPath = it.userPhotoPath
-            selectedAnimationIndex = lottieFiles.indexOf(userPhotoPath).takeIf { it >= 0 } ?: 0
-        }
-    }
-
+    selectedAnimationIndex = lottieFiles.indexOf(playerModel.value?.userPhotoPath).takeIf { it >= 0 } ?: 0
     var isAnimationPlaying by remember { mutableStateOf(false) }
 
     // Box dla zdjęcia użytkownika
@@ -81,8 +78,7 @@ fun UserImagePicker(loginViewModel: LoginViewModel) {
                 isAnimationPlaying = true
 
                 // Zaktualizowanie ścieżki w bazie danych za pomocą ViewModelu
-                loginViewModel.updateUserPhotoPath(newPhotoPath)
-
+                playerModel.value?.userPhotoPath = newPhotoPath
             }
     ) {
         // Wyświetlanie wybranej animacji Lottie

@@ -1,23 +1,17 @@
 package com.example.pracainynierska.API
 
 import com.example.pracainynierska.API.model.Player
+import com.example.pracainynierska.context.PlayerContextInterface
 import okhttp3.OkHttpClient
 
 
-open class ApiDetails {
+open class ApiDetails(private var playerContext: PlayerContextInterface) {
     private val apiPath: String = "https://88a7-83-31-42-39.ngrok-free.app"
 
     protected val apiClient = OkHttpClient()
 
-    private var token: String? = null
-
-    private var player: Player? = null
-
-    init {
-        reinitializeApiClient()
-    }
-
     fun reinitializeApiClient() {
+        val token = getToken()
         apiClient.newBuilder().addInterceptor { chain ->
             val request = chain.request().newBuilder()
                 .addHeader("Content-Type", "application/json")
@@ -33,20 +27,20 @@ open class ApiDetails {
     }
 
     fun getToken(): String? {
-        return token
+        return playerContext.getToken()
     }
 
     fun setToken(token: String) {
-        this.token = token
-
+        this.playerContext.setToken(token)
+        reinitializeApiClient()
     }
 
     fun getPlayer(): Player? {
-        return player
+        return playerContext.getPlayer()
     }
 
     fun setPlayer(player: Player) {
-        this.player = player
+        this.playerContext.setPlayer(player)
     }
 
     fun buildPath(path: String): String {
@@ -54,6 +48,6 @@ open class ApiDetails {
     }
 
     fun authorized(): Boolean {
-        return token != null
+        return getToken() != null
     }
 }

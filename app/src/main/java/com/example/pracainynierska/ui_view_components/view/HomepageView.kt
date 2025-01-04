@@ -45,31 +45,31 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.model.Task
-import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.ui.components.ModalDrawer
 import com.example.pracainynierska.ui_view_components.components.DailyTaskCard
 import com.example.pracainynierska.ui_view_components.components.DailyTaskDetailsDialog
 import com.example.pracainynierska.ui_view_components.components.GradientStatsProgressBars
-import com.example.pracainynierska.ui_view_components.components.TaskCard
-import com.example.pracainynierska.ui_view_components.components.TaskDetailsDialog
 import com.example.pracainynierska.ui_view_components.components.TaskMode
 import com.example.pracainynierska.ui_view_components.components.TopMenu
 import com.example.pracainynierska.ui_view_components.components.UserImagePicker
+import com.example.pracainynierska.view_model.HomepageViewModel
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
+fun HomepageView(navController: NavController, homepageViewModel: HomepageViewModel) {
 
     val focusManager = LocalFocusManager.current
     var userLevel = 1
-    var userExperience = 0f
+    var playerExperience = 0f
+    val playerModel = homepageViewModel.getPlayerModel()
+    val player = homepageViewModel.getPlayer()
 
-    loginViewModel.user.observeAsState().value.let {
+    playerModel.observeAsState().value.let {
         if (it != null) {
-            userLevel = it.level
-            userExperience = it.experience
+            userLevel = it.playerLevel
+            playerExperience = it.playerExperience.toFloat()
         }
     }
 
@@ -121,13 +121,7 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
 
     val userRank = levelNames[userLevel] ?: "Nieznany poziom"
 
-    val stats = listOf(
-        "Determinacja" to (loginViewModel.user.value?.determination ?: 0f),
-        "Sprawność fizyczna" to (loginViewModel.user.value?.physical_fitness ?: 0f),
-        "Inteligencja" to (loginViewModel.user.value?.intelligence ?: 0f),
-        "Wiedza" to (loginViewModel.user.value?.knowledge ?: 0f)
-    )
-
+    val stats = player?.playerStatistics?.statistics?.map{ it.name to it.value.toFloat() } ?: emptyList()
 
     val gradients = listOf(
         Brush.horizontalGradient(colors = listOf(Color(0xFFFFA726), Color(0xFFFF7043))),
@@ -155,7 +149,7 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
             topBar = {
                 TopMenu(
                     navController = navController,
-                    loginViewModel = loginViewModel,
+                    username = player?.name ?: "",
                     drawerState = drawerState,
                     onDrawerOpen = {
                         scope.launch {
@@ -206,7 +200,7 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
                         ) {
 
                             // Miejsce na zdjęcie użytkownika
-                            UserImagePicker(loginViewModel)
+                            UserImagePicker(playerModel)
 
                             Spacer(modifier = Modifier.width(16.dp))
 
@@ -243,7 +237,7 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
 
                                 Spacer(modifier = Modifier.height(8.dp))
 
-                                GradientLevelProgressBar(loginViewModel) // Procent doświadczenia
+                                GradientLevelProgressBar(playerExperience) // Procent doświadczenia
 
                                 Spacer(modifier = Modifier.height(4.dp))
 
@@ -264,7 +258,7 @@ fun HomepageView(navController: NavController, loginViewModel: LoginViewModel) {
                                     Spacer(modifier = Modifier.width(105.dp))
 
                                     Text(
-                                        text = "${userExperience.toInt()}/100", // Doświadczenie
+                                        text = "${playerExperience.toInt()}/100", // Doświadczenie
                                         fontSize = 12.sp,
                                         color = Color.White,
                                         style = TextStyle(
