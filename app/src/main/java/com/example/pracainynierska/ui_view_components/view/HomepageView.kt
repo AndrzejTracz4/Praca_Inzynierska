@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.model.FakeData.fakeTask
 import com.example.pracainynierska.model.Task
 import com.example.pracainynierska.ui.components.ModalDrawer
 import com.example.pracainynierska.ui_view_components.components.DailyTaskCard
@@ -72,19 +73,6 @@ fun HomepageView(navController: NavController, homepageViewModel: HomepageViewMo
             playerExperience = it.playerExperience.toFloat()
         }
     }
-
-    val fakeTask = Task(
-        id = 1,
-        name = "Przebiegnij maraton",
-        difficulty = "Trudny",
-        category = "Trening",
-        startDate = "2024-12-01",
-        endDate = "2024-12-31",
-        interval = 7,
-        measureUnit = "dni",
-        mode = TaskMode.CYKLICZNE,
-        status = "Aktywne"
-    )
 
     val levelNames = mapOf(
         1 to "Rekrut",
@@ -210,7 +198,7 @@ fun HomepageView(navController: NavController, homepageViewModel: HomepageViewMo
                             ) {
 
                                 Text(
-                                    text = userRank, // Ranga użytkownika
+                                    text = userRank,
                                     fontSize = 20.sp,
                                     color = Color.White,
                                     style = TextStyle(
@@ -223,7 +211,7 @@ fun HomepageView(navController: NavController, homepageViewModel: HomepageViewMo
                                 )
 
                                 Text(
-                                    text = "Poziom $userLevel", // Poziom użytkownika
+                                    text = "Poziom $userLevel",
                                     fontSize = 16.sp,
                                     color = Color.White,
                                     style = TextStyle(

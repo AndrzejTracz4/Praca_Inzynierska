@@ -2,6 +2,8 @@ package com.example.pracainynierska.ui_view_components.view
 
 import BottomMenu
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -46,35 +48,43 @@ import androidx.compose.ui.text.withStyle
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.ui.components.ModalDrawer
+import com.example.pracainynierska.ui_view_components.components.AddBoosterButton
 import com.example.pracainynierska.ui_view_components.components.CustomSlider
 import com.example.pracainynierska.ui_view_components.components.CustomSliderDefaults
+import com.example.pracainynierska.ui_view_components.components.ShopSelectButton
 import com.example.pracainynierska.ui_view_components.components.TopMenu
 import com.example.pracainynierska.ui_view_components.components.progress
 import com.example.pracainynierska.ui_view_components.components.track
+import com.example.pracainynierska.view_model.BoosterViewModel
 import com.example.pracainynierska.view_model.LoginViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
-    var selectedStat by remember { mutableStateOf("Determinacja") }
-    var selectedShopMode by remember { mutableStateOf("Oslona") }
+fun ShopView(
+    navController: NavController,
+    loginViewModel: LoginViewModel,
+    boosterViewModel: BoosterViewModel
+) {
+    var selectedCategory by remember { mutableStateOf("Determinacja") }
+    var selectedShopMode by remember { mutableStateOf("Osłona antyredukcjna statystyk") }
     var sliderValueTime by remember { mutableFloatStateOf(10f) }
     var sliderValueMultiplier by remember { mutableFloatStateOf(10f) }
     var isHidden by remember { mutableStateOf(true) }
     var costValue by remember { mutableStateOf(5) }
+    val startDate = LocalDate.now()
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope();
 
 
     val costText = buildAnnotatedString {
-        // Dodaj normalny tekst
         withStyle(style = SpanStyle(color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Normal)) {
             append("Koszt: ")
         }
-        // Dodaj pogrubiony tekst z dynamiczną wartością
         withStyle(style = SpanStyle(color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)) {
             append("$costValue C")
         }
@@ -105,11 +115,11 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
                     .background(
                         brush = Brush.linearGradient(
                             colors = listOf(
-                                Color(0xFF4C0949), // Bottom color
-                                Color(0xFF470B93)  // Top color
+                                Color(0xFF4C0949),
+                                Color(0xFF470B93)
                             ),
-                            start = Offset(0f, Float.POSITIVE_INFINITY), // Start at the bottom
-                            end = Offset(0f, 0f)  // End at the top
+                            start = Offset(0f, Float.POSITIVE_INFINITY),
+                            end = Offset(0f, 0f)
                         )
                     )
             ) {
@@ -121,19 +131,19 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
                     Spacer(modifier = Modifier.height(55.dp))
 
                     Column {
-                        CustomButton(
+                        ShopSelectButton(
                             text = "Osłona antyredukcjna statystyk",
-                            isSelected = selectedShopMode == "Oslona",
+                            isSelected = selectedShopMode == "Osłona antyredukcjna statystyk",
                             onClick = {
-                                selectedShopMode = "Oslona"
+                                selectedShopMode = "Osłona antyredukcjna statystyk"
                                 isHidden = true },
                             iconResId = R.drawable.shield
                         )
-                        CustomButton(
+                        ShopSelectButton(
                             text = "Modyfikator czasowy",
-                            isSelected = selectedShopMode == "Modyfikator",
+                            isSelected = selectedShopMode == "Modyfikator czasowy",
                             onClick = {
-                                selectedShopMode = "Modyfikator"
+                                selectedShopMode = "Modyfikator czasowy"
                                 isHidden = false },
                             iconResId = R.drawable.timeout
                         )
@@ -141,7 +151,6 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Slider
                     Text(
                         text = "Czas trwania",
                         color = Color.White,
@@ -195,7 +204,6 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
                         }
                     )
 
-                    // Mnożnik
                     if (!isHidden) {
                         Spacer(modifier = Modifier.height(16.dp))
 
@@ -255,9 +263,8 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Statystyki
                     Text(
-                        text = "Statystyka",
+                        text = "Kategoria",
                         color = Color.White,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
@@ -266,35 +273,35 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Column {
-                        CustomButton(
+                        ShopSelectButton(
                             text = "Determinacja",
-                            isSelected = selectedStat == "Determinacja",
+                            isSelected = selectedCategory == "Determinacja",
                             onClick = {
-                                selectedStat = "Determinacja"
+                                selectedCategory = "Determinacja"
                                 costValue = 5 },
                             iconResId = R.drawable.determinacja
                         )
-                        CustomButton(
+                        ShopSelectButton(
                             text = "Sprawność fizyczna",
-                            isSelected = selectedStat == "Sprawność fizyczna",
+                            isSelected = selectedCategory == "Sprawność fizyczna",
                             onClick = {
-                                selectedStat = "Sprawność fizyczna"
+                                selectedCategory = "Sprawność fizyczna"
                                 costValue = 10 },
                             iconResId = R.drawable.sprawnosc
                         )
-                        CustomButton(
+                        ShopSelectButton(
                             text = "Inteligencja",
-                            isSelected = selectedStat == "Inteligencja",
+                            isSelected = selectedCategory == "Inteligencja",
                             onClick = {
-                                selectedStat = "Inteligencja"
+                                selectedCategory = "Inteligencja"
                                 costValue = 15 },
                             iconResId = R.drawable.inteligencja
                         )
-                        CustomButton(
+                        ShopSelectButton(
                             text = "Wiedza",
-                            isSelected = selectedStat == "Wiedza",
+                            isSelected = selectedCategory == "Wiedza",
                             onClick = {
-                                selectedStat = "Wiedza"
+                                selectedCategory = "Wiedza"
                                 costValue = 20 },
                             iconResId = R.drawable.wiedza
                         )
@@ -302,7 +309,6 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    // Koszt text
                     Text(
                         text = costText,
                         color = Color.White,
@@ -314,87 +320,20 @@ fun ShopView(navController: NavController, loginViewModel: LoginViewModel) {
                             .wrapContentWidth(Alignment.CenterHorizontally)
                     )
 
-                    // Confirmation button at the bottom
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(60.dp)
-                            .padding(vertical = 4.dp)
-                            .background(
-                                color = Color(0x19FFFFFF),
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .clickable { /* TODO */ }
-                            .padding(horizontal = 16.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // Image
-                            Icon(
-                                painter = painterResource(R.drawable.buy),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(24.dp), // Size of the icon
-                                tint = Color.White // Tint the icon with white color
-                            )
-
-                            Spacer(modifier = Modifier.width(8.dp)) // Space between icon and text
-
-                            // Text
-                            Text(
-                                text = "Potwierdź",
-                                color = Color.White,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                modifier = Modifier
-                                    .padding(start = 8.dp)
-                            )
-                        }
-                    }
+                    AddBoosterButton(
+                        selectedCategory = selectedCategory,
+                        selectedShopMode = selectedShopMode,
+                        sliderValueTime = sliderValueTime,
+                        sliderValueMultiplier = sliderValueMultiplier,
+                        costValue = costValue,
+                        boosterViewModel = boosterViewModel,
+                        startDate = startDate,
+                        isActive = true
+                    )
 
                     Spacer(modifier = Modifier.height(75.dp))
                 }
             }
-        }
-    }
-}
-@Composable
-fun CustomButton(text: String, isSelected: Boolean, onClick: () -> Unit, iconResId: Int) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp)
-            .padding(vertical = 4.dp)
-            .background(
-                color = if (isSelected) Color(0x4DFFFFFF) else Color(0x19FFFFFF),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Image
-            Icon(
-                painter = painterResource(id = iconResId),
-                contentDescription = null,
-                modifier = Modifier.size(20.dp), // Size of the icon
-                tint = Color.White // Tint the icon with white color
-            )
-
-            Spacer(modifier = Modifier.width(8.dp)) // Space between icon and text
-
-            // Text
-            Text(
-                text = text,
-                color = Color.White,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.ExtraBold
-            )
         }
     }
 }

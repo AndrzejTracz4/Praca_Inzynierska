@@ -44,23 +44,28 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.ui.components.ModalDrawer
-import com.example.pracainynierska.ui_view_components.components.CustomChooseTaskButton
-import com.example.pracainynierska.ui_view_components.components.CustomCreateTaskButton
+import com.example.pracainynierska.ui_view_components.components.CreateTaskButton
 import com.example.pracainynierska.ui_view_components.components.CustomDatePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomMeasurePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomNumberPickerField
 import com.example.pracainynierska.ui_view_components.components.CustomTextField
 import com.example.pracainynierska.ui_view_components.components.DateTimePickerDialog
 import com.example.pracainynierska.ui_view_components.components.NumberPickerDialog
+import com.example.pracainynierska.ui_view_components.components.SelectTaskButton
 import com.example.pracainynierska.ui_view_components.components.TaskMode
 import com.example.pracainynierska.ui_view_components.components.TopMenu
 import com.example.pracainynierska.view_model.LoginViewModel
+import com.example.pracainynierska.view_model.TaskViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
+fun AddTaskView(
+    navController: NavController,
+    loginViewModel: LoginViewModel,
+    taskViewModel: TaskViewModel
+    ) {
 
     val focusManager = LocalFocusManager.current
 
@@ -134,7 +139,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                             .fillMaxWidth()
                             .padding(8.dp)
                     ) {
-                        CustomChooseTaskButton(
+                        SelectTaskButton(
                             text = "Jednorazowe",
                             isSelected = selectedAddTaskMode == TaskMode.JEDNORAZOWE,
                             onClick = {
@@ -148,7 +153,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
 
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        CustomChooseTaskButton(
+                        SelectTaskButton(
                             text = "Cykliczne",
                             isSelected = selectedAddTaskMode == TaskMode.CYKLICZNE,
                             onClick = {
@@ -286,7 +291,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                                 .fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            CustomChooseTaskButton(
+                            SelectTaskButton(
                                 text = "Łatwy",
                                 isSelected = selectedDifficulty == "Łatwe",
                                 onClick = { selectedDifficulty = "Łatwe" },
@@ -295,7 +300,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                                 color = true
                             )
 
-                            CustomChooseTaskButton(
+                            SelectTaskButton(
                                 text = "Średni",
                                 isSelected = selectedDifficulty == "Średni",
                                 onClick = { selectedDifficulty = "Średni" },
@@ -304,7 +309,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                                 color = true
                             )
 
-                            CustomChooseTaskButton(
+                            SelectTaskButton(
                                 text = "Trudny",
                                 isSelected = selectedDifficulty == "Trudny",
                                 onClick = { selectedDifficulty = "Trudny" },
@@ -323,7 +328,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                             fontWeight = FontWeight.ExtraBold
                         )
 
-                        CustomChooseTaskButton(
+                        SelectTaskButton(
                             text = "Samorozwój",
                             isSelected = selectedCategory == "Samorozwój",
                             onClick = { selectedCategory = "Samorozwój" },
@@ -334,7 +339,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        CustomChooseTaskButton(
+                        SelectTaskButton(
                             text = "Ćwiczenia",
                             isSelected = selectedCategory == "Ćwiczenia",
                             onClick = { selectedCategory = "Ćwiczenia" },
@@ -345,7 +350,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        CustomChooseTaskButton(
+                        SelectTaskButton(
                             text = "Edukacja",
                             isSelected = selectedCategory == "Edukacja",
                             onClick = { selectedCategory = "Edukacja" },
@@ -356,7 +361,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        CustomChooseTaskButton(
+                        SelectTaskButton(
                             text = "Praca",
                             isSelected = selectedCategory == "Praca",
                             onClick = { selectedCategory = "Praca" },
@@ -368,7 +373,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                     }
 
                     Column(modifier = Modifier.padding(8.dp)) {
-                    CustomCreateTaskButton(
+                    CreateTaskButton(
                         text = "Utwórz",
                         taskName = taskName,
                         selectedDifficulty = selectedDifficulty,
@@ -388,7 +393,7 @@ fun AddTaskView(navController: NavController, loginViewModel: LoginViewModel) {
                             interval = 0
                             selectedMeasureUnit = ""
                         },
-                        loginViewModel = loginViewModel
+                        taskViewModel = taskViewModel
                     )
                     }
                     
