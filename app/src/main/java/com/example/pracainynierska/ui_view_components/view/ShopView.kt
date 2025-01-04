@@ -86,7 +86,7 @@ fun ShopView(
             append("Koszt: ")
         }
         withStyle(style = SpanStyle(color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)) {
-            append("$costValue")
+            append("$costValue C")
         }
     }
 
@@ -309,30 +309,16 @@ fun ShopView(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    // Koszt text
-                    Row(
+                    Text(
+                        text = costText,
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 4.dp)
-                            .wrapContentWidth(Alignment.CenterHorizontally),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = costText,
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-
-                        Icon(
-                            painter = painterResource(id = R.drawable.coins),
-                            contentDescription = "Ikona monet",
-                            tint = Color.Unspecified,
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-
+                            .padding(bottom = 8.dp)
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                    )
 
                     AddBoosterButton(
                         selectedCategory = selectedCategory,
