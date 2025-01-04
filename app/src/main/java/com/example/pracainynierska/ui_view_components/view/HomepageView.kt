@@ -16,11 +16,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
@@ -39,6 +41,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,6 +67,7 @@ fun HomepageView(navController: NavController, homepageViewModel: HomepageViewMo
     val focusManager = LocalFocusManager.current
     var userLevel = 1
     var playerExperience = 0f
+    var playerBalance = 0
     val playerModel = homepageViewModel.getPlayerModel()
     val player = homepageViewModel.getPlayer()
 
@@ -71,6 +75,7 @@ fun HomepageView(navController: NavController, homepageViewModel: HomepageViewMo
         if (it != null) {
             userLevel = it.playerLevel
             playerExperience = it.playerExperience.toFloat()
+            playerBalance = it.balance
         }
     }
 
@@ -177,7 +182,7 @@ fun HomepageView(navController: NavController, homepageViewModel: HomepageViewMo
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(120.dp)
+                            .height(130.dp)
                             .clip(RoundedCornerShape(10.dp))
                             .background(Color(0x19FFFFFF))
                             .padding(16.dp)
@@ -223,7 +228,32 @@ fun HomepageView(navController: NavController, homepageViewModel: HomepageViewMo
                                     )
                                 )
 
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        text = "Monety: $playerBalance",
+                                        fontSize = 16.sp,
+                                        color = Color.White,
+                                        style = TextStyle(
+                                            shadow = Shadow(
+                                                color = Color.Black,
+                                                offset = Offset(3f, 1f),
+                                                blurRadius = 3f
+                                            )
+                                        )
+                                    )
+
+                                    Spacer(modifier = Modifier.width(4.dp))
+
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.coins),
+                                        contentDescription = "Ikona monet",
+                                        tint = Color.Unspecified,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+
                                 Spacer(modifier = Modifier.height(8.dp))
+
 
                                 GradientLevelProgressBar(playerExperience) // Procent doświadczenia
 
