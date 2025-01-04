@@ -36,18 +36,18 @@ import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.model.Task
 import com.example.pracainynierska.ui.components.ModalDrawer
-import com.example.pracainynierska.ui_view_components.components.CustomChooseTaskButton
-import com.example.pracainynierska.ui_view_components.components.CustomCreateTaskButton
 import com.example.pracainynierska.ui_view_components.components.CustomDatePickerField
-import com.example.pracainynierska.ui_view_components.components.CustomEditTaskButton
 import com.example.pracainynierska.ui_view_components.components.CustomMeasurePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomNumberPickerField
 import com.example.pracainynierska.ui_view_components.components.CustomTextField
 import com.example.pracainynierska.ui_view_components.components.DateTimePickerDialog
+import com.example.pracainynierska.ui_view_components.components.EditTaskButton
 import com.example.pracainynierska.ui_view_components.components.NumberPickerDialog
+import com.example.pracainynierska.ui_view_components.components.SelectTaskButton
 import com.example.pracainynierska.ui_view_components.components.TaskMode
 import com.example.pracainynierska.ui_view_components.components.TopMenu
 import com.example.pracainynierska.view_model.LoginViewModel
+import com.example.pracainynierska.view_model.TaskViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,6 +56,7 @@ import kotlinx.coroutines.launch
 fun EditTaskView(
     navController: NavController,
     loginViewModel: LoginViewModel,
+    taskViewModel: TaskViewModel,
     taskToEdit: Task
 ) {
 
@@ -131,7 +132,7 @@ fun EditTaskView(
                             .fillMaxWidth()
                             .padding(8.dp)
                     ) {
-                        CustomChooseTaskButton(
+                        SelectTaskButton(
                             text = "Jednorazowe",
                             isSelected = selectedEditTaskMode == TaskMode.JEDNORAZOWE,
                             onClick = {
@@ -145,7 +146,7 @@ fun EditTaskView(
 
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        CustomChooseTaskButton(
+                        SelectTaskButton(
                             text = "Cykliczne",
                             isSelected = selectedEditTaskMode == TaskMode.CYKLICZNE,
                             onClick = {
@@ -280,7 +281,7 @@ fun EditTaskView(
                                 .fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            CustomChooseTaskButton(
+                            SelectTaskButton(
                                 text = "Łatwy",
                                 isSelected = selectedDifficulty == "Łatwe",
                                 onClick = { selectedDifficulty = "Łatwe" },
@@ -289,7 +290,7 @@ fun EditTaskView(
                                 color = true
                             )
 
-                            CustomChooseTaskButton(
+                            SelectTaskButton(
                                 text = "Średni",
                                 isSelected = selectedDifficulty == "Średni",
                                 onClick = { selectedDifficulty = "Średni" },
@@ -298,7 +299,7 @@ fun EditTaskView(
                                 color = true
                             )
 
-                            CustomChooseTaskButton(
+                            SelectTaskButton(
                                 text = "Trudny",
                                 isSelected = selectedDifficulty == "Trudny",
                                 onClick = { selectedDifficulty = "Trudny" },
@@ -317,7 +318,7 @@ fun EditTaskView(
                             fontWeight = FontWeight.ExtraBold
                         )
 
-                        CustomChooseTaskButton(
+                        SelectTaskButton(
                             text = "Samorozwój",
                             isSelected = selectedCategory == "Samorozwój",
                             onClick = { selectedCategory = "Samorozwój" },
@@ -328,7 +329,7 @@ fun EditTaskView(
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        CustomChooseTaskButton(
+                        SelectTaskButton(
                             text = "Ćwiczenia",
                             isSelected = selectedCategory == "Ćwiczenia",
                             onClick = { selectedCategory = "Ćwiczenia" },
@@ -339,7 +340,7 @@ fun EditTaskView(
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        CustomChooseTaskButton(
+                        SelectTaskButton(
                             text = "Edukacja",
                             isSelected = selectedCategory == "Edukacja",
                             onClick = { selectedCategory = "Edukacja" },
@@ -350,7 +351,7 @@ fun EditTaskView(
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        CustomChooseTaskButton(
+                        SelectTaskButton(
                             text = "Praca",
                             isSelected = selectedCategory == "Praca",
                             onClick = { selectedCategory = "Praca" },
@@ -362,7 +363,7 @@ fun EditTaskView(
                     }
 
                     Column(modifier = Modifier.padding(8.dp)) {
-                        CustomEditTaskButton(
+                        EditTaskButton(
                             text = "Zapisz zmiany",
                             taskToEdit = taskToEdit,
                             taskName = taskName,
@@ -377,7 +378,7 @@ fun EditTaskView(
                                 Log.d("TaskUpdated", "Zadanie zostało zaktualizowane.")
                                 navController.navigate("CalendarsView")
                             },
-                            loginViewModel = loginViewModel
+                            taskViewModel = taskViewModel
                         )
                     }
                     Spacer(modifier = Modifier.height(90.dp))
