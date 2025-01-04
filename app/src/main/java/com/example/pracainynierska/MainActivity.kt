@@ -1,8 +1,10 @@
 package com.example.pracainynierska
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -45,6 +47,7 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var playerContext: PlayerContextInterface
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -87,6 +90,7 @@ class MainActivity : ComponentActivity() {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SetupNavGraph(
     navController: NavHostController,
@@ -107,7 +111,7 @@ fun SetupNavGraph(
             RegisterView(navController = navController, registrationViewModel = registrationViewModel)
         }
         composable("HomepageView") {
-            HomepageView(navController = navController, homepageViewModel = homepageViewModel)
+            HomepageView(navController = navController, homepageViewModel = homepageViewModel, boosterViewModel = boosterViewModel)
         }
         composable("ForgotPasswordView") {
             ForgotPasswordView(navController = navController, loginViewModel = loginViewModel)

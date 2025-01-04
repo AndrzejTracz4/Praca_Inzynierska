@@ -74,7 +74,7 @@ fun DailyTaskCard(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            Column {
+             Column {
                 Text(
                     text = task.category,
                     color = Color.White,

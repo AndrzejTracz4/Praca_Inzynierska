@@ -7,8 +7,8 @@ data class Booster(
     val id: Int,
     val shopMode: String,
     val category: String,
-    val multiplier: Float,
-    val duration: Float,
+    val multiplier: Int,
+    val duration: Int,
     val price: Int,
     var isActive: Boolean = false,
     val startDate: LocalDate
