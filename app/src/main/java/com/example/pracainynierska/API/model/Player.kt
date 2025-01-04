@@ -12,5 +12,6 @@ data class Player(
     val playerExperience: Int,
     val roles: List<String>,
     val playerStatistics: PlayerStatistics,
-    var userPhotoPath: String
+    var userPhotoPath: String,
+    val balance: Int
 )
