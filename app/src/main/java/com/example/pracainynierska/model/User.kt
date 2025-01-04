@@ -10,37 +10,15 @@ data class User (
     // autoGenerate = true oznacza, że identyfikator będzie automatycznie generowany przez bazę danych
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-
-    // Nazwa użytkownika, unikalny identyfikator przypisany przez użytkownika
     val username: String,
-
-    // Hasło użytkownika, które przechowujemy jako string
     var password: String,
-
-    // Adres e-mail użytkownika
     var email: String,
-
-    //Zdjęcie użytkownika
     var userPhotoPath: String?,
-
-    //Poziom użytkownika
     var level: Int,
-
-    //Doświadczenie użytkownika
     var experience: Float,
-
-    //UUID do identyfikacji usera
     var userUUID: String,
-
-    //Determinacja użytkownika
     var determination: Float,
-
-    //Sprawność fizyczna użytkownika
     var physical_fitness: Float,
-
-    //Inteligencja użytkownika
     var intelligence: Float,
-
-    //Wiedza użytkownika
     var knowledge: Float
 )

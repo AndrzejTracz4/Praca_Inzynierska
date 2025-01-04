@@ -23,11 +23,12 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.pracainynierska.model.Task
 import com.example.pracainynierska.view_model.LoginViewModel
+import com.example.pracainynierska.view_model.TaskViewModel
 
 @Composable
 fun TaskDetailsDialog(
     navController: NavController,
-    loginViewModel: LoginViewModel,
+    taskViewModel: TaskViewModel,
     task: Task,
     onDismiss: () -> Unit,
     onEdit: () -> Unit
@@ -99,7 +100,7 @@ fun TaskDetailsDialog(
                             text = "Anuluj",
                             color = Color(0xFFFF0000),
                             onClick = {
-                                loginViewModel.deleteTask(task.id)
+                                taskViewModel.deleteTask(task.id)
                                 //navController.navigate("CalendarsView")
                                 onDismiss()
                             }
