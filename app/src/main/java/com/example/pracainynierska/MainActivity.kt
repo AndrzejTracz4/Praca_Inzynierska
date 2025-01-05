@@ -1,8 +1,10 @@
 package com.example.pracainynierska
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -18,6 +20,7 @@ import com.example.pracainynierska.API.handler.registration.RegistrationHandler
 import com.example.pracainynierska.context.PlayerContext
 import com.example.pracainynierska.context.PlayerContextInterface
 import com.example.pracainynierska.ui.theme.PracaInżynierskaTheme
+import com.example.pracainynierska.ui_view_components.view.AchievementsView
 import com.example.pracainynierska.ui_view_components.view.AddCategoryView
 import com.example.pracainynierska.ui_view_components.view.AddTaskView
 import com.example.pracainynierska.ui_view_components.view.CalendarsView
@@ -28,6 +31,8 @@ import com.example.pracainynierska.ui_view_components.view.HomepageView
 import com.example.pracainynierska.ui_view_components.view.LoginView
 import com.example.pracainynierska.ui_view_components.view.ShopView
 import com.example.pracainynierska.ui_view_components.view.StatisticView
+import com.example.pracainynierska.view_model.BoosterViewModel
+import com.example.pracainynierska.view_model.BoosterViewModelFactory
 import com.example.pracainynierska.view_model.HomepageViewModel
 import com.example.pracainynierska.view_model.HomepageViewModelFactory
 import com.example.pracainynierska.ui_view_components.view.RegisterView as RegisterView
@@ -35,11 +40,14 @@ import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.view_model.LoginViewModelFactory
 import com.example.pracainynierska.view_model.RegistrationViewModel
 import com.example.pracainynierska.view_model.RegistrationViewModelFactory
+import com.example.pracainynierska.view_model.TaskViewModel
+import com.example.pracainynierska.view_model.TaskViewModelFactory
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var playerContext: PlayerContextInterface
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,11 +69,19 @@ class MainActivity : ComponentActivity() {
                     val homepageViewModel : HomepageViewModel = viewModel(
                         factory = HomepageViewModelFactory(playerContext)
                     )
+                    val taskViewModel : TaskViewModel = viewModel(
+                        factory = TaskViewModelFactory(playerContext)
+                    )
+                    val boosterViewModel : BoosterViewModel = viewModel(
+                        factory = BoosterViewModelFactory(playerContext)
+                    )
                     SetupNavGraph(
                         navController = navController,
                         loginViewModel = loginViewModel,
                         registrationViewModel = registrationViewModel,
-                        homepageViewModel = homepageViewModel
+                        homepageViewModel = homepageViewModel,
+                        taskViewModel = taskViewModel,
+                        boosterViewModel = boosterViewModel
                     )
                 }
             }
@@ -74,12 +90,15 @@ class MainActivity : ComponentActivity() {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SetupNavGraph(
     navController: NavHostController,
     loginViewModel: LoginViewModel,
     registrationViewModel: RegistrationViewModel,
-    homepageViewModel: HomepageViewModel
+    homepageViewModel: HomepageViewModel,
+    taskViewModel: TaskViewModel,
+    boosterViewModel: BoosterViewModel
 ) {
     NavHost(
         navController = navController,
@@ -92,7 +111,7 @@ fun SetupNavGraph(
             RegisterView(navController = navController, registrationViewModel = registrationViewModel)
         }
         composable("HomepageView") {
-            HomepageView(navController = navController, homepageViewModel = homepageViewModel)
+            HomepageView(navController = navController, homepageViewModel = homepageViewModel, boosterViewModel = boosterViewModel)
         }
         composable("ForgotPasswordView") {
             ForgotPasswordView(navController = navController, loginViewModel = loginViewModel)
@@ -101,13 +120,13 @@ fun SetupNavGraph(
             ChangeForgotPasswordView(navController = navController, loginViewModel = loginViewModel)
         }
         composable("ShopView") {
-            ShopView(navController = navController, loginViewModel = loginViewModel)
+            ShopView(navController = navController, loginViewModel = loginViewModel, boosterViewModel = boosterViewModel)
         }
         composable("AddTaskView") {
-            AddTaskView(navController = navController, loginViewModel = loginViewModel)
+            AddTaskView(navController = navController, loginViewModel = loginViewModel, taskViewModel = taskViewModel)
         }
         composable("CalendarsView") {
-            CalendarsView(navController = navController, loginViewModel = loginViewModel)
+            CalendarsView(navController = navController, loginViewModel = loginViewModel, taskViewModel = taskViewModel)
         }
         composable("StatisticView") {
             StatisticView(navController = navController, loginViewModel = loginViewModel)
@@ -117,14 +136,18 @@ fun SetupNavGraph(
         }
         composable("EditTaskView/{taskId}") { backStackEntry ->
             val taskId = backStackEntry.arguments?.getString("taskId")
-            val taskToEdit = loginViewModel.getTaskById(taskId)
+            val taskToEdit = taskViewModel.getTaskById(taskId)
             if (taskToEdit != null) {
                 EditTaskView(
                     taskToEdit = taskToEdit,
                     navController = navController,
-                    loginViewModel = loginViewModel
+                    loginViewModel = loginViewModel,
+                    taskViewModel = taskViewModel
                 )
             }
+        }
+        composable("AchievementsView") {
+            AchievementsView(navController = navController, loginViewModel = loginViewModel)
         }
 
     }

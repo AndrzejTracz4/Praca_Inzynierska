@@ -1,10 +1,10 @@
 package com.example.pracainynierska.ui_view_components.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,54 +23,61 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pracainynierska.R
 import com.example.pracainynierska.model.Task
-import com.example.pracainynierska.view_model.LoginViewModel
+import com.example.pracainynierska.view_model.TaskViewModel
+import java.text.SimpleDateFormat
+import java.util.*
+
+enum class TaskMode {
+    JEDNORAZOWE,
+    CYKLICZNE
+}
 
 @Composable
-fun CustomEditTaskButton(
+fun CreateTaskButton(
     text: String,
     taskName: String,
-    taskToEdit: Task,
     selectedDifficulty: String,
     selectedCategory: String,
     selectedStartDate: String,
     selectedEndDate: String,
     interval: Int,
     selectedMeasureUnit: String,
-    selectedEditTaskMode: TaskMode,
+    selectedAddTaskMode: TaskMode,
     modifier: Modifier = Modifier,
-    onTaskUpdated: () -> Unit,
-    loginViewModel: LoginViewModel
+    onTaskCreated: () -> Unit,
+    taskViewModel: TaskViewModel
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf("") }
     var showErrorDialog by remember { mutableStateOf(false) }
     var showDateErrorDialog by remember { mutableStateOf(false) }
-
     var taskList by remember { mutableStateOf(emptyList<Task>()) }
 
-    loginViewModel.tasks.observeForever { tasks ->
+    taskViewModel.tasks.observeForever { tasks ->
         taskList = tasks
     }
 
     Box(
         modifier = modifier
             .height(75.dp)
-            .fillMaxWidth()
             .padding(vertical = 4.dp)
             .background(
                 color = Color(0x19FFFFFF),
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable {
-                val isValid = when (selectedEditTaskMode) {
+                // Sprawdzenie, czy wszystkie wymagane pola są uzupełnione
+                val isValid = when (selectedAddTaskMode) {
                     TaskMode.JEDNORAZOWE -> {
-                        selectedDifficulty.isNotBlank() &&
+                        taskName.isNotBlank() &&
+                                selectedDifficulty.isNotBlank() &&
                                 selectedCategory.isNotBlank() &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank()
                     }
                     TaskMode.CYKLICZNE -> {
-                        selectedDifficulty.isNotBlank() &&
+                        taskName.isNotBlank() &&
+                                selectedDifficulty.isNotBlank() &&
                                 selectedCategory.isNotBlank() &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank() &&
@@ -86,20 +93,22 @@ fun CustomEditTaskButton(
                     dialogMessage = "Data końcowa nie może być wcześniejsza niż data startowa."
                     showDateErrorDialog = true
                 } else {
-                    // Aktualizacja zadania
-                    val updatedTask = taskToEdit.copy(
+                    val lastTaskId = taskList.maxOfOrNull { it.id } ?: 0
+                    val task = Task(
+                        id = lastTaskId + 1,
                         name = taskName,
                         difficulty = selectedDifficulty,
                         category = selectedCategory,
                         startDate = selectedStartDate,
                         endDate = selectedEndDate,
-                        interval = if (selectedEditTaskMode == TaskMode.CYKLICZNE) interval else 0,
-                        measureUnit = if (selectedEditTaskMode == TaskMode.CYKLICZNE) selectedMeasureUnit else "",
-                        mode = selectedEditTaskMode
+                        interval = if (selectedAddTaskMode == TaskMode.CYKLICZNE) interval else 0,
+                        measureUnit = if (selectedAddTaskMode == TaskMode.CYKLICZNE) selectedMeasureUnit else "",
+                        mode = selectedAddTaskMode,
+                        status = "Pending"
                     )
-                    loginViewModel.updateTask(updatedTask)
+                    taskViewModel.addTask(task)
 
-                    dialogMessage = "Pomyślnie zaktualizowano zadanie"
+                    dialogMessage = "Pomyślnie utworzono zadanie"
                     showDialog = true
                 }
             }
@@ -110,7 +119,7 @@ fun CustomEditTaskButton(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(R.drawable.edit),
+                painter = painterResource(R.drawable.plus_square),
                 contentDescription = null,
                 modifier = Modifier
                     .size(24.dp),
@@ -128,6 +137,7 @@ fun CustomEditTaskButton(
         }
     }
 
+    // AlertDialog dla potwierdzenia utworzenia zadania
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
@@ -136,7 +146,7 @@ fun CustomEditTaskButton(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        onTaskUpdated()
+                        onTaskCreated()
                         showDialog = false
                     }
                 ) {
@@ -146,6 +156,7 @@ fun CustomEditTaskButton(
         )
     }
 
+    // AlertDialog dla błędnych danych
     if (showErrorDialog) {
         AlertDialog(
             onDismissRequest = { showErrorDialog = false },
@@ -163,6 +174,7 @@ fun CustomEditTaskButton(
         )
     }
 
+    // AlertDialog dla złych dat
     if (showDateErrorDialog) {
         AlertDialog(
             onDismissRequest = { showDateErrorDialog = false },
@@ -178,5 +190,17 @@ fun CustomEditTaskButton(
                 }
             }
         )
+    }
+}
+
+// Funkcja sprawdzająca, czy data końcowa jest wcześniejsza niż data startowa
+fun isEndDateBeforeStartDate(startDate: String, endDate: String): Boolean {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return try {
+        val start = dateFormat.parse(startDate)
+        val end = dateFormat.parse(endDate)
+        end.before(start)
+    } catch (e: Exception) {
+        false
     }
 }

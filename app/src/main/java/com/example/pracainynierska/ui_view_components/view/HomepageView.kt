@@ -16,11 +16,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
@@ -39,30 +41,40 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.model.FakeData.fakeTask
 import com.example.pracainynierska.model.Task
 import com.example.pracainynierska.ui.components.ModalDrawer
+import com.example.pracainynierska.ui_view_components.components.BoosterCard
+import com.example.pracainynierska.ui_view_components.components.BoosterList
 import com.example.pracainynierska.ui_view_components.components.DailyTaskCard
 import com.example.pracainynierska.ui_view_components.components.DailyTaskDetailsDialog
 import com.example.pracainynierska.ui_view_components.components.GradientStatsProgressBars
 import com.example.pracainynierska.ui_view_components.components.TaskMode
 import com.example.pracainynierska.ui_view_components.components.TopMenu
 import com.example.pracainynierska.ui_view_components.components.UserImagePicker
+import com.example.pracainynierska.view_model.BoosterViewModel
 import com.example.pracainynierska.view_model.HomepageViewModel
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomepageView(navController: NavController, homepageViewModel: HomepageViewModel) {
+fun HomepageView(
+    navController: NavController,
+    homepageViewModel: HomepageViewModel,
+    boosterViewModel: BoosterViewModel
+) {
 
     val focusManager = LocalFocusManager.current
     var userLevel = 1
     var playerExperience = 0f
+    var playerBalance = 0
     val playerModel = homepageViewModel.getPlayerModel()
     val player = homepageViewModel.getPlayer()
 
@@ -70,21 +82,9 @@ fun HomepageView(navController: NavController, homepageViewModel: HomepageViewMo
         if (it != null) {
             userLevel = it.playerLevel
             playerExperience = it.playerExperience.toFloat()
+            playerBalance = it.balance
         }
     }
-
-    val fakeTask = Task(
-        id = 1,
-        name = "Przebiegnij maraton",
-        difficulty = "Trudny",
-        category = "Trening",
-        startDate = "2024-12-01",
-        endDate = "2024-12-31",
-        interval = 7,
-        measureUnit = "dni",
-        mode = TaskMode.CYKLICZNE,
-        status = "Aktywne"
-    )
 
     val levelNames = mapOf(
         1 to "Rekrut",
@@ -189,7 +189,7 @@ fun HomepageView(navController: NavController, homepageViewModel: HomepageViewMo
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(120.dp)
+                            .height(130.dp)
                             .clip(RoundedCornerShape(10.dp))
                             .background(Color(0x19FFFFFF))
                             .padding(16.dp)
@@ -210,7 +210,7 @@ fun HomepageView(navController: NavController, homepageViewModel: HomepageViewMo
                             ) {
 
                                 Text(
-                                    text = userRank, // Ranga użytkownika
+                                    text = userRank,
                                     fontSize = 20.sp,
                                     color = Color.White,
                                     style = TextStyle(
@@ -223,7 +223,7 @@ fun HomepageView(navController: NavController, homepageViewModel: HomepageViewMo
                                 )
 
                                 Text(
-                                    text = "Poziom $userLevel", // Poziom użytkownika
+                                    text = "Poziom $userLevel",
                                     fontSize = 16.sp,
                                     color = Color.White,
                                     style = TextStyle(
@@ -235,7 +235,32 @@ fun HomepageView(navController: NavController, homepageViewModel: HomepageViewMo
                                     )
                                 )
 
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        text = "Monety: $playerBalance",
+                                        fontSize = 16.sp,
+                                        color = Color.White,
+                                        style = TextStyle(
+                                            shadow = Shadow(
+                                                color = Color.Black,
+                                                offset = Offset(3f, 1f),
+                                                blurRadius = 3f
+                                            )
+                                        )
+                                    )
+
+                                    Spacer(modifier = Modifier.width(4.dp))
+
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.coins),
+                                        contentDescription = "Ikona monet",
+                                        tint = Color.Unspecified,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+
                                 Spacer(modifier = Modifier.height(8.dp))
+
 
                                 GradientLevelProgressBar(playerExperience) // Procent doświadczenia
 
@@ -340,13 +365,11 @@ fun HomepageView(navController: NavController, homepageViewModel: HomepageViewMo
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .fillMaxHeight(0.9f)
-                                        .height(100.dp)
                                         .clip(RoundedCornerShape(10.dp))
-                                        .background(Color(0x14FFFFFF))
-                                        .padding(16.dp)
-                                ) {
-
+                                ){
+                                    BoosterList(boosterViewModel = boosterViewModel)
                                 }
+
                             }
                         }
 

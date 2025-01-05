@@ -42,6 +42,7 @@ import com.example.pracainynierska.ui_view_components.components.TaskCard
 import com.example.pracainynierska.ui_view_components.components.TaskDetailsDialog
 import com.example.pracainynierska.ui_view_components.components.TopMenu
 import com.example.pracainynierska.view_model.LoginViewModel
+import com.example.pracainynierska.view_model.TaskViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -50,7 +51,11 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CalendarsView(navController: NavController, loginViewModel: LoginViewModel) {
+fun CalendarsView(
+    navController: NavController,
+    loginViewModel: LoginViewModel,
+    taskViewModel: TaskViewModel
+) {
     val focusManager = LocalFocusManager.current
     val selectedDate = remember { mutableStateOf("") }
     val selectedTasks = remember { mutableStateOf<List<Task>?>(null) }
@@ -116,7 +121,7 @@ fun CalendarsView(navController: NavController, loginViewModel: LoginViewModel) 
                                     selectedDate.value = dateFormat.format(selectedCalendar.time)
 
                                     // Pobranie zadania dla wybranej daty
-                                    selectedTasks.value = loginViewModel.getTasksForDate(selectedDate.value)
+                                    selectedTasks.value = taskViewModel.getTasksForDate(selectedDate.value)
                                 }
                             }
                         },
@@ -147,7 +152,7 @@ fun CalendarsView(navController: NavController, loginViewModel: LoginViewModel) 
                 selectedTask?.let { task ->
                     TaskDetailsDialog(
                         navController = navController,
-                        loginViewModel = loginViewModel,
+                        taskViewModel = taskViewModel,
                         task = task,
                         onDismiss = { selectedTask = null },
                         onEdit = {
