@@ -8,5 +8,6 @@ data class Statistics(
     val code: String,
     val name: String,
     val experience: Int,
-    val level: Int
+    val level: Int,
+    val iconPath: String
 )
