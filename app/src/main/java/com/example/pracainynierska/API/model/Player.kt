@@ -13,5 +13,6 @@ data class Player(
     val roles: List<String>,
     val playerStatistics: PlayerStatistics,
     var userPhotoPath: String,
-    val balance: Int
+    val balance: Int,
+    val activeAugments: List<Augment>,
 )

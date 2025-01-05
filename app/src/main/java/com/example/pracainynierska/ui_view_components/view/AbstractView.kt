@@ -10,22 +10,22 @@ import com.example.pracainynierska.view_model.AbstractViewModel
 abstract class AbstractView(
     protected val viewModel: AbstractViewModel
 ) {
-    @Composable
-    protected fun render() {
-        ModalDrawer(navController = navController, drawerState = drawerState) {
-            Scaffold(
-                topBar = {
-                    renderTop()
-                },
-                bottomBar = {
-                    renderBottom()
-                },
-                containerColor = Color.Transparent
-            )
-            renderDrawer()
-            renderContent()
-        }
-    }
+//    @Composable
+//    protected fun render() {
+//        ModalDrawer(navController = navController, drawerState = drawerState) {
+//            Scaffold(
+//                topBar = {
+//                    renderTop()
+//                },
+//                bottomBar = {
+//                    renderBottom()
+//                },
+//                containerColor = Color.Transparent
+//            )
+//            renderDrawer()
+//            renderContent()
+//        }
+//    }
 
     protected fun renderTop() {
         val player = viewModel.getPlayer()
