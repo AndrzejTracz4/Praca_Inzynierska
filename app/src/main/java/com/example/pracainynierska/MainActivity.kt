@@ -40,6 +40,8 @@ import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.view_model.LoginViewModelFactory
 import com.example.pracainynierska.view_model.RegistrationViewModel
 import com.example.pracainynierska.view_model.RegistrationViewModelFactory
+import com.example.pracainynierska.view_model.ShopViewModel
+import com.example.pracainynierska.view_model.ShopViewModelFactory
 import com.example.pracainynierska.view_model.TaskViewModel
 import com.example.pracainynierska.view_model.TaskViewModelFactory
 
@@ -75,13 +77,17 @@ class MainActivity : ComponentActivity() {
                     val boosterViewModel : BoosterViewModel = viewModel(
                         factory = BoosterViewModelFactory(playerContext)
                     )
+                    val shopViewModel : ShopViewModel = viewModel(
+                        factory = ShopViewModelFactory(playerContext, boosterViewModel)
+                    )
                     SetupNavGraph(
                         navController = navController,
                         loginViewModel = loginViewModel,
                         registrationViewModel = registrationViewModel,
                         homepageViewModel = homepageViewModel,
                         taskViewModel = taskViewModel,
-                        boosterViewModel = boosterViewModel
+                        boosterViewModel = boosterViewModel,
+                        shopViewModel = shopViewModel
                     )
                 }
             }
@@ -98,7 +104,8 @@ fun SetupNavGraph(
     registrationViewModel: RegistrationViewModel,
     homepageViewModel: HomepageViewModel,
     taskViewModel: TaskViewModel,
-    boosterViewModel: BoosterViewModel
+    boosterViewModel: BoosterViewModel,
+    shopViewModel: ShopViewModel
 ) {
     NavHost(
         navController = navController,
@@ -120,7 +127,7 @@ fun SetupNavGraph(
             ChangeForgotPasswordView(navController = navController, loginViewModel = loginViewModel)
         }
         composable("ShopView") {
-            ShopView(navController = navController, loginViewModel = loginViewModel, boosterViewModel = boosterViewModel)
+            ShopView(navController = navController, loginViewModel = loginViewModel, shopViewModel = shopViewModel)
         }
         composable("AddTaskView") {
             AddTaskView(navController = navController, loginViewModel = loginViewModel, taskViewModel = taskViewModel)

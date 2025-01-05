@@ -57,6 +57,7 @@ import com.example.pracainynierska.ui_view_components.components.progress
 import com.example.pracainynierska.ui_view_components.components.track
 import com.example.pracainynierska.view_model.BoosterViewModel
 import com.example.pracainynierska.view_model.LoginViewModel
+import com.example.pracainynierska.view_model.ShopViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -67,19 +68,24 @@ import java.time.LocalDate
 fun ShopView(
     navController: NavController,
     loginViewModel: LoginViewModel,
-    boosterViewModel: BoosterViewModel
+    shopViewModel: ShopViewModel
 ) {
     var selectedCategory by remember { mutableStateOf("Determinacja") }
     var selectedShopMode by remember { mutableStateOf("Osłona antyredukcyjna statystyk") }
     var sliderValueTime by remember { mutableFloatStateOf(10f) }
-    var sliderValueMultiplier by remember { mutableFloatStateOf(10f) }
+    var sliderValueMultiplier by remember { mutableFloatStateOf(20f) }
+    var costValue by remember { mutableStateOf(0) }
+
     var isHidden by remember { mutableStateOf(true) }
-    var costValue by remember { mutableStateOf(5) }
-    val startDate = LocalDate.now()
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope();
 
+    costValue = shopViewModel.calculateCost(
+        shopMode = selectedShopMode,
+        duration = sliderValueTime.toInt(),
+        multiplier = sliderValueMultiplier.toInt()
+    )
 
     val costText = buildAnnotatedString {
         withStyle(style = SpanStyle(color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Normal)) {
@@ -152,7 +158,7 @@ fun ShopView(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = "Czas trwania",
+                        text = "Czas trwania (d)",
                         color = Color.White,
                         fontSize = 14.sp
                     )
@@ -208,7 +214,7 @@ fun ShopView(
                         Spacer(modifier = Modifier.height(16.dp))
 
                         Text(
-                            text = "Mnożnik",
+                            text = "Mnożnik (x)",
                             color = Color.White,
                             fontSize = 14.sp
                         )
@@ -222,7 +228,7 @@ fun ShopView(
                             onValueChange = {
                                 sliderValueMultiplier = it
                             },
-                            valueRange = 10f..100f,
+                            valueRange = 20f..100f,
                             gap = 10,
                             showIndicator = true,
                             thumb = { thumbValue ->
@@ -277,32 +283,28 @@ fun ShopView(
                             text = "Determinacja",
                             isSelected = selectedCategory == "Determinacja",
                             onClick = {
-                                selectedCategory = "Determinacja"
-                                costValue = 5 },
+                                selectedCategory = "Determinacja" },
                             iconResId = R.drawable.determinacja
                         )
                         ShopSelectButton(
                             text = "Sprawność fizyczna",
                             isSelected = selectedCategory == "Sprawność fizyczna",
                             onClick = {
-                                selectedCategory = "Sprawność fizyczna"
-                                costValue = 10 },
+                                selectedCategory = "Sprawność fizyczna" },
                             iconResId = R.drawable.sprawnosc
                         )
                         ShopSelectButton(
                             text = "Inteligencja",
                             isSelected = selectedCategory == "Inteligencja",
                             onClick = {
-                                selectedCategory = "Inteligencja"
-                                costValue = 15 },
+                                selectedCategory = "Inteligencja" },
                             iconResId = R.drawable.inteligencja
                         )
                         ShopSelectButton(
                             text = "Wiedza",
                             isSelected = selectedCategory == "Wiedza",
                             onClick = {
-                                selectedCategory = "Wiedza"
-                                costValue = 20 },
+                                selectedCategory = "Wiedza" },
                             iconResId = R.drawable.wiedza
                         )
                     }
@@ -340,9 +342,7 @@ fun ShopView(
                         sliderValueTime = sliderValueTime,
                         sliderValueMultiplier = sliderValueMultiplier,
                         costValue = costValue,
-                        boosterViewModel = boosterViewModel,
-                        startDate = startDate,
-                        isActive = true
+                        shopViewModel = shopViewModel,
                     )
 
                     Spacer(modifier = Modifier.height(75.dp))
