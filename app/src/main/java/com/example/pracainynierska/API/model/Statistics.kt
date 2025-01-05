@@ -7,6 +7,6 @@ import kotlinx.serialization.Serializable
 data class Statistics(
     val code: String,
     val name: String,
-    val value: Int,
+    val experience: Int,
     val level: Int
 )
