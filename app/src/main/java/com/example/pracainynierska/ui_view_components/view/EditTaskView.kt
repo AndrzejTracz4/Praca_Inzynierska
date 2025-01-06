@@ -1,25 +1,31 @@
 package com.example.pracainynierska.ui_view_components.view
 
-import BottomMenu
-import android.annotation.SuppressLint
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +41,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.model.Task
-import com.example.pracainynierska.ui.components.ModalDrawer
 import com.example.pracainynierska.ui_view_components.components.CustomDatePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomMeasurePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomNumberPickerField
@@ -45,373 +50,354 @@ import com.example.pracainynierska.ui_view_components.components.EditTaskButton
 import com.example.pracainynierska.ui_view_components.components.NumberPickerDialog
 import com.example.pracainynierska.ui_view_components.components.SelectTaskButton
 import com.example.pracainynierska.ui_view_components.components.TaskMode
-import com.example.pracainynierska.ui_view_components.components.TopMenu
-import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.view_model.TaskViewModel
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun EditTaskView(
-    navController: NavController,
-    loginViewModel: LoginViewModel,
-    taskViewModel: TaskViewModel,
-    taskToEdit: Task
-) {
+class EditTaskView(taskViewModel: TaskViewModel,
+                   navController: NavController,
+                   private var taskToEdit: Task
+) : AbstractView(taskViewModel, navController) {
 
-    val focusManager = LocalFocusManager.current
 
-    var selectedEditTaskMode by remember { mutableStateOf(taskToEdit.mode) }
-    var isHidden by remember { mutableStateOf(selectedEditTaskMode == TaskMode.JEDNORAZOWE) }
-    var taskName by remember { mutableStateOf(taskToEdit.name) }
-    var selectedDifficulty by remember { mutableStateOf(taskToEdit.difficulty) }
-    var selectedCategory by remember { mutableStateOf(taskToEdit.category) }
-    var showStartDatePicker by remember { mutableStateOf(false) }
-    var showEndDatePicker by remember { mutableStateOf(false) }
-    var showNumberPicker by remember { mutableStateOf(false) }
-    var selectedMeasureUnit by remember { mutableStateOf(taskToEdit.measureUnit) }
-    var showMeasurePicker by remember { mutableStateOf(false) }
-    var selectedStartDate by remember { mutableStateOf(taskToEdit.startDate) }
-    var selectedEndDate by remember { mutableStateOf(taskToEdit.endDate) }
-    var interval by remember { mutableIntStateOf(taskToEdit.interval) }
+    @RequiresApi(Build.VERSION_CODES.O)
+    @Composable
+    public override fun renderContent(
+        innerPadding: PaddingValues
+    ) {
 
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
-    val scrollState = rememberScrollState()
+        val focusManager = LocalFocusManager.current
 
-    ModalDrawer(navController = navController, drawerState = drawerState) {
-        Scaffold(
-            topBar = {
-                TopMenu(
-                    navController = navController,
-                    loginViewModel = loginViewModel,
-                    drawerState = drawerState,
-                    onDrawerOpen = {
-                        scope.launch {
-                            drawerState.open()
-                        }
-                    }
-                )
-            },
-            bottomBar = {
-                BottomMenu(navController = navController)
-            },
-            containerColor = Color.Transparent
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                Color(0xFF4C0949),
-                                Color(0xFF470B93)
-                            ),
-                            start = Offset(0f, Float.POSITIVE_INFINITY),
-                            end = Offset(0f, 0f)
-                        )
+        var selectedEditTaskMode by remember { mutableStateOf(taskToEdit.mode) }
+        var isHidden by remember { mutableStateOf(selectedEditTaskMode == TaskMode.JEDNORAZOWE) }
+        var taskName by remember { mutableStateOf(taskToEdit.name) }
+        var selectedDifficulty by remember { mutableStateOf(taskToEdit.difficulty) }
+        var selectedCategory by remember { mutableStateOf(taskToEdit.category) }
+        var showStartDatePicker by remember { mutableStateOf(false) }
+        var showEndDatePicker by remember { mutableStateOf(false) }
+        var showNumberPicker by remember { mutableStateOf(false) }
+        var selectedMeasureUnit by remember { mutableStateOf(taskToEdit.measureUnit) }
+        var showMeasurePicker by remember { mutableStateOf(false) }
+        var selectedStartDate by remember { mutableStateOf(taskToEdit.startDate) }
+        var selectedEndDate by remember { mutableStateOf(taskToEdit.endDate) }
+        var interval by remember { mutableIntStateOf(taskToEdit.interval) }
+
+        val scrollState = rememberScrollState()
+
+        if (false == (viewModel is TaskViewModel)){
+            throw Exception("Invalid View Model")
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.linearGradient(
+                        colors = listOf(
+                            Color(0xFF4C0949),
+                            Color(0xFF470B93)
+                        ),
+                        start = Offset(0f, Float.POSITIVE_INFINITY),
+                        end = Offset(0f, 0f)
                     )
-                    .pointerInput(Unit) {
-                        detectTapGestures(onTap = { focusManager.clearFocus() })
-                    }
-            ) {
+                )
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = { focusManager.clearFocus() })
+                }
+        ) {
 
-                Column(
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(16.dp)
+                    .verticalScroll(scrollState)
+            ) {
+                Spacer(modifier = Modifier.height(55.dp))
+
+                // Tryb zadania (Jednorazowe/Cykliczne)
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight()
-                        .padding(16.dp)
-                        .verticalScroll(scrollState)
+                        .padding(8.dp)
                 ) {
-                    Spacer(modifier = Modifier.height(55.dp))
+                    SelectTaskButton(
+                        text = "Jednorazowe",
+                        isSelected = selectedEditTaskMode == TaskMode.JEDNORAZOWE,
+                        onClick = {
+                            selectedEditTaskMode = TaskMode.JEDNORAZOWE
+                            isHidden = true
+                        },
+                        iconResId = R.drawable.repeat_single,
+                        modifier = Modifier.weight(1f),
+                        color = false
+                    )
 
-                    // Tryb zadania (Jednorazowe/Cykliczne)
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    SelectTaskButton(
+                        text = "Cykliczne",
+                        isSelected = selectedEditTaskMode == TaskMode.CYKLICZNE,
+                        onClick = {
+                            selectedEditTaskMode = TaskMode.CYKLICZNE
+                            isHidden = false
+                        },
+                        iconResId = R.drawable.repeat,
+                        modifier = Modifier.weight(1f),
+                        color = false
+                    )
+                }
+
+                // Edytuj dane zadania
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Text(
+                        text = "Nazwa",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(55.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0x4DFFFFFF)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CustomTextField(
+                            name = taskName,
+                            onNameChange = { taskName = it }
+                        )
+                    }
+                }
+
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Text(
+                        text = "Data rozpoczęcia",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    CustomDatePickerField(
+                        text = "",
+                        value = selectedStartDate,
+                        onValueChange = { selectedStartDate = it },
+                        onClick = { showStartDatePicker = true }
+                    )
+                }
+
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Text(
+                        text = "Data zakończenia",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    CustomDatePickerField(
+                        text = "",
+                        value = selectedEndDate,
+                        onValueChange = { selectedEndDate = it },
+                        onClick = { showEndDatePicker = true }
+                    )
+                }
+
+                if (!isHidden) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
                     ) {
-                        SelectTaskButton(
-                            text = "Jednorazowe",
-                            isSelected = selectedEditTaskMode == TaskMode.JEDNORAZOWE,
-                            onClick = {
-                                selectedEditTaskMode = TaskMode.JEDNORAZOWE
-                                isHidden = true
-                            },
-                            iconResId = R.drawable.repeat_single,
-                            modifier = Modifier.weight(1f),
-                            color = false
-                        )
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                        ) {
+                            Text(
+                                text = "Interwał",
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.ExtraBold
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+
+                            CustomNumberPickerField(
+                                text = "",
+                                value = interval,
+                                onValueChange = { interval = it },
+                                onClick = { showNumberPicker = true },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
 
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        SelectTaskButton(
-                            text = "Cykliczne",
-                            isSelected = selectedEditTaskMode == TaskMode.CYKLICZNE,
-                            onClick = {
-                                selectedEditTaskMode = TaskMode.CYKLICZNE
-                                isHidden = false
-                            },
-                            iconResId = R.drawable.repeat,
-                            modifier = Modifier.weight(1f),
-                            color = false
-                        )
-                    }
-
-                    // Edytuj dane zadania
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        Text(
-                            text = "Nazwa",
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-
-                        Box(
+                        Column(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(55.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(Color(0x4DFFFFFF)),
-                            contentAlignment = Alignment.Center
+                                .weight(1f)
                         ) {
-                            CustomTextField(
-                                name = taskName,
-                                onNameChange = { taskName = it }
+                            Text(
+                                text = "Miara",
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.ExtraBold
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+
+                            CustomMeasurePickerField(
+                                selectedMeasureUnit = selectedMeasureUnit,
+                                onMeasureUnitSelected = { unit -> selectedMeasureUnit = unit },
+                                showMeasurePicker = showMeasurePicker,
+                                setShowMeasurePicker = { showMeasurePicker = it },
+                                onClick = { showMeasurePicker = true },
+                                modifier = Modifier.fillMaxWidth()
                             )
                         }
                     }
-
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        Text(
-                            text = "Data rozpoczęcia",
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-                        CustomDatePickerField(
-                            text = "",
-                            value = selectedStartDate,
-                            onValueChange = { selectedStartDate = it },
-                            onClick = { showStartDatePicker = true }
-                        )
-                    }
-
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        Text(
-                            text = "Data zakończenia",
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-                        CustomDatePickerField(
-                            text = "",
-                            value = selectedEndDate,
-                            onValueChange = { selectedEndDate = it },
-                            onClick = { showEndDatePicker = true }
-                        )
-                    }
-
-                    if (!isHidden) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                            ) {
-                                Text(
-                                    text = "Interwał",
-                                    color = Color.White,
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.ExtraBold
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-
-                                CustomNumberPickerField(
-                                    text = "",
-                                    value = interval,
-                                    onValueChange = { interval = it },
-                                    onClick = { showNumberPicker = true },
-                                    modifier = Modifier.fillMaxWidth()
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.width(8.dp))
-
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                            ) {
-                                Text(
-                                    text = "Miara",
-                                    color = Color.White,
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.ExtraBold
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-
-                                CustomMeasurePickerField(
-                                    selectedMeasureUnit = selectedMeasureUnit,
-                                    onMeasureUnitSelected = { unit -> selectedMeasureUnit = unit },
-                                    showMeasurePicker = showMeasurePicker,
-                                    setShowMeasurePicker = { showMeasurePicker = it },
-                                    onClick = { showMeasurePicker = true },
-                                    modifier = Modifier.fillMaxWidth()
-                                )
-                            }
-                        }
-                    }
-
-                    // Poziom trudności
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        Text(
-                            text = "Poziom trudności",
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            SelectTaskButton(
-                                text = "Łatwy",
-                                isSelected = selectedDifficulty == "Łatwe",
-                                onClick = { selectedDifficulty = "Łatwe" },
-                                iconResId = R.drawable.water,
-                                modifier = Modifier.weight(1f),
-                                color = true
-                            )
-
-                            SelectTaskButton(
-                                text = "Średni",
-                                isSelected = selectedDifficulty == "Średni",
-                                onClick = { selectedDifficulty = "Średni" },
-                                iconResId = R.drawable.leaf,
-                                modifier = Modifier.weight(1f),
-                                color = true
-                            )
-
-                            SelectTaskButton(
-                                text = "Trudny",
-                                isSelected = selectedDifficulty == "Trudny",
-                                onClick = { selectedDifficulty = "Trudny" },
-                                iconResId = R.drawable.flame,
-                                modifier = Modifier.weight(1f),
-                                color = true
-                            )
-                        }
-                    }
-
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        Text(
-                            text = "Kategorie",
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-
-                        SelectTaskButton(
-                            text = "Samorozwój",
-                            isSelected = selectedCategory == "Samorozwój",
-                            onClick = { selectedCategory = "Samorozwój" },
-                            iconResId = R.drawable.disposable_icon,
-                            modifier = Modifier.fillMaxWidth(),
-                            color = false
-                        )
-
-                        Spacer(modifier = Modifier.height(4.dp))
-
-                        SelectTaskButton(
-                            text = "Ćwiczenia",
-                            isSelected = selectedCategory == "Ćwiczenia",
-                            onClick = { selectedCategory = "Ćwiczenia" },
-                            iconResId = R.drawable.disposable_icon,
-                            modifier = Modifier.fillMaxWidth(),
-                            color = false
-                        )
-
-                        Spacer(modifier = Modifier.height(4.dp))
-
-                        SelectTaskButton(
-                            text = "Edukacja",
-                            isSelected = selectedCategory == "Edukacja",
-                            onClick = { selectedCategory = "Edukacja" },
-                            iconResId = R.drawable.disposable_icon,
-                            modifier = Modifier.fillMaxWidth(),
-                            color = false
-                        )
-
-                        Spacer(modifier = Modifier.height(4.dp))
-
-                        SelectTaskButton(
-                            text = "Praca",
-                            isSelected = selectedCategory == "Praca",
-                            onClick = { selectedCategory = "Praca" },
-                            iconResId = R.drawable.disposable_icon,
-                            modifier = Modifier.fillMaxWidth(),
-                            color = false
-                        )
-
-                    }
-
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        EditTaskButton(
-                            text = "Zapisz zmiany",
-                            taskToEdit = taskToEdit,
-                            taskName = taskName,
-                            selectedDifficulty = selectedDifficulty,
-                            selectedCategory = selectedCategory,
-                            selectedStartDate = selectedStartDate,
-                            selectedEndDate = selectedEndDate,
-                            interval = interval,
-                            selectedMeasureUnit = selectedMeasureUnit,
-                            selectedEditTaskMode = selectedEditTaskMode,
-                            onTaskUpdated = {
-                                Log.d("TaskUpdated", "Zadanie zostało zaktualizowane.")
-                                navController.navigate("CalendarsView")
-                            },
-                            taskViewModel = taskViewModel
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(90.dp))
                 }
-            }
 
-            if (showStartDatePicker) {
-                DateTimePickerDialog(
-                    onDateTimeSelected = { dateTime ->
-                        selectedStartDate = dateTime
-                        showStartDatePicker = false
-                    },
-                    onDismissRequest = { showStartDatePicker = false }
-                )
-            }else if (showEndDatePicker){
-                DateTimePickerDialog(
-                    onDateTimeSelected = { dateTime ->
-                        selectedEndDate = dateTime
-                        showEndDatePicker = false
-                    },
-                    onDismissRequest = { showEndDatePicker = false }
-                )
+                // Poziom trudności
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Text(
+                        text = "Poziom trudności",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        SelectTaskButton(
+                            text = "Łatwy",
+                            isSelected = selectedDifficulty == "Łatwe",
+                            onClick = { selectedDifficulty = "Łatwe" },
+                            iconResId = R.drawable.water,
+                            modifier = Modifier.weight(1f),
+                            color = true
+                        )
+
+                        SelectTaskButton(
+                            text = "Średni",
+                            isSelected = selectedDifficulty == "Średni",
+                            onClick = { selectedDifficulty = "Średni" },
+                            iconResId = R.drawable.leaf,
+                            modifier = Modifier.weight(1f),
+                            color = true
+                        )
+
+                        SelectTaskButton(
+                            text = "Trudny",
+                            isSelected = selectedDifficulty == "Trudny",
+                            onClick = { selectedDifficulty = "Trudny" },
+                            iconResId = R.drawable.flame,
+                            modifier = Modifier.weight(1f),
+                            color = true
+                        )
+                    }
+                }
+
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Text(
+                        text = "Kategorie",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+
+                    SelectTaskButton(
+                        text = "Samorozwój",
+                        isSelected = selectedCategory == "Samorozwój",
+                        onClick = { selectedCategory = "Samorozwój" },
+                        iconResId = R.drawable.disposable_icon,
+                        modifier = Modifier.fillMaxWidth(),
+                        color = false
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    SelectTaskButton(
+                        text = "Ćwiczenia",
+                        isSelected = selectedCategory == "Ćwiczenia",
+                        onClick = { selectedCategory = "Ćwiczenia" },
+                        iconResId = R.drawable.disposable_icon,
+                        modifier = Modifier.fillMaxWidth(),
+                        color = false
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    SelectTaskButton(
+                        text = "Edukacja",
+                        isSelected = selectedCategory == "Edukacja",
+                        onClick = { selectedCategory = "Edukacja" },
+                        iconResId = R.drawable.disposable_icon,
+                        modifier = Modifier.fillMaxWidth(),
+                        color = false
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    SelectTaskButton(
+                        text = "Praca",
+                        isSelected = selectedCategory == "Praca",
+                        onClick = { selectedCategory = "Praca" },
+                        iconResId = R.drawable.disposable_icon,
+                        modifier = Modifier.fillMaxWidth(),
+                        color = false
+                    )
+
+                }
+
+                Column(modifier = Modifier.padding(8.dp)) {
+                    EditTaskButton(
+                        text = "Zapisz zmiany",
+                        taskToEdit = taskToEdit,
+                        taskName = taskName,
+                        selectedDifficulty = selectedDifficulty,
+                        selectedCategory = selectedCategory,
+                        selectedStartDate = selectedStartDate,
+                        selectedEndDate = selectedEndDate,
+                        interval = interval,
+                        selectedMeasureUnit = selectedMeasureUnit,
+                        selectedEditTaskMode = selectedEditTaskMode,
+                        onTaskUpdated = {
+                            Log.d("TaskUpdated", "Zadanie zostało zaktualizowane.")
+                            navController.navigate("CalendarsView")
+                        },
+                        taskViewModel = viewModel
+                    )
+                }
+                Spacer(modifier = Modifier.height(90.dp))
             }
-            if (showNumberPicker) {
-                NumberPickerDialog(
-                    selectedNumber = interval,
-                    onNumberSelected = { number ->
-                        interval = number
-                        showNumberPicker = false
-                    },
-                    onDismissRequest = { showNumberPicker = false }
-                )
-            }
+        }
+
+        if (showStartDatePicker) {
+            DateTimePickerDialog(
+                onDateTimeSelected = { dateTime ->
+                    selectedStartDate = dateTime
+                    showStartDatePicker = false
+                },
+                onDismissRequest = { showStartDatePicker = false }
+            )
+        }else if (showEndDatePicker){
+            DateTimePickerDialog(
+                onDateTimeSelected = { dateTime ->
+                    selectedEndDate = dateTime
+                    showEndDatePicker = false
+                },
+                onDismissRequest = { showEndDatePicker = false }
+            )
+        }
+        if (showNumberPicker) {
+            NumberPickerDialog(
+                selectedNumber = interval,
+                onNumberSelected = { number ->
+                    interval = number
+                    showNumberPicker = false
+                },
+                onDismissRequest = { showNumberPicker = false }
+            )
         }
     }
 }

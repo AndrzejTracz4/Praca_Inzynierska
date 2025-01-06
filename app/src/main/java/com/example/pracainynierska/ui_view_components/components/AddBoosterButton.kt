@@ -69,6 +69,7 @@ fun AddBoosterButton(
                     dialogTitle = "Sukces!"
                     dialogMessage = "Pomyślnie zakupiono booster!"
                     showDialog = true
+
                 } else {
                     dialogTitle = "Błąd!"
                     dialogMessage = "Nie udało się zakupić boostera!"
