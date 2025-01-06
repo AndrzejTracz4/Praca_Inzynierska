@@ -119,6 +119,7 @@ fun SetupNavGraph(
         }
         composable("HomepageView") {
             HomepageView(navController = navController, homepageViewModel = homepageViewModel, boosterViewModel = boosterViewModel)
+                .renderView()
         }
         composable("ForgotPasswordView") {
             ForgotPasswordView(navController = navController, loginViewModel = loginViewModel)
@@ -127,19 +128,24 @@ fun SetupNavGraph(
             ChangeForgotPasswordView(navController = navController, loginViewModel = loginViewModel)
         }
         composable("ShopView") {
-            ShopView(navController = navController, loginViewModel = loginViewModel, shopViewModel = shopViewModel)
+            ShopView(navController = navController, shopViewModel = shopViewModel)
+                .renderView()
         }
         composable("AddTaskView") {
-            AddTaskView(navController = navController, loginViewModel = loginViewModel, taskViewModel = taskViewModel)
+            AddTaskView(navController = navController, taskViewModel = taskViewModel)
+                .renderView()
         }
         composable("CalendarsView") {
-            CalendarsView(navController = navController, loginViewModel = loginViewModel, taskViewModel = taskViewModel)
+            CalendarsView(navController = navController, taskViewModel = taskViewModel)
+                .renderView()
         }
         composable("StatisticView") {
             StatisticView(navController = navController, loginViewModel = loginViewModel)
+                .renderView()
         }
         composable("AddCategoryView") {
             AddCategoryView(navController = navController, loginViewModel = loginViewModel)
+                .renderView()
         }
         composable("EditTaskView/{taskId}") { backStackEntry ->
             val taskId = backStackEntry.arguments?.getString("taskId")
@@ -148,13 +154,14 @@ fun SetupNavGraph(
                 EditTaskView(
                     taskToEdit = taskToEdit,
                     navController = navController,
-                    loginViewModel = loginViewModel,
                     taskViewModel = taskViewModel
                 )
+                    .renderView()
             }
         }
         composable("AchievementsView") {
             AchievementsView(navController = navController, loginViewModel = loginViewModel)
+                .renderView()
         }
 
     }
