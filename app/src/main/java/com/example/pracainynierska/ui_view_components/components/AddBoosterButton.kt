@@ -1,5 +1,7 @@
 package com.example.pracainynierska.ui_view_components.components
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -28,11 +30,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pracainynierska.R
-import com.example.pracainynierska.model.Booster
-import com.example.pracainynierska.model.Task
-import com.example.pracainynierska.view_model.BoosterViewModel
-import java.time.LocalDate
+import com.example.pracainynierska.view_model.ShopViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AddBoosterButton(
     selectedCategory: String,
@@ -40,17 +40,12 @@ fun AddBoosterButton(
     sliderValueTime: Float,
     sliderValueMultiplier: Float,
     costValue: Int,
-    boosterViewModel: BoosterViewModel,
-    startDate: LocalDate,
-    isActive: Boolean
+    shopViewModel: ShopViewModel,
+    onClick: () -> Unit = {}
 ) {
-    var boostersList by remember { mutableStateOf(emptyList<Booster>()) }
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf("") }
-
-    boosterViewModel.boosters.observeForever { boosters ->
-        boostersList = boosters
-    }
+    var dialogTitle by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -62,26 +57,25 @@ fun AddBoosterButton(
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable {
-                val lastBoosterId = boostersList.maxOfOrNull { it.id } ?: 0
-                val booster = Booster(
-                    id = lastBoosterId + 1,
+                val booster = shopViewModel.buyBooster(
                     shopMode = selectedShopMode,
                     category = selectedCategory,
-                    multiplier = if (selectedShopMode == "Osłona antyredukcjna statystyk") {
-                        0
-                    } else {
-                        (sliderValueMultiplier.toInt())/10
-                    },
-                    duration = (sliderValueTime.toInt())/10,
-                    price = costValue,
-                    startDate = startDate,
-                    isActive = isActive
+                    duration = sliderValueTime.toInt(),
+                    multiplier = sliderValueMultiplier.toInt(),
+                    price = costValue
                 )
 
-                boosterViewModel.addBooster(booster)
+                if (booster) {
+                    dialogTitle = "Sukces!"
+                    dialogMessage = "Pomyślnie zakupiono booster!"
+                    showDialog = true
+                } else {
+                    dialogTitle = "Błąd!"
+                    dialogMessage = "Nie udało się zakupić boostera!"
+                    showDialog = true
+                }
 
-                dialogMessage = "Pomyślnie zakupiono booster!"
-                showDialog = true
+                onClick()
             }
             .padding(horizontal = 16.dp),
         contentAlignment = Alignment.Center
@@ -113,7 +107,7 @@ fun AddBoosterButton(
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(text = "Sukces!") },
+            title = { Text(text = dialogTitle) },
             text = { Text(text = dialogMessage) },
             confirmButton = {
                 TextButton(
