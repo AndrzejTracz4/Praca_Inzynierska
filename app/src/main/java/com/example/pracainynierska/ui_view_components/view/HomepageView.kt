@@ -121,7 +121,7 @@ fun HomepageView(
 
     val userRank = levelNames[userLevel] ?: "Nieznany poziom"
 
-    val stats = player?.playerStatistics?.statistics?.map{ it.name to it.value.toFloat() } ?: emptyList()
+    val stats = player?.playerStatistics?.statistics?.map{ it.name to it.experience.toFloat() } ?: emptyList()
 
     val gradients = listOf(
         Brush.horizontalGradient(colors = listOf(Color(0xFFFFA726), Color(0xFFFF7043))),
