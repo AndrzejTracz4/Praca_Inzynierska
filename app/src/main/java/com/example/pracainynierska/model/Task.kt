@@ -12,5 +12,6 @@ data class Task(
     val interval: Int,
     val measureUnit: String,
     val mode: TaskMode,
-    val status: String
+    val status: String,
+    val description: String
 )

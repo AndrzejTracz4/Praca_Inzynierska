@@ -43,11 +43,11 @@ import com.example.pracainynierska.ui_view_components.components.CreateTaskButto
 import com.example.pracainynierska.ui_view_components.components.CustomDatePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomMeasurePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomNumberPickerField
-import com.example.pracainynierska.ui_view_components.components.CustomTextField
 import com.example.pracainynierska.ui_view_components.components.DateTimePickerDialog
 import com.example.pracainynierska.ui_view_components.components.NumberPickerDialog
 import com.example.pracainynierska.ui_view_components.components.SelectTaskButton
 import com.example.pracainynierska.ui_view_components.components.TaskMode
+import com.example.pracainynierska.ui_view_components.components.TaskTextField
 import com.example.pracainynierska.view_model.TaskViewModel
 
 class AddTaskView(taskViewModel: TaskViewModel,
@@ -64,6 +64,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
         var selectedAddTaskMode by remember { mutableStateOf(TaskMode.JEDNORAZOWE) }
         var isHidden by remember { mutableStateOf(true) }
         var taskName by remember { mutableStateOf("") }
+        var taskDescription by remember { mutableStateOf("") }
         var selectedDifficulty by remember { mutableStateOf("") }
         var selectedCategory by remember { mutableStateOf("") }
         var showStartDatePicker by remember { mutableStateOf(false) }
@@ -156,9 +157,36 @@ class AddTaskView(taskViewModel: TaskViewModel,
                             .background(Color(0x4DFFFFFF)),
                         contentAlignment = Alignment.Center
                     ) {
-                        CustomTextField(
-                            name = taskName,
-                            onNameChange = { taskName = it }
+                        TaskTextField(
+                            string = taskName,
+                            onStringChange = { taskName = it },
+                            singleLine = true
+                        )
+                    }
+
+                }
+
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Text(
+                        text = "Opis",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            //.height(55.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0x4DFFFFFF)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        TaskTextField(
+                            string = taskDescription,
+                            onStringChange = { taskDescription = it },
+                            singleLine = false
                         )
                     }
 
@@ -366,7 +394,8 @@ class AddTaskView(taskViewModel: TaskViewModel,
                             interval = 0
                             selectedMeasureUnit = ""
                         },
-                        taskViewModel = viewModel
+                        taskViewModel = viewModel,
+                        taskDescription = taskDescription
                     )
                 }
 
