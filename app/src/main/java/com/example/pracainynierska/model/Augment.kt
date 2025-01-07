@@ -1,10 +1,9 @@
 package com.example.pracainynierska.model
 
 import java.time.LocalDate
-import java.util.Date
 
-data class Booster(
-    val id: Int,
+data class Augment(
+    val id: Int? = null,
     val shopMode: String,
     val category: String,
     val multiplier: Int,

@@ -5,17 +5,20 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.pracainynierska.API.api_client.PlayerApi
 import com.example.pracainynierska.API.handler.authorization.PlayerAuthorizationHandler
 import com.example.pracainynierska.context.PlayerContextInterface
+import com.example.pracainynierska.manager.augment.AugmentManager
+import com.example.pracainynierska.manager.shop.Calculator
+import com.example.pracainynierska.manager.shop.PurchaseHandler
 
 class ShopViewModelFactory(
     private val playerContext: PlayerContextInterface,
-    private val boosterViewModel: BoosterViewModel
+    private val augmentManager: AugmentManager
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ShopViewModel::class.java)) {
-            val playerApi = PlayerApi(playerContext)
-            val playerAuthorizationHandler = PlayerAuthorizationHandler(playerApi)
+            val calculator = Calculator()
+            val purchaseHandler = PurchaseHandler(augmentManager)
 
-            return ShopViewModel(playerContext, playerAuthorizationHandler, boosterViewModel) as T
+            return ShopViewModel(playerContext, calculator, purchaseHandler) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

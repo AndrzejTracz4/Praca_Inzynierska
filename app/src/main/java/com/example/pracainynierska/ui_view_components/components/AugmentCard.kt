@@ -17,16 +17,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.pracainynierska.model.Booster
+import com.example.pracainynierska.model.Augment
 import com.example.pracainynierska.R
-import com.example.pracainynierska.view_model.BoosterViewModel
+import com.example.pracainynierska.dictionary.types.ShopTypes
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BoosterCard(
-    booster: Booster,
+fun AugmentCard(
+    augment: Augment,
     showNext: Boolean,
     showPrevious: Boolean,
     onClickNext: () -> Unit,
@@ -34,8 +34,8 @@ fun BoosterCard(
 ) {
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val startDate = LocalDate.parse(booster.startDate.toString(), formatter)
-    val endDate = startDate.plusDays(booster.duration.toLong())
+    val startDate = LocalDate.parse(augment.startDate.toString(), formatter)
+    val endDate = startDate.plusDays(augment.duration.toLong())
     val endDateFormatted = endDate.format(formatter)
     Box(
         modifier = Modifier
@@ -49,7 +49,7 @@ fun BoosterCard(
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            if (booster.shopMode == "Osłona antyredukcyjna statystyk") {
+            if (augment.shopMode == ShopTypes.SHIELD) {
                 Icon(
                     painter = painterResource(R.drawable.shield),
                     contentDescription = "BoosterIcon",
@@ -59,7 +59,7 @@ fun BoosterCard(
                         .align(Alignment.CenterVertically)
                         .padding(10.dp)
                 )
-            }else if (booster.shopMode == "Modyfikator czasowy"){
+            }else if (augment.shopMode == ShopTypes.BOOSTER){
                 Icon(
                     painter = painterResource(R.drawable.timeout),
                     contentDescription = "BoosterIcon",
@@ -75,7 +75,7 @@ fun BoosterCard(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = booster.category,
+                    text = augment.category,
                     color = Color.White,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
@@ -88,9 +88,9 @@ fun BoosterCard(
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
-                if (booster.shopMode == "Modyfikator czasowy") {
+                if (augment.shopMode == ShopTypes.BOOSTER) {
                     Text(
-                        text = "Mnożnik: x${booster.multiplier}",
+                        text = "Mnożnik: x${augment.multiplier}",
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
