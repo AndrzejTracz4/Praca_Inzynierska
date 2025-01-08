@@ -79,6 +79,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
         var selectedStartDate by remember { mutableStateOf(taskToEdit.startDate) }
         var selectedEndDate by remember { mutableStateOf(taskToEdit.endDate) }
         var interval by remember { mutableIntStateOf(taskToEdit.interval) }
+        var taskDescription by remember { mutableStateOf(taskToEdit.description) }
 
         val scrollState = rememberScrollState()
 
@@ -168,6 +169,31 @@ class EditTaskView(taskViewModel: TaskViewModel,
                             string = taskName,
                             onStringChange = { taskName = it },
                             singleLine = true
+                        )
+                    }
+                }
+
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Text(
+                        text = "Opis",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            //.height(55.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0x4DFFFFFF)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        TaskTextField(
+                            string = taskDescription,
+                            onStringChange = { taskDescription = it },
+                            singleLine = false
                         )
                     }
                 }
@@ -366,7 +392,8 @@ class EditTaskView(taskViewModel: TaskViewModel,
                             Log.d("TaskUpdated", "Zadanie zostało zaktualizowane.")
                             navController.navigate("CalendarsView")
                         },
-                        taskViewModel = viewModel
+                        taskViewModel = viewModel,
+                        taskDescription = taskDescription
                     )
                 }
                 Spacer(modifier = Modifier.height(90.dp))

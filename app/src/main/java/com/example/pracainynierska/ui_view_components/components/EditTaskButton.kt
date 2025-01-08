@@ -39,7 +39,8 @@ fun EditTaskButton(
     selectedEditTaskMode: TaskMode,
     modifier: Modifier = Modifier,
     onTaskUpdated: () -> Unit,
-    taskViewModel: TaskViewModel
+    taskViewModel: TaskViewModel,
+    taskDescription: String
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf("") }
@@ -95,7 +96,8 @@ fun EditTaskButton(
                         endDate = selectedEndDate,
                         interval = if (selectedEditTaskMode == TaskMode.CYKLICZNE) interval else 0,
                         measureUnit = if (selectedEditTaskMode == TaskMode.CYKLICZNE) selectedMeasureUnit else "",
-                        mode = selectedEditTaskMode
+                        mode = selectedEditTaskMode,
+                        description = taskDescription
                     )
                     taskViewModel.updateTask(updatedTask)
 
