@@ -1,0 +1,6 @@
+pl:
+  level: "Poziom"
+  coins: "Monety",
+  experience: "Doświadczenie"
+  active_boosters: "Aktywne boostery"
+  challenge_of_the_day: "Wyzwanie dnia"
