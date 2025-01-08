@@ -6,7 +6,7 @@ import okhttp3.OkHttpClient
 
 
 open class ApiDetails(private var playerContext: PlayerContextInterface) {
-    private val apiPath: String = "https://88a7-83-31-42-39.ngrok-free.app"
+    private val apiPath: String = "https://cac7-83-31-123-5.ngrok-free.app"
 
     protected val apiClient = OkHttpClient()
 
