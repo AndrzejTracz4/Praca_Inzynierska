@@ -14,19 +14,19 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.pracainynierska.view_model.BoosterViewModel
+import com.example.pracainynierska.manager.augment.AugmentManager
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BoosterList(boosterViewModel: BoosterViewModel) {
-    val boostersList = boosterViewModel.boosters.observeAsState(initial = emptyList()).value
+fun AugmentList(augmentManager: AugmentManager) {
+    val boostersList = augmentManager.boosters.observeAsState(initial = emptyList()).value
     var currentBoosterIndex by remember { mutableStateOf(0) }
 
     if (boostersList.isNotEmpty()) {
         val currentBooster = boostersList[currentBoosterIndex]
-        BoosterCard(
-            booster = currentBooster,
+        AugmentCard(
+            augment = currentBooster,
             showNext = currentBoosterIndex < boostersList.size - 1,
             showPrevious = currentBoosterIndex > 0,
             onClickNext = {

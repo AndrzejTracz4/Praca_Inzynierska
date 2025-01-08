@@ -1,6 +1,5 @@
 package com.example.pracainynierska.ui_view_components.view
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -21,7 +20,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,19 +41,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.manager.augment.AugmentManager
 import com.example.pracainynierska.model.FakeData
-import com.example.pracainynierska.ui_view_components.components.BoosterList
+import com.example.pracainynierska.ui_view_components.components.AugmentList
 import com.example.pracainynierska.ui_view_components.components.DailyTaskCard
 import com.example.pracainynierska.ui_view_components.components.DailyTaskDetailsDialog
 import com.example.pracainynierska.ui_view_components.components.GradientLevelProgressBar
 import com.example.pracainynierska.ui_view_components.components.GradientStatsProgressBars
 import com.example.pracainynierska.ui_view_components.components.UserImagePicker
-import com.example.pracainynierska.view_model.BoosterViewModel
 import com.example.pracainynierska.view_model.HomepageViewModel
 
 class HomepageView(homepageViewModel: HomepageViewModel,
                    navController: NavController,
-                   private val boosterViewModel: BoosterViewModel
+                   private val augmentManager: AugmentManager
 ) : AbstractView(homepageViewModel, navController) {
 
 
@@ -338,7 +336,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                                     .fillMaxHeight(0.9f)
                                     .clip(RoundedCornerShape(10.dp))
                             ){
-                                BoosterList(boosterViewModel = boosterViewModel)
+                                AugmentList(augmentManager = augmentManager)
                             }
 
                         }

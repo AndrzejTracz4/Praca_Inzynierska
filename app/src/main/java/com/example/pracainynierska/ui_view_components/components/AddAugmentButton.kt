@@ -34,7 +34,7 @@ import com.example.pracainynierska.view_model.ShopViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AddBoosterButton(
+fun AddAugmentButton(
     selectedCategory: String,
     selectedShopMode: String,
     sliderValueTime: Float,

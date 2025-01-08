@@ -40,7 +40,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
-import com.example.pracainynierska.ui_view_components.components.AddBoosterButton
+import com.example.pracainynierska.dictionary.types.ShopTypes
+import com.example.pracainynierska.ui_view_components.components.AddAugmentButton
 import com.example.pracainynierska.ui_view_components.components.CustomSlider
 import com.example.pracainynierska.ui_view_components.components.CustomSliderDefaults
 import com.example.pracainynierska.ui_view_components.components.ShopSelectButton
@@ -60,7 +61,7 @@ class ShopView(shopViewModel: ShopViewModel,
     ) {
 
         var selectedCategory by remember { mutableStateOf("Determinacja") }
-        var selectedShopMode by remember { mutableStateOf("Osłona antyredukcyjna statystyk") }
+        var selectedShopMode by remember { mutableStateOf(ShopTypes.SHIELD) }
         var sliderValueTime by remember { mutableFloatStateOf(10f) }
         var sliderValueMultiplier by remember { mutableFloatStateOf(20f) }
         var costValue by remember { mutableStateOf(0) }
@@ -77,11 +78,15 @@ class ShopView(shopViewModel: ShopViewModel,
             multiplier = sliderValueMultiplier.toInt()
         )
 
+        val isAffordable = viewModel.checkIfCanAfford(costValue)
+
+        val costTextColor = if (isAffordable) Color.White else Color.Red
+
         val costText = buildAnnotatedString {
             withStyle(style = SpanStyle(color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Normal)) {
                 append("Koszt: ")
             }
-            withStyle(style = SpanStyle(color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)) {
+            withStyle(style = SpanStyle(color = costTextColor, fontSize = 16.sp, fontWeight = FontWeight.Bold)) {
                 append("$costValue")
             }
         }
@@ -110,17 +115,17 @@ class ShopView(shopViewModel: ShopViewModel,
                 Column {
                     ShopSelectButton(
                         text = "Osłona antyredukcyjna statystyk",
-                        isSelected = selectedShopMode == "Osłona antyredukcyjna statystyk",
+                        isSelected = selectedShopMode == ShopTypes.SHIELD,
                         onClick = {
-                            selectedShopMode = "Osłona antyredukcyjna statystyk"
+                            selectedShopMode = ShopTypes.SHIELD
                             isHidden = true },
                         iconResId = R.drawable.shield
                     )
                     ShopSelectButton(
                         text = "Modyfikator czasowy",
-                        isSelected = selectedShopMode == "Modyfikator czasowy",
+                        isSelected = selectedShopMode == ShopTypes.BOOSTER,
                         onClick = {
-                            selectedShopMode = "Modyfikator czasowy"
+                            selectedShopMode = ShopTypes.BOOSTER
                             isHidden = false },
                         iconResId = R.drawable.timeout
                     )
@@ -307,7 +312,7 @@ class ShopView(shopViewModel: ShopViewModel,
                 }
 
 
-                AddBoosterButton(
+                AddAugmentButton(
                     selectedCategory = selectedCategory,
                     selectedShopMode = selectedShopMode,
                     sliderValueTime = sliderValueTime,
