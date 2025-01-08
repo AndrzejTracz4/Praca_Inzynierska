@@ -44,12 +44,12 @@ import com.example.pracainynierska.model.Task
 import com.example.pracainynierska.ui_view_components.components.CustomDatePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomMeasurePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomNumberPickerField
-import com.example.pracainynierska.ui_view_components.components.CustomTextField
 import com.example.pracainynierska.ui_view_components.components.DateTimePickerDialog
 import com.example.pracainynierska.ui_view_components.components.EditTaskButton
 import com.example.pracainynierska.ui_view_components.components.NumberPickerDialog
 import com.example.pracainynierska.ui_view_components.components.SelectTaskButton
 import com.example.pracainynierska.ui_view_components.components.TaskMode
+import com.example.pracainynierska.ui_view_components.components.TaskTextField
 import com.example.pracainynierska.view_model.TaskViewModel
 
 class EditTaskView(taskViewModel: TaskViewModel,
@@ -164,9 +164,10 @@ class EditTaskView(taskViewModel: TaskViewModel,
                             .background(Color(0x4DFFFFFF)),
                         contentAlignment = Alignment.Center
                     ) {
-                        CustomTextField(
-                            name = taskName,
-                            onNameChange = { taskName = it }
+                        TaskTextField(
+                            string = taskName,
+                            onStringChange = { taskName = it },
+                            singleLine = true
                         )
                     }
                 }

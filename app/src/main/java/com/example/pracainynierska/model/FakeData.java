@@ -14,6 +14,7 @@ public class FakeData {
             7,
             "dni",
             TaskMode.CYKLICZNE,
-            "Aktywne"
+            "Aktywne",
+            "Opis"
     );
 }

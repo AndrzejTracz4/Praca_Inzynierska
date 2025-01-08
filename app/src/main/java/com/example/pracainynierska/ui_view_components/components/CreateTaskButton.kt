@@ -1,5 +1,6 @@
 package com.example.pracainynierska.ui_view_components.components
 
+import android.app.ActivityManager.TaskDescription
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,7 +46,8 @@ fun CreateTaskButton(
     selectedAddTaskMode: TaskMode,
     modifier: Modifier = Modifier,
     onTaskCreated: () -> Unit,
-    taskViewModel: TaskViewModel
+    taskViewModel: TaskViewModel,
+    taskDescription: String
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf("") }
@@ -104,7 +106,8 @@ fun CreateTaskButton(
                         interval = if (selectedAddTaskMode == TaskMode.CYKLICZNE) interval else 0,
                         measureUnit = if (selectedAddTaskMode == TaskMode.CYKLICZNE) selectedMeasureUnit else "",
                         mode = selectedAddTaskMode,
-                        status = "Pending"
+                        status = "Pending",
+                        description = taskDescription
                     )
                     taskViewModel.addTask(task)
 

@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.ui_view_components.components.CustomCreateCategoryButton
-import com.example.pracainynierska.ui_view_components.components.CustomTextField
+import com.example.pracainynierska.ui_view_components.components.TaskTextField
 import com.example.pracainynierska.view_model.LoginViewModel
 
 class AddCategoryView(loginViewModel: LoginViewModel,
@@ -125,9 +125,10 @@ class AddCategoryView(loginViewModel: LoginViewModel,
                         .background(Color(0x4DFFFFFF)),
                     contentAlignment = Alignment.Center
                 ) {
-                    CustomTextField(
-                        name = categoryName,
-                        onNameChange = { categoryName = it }
+                    TaskTextField(
+                        string = categoryName,
+                        onStringChange = { categoryName = it },
+                        singleLine = true
                     )
                 }
             }

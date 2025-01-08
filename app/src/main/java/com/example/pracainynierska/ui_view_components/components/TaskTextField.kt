@@ -1,7 +1,8 @@
 package com.example.pracainynierska.ui_view_components.components
 
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -22,24 +23,26 @@ import androidx.compose.ui.text.input.ImeAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomTextField(
-    name: String,
-    onNameChange: (String) -> Unit
+fun TaskTextField(
+    string: String,
+    onStringChange: (String) -> Unit,
+    singleLine: Boolean
 ) {
     val focusManager = LocalFocusManager.current
 
     TextField(
-        value = name,
+        value = string,
         onValueChange = {
-            onNameChange(it)
+            onStringChange(it)
         },
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .heightIn(min = 56.dp, max = Int.MAX_VALUE.dp)
             .padding(vertical = 0.dp)
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
-                        if (name.isNotBlank()) {
+                        if (string.isNotBlank()) {
                             focusManager.clearFocus()
                         }
                     }
@@ -53,12 +56,13 @@ fun CustomTextField(
             focusedTextColor = Color.White,
             unfocusedTextColor = Color.White
         ),
-        singleLine = true,
+        singleLine = singleLine,
+        maxLines = if (singleLine) 1 else Int.MAX_VALUE,
         textStyle = LocalTextStyle.current.copy(
             color = Color.White,
             fontSize = 14.sp,
             fontWeight = FontWeight.ExtraBold,
-            textAlign = TextAlign.Center
+            textAlign = if (singleLine) TextAlign.Center else TextAlign.Start
         ),
         keyboardActions = KeyboardActions(
             onDone = {
