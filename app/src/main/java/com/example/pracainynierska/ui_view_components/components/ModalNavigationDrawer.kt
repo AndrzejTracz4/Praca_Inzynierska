@@ -37,7 +37,7 @@ fun ModalDrawer(
 
     val items = listOf(
         DrawerItem("Strona Główna", R.drawable.home, "HomepageView"),
-        DrawerItem("Profil", R.drawable.profile, "HomepageView"),
+        DrawerItem("Profil", R.drawable.profile, "ProfileView"),
         DrawerItem("Statystyki", R.drawable.stats, "StatisticView"),
         DrawerItem("Kalendarz", R.drawable.calendar, "CalendarsView"),
         DrawerItem("Sklep", R.drawable.shop, "ShopView"),
