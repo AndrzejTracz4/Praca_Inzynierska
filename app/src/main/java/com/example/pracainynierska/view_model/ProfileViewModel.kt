@@ -6,11 +6,10 @@ import com.example.pracainynierska.context.PlayerContextInterface
 import com.example.pracainynierska.dictionary.UserPhotoDictionary
 import com.example.pracainynierska.resolver.UserPhotoResourceResolver
 
-class ProfileViewModel (
+class ProfileViewModel(
     pc: PlayerContextInterface,
-    private val appContext: Context
+    private val appContext: Context,
 ) : AbstractViewModel(pc) {
-
     private val userPhotoResourceResolver = UserPhotoResourceResolver()
 
     private var selectedAnimationIndex = 1
@@ -19,11 +18,12 @@ class ProfileViewModel (
 
     fun getPhotoResId(): Int {
         val userPhotoPath = playerContext.getPlayer()?.userPhotoPath
-        userPhotoResId.value = if (!userPhotoPath.isNullOrBlank()) {
-            userPhotoResourceResolver.getResId(appContext, userPhotoPath)
-        } else {
-            0
-        }
+        userPhotoResId.value =
+            if (!userPhotoPath.isNullOrBlank()) {
+                userPhotoResourceResolver.getResId(appContext, userPhotoPath)
+            } else {
+                0
+            }
         return userPhotoResId.value
     }
 
@@ -33,5 +33,4 @@ class ProfileViewModel (
         playerContext.getPlayer()?.userPhotoPath = newPhotoPath
         userPhotoResId.value = userPhotoResourceResolver.getResId(appContext, newPhotoPath)
     }
-
 }

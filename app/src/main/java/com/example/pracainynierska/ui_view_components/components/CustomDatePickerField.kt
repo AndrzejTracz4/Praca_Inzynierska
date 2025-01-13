@@ -23,26 +23,26 @@ fun CustomDatePickerField(
     value: String,
     onValueChange: (String) -> Unit,
     onClick: () -> Unit,
-    height: Dp = 50.dp
+    height: Dp = 50.dp,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(height)
-            .padding(vertical = 4.dp)
-            .background(
-                color = Color(0x4DFFFFFF),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(height)
+                .padding(vertical = 4.dp)
+                .background(
+                    color = Color(0x4DFFFFFF),
+                    shape = RoundedCornerShape(12.dp),
+                ).clickable { onClick() }
+                .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = value.ifEmpty { text },
             color = Color.White,
             fontSize = 14.sp,
-            fontWeight = FontWeight.ExtraBold
+            fontWeight = FontWeight.ExtraBold,
         )
     }
 }

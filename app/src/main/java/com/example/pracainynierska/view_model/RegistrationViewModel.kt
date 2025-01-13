@@ -14,45 +14,55 @@ import kotlinx.coroutines.launch
 class RegistrationViewModel(
     playerContext: PlayerContextInterface,
     private val registrationHandler: RegistrationHandlerInterface,
-    private val validator: PlayerDataValidator
+    private val validator: PlayerDataValidator,
 ) : AbstractViewModel(playerContext) {
-
     var username by mutableStateOf("")
     var password by mutableStateOf("")
     var confirmPassword by mutableStateOf("")
     var email by mutableStateOf("")
 
-    val usernameProperty : String = "name"
-    val emailProperty : String = "email"
-    val passwordProperty : String = "password"
-    val confirmPasswordProperty : String = "confirmPassword"
+    val usernameProperty: String = "name"
+    val emailProperty: String = "email"
+    val passwordProperty: String = "password"
+    val confirmPasswordProperty: String = "confirmPassword"
 
-    private val errorMessages = mutableMapOf(
-        usernameProperty to mutableStateOf<String?>(null),
-        emailProperty to mutableStateOf<String?>(null),
-        passwordProperty to mutableStateOf<String?>(null),
-        confirmPasswordProperty to mutableStateOf<String?>(null),
-    )
+    private val errorMessages =
+        mutableMapOf(
+            usernameProperty to mutableStateOf<String?>(null),
+            emailProperty to mutableStateOf<String?>(null),
+            passwordProperty to mutableStateOf<String?>(null),
+            confirmPasswordProperty to mutableStateOf<String?>(null),
+        )
 
     fun onUsernameChange(newUsername: String) = updateField(usernameProperty, newUsername, validator::validateUsername)
+
     fun onEmailChange(newEmail: String) = updateField(emailProperty, newEmail, validator::validateEmail)
+
     fun onPasswordChange(newPassword: String) = updateField(passwordProperty, newPassword, validator::validatePassword)
+
     fun onConfirmPasswordChange(confirmPassword: String) {
         this.confirmPassword = confirmPassword
         errorMessages[confirmPasswordProperty]?.value = validator.validatePasswordsMatch(password, confirmPassword)
     }
 
-    private fun updateField(field: String, value: String, validationFn: (String) -> String?) {
+    private fun updateField(
+        field: String,
+        value: String,
+        validationFn: (String) -> String?,
+    ) {
         when (field) {
             usernameProperty -> username = value
             emailProperty -> email = value
-            passwordProperty-> password = value
+            passwordProperty -> password = value
             confirmPasswordProperty -> confirmPassword = value
         }
         errorMessages[field]?.value = validationFn(value)
     }
 
-    fun registerUser(onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun registerUser(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit,
+    ) {
         if (fieldsAreEmpty()) {
             onError("All fields must be filled!")
             return
@@ -92,14 +102,18 @@ class RegistrationViewModel(
             }
         }
 
-        Log.d("RegistrationViewModel", "Validation messages added : ${errorMessages}")
+        Log.d("RegistrationViewModel", "Validation messages added : $errorMessages")
     }
 
     private fun fieldsAreEmpty() = username.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()
+
     private fun passwordsMismatch() = password != confirmPassword
 
     fun getUserNameErrorMessage() = errorMessages[usernameProperty]?.value
+
     fun getEmailErrorMessage() = errorMessages[emailProperty]?.value
+
     fun getPasswordErrorMessage() = errorMessages[passwordProperty]?.value
+
     fun getConfirmPasswordErrorMessage() = errorMessages[confirmPasswordProperty]?.value
 }

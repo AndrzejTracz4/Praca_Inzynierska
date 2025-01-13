@@ -1,7 +1,6 @@
 package com.example.pracainynierska.ui_view_components.components
 
 import DailyTaskDetailsButton
-import TaskDetailsButton
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,7 +23,10 @@ import androidx.compose.ui.window.Dialog
 import com.example.pracainynierska.model.Task
 
 @Composable
-fun DailyTaskDetailsDialog(task: Task, onDismiss: () -> Unit) {
+fun DailyTaskDetailsDialog(
+    task: Task,
+    onDismiss: () -> Unit,
+) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -34,60 +36,60 @@ fun DailyTaskDetailsDialog(task: Task, onDismiss: () -> Unit) {
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 16.dp),
             )
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        Color(0xDD1C1C1C),
-                        shape = RoundedCornerShape(16.dp)
-                    )
-                    .padding(20.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(
+                            Color(0xDD1C1C1C),
+                            shape = RoundedCornerShape(16.dp),
+                        ).padding(20.dp),
             ) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Text(
                         text = task.category,
                         color = Color(0xFF3CB043),
                         fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
 
                     Text(
                         text = task.difficulty,
                         color = Color.White,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
                     )
 
                     Text(
                         text = task.name,
                         color = Color.White,
                         fontSize = 18.sp,
-                        fontWeight = FontWeight.Normal
+                        fontWeight = FontWeight.Normal,
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         DailyTaskDetailsButton(
                             text = "Wykonaj",
                             color = Color(0xFF3CB043),
                             onClick = { /* Obsługa wykonania zadania todo */ },
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
 
                         DailyTaskDetailsButton(
                             text = "Anuluj",
                             color = Color(0xFFFF0000),
                             onClick = onDismiss,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
                     }
                 }

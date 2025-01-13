@@ -35,7 +35,6 @@ import com.example.pracainynierska.ui_view_components.view.ShopView
 import com.example.pracainynierska.ui_view_components.view.StatisticView
 import com.example.pracainynierska.view_model.HomepageViewModel
 import com.example.pracainynierska.view_model.HomepageViewModelFactory
-import com.example.pracainynierska.ui_view_components.view.RegisterView as RegisterView
 import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.view_model.LoginViewModelFactory
 import com.example.pracainynierska.view_model.ProfileViewModel
@@ -46,12 +45,11 @@ import com.example.pracainynierska.view_model.ShopViewModel
 import com.example.pracainynierska.view_model.ShopViewModelFactory
 import com.example.pracainynierska.view_model.TaskViewModel
 import com.example.pracainynierska.view_model.TaskViewModelFactory
+import com.example.pracainynierska.ui_view_components.view.RegisterView as RegisterView
 
 class MainActivity : ComponentActivity() {
-
     private lateinit var playerContext: PlayerContextInterface
     private lateinit var augmentManager: AugmentManager
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,27 +64,33 @@ class MainActivity : ComponentActivity() {
             PracaInżynierskaTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 ) {
                     val navController = rememberNavController()
-                    val loginViewModel: LoginViewModel = viewModel(
-                        factory = LoginViewModelFactory(playerContext)
-                    )
-                    val registrationViewModel : RegistrationViewModel = viewModel(
-                        factory = RegistrationViewModelFactory(playerContext)
-                    )
-                    val homepageViewModel : HomepageViewModel = viewModel(
-                        factory = HomepageViewModelFactory(playerContext, context, augmentManager)
-                    )
-                    val taskViewModel : TaskViewModel = viewModel(
-                        factory = TaskViewModelFactory(playerContext)
-                    )
-                    val shopViewModel : ShopViewModel = viewModel(
-                        factory = ShopViewModelFactory(playerContext, augmentManager)
-                    )
-                    val profileViewModel : ProfileViewModel = viewModel(
-                        factory = ProfileViewModelFactory(playerContext, context)
-                    )
+                    val loginViewModel: LoginViewModel =
+                        viewModel(
+                            factory = LoginViewModelFactory(playerContext),
+                        )
+                    val registrationViewModel: RegistrationViewModel =
+                        viewModel(
+                            factory = RegistrationViewModelFactory(playerContext),
+                        )
+                    val homepageViewModel: HomepageViewModel =
+                        viewModel(
+                            factory = HomepageViewModelFactory(playerContext, context, augmentManager),
+                        )
+                    val taskViewModel: TaskViewModel =
+                        viewModel(
+                            factory = TaskViewModelFactory(playerContext),
+                        )
+                    val shopViewModel: ShopViewModel =
+                        viewModel(
+                            factory = ShopViewModelFactory(playerContext, augmentManager),
+                        )
+                    val profileViewModel: ProfileViewModel =
+                        viewModel(
+                            factory = ProfileViewModelFactory(playerContext, context),
+                        )
                     SetupNavGraph(
                         navController = navController,
                         loginViewModel = loginViewModel,
@@ -94,14 +98,13 @@ class MainActivity : ComponentActivity() {
                         homepageViewModel = homepageViewModel,
                         taskViewModel = taskViewModel,
                         shopViewModel = shopViewModel,
-                        profileViewModel = profileViewModel
+                        profileViewModel = profileViewModel,
                     )
                 }
             }
         }
     }
 }
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -112,11 +115,11 @@ fun SetupNavGraph(
     homepageViewModel: HomepageViewModel,
     taskViewModel: TaskViewModel,
     shopViewModel: ShopViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
 ) {
     NavHost(
         navController = navController,
-        startDestination = "LoginView"
+        startDestination = "LoginView",
     ) {
         composable("LoginView") {
             LoginView(navController = navController, loginViewModel = loginViewModel)
@@ -165,16 +168,13 @@ fun SetupNavGraph(
                 EditTaskView(
                     taskToEdit = taskToEdit,
                     navController = navController,
-                    taskViewModel = taskViewModel
-                )
-                    .renderView()
+                    taskViewModel = taskViewModel,
+                ).renderView()
             }
         }
         composable("AchievementsView") {
             AchievementsView(navController = navController, loginViewModel = loginViewModel)
                 .renderView()
         }
-
     }
 }
-

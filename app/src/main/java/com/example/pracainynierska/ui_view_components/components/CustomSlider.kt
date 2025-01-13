@@ -66,35 +66,38 @@ fun CustomSlider(
     },
     label: @Composable (labelValue: Int) -> Unit = { labelValue ->
         CustomSliderDefaults.Label(labelValue = labelValue.toString())
-    }
+    },
 ) {
     val itemCount = (valueRange.endInclusive - valueRange.start).roundToInt()
     val steps = if (gap == 1) 0 else (itemCount / gap - 1)
 
     Box(modifier = modifier) {
         Layout(
-            measurePolicy = customSliderMeasurePolicy(
-                itemCount = itemCount,
-                gap = gap,
-                value = value,
-                startValue = valueRange.start
-            ),
+            measurePolicy =
+                customSliderMeasurePolicy(
+                    itemCount = itemCount,
+                    gap = gap,
+                    value = value,
+                    startValue = valueRange.start,
+                ),
             content = {
-                if (showLabel)
+                if (showLabel) {
                     Label(
                         modifier = Modifier.layoutId(CustomSliderComponents.LABEL),
                         value = value,
-                        label = label
+                        label = label,
                     )
+                }
 
                 Box(modifier = Modifier.layoutId(CustomSliderComponents.THUMB)) {
                     thumb(value.roundToInt())
                 }
 
                 Slider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .layoutId(CustomSliderComponents.SLIDER),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .layoutId(CustomSliderComponents.SLIDER),
                     value = value,
                     valueRange = valueRange,
                     steps = steps,
@@ -103,17 +106,19 @@ fun CustomSlider(
                         thumb(value.roundToInt())
                     },
                     track = { track(it) },
-                    enabled = enabled
+                    enabled = enabled,
                 )
 
-                if (showIndicator)
+                if (showIndicator) {
                     Indicator(
                         modifier = Modifier.layoutId(CustomSliderComponents.INDICATOR),
                         valueRange = valueRange,
                         gap = gap,
-                        indicator = indicator
+                        indicator = indicator,
                     )
-            })
+                }
+            },
+        )
     }
 }
 
@@ -121,11 +126,11 @@ fun CustomSlider(
 private fun Label(
     modifier: Modifier = Modifier,
     value: Float,
-    label: @Composable (labelValue: Int) -> Unit
+    label: @Composable (labelValue: Int) -> Unit,
 ) {
     Box(
         modifier = modifier,
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         label(value.roundToInt())
     }
@@ -136,14 +141,14 @@ private fun Indicator(
     modifier: Modifier = Modifier,
     valueRange: ClosedFloatingPointRange<Float>,
     gap: Int,
-    indicator: @Composable (indicatorValue: Int) -> Unit
+    indicator: @Composable (indicatorValue: Int) -> Unit,
 ) {
     // Iterate over the value range and display indicators at regular intervals.
     for (i in valueRange.start.roundToInt()..valueRange.endInclusive.roundToInt() step gap) {
         Box(
-            modifier = modifier
+            modifier = modifier,
         ) {
-            indicator(i/10)
+            indicator(i / 10)
         }
     }
 }
@@ -152,29 +157,37 @@ private fun customSliderMeasurePolicy(
     itemCount: Int,
     gap: Int,
     value: Float,
-    startValue: Float
+    startValue: Float,
 ) = MeasurePolicy { measurables, constraints ->
     // Measure the thumb component and calculate its radius.
-    val thumbPlaceable = measurables.first {
-        it.layoutId == CustomSliderComponents.THUMB
-    }.measure(constraints)
+    val thumbPlaceable =
+        measurables
+            .first {
+                it.layoutId == CustomSliderComponents.THUMB
+            }.measure(constraints)
     val thumbRadius = (thumbPlaceable.width / 2).toFloat()
 
-    val indicatorPlaceables = measurables.filter {
-        it.layoutId == CustomSliderComponents.INDICATOR
-    }.map { measurable ->
-        measurable.measure(constraints)
-    }
+    val indicatorPlaceables =
+        measurables
+            .filter {
+                it.layoutId == CustomSliderComponents.INDICATOR
+            }.map { measurable ->
+                measurable.measure(constraints)
+            }
     val indicatorHeight = indicatorPlaceables.maxByOrNull { it.height }?.height ?: 0
 
-    val sliderPlaceable = measurables.first {
-        it.layoutId == CustomSliderComponents.SLIDER
-    }.measure(constraints)
+    val sliderPlaceable =
+        measurables
+            .first {
+                it.layoutId == CustomSliderComponents.SLIDER
+            }.measure(constraints)
     val sliderHeight = sliderPlaceable.height
 
-    val labelPlaceable = measurables.find {
-        it.layoutId == CustomSliderComponents.LABEL
-    }?.measure(constraints)
+    val labelPlaceable =
+        measurables
+            .find {
+                it.layoutId == CustomSliderComponents.LABEL
+            }?.measure(constraints)
     val labelHeight = labelPlaceable?.height ?: 0
 
     // Calculate the total width and height of the custom slider layout
@@ -202,7 +215,7 @@ private fun customSliderMeasurePolicy(
         // to place our label at the center.
         labelPlaceable?.placeRelative(
             x = (labelOffset - (labelPlaceable.width / 2)).roundToInt(),
-            y = 0
+            y = 0,
         )
 
         // Place slider placeable below the label.
@@ -214,7 +227,7 @@ private fun customSliderMeasurePolicy(
             // to place our indicators at the center.
             placeable.placeRelative(
                 x = (indicatorOffsetX - (placeable.width / 2)).roundToInt(),
-                y = labelHeight + sliderHeight
+                y = labelHeight + sliderHeight,
             )
             indicatorOffsetX += indicatorSpacing
         }
@@ -225,7 +238,6 @@ private fun customSliderMeasurePolicy(
  * Object to hold defaults used by [CustomSlider]
  */
 object CustomSliderDefaults {
-
     /**
      * Composable function that represents the thumb of the slider.
      *
@@ -246,16 +258,17 @@ object CustomSliderDefaults {
             Text(
                 text = thumbValue,
                 color = Color.White,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
-        }
+        },
     ) {
         Box(
-            modifier = modifier
-                .thumb(size = size, shape = shape)
-                .background(color)
-                .padding(2.dp),
-            contentAlignment = Alignment.Center
+            modifier =
+                modifier
+                    .thumb(size = size, shape = shape)
+                    .background(color)
+                    .padding(2.dp),
+            contentAlignment = Alignment.Center,
         ) {
             content()
         }
@@ -279,21 +292,22 @@ object CustomSliderDefaults {
         trackColor: Color = TrackColor,
         progressColor: Color = PrimaryColor,
         height: Dp = TrackHeight,
-        shape: Shape = CircleShape
+        shape: Shape = CircleShape,
     ) {
         Box(
-            modifier = modifier
-                .track(height = height, shape = shape)
-                .background(trackColor)
+            modifier =
+                modifier
+                    .track(height = height, shape = shape)
+                    .background(trackColor),
         ) {
             Box(
-                modifier = Modifier
-                    .progress(
-                        sliderState = sliderState,
-                        height = height,
-                        shape = shape
-                    )
-                    .background(progressColor)
+                modifier =
+                    Modifier
+                        .progress(
+                            sliderState = sliderState,
+                            height = height,
+                            shape = shape,
+                        ).background(progressColor),
             )
         }
     }
@@ -309,14 +323,14 @@ object CustomSliderDefaults {
     fun Indicator(
         indicatorValue: String,
         modifier: Modifier = Modifier,
-        style: TextStyle = TextStyle(fontSize = 10.sp, fontWeight = FontWeight.Normal)
+        style: TextStyle = TextStyle(fontSize = 10.sp, fontWeight = FontWeight.Normal),
     ) {
         Box(modifier = modifier) {
             Text(
                 text = indicatorValue,
                 style = style,
                 color = Color.White,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
     }
@@ -332,14 +346,14 @@ object CustomSliderDefaults {
     fun Label(
         labelValue: String,
         modifier: Modifier = Modifier,
-        style: TextStyle = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Normal)
+        style: TextStyle = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Normal),
     ) {
         Box(modifier = modifier) {
             Text(
                 text = labelValue,
                 style = style,
                 color = Color.White,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
     }
@@ -347,7 +361,7 @@ object CustomSliderDefaults {
 
 fun Modifier.track(
     height: Dp = TrackHeight,
-    shape: Shape = CircleShape
+    shape: Shape = CircleShape,
 ) = this
     .fillMaxWidth()
     .heightIn(min = height)
@@ -357,25 +371,30 @@ fun Modifier.track(
 fun Modifier.progress(
     sliderState: SliderState,
     height: Dp = TrackHeight,
-    shape: Shape = CircleShape
+    shape: Shape = CircleShape,
 ) = this
     // Compute the fraction based on the slider's current value.
     // We do this by dividing the current value by the total value.
     // However, the start value might not always be 0, so we need to
     // subtract the start value from both the current value and the total value.
-    .fillMaxWidth(fraction = (sliderState.value - sliderState.valueRange.start) / (sliderState.valueRange.endInclusive - sliderState.valueRange.start))
-    .heightIn(min = height)
+    .fillMaxWidth(
+        fraction =
+            (sliderState.value - sliderState.valueRange.start) / (sliderState.valueRange.endInclusive - sliderState.valueRange.start),
+    ).heightIn(min = height)
     .clip(shape)
 
 fun Modifier.thumb(
     size: Dp = ThumbSize,
-    shape: Shape = CircleShape
+    shape: Shape = CircleShape,
 ) = this
     .defaultMinSize(minWidth = size, minHeight = size)
     .clip(shape)
 
 private enum class CustomSliderComponents {
-    SLIDER, LABEL, INDICATOR, THUMB
+    SLIDER,
+    LABEL,
+    INDICATOR,
+    THUMB,
 }
 
 val PrimaryColor = Color(0xFF6650a4)

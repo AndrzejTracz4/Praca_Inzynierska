@@ -15,9 +15,8 @@ import java.security.MessageDigest
 
 class LoginViewModel(
     pc: PlayerContextInterface,
-    private val playerAuthorizationHandler: AuthorizationHandlerInterface
+    private val playerAuthorizationHandler: AuthorizationHandlerInterface,
 ) : AbstractViewModel(pc) {
-
     var username by mutableStateOf("")
         private set
 
@@ -48,7 +47,6 @@ class LoginViewModel(
     private val _user = MutableLiveData<User>()
     val user: LiveData<User> get() = _user
 
-
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
@@ -77,14 +75,20 @@ class LoginViewModel(
     }
 
     private fun validateNewPasswords() {
-        confirmNewPasswordErrorMessage = if (newPassword != confirmNewPassword) {
-            "Passwords do not match!"
-        } else {
-            null
-        }
+        confirmNewPasswordErrorMessage =
+            if (newPassword != confirmNewPassword) {
+                "Passwords do not match!"
+            } else {
+                null
+            }
     }
 
-    fun changePasswordByEmail(email: String, newPassword: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun changePasswordByEmail(
+        email: String,
+        newPassword: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit,
+    ) {
         viewModelScope.launch {
             try {
                 val hashedNewPassword = hashPassword(newPassword)
@@ -95,7 +99,6 @@ class LoginViewModel(
             }
         }
     }
-
 
     fun onUsernameChange(newUsername: String) {
         username = newUsername
@@ -117,25 +120,20 @@ class LoginViewModel(
         validatePasswords()
     }
 
-    private fun validateUsername(username: String): String? {
-        return if (username.isBlank()) "Username cannot be empty!" else null
-    }
+    private fun validateUsername(username: String): String? = if (username.isBlank()) "Username cannot be empty!" else null
 
-    private fun validatePassword(password: String): String? {
-        return if (password.isBlank()) "Password cannot be empty" else null
-    }
+    private fun validatePassword(password: String): String? = if (password.isBlank()) "Password cannot be empty" else null
 
     private fun validatePasswords() {
-        confirmPasswordErrorMessage = if (password != confirmPassword) {
-            "Passwords do not match!"
-        } else {
-            null
-        }
+        confirmPasswordErrorMessage =
+            if (password != confirmPassword) {
+                "Passwords do not match!"
+            } else {
+                null
+            }
     }
 
-    private fun validateEmail(email: String): String? {
-        return if (email.isBlank()) "Email cannot be empty" else null
-    }
+    private fun validateEmail(email: String): String? = if (email.isBlank()) "Email cannot be empty" else null
 
     fun login(onLoginResult: (Boolean) -> Unit) {
         viewModelScope.launch {
@@ -159,7 +157,11 @@ class LoginViewModel(
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
 
-    fun forgotPassword(email: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun forgotPassword(
+        email: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit,
+    ) {
         viewModelScope.launch {
             try {
                 throw NotImplementedError("Not implemented")
@@ -168,7 +170,6 @@ class LoginViewModel(
             }
         }
     }
-
 
     fun updateUserPhotoPath(photoPath: String) {
         val currentUserId = _user.value?.id

@@ -30,41 +30,39 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pracainynierska.R
-import com.example.pracainynierska.view_model.ShopViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AddAugmentButton(
-    onClick: () -> Unit = {}
-) {
+fun AddAugmentButton(onClick: () -> Unit = {}) {
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf("") }
     var dialogTitle by remember { mutableStateOf("") }
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .padding(vertical = 4.dp)
-            .background(
-                color = Color(0x19FFFFFF),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .padding(horizontal = 16.dp)
-            .clickable {
-                onClick()
-            },
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .padding(vertical = 4.dp)
+                .background(
+                    color = Color(0x19FFFFFF),
+                    shape = RoundedCornerShape(12.dp),
+                ).padding(horizontal = 16.dp)
+                .clickable {
+                    onClick()
+                },
+        contentAlignment = Alignment.Center,
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 painter = painterResource(R.drawable.buy),
                 contentDescription = null,
-                modifier = Modifier
-                    .size(24.dp),
-                tint = Color.White
+                modifier =
+                    Modifier
+                        .size(24.dp),
+                tint = Color.White,
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -74,8 +72,9 @@ fun AddAugmentButton(
                 color = Color.White,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.ExtraBold,
-                modifier = Modifier
-                    .padding(start = 8.dp)
+                modifier =
+                    Modifier
+                        .padding(start = 8.dp),
             )
         }
     }
@@ -89,11 +88,11 @@ fun AddAugmentButton(
                 TextButton(
                     onClick = {
                         showDialog = false
-                    }
+                    },
                 ) {
                     Text("OK")
                 }
-            }
+            },
         )
     }
 }

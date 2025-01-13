@@ -24,40 +24,52 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun BottomMenuItem(icon: Int, label: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun BottomMenuItem(
+    icon: Int,
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = modifier
-            .fillMaxHeight()
-            .clickable(onClick = onClick)
+        modifier =
+            modifier
+                .fillMaxHeight()
+                .clickable(onClick = onClick),
     ) {
         Image(
             painter = painterResource(id = icon),
             contentDescription = label,
-            modifier = Modifier
-                .size(24.dp),
-            colorFilter = ColorFilter.tint(Color.White)
+            modifier =
+                Modifier
+                    .size(24.dp),
+            colorFilter = ColorFilter.tint(Color.White),
         )
         Spacer(modifier = Modifier.height(5.dp))
         Text(
             text = label,
-            style = TextStyle(
-                color = Color.White,
-                fontSize = 8.sp,
-                shadow = Shadow(
-                    color = Color.Black,
-                    offset = Offset(3f, 1f),
-                    blurRadius = 3f
-                )
-            ),
+            style =
+                TextStyle(
+                    color = Color.White,
+                    fontSize = 8.sp,
+                    shadow =
+                        Shadow(
+                            color = Color.Black,
+                            offset = Offset(3f, 1f),
+                            blurRadius = 3f,
+                        ),
+                ),
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
 
-fun navigateIfNotCurrent(navController: NavController, route: String) {
+fun navigateIfNotCurrent(
+    navController: NavController,
+    route: String,
+) {
     val currentRoute = navController.currentDestination?.route
     if (currentRoute != route) {
         navController.navigate(route)

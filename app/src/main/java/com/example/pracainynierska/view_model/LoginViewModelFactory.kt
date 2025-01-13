@@ -7,7 +7,7 @@ import com.example.pracainynierska.API.handler.authorization.PlayerAuthorization
 import com.example.pracainynierska.context.PlayerContextInterface
 
 class LoginViewModelFactory(
-    private val playerContext: PlayerContextInterface
+    private val playerContext: PlayerContextInterface,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {

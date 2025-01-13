@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.pracainynierska.model.Task
-import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.view_model.TaskViewModel
 
 @Composable
@@ -31,7 +30,7 @@ fun TaskDetailsDialog(
     taskViewModel: TaskViewModel,
     task: Task,
     onDismiss: () -> Unit,
-    onEdit: () -> Unit
+    onEdit: () -> Unit,
 ) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Column(
@@ -42,26 +41,26 @@ fun TaskDetailsDialog(
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 16.dp),
             )
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        Color(0xDD1C1C1C),
-                        shape = RoundedCornerShape(16.dp)
-                    )
-                    .padding(20.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(
+                            Color(0xDD1C1C1C),
+                            shape = RoundedCornerShape(16.dp),
+                        ).padding(20.dp),
             ) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Text(
                         text = task.category,
                         color = Color(0xFF3CB043),
                         fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
 
                     Row {
@@ -69,13 +68,13 @@ fun TaskDetailsDialog(
                             text = "Poziom trudności: ",
                             color = Color.White,
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal
+                            fontWeight = FontWeight.Normal,
                         )
                         Text(
                             text = task.difficulty.toString(),
                             color = Color.White,
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
                         )
                     }
 
@@ -84,13 +83,13 @@ fun TaskDetailsDialog(
                             text = "Nazwa zadania: ",
                             color = Color.White,
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal
+                            fontWeight = FontWeight.Normal,
                         )
                         Text(
                             text = task.name,
                             color = Color.White,
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
                         )
                     }
 
@@ -101,13 +100,13 @@ fun TaskDetailsDialog(
                             text = "Opis: ",
                             color = Color.White,
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal
+                            fontWeight = FontWeight.Normal,
                         )
                         Text(
                             text = task.description,
                             color = Color.White,
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Medium,
                         )
                     }
 
@@ -118,13 +117,13 @@ fun TaskDetailsDialog(
                             text = "Rozpoczęcie: ",
                             color = Color.White,
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal
+                            fontWeight = FontWeight.Normal,
                         )
                         Text(
                             text = task.startDate,
                             color = Color.White,
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Medium,
                         )
                     }
 
@@ -133,13 +132,13 @@ fun TaskDetailsDialog(
                             text = "Zakończenie: ",
                             color = Color.White,
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal
+                            fontWeight = FontWeight.Normal,
                         )
                         Text(
                             text = task.endDate,
                             color = Color.White,
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Medium,
                         )
                     }
 
@@ -147,18 +146,18 @@ fun TaskDetailsDialog(
 
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         TaskDetailsButton(
                             text = "Wykonaj",
                             color = Color(0xFF3CB043),
-                            onClick = { /* Obsługa wykonania zadania todo */ }
+                            onClick = { /* Obsługa wykonania zadania todo */ },
                         )
 
                         TaskDetailsButton(
                             text = "Edytuj",
                             color = Color(0xFFFFFF00),
-                            onClick = onEdit
+                            onClick = onEdit,
                         )
 
                         TaskDetailsButton(
@@ -166,9 +165,9 @@ fun TaskDetailsDialog(
                             color = Color(0xFFFF0000),
                             onClick = {
                                 taskViewModel.deleteTask(task.id)
-                                //navController.navigate("CalendarsView")
+                                // navController.navigate("CalendarsView")
                                 onDismiss()
-                            }
+                            },
                         )
                     }
                 }

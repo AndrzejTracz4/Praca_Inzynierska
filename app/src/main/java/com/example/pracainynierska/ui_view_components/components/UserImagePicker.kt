@@ -15,22 +15,20 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 
 @Composable
-fun UserImagePicker(
-    userResId: Int
-){
-
+fun UserImagePicker(userResId: Int) {
     val composition by rememberLottieComposition(
-        LottieCompositionSpec.RawRes(userResId)
+        LottieCompositionSpec.RawRes(userResId),
     )
 
     Box(
-        modifier = Modifier
-            .size(100.dp)
-            .background(Color.Transparent, shape = RoundedCornerShape(50.dp))
+        modifier =
+            Modifier
+                .size(100.dp)
+                .background(Color.Transparent, shape = RoundedCornerShape(50.dp)),
     ) {
         LottieAnimation(
             composition = composition,
-            iterations = LottieConstants.IterateForever
+            iterations = LottieConstants.IterateForever,
         )
     }
 }

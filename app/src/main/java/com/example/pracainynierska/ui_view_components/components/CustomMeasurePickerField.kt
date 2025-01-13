@@ -27,28 +27,28 @@ fun CustomMeasurePickerField(
     showMeasurePicker: Boolean,
     setShowMeasurePicker: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     // Lista jednostek czasu
     val timeUnits = listOf("Minuta", "Godzina", "Dzień", "Miesiąc")
 
     Box(
-        modifier = modifier
-            .height(50.dp)
-            .padding(vertical = 4.dp)
-            .background(
-                color = Color(0x4DFFFFFF),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .height(50.dp)
+                .padding(vertical = 4.dp)
+                .background(
+                    color = Color(0x4DFFFFFF),
+                    shape = RoundedCornerShape(12.dp),
+                ).clickable { onClick() }
+                .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = selectedMeasureUnit,
             color = Color.White,
             fontSize = 14.sp,
-            fontWeight = FontWeight.ExtraBold
+            fontWeight = FontWeight.ExtraBold,
         )
     }
 
@@ -61,23 +61,24 @@ fun CustomMeasurePickerField(
                 Column {
                     timeUnits.forEach { unit ->
                         Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(Color(0x4DFFFFFF))
-                                .clickable {
-                                    onMeasureUnitSelected(unit)
-                                    setShowMeasurePicker(false)
-                                },
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp)
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .background(Color(0x4DFFFFFF))
+                                    .clickable {
+                                        onMeasureUnitSelected(unit)
+                                        setShowMeasurePicker(false)
+                                    },
+                            contentAlignment = Alignment.Center,
                         ) {
                             Text(
                                 text = unit,
                                 color = Color.Black,
                                 fontSize = 16.sp,
                                 fontWeight = if (unit == selectedMeasureUnit) FontWeight.Bold else FontWeight.Normal,
-                                modifier = Modifier.padding(8.dp)
+                                modifier = Modifier.padding(8.dp),
                             )
                         }
                     }
@@ -87,8 +88,7 @@ fun CustomMeasurePickerField(
                 Button(onClick = { setShowMeasurePicker(false) }) {
                     Text("Zamknij")
                 }
-            }
+            },
         )
     }
-
 }

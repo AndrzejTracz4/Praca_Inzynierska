@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 // Definiuje encję (tabelę) w bazie danych o nazwie "user_table"
 @Entity(tableName = "user_table")
-data class User (
+data class User(
     // Unikalny identyfikator użytkownika, który jest kluczem głównym w tabeli
     // autoGenerate = true oznacza, że identyfikator będzie automatycznie generowany przez bazę danych
     @PrimaryKey(autoGenerate = true)
@@ -20,5 +20,5 @@ data class User (
     var determination: Float,
     var physical_fitness: Float,
     var intelligence: Float,
-    var knowledge: Float
+    var knowledge: Float,
 )

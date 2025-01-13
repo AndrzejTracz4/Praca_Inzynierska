@@ -1,7 +1,6 @@
 package com.example.pracainynierska.ui_view_components
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,16 +44,12 @@ import com.example.pracainynierska.view_model.ProfileViewModel
 
 class ProfileView(
     profileViewModel: ProfileViewModel,
-    navController: NavController
+    navController: NavController,
 ) : AbstractView(profileViewModel, navController) {
-
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    public override fun renderContent(
-        innerPadding: PaddingValues
-    ) {
-
-        if (false == (viewModel is ProfileViewModel)){
+    public override fun renderContent(innerPadding: PaddingValues) {
+        if (false == (viewModel is ProfileViewModel)) {
             throw Exception("Invalid View Model")
         }
 
@@ -82,66 +77,67 @@ class ProfileView(
         val userRank = rankDictionary.levelNames[userLevel] ?: "Nieznany poziom"
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFF4C0949),
-                            Color(0xFF470B93)
-                        )
-                    )
-                )
-                .padding(16.dp),
-
-            ) {
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush =
+                            Brush.linearGradient(
+                                colors =
+                                    listOf(
+                                        Color(0xFF4C0949),
+                                        Color(0xFF470B93),
+                                    ),
+                            ),
+                    ).padding(16.dp),
+        ) {
             Spacer(modifier = Modifier.height(65.dp))
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(Color(0x19FFFFFF))
-                    .padding(16.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0x19FFFFFF))
+                        .padding(16.dp),
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         UserImagePicker(
-                            userResId = playerPhotoResId
+                            userResId = playerPhotoResId,
                         )
 
                         Spacer(modifier = Modifier.width(16.dp))
 
                         // Przycisk do zmiany obrazka
                         Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(60.dp)
-                                .padding(vertical = 4.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(
-                                    color = Color(0x19FFFFFF)
-                                )
-                                .clickable {
-                                    viewModel.changeUserPhoto()
-                                }
-                                .padding(horizontal = 16.dp),
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(60.dp)
+                                    .padding(vertical = 4.dp)
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .background(
+                                        color = Color(0x19FFFFFF),
+                                    ).clickable {
+                                        viewModel.changeUserPhoto()
+                                    }.padding(horizontal = 16.dp),
+                            contentAlignment = Alignment.Center,
                         ) {
                             Row(
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Icon(
                                     painter = painterResource(R.drawable.change_image_icon),
                                     contentDescription = "Ikona zmiany obrazka",
                                     modifier = Modifier.size(24.dp),
-                                    tint = Color.White
+                                    tint = Color.White,
                                 )
 
                                 Spacer(modifier = Modifier.width(8.dp))
@@ -150,56 +146,61 @@ class ProfileView(
                                     text = "Zmień obrazek",
                                     color = Color.White,
                                     fontSize = 14.sp,
-                                    fontWeight = FontWeight.ExtraBold
+                                    fontWeight = FontWeight.ExtraBold,
                                 )
                             }
                         }
-
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Column(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         Text(
                             text = playerEmail,
                             fontSize = 20.sp,
                             color = Color.White,
-                            style = TextStyle(
-                                shadow = Shadow(
-                                    color = Color.Black,
-                                    offset = Offset(3f, 1f),
-                                    blurRadius = 3f
-                                )
-                            )
+                            style =
+                                TextStyle(
+                                    shadow =
+                                        Shadow(
+                                            color = Color.Black,
+                                            offset = Offset(3f, 1f),
+                                            blurRadius = 3f,
+                                        ),
+                                ),
                         )
 
                         Text(
                             text = userRank,
                             fontSize = 20.sp,
                             color = Color.White,
-                            style = TextStyle(
-                                shadow = Shadow(
-                                    color = Color.Black,
-                                    offset = Offset(3f, 1f),
-                                    blurRadius = 3f
-                                )
-                            )
+                            style =
+                                TextStyle(
+                                    shadow =
+                                        Shadow(
+                                            color = Color.Black,
+                                            offset = Offset(3f, 1f),
+                                            blurRadius = 3f,
+                                        ),
+                                ),
                         )
 
                         Text(
                             text = "Poziom $userLevel",
                             fontSize = 16.sp,
                             color = Color.White,
-                            style = TextStyle(
-                                shadow = Shadow(
-                                    color = Color.Black,
-                                    offset = Offset(3f, 1f),
-                                    blurRadius = 3f
-                                )
-                            )
+                            style =
+                                TextStyle(
+                                    shadow =
+                                        Shadow(
+                                            color = Color.Black,
+                                            offset = Offset(3f, 1f),
+                                            blurRadius = 3f,
+                                        ),
+                                ),
                         )
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -207,13 +208,15 @@ class ProfileView(
                                 text = "Monety: $playerBalance",
                                 fontSize = 16.sp,
                                 color = Color.White,
-                                style = TextStyle(
-                                    shadow = Shadow(
-                                        color = Color.Black,
-                                        offset = Offset(3f, 1f),
-                                        blurRadius = 3f
-                                    )
-                                )
+                                style =
+                                    TextStyle(
+                                        shadow =
+                                            Shadow(
+                                                color = Color.Black,
+                                                offset = Offset(3f, 1f),
+                                                blurRadius = 3f,
+                                            ),
+                                    ),
                             )
 
                             Spacer(modifier = Modifier.width(4.dp))
@@ -222,7 +225,7 @@ class ProfileView(
                                 painter = painterResource(id = R.drawable.coins),
                                 contentDescription = "Ikona monet",
                                 tint = Color.Unspecified,
-                                modifier = Modifier.size(20.dp)
+                                modifier = Modifier.size(20.dp),
                             )
                         }
 
@@ -230,32 +233,36 @@ class ProfileView(
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
                             Text(
                                 text = "Doświadczenie",
                                 fontSize = 12.sp,
                                 color = Color.White,
-                                style = TextStyle(
-                                    shadow = Shadow(
-                                        color = Color.Black,
-                                        offset = Offset(3f, 1f),
-                                        blurRadius = 3f
-                                    )
-                                )
+                                style =
+                                    TextStyle(
+                                        shadow =
+                                            Shadow(
+                                                color = Color.Black,
+                                                offset = Offset(3f, 1f),
+                                                blurRadius = 3f,
+                                            ),
+                                    ),
                             )
 
                             Text(
                                 text = "${playerExperience.toInt()}/100",
                                 fontSize = 12.sp,
                                 color = Color.White,
-                                style = TextStyle(
-                                    shadow = Shadow(
-                                        color = Color.Black,
-                                        offset = Offset(3f, 1f),
-                                        blurRadius = 3f
-                                    )
-                                )
+                                style =
+                                    TextStyle(
+                                        shadow =
+                                            Shadow(
+                                                color = Color.Black,
+                                                offset = Offset(3f, 1f),
+                                                blurRadius = 3f,
+                                            ),
+                                    ),
                             )
                         }
                     }
@@ -266,28 +273,27 @@ class ProfileView(
 
             // Przycisk wylogowania
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(vertical = 4.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(
-                        color = Color(0x19FFFFFF)
-                    )
-                    .clickable {
-                        navController.navigate("LoginView")
-                    }
-                    .padding(horizontal = 16.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .padding(vertical = 4.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(
+                            color = Color(0x19FFFFFF),
+                        ).clickable {
+                            navController.navigate("LoginView")
+                        }.padding(horizontal = 16.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.logout),
                         contentDescription = "Ikona wylogowania",
                         modifier = Modifier.size(24.dp),
-                        tint = Color.White
+                        tint = Color.White,
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -296,11 +302,10 @@ class ProfileView(
                         text = "Wyloguj się",
                         color = Color.White,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.ExtraBold
+                        fontWeight = FontWeight.ExtraBold,
                     )
                 }
             }
-
 
             Spacer(modifier = Modifier.height(75.dp))
         }

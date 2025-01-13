@@ -5,10 +5,12 @@ import com.example.pracainynierska.API.model.PlayerStatistics
 
 interface PlayerContextInterface {
     fun getToken(): String?
+
     fun setToken(token: String)
 
     fun getPlayer(): Player?
+
     fun setPlayer(player: Player)
 
-    fun getPlayerStatistics() : PlayerStatistics
+    fun getPlayerStatistics(): PlayerStatistics
 }

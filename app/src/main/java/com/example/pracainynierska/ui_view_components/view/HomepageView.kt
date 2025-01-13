@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.RankDictionary
-import com.example.pracainynierska.manager.augment.AugmentManager
 import com.example.pracainynierska.model.FakeData
 import com.example.pracainynierska.ui_view_components.components.AugmentList
 import com.example.pracainynierska.ui_view_components.components.DailyTaskCard
@@ -52,18 +51,14 @@ import com.example.pracainynierska.ui_view_components.components.GradientStatsPr
 import com.example.pracainynierska.ui_view_components.components.UserImagePicker
 import com.example.pracainynierska.view_model.HomepageViewModel
 
-class HomepageView(homepageViewModel: HomepageViewModel,
-                   navController: NavController,
+class HomepageView(
+    homepageViewModel: HomepageViewModel,
+    navController: NavController,
 ) : AbstractView(homepageViewModel, navController) {
-
-
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    public override fun renderContent(
-        innerPadding: PaddingValues
-    ) {
-
-        if (false == (viewModel is HomepageViewModel)){
+    public override fun renderContent(innerPadding: PaddingValues) {
+        if (false == (viewModel is HomepageViewModel)) {
             throw Exception("Invalid View Model")
         }
 
@@ -86,61 +81,66 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
         val userRank = rankDictionary.levelNames[userLevel] ?: "Nieznany poziom"
 
-        val stats = player?.playerStatistics?.statistics?.map{ it.name to it.experience.toFloat() } ?: emptyList()
+        val stats = player?.playerStatistics?.statistics?.map { it.name to it.experience.toFloat() } ?: emptyList()
 
-        val gradients = listOf(
-            Brush.horizontalGradient(colors = listOf(Color(0xFFFFA726), Color(0xFFFF7043))),
-            Brush.horizontalGradient(colors = listOf(Color(0xFF66BB6A), Color(0xFF43A047))),
-            Brush.horizontalGradient(colors = listOf(Color(0xFFAB47BC), Color(0xFF8E24AA))),
-            Brush.horizontalGradient(colors = listOf(Color(0xFF29B6F6), Color(0xFF0288D1)))
-        )
+        val gradients =
+            listOf(
+                Brush.horizontalGradient(colors = listOf(Color(0xFFFFA726), Color(0xFFFF7043))),
+                Brush.horizontalGradient(colors = listOf(Color(0xFF66BB6A), Color(0xFF43A047))),
+                Brush.horizontalGradient(colors = listOf(Color(0xFFAB47BC), Color(0xFF8E24AA))),
+                Brush.horizontalGradient(colors = listOf(Color(0xFF29B6F6), Color(0xFF0288D1))),
+            )
 
-        val icons = listOf(
-            R.raw.determination_bar,
-            R.raw.physical_fitness_bar,
-            R.raw.intelligence_bar,
-            R.raw.knowledge_bar
-        )
+        val icons =
+            listOf(
+                R.raw.determination_bar,
+                R.raw.physical_fitness_bar,
+                R.raw.intelligence_bar,
+                R.raw.knowledge_bar,
+            )
 
         val scrollState = rememberScrollState()
         var showTaskDetailsDialog by remember { mutableStateOf(false) }
 
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFF4C0949),
-                            Color(0xFF470B93)
-                        ),
-                        start = Offset(0f, Float.POSITIVE_INFINITY),
-                        end = Offset(0f, 0f)
-                    )
-                )
-                .padding(innerPadding)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush =
+                            Brush.linearGradient(
+                                colors =
+                                    listOf(
+                                        Color(0xFF4C0949),
+                                        Color(0xFF470B93),
+                                    ),
+                                start = Offset(0f, Float.POSITIVE_INFINITY),
+                                end = Offset(0f, 0f),
+                            ),
+                    ).padding(innerPadding),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(12.dp)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(12.dp),
             ) {
                 Spacer(modifier = Modifier.height(0.dp))
 
                 // użytkownik
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(130.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Color(0x19FFFFFF))
-                        .padding(16.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(130.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color(0x19FFFFFF))
+                            .padding(16.dp),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-
                         UserImagePicker(
                             userResId = playerPhotoResId,
                         )
@@ -149,33 +149,36 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
                         Column(
                             modifier = Modifier.fillMaxHeight(),
-                            verticalArrangement = Arrangement.Center
+                            verticalArrangement = Arrangement.Center,
                         ) {
-
                             Text(
                                 text = userRank,
                                 fontSize = 20.sp,
                                 color = Color.White,
-                                style = TextStyle(
-                                    shadow = Shadow(
-                                        color = Color.Black,
-                                        offset = Offset(3f, 1f),
-                                        blurRadius = 3f
-                                    )
-                                )
+                                style =
+                                    TextStyle(
+                                        shadow =
+                                            Shadow(
+                                                color = Color.Black,
+                                                offset = Offset(3f, 1f),
+                                                blurRadius = 3f,
+                                            ),
+                                    ),
                             )
 
                             Text(
                                 text = "Poziom $userLevel",
                                 fontSize = 16.sp,
                                 color = Color.White,
-                                style = TextStyle(
-                                    shadow = Shadow(
-                                        color = Color.Black,
-                                        offset = Offset(3f, 1f),
-                                        blurRadius = 3f
-                                    )
-                                )
+                                style =
+                                    TextStyle(
+                                        shadow =
+                                            Shadow(
+                                                color = Color.Black,
+                                                offset = Offset(3f, 1f),
+                                                blurRadius = 3f,
+                                            ),
+                                    ),
                             )
 
                             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -183,13 +186,15 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                                     text = "Monety: $playerBalance",
                                     fontSize = 16.sp,
                                     color = Color.White,
-                                    style = TextStyle(
-                                        shadow = Shadow(
-                                            color = Color.Black,
-                                            offset = Offset(3f, 1f),
-                                            blurRadius = 3f
-                                        )
-                                    )
+                                    style =
+                                        TextStyle(
+                                            shadow =
+                                                Shadow(
+                                                    color = Color.Black,
+                                                    offset = Offset(3f, 1f),
+                                                    blurRadius = 3f,
+                                                ),
+                                        ),
                                 )
 
                                 Spacer(modifier = Modifier.width(4.dp))
@@ -198,7 +203,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                                     painter = painterResource(id = R.drawable.coins),
                                     contentDescription = "Ikona monet",
                                     tint = Color.Unspecified,
-                                    modifier = Modifier.size(20.dp)
+                                    modifier = Modifier.size(20.dp),
                                 )
                             }
 
@@ -213,13 +218,15 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                                     text = "Doświadczenie",
                                     fontSize = 12.sp,
                                     color = Color.White,
-                                    style = TextStyle(
-                                        shadow = Shadow(
-                                            color = Color.Black,
-                                            offset = Offset(3f, 1f),
-                                            blurRadius = 3f
-                                        )
-                                    )
+                                    style =
+                                        TextStyle(
+                                            shadow =
+                                                Shadow(
+                                                    color = Color.Black,
+                                                    offset = Offset(3f, 1f),
+                                                    blurRadius = 3f,
+                                                ),
+                                        ),
                                 )
 
                                 Spacer(modifier = Modifier.width(105.dp))
@@ -228,13 +235,15 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                                     text = "${playerExperience.toInt()}/100", // Doświadczenie
                                     fontSize = 12.sp,
                                     color = Color.White,
-                                    style = TextStyle(
-                                        shadow = Shadow(
-                                            color = Color.Black,
-                                            offset = Offset(3f, 1f),
-                                            blurRadius = 3f
-                                        )
-                                    )
+                                    style =
+                                        TextStyle(
+                                            shadow =
+                                                Shadow(
+                                                    color = Color.Black,
+                                                    offset = Offset(3f, 1f),
+                                                    blurRadius = 3f,
+                                                ),
+                                        ),
                                 )
                             }
                         }
@@ -245,27 +254,29 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
                 // statystyki
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(240.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Color(0x19FFFFFF))
-                        .padding(20.dp)
-                ){
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(240.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color(0x19FFFFFF))
+                            .padding(20.dp),
+                ) {
                     GradientStatsProgressBars(
                         stats = stats,
                         gradients = gradients,
-                        icons = icons
+                        icons = icons,
                     )
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(0.dp)
-                        .verticalScroll(scrollState)
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(0.dp)
+                            .verticalScroll(scrollState),
                 ) {
                     Spacer(modifier = Modifier.height(0.dp))
 
@@ -273,48 +284,52 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
                     // Aktywne boostery
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f, fill = true)
-                            .heightIn(min = 140.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(Color(0x19FFFFFF))
-                            .padding(horizontal = 10.dp, vertical = 1.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .weight(1f, fill = true)
+                                .heightIn(min = 140.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(Color(0x19FFFFFF))
+                                .padding(horizontal = 10.dp, vertical = 1.dp),
                     ) {
                         Column(
                             modifier = Modifier.fillMaxHeight(),
-                            verticalArrangement = Arrangement.Top
+                            verticalArrangement = Arrangement.Top,
                         ) {
                             Text(
                                 text = "Aktywne boostery",
                                 fontSize = 13.sp,
                                 color = Color.White,
-                                style = TextStyle(
-                                    shadow = Shadow(
-                                        color = Color.Black,
-                                        offset = Offset(3f, 1f),
-                                        blurRadius = 3f
-                                    )
-                                ),
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(vertical = 5.dp)
+                                style =
+                                    TextStyle(
+                                        shadow =
+                                            Shadow(
+                                                color = Color.Black,
+                                                offset = Offset(3f, 1f),
+                                                blurRadius = 3f,
+                                            ),
+                                    ),
+                                modifier =
+                                    Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(vertical = 5.dp),
                             )
 
                             Spacer(modifier = Modifier.height(1.dp))
 
                             Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight(0.9f)
-                                    .clip(RoundedCornerShape(10.dp))
-                            ){
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .fillMaxHeight(0.9f)
+                                        .clip(RoundedCornerShape(10.dp)),
+                            ) {
                                 if (false == (viewModel is HomepageViewModel)) {
                                     throw Exception("Invalid View Model")
                                 }
                                 AugmentList(viewModel.getAugmentsList())
                             }
-
                         }
                     }
 
@@ -322,42 +337,47 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
                     // Zadanie dnia
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f, fill = true)
-                            .heightIn(min = 140.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(Color(0x19FFFFFF))
-                            .padding(horizontal = 10.dp, vertical = 1.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .weight(1f, fill = true)
+                                .heightIn(min = 140.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(Color(0x19FFFFFF))
+                                .padding(horizontal = 10.dp, vertical = 1.dp),
                     ) {
                         Column(
                             modifier = Modifier.fillMaxHeight(),
-                            verticalArrangement = Arrangement.Top
+                            verticalArrangement = Arrangement.Top,
                         ) {
                             Text(
                                 text = "Wyzwanie dnia!",
                                 fontSize = 13.sp,
                                 color = Color.White,
-                                style = TextStyle(
-                                    shadow = Shadow(
-                                        color = Color.Black,
-                                        offset = Offset(3f, 1f),
-                                        blurRadius = 3f
-                                    )
-                                ),
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(vertical = 5.dp)
+                                style =
+                                    TextStyle(
+                                        shadow =
+                                            Shadow(
+                                                color = Color.Black,
+                                                offset = Offset(3f, 1f),
+                                                blurRadius = 3f,
+                                            ),
+                                    ),
+                                modifier =
+                                    Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(vertical = 5.dp),
                             )
 
                             Spacer(modifier = Modifier.height(1.dp))
 
                             Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight(0.9f)
-                                    .clip(RoundedCornerShape(10.dp))
-                            ){
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .fillMaxHeight(0.9f)
+                                        .clip(RoundedCornerShape(10.dp)),
+                            ) {
                                 DailyTaskCard(
                                     task = FakeData.fakeTask,
                                     onClick = { showTaskDetailsDialog = true },
@@ -369,7 +389,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                     if (showTaskDetailsDialog) {
                         DailyTaskDetailsDialog(
                             task = FakeData.fakeTask,
-                            onDismiss = { showTaskDetailsDialog = false }
+                            onDismiss = { showTaskDetailsDialog = false },
                         )
                     }
                     Spacer(modifier = Modifier.height(20.dp))

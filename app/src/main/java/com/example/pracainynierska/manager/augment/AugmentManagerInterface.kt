@@ -5,10 +5,10 @@ import com.example.pracainynierska.API.model.Augment
 
 interface AugmentManagerInterface {
     fun addAugment(
-        type : String,
-        multiplier : Int,
-        validForDays : Int,
-        category : String
+        type: String,
+        multiplier: Int,
+        validForDays: Int,
+        category: String,
     )
 
     fun getAugments(): List<Augment>

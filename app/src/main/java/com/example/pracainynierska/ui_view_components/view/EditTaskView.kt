@@ -52,18 +52,14 @@ import com.example.pracainynierska.ui_view_components.components.TaskMode
 import com.example.pracainynierska.ui_view_components.components.TaskTextField
 import com.example.pracainynierska.view_model.TaskViewModel
 
-class EditTaskView(taskViewModel: TaskViewModel,
-                   navController: NavController,
-                   private var taskToEdit: Task
+class EditTaskView(
+    taskViewModel: TaskViewModel,
+    navController: NavController,
+    private var taskToEdit: Task,
 ) : AbstractView(taskViewModel, navController) {
-
-
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    public override fun renderContent(
-        innerPadding: PaddingValues
-    ) {
-
+    public override fun renderContent(innerPadding: PaddingValues) {
         val focusManager = LocalFocusManager.current
 
         var selectedEditTaskMode by remember { mutableStateOf(taskToEdit.mode) }
@@ -83,42 +79,45 @@ class EditTaskView(taskViewModel: TaskViewModel,
 
         val scrollState = rememberScrollState()
 
-        if (false == (viewModel is TaskViewModel)){
+        if (false == (viewModel is TaskViewModel)) {
             throw Exception("Invalid View Model")
         }
 
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFF4C0949),
-                            Color(0xFF470B93)
-                        ),
-                        start = Offset(0f, Float.POSITIVE_INFINITY),
-                        end = Offset(0f, 0f)
-                    )
-                )
-                .pointerInput(Unit) {
-                    detectTapGestures(onTap = { focusManager.clearFocus() })
-                }
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush =
+                            Brush.linearGradient(
+                                colors =
+                                    listOf(
+                                        Color(0xFF4C0949),
+                                        Color(0xFF470B93),
+                                    ),
+                                start = Offset(0f, Float.POSITIVE_INFINITY),
+                                end = Offset(0f, 0f),
+                            ),
+                    ).pointerInput(Unit) {
+                        detectTapGestures(onTap = { focusManager.clearFocus() })
+                    },
         ) {
-
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .padding(16.dp)
-                    .verticalScroll(scrollState)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(16.dp)
+                        .verticalScroll(scrollState),
             ) {
                 Spacer(modifier = Modifier.height(55.dp))
 
                 // Tryb zadania (Jednorazowe/Cykliczne)
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
                 ) {
                     SelectTaskButton(
                         text = "Jednorazowe",
@@ -129,7 +128,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         },
                         iconResId = R.drawable.repeat_single,
                         modifier = Modifier.weight(1f),
-                        color = false
+                        color = false,
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -143,7 +142,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         },
                         iconResId = R.drawable.repeat,
                         modifier = Modifier.weight(1f),
-                        color = false
+                        color = false,
                     )
                 }
 
@@ -153,22 +152,23 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         text = "Nazwa",
                         color = Color.White,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.ExtraBold
+                        fontWeight = FontWeight.ExtraBold,
                     )
                     Spacer(modifier = Modifier.height(4.dp))
 
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(55.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(Color(0x4DFFFFFF)),
-                        contentAlignment = Alignment.Center
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(55.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(Color(0x4DFFFFFF)),
+                        contentAlignment = Alignment.Center,
                     ) {
                         TaskTextField(
                             string = taskName,
                             onStringChange = { taskName = it },
-                            singleLine = true
+                            singleLine = true,
                         )
                     }
                 }
@@ -178,22 +178,23 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         text = "Opis",
                         color = Color.White,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.ExtraBold
+                        fontWeight = FontWeight.ExtraBold,
                     )
                     Spacer(modifier = Modifier.height(4.dp))
 
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            //.height(55.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(Color(0x4DFFFFFF)),
-                        contentAlignment = Alignment.Center
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                // .height(55.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(Color(0x4DFFFFFF)),
+                        contentAlignment = Alignment.Center,
                     ) {
                         TaskTextField(
                             string = taskDescription,
                             onStringChange = { taskDescription = it },
-                            singleLine = false
+                            singleLine = false,
                         )
                     }
                 }
@@ -203,13 +204,13 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         text = "Data rozpoczęcia",
                         color = Color.White,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.ExtraBold
+                        fontWeight = FontWeight.ExtraBold,
                     )
                     CustomDatePickerField(
                         text = "",
                         value = selectedStartDate,
                         onValueChange = { selectedStartDate = it },
-                        onClick = { showStartDatePicker = true }
+                        onClick = { showStartDatePicker = true },
                     )
                 }
 
@@ -218,31 +219,33 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         text = "Data zakończenia",
                         color = Color.White,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.ExtraBold
+                        fontWeight = FontWeight.ExtraBold,
                     )
                     CustomDatePickerField(
                         text = "",
                         value = selectedEndDate,
                         onValueChange = { selectedEndDate = it },
-                        onClick = { showEndDatePicker = true }
+                        onClick = { showEndDatePicker = true },
                     )
                 }
 
                 if (!isHidden) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
                     ) {
                         Column(
-                            modifier = Modifier
-                                .weight(1f)
+                            modifier =
+                                Modifier
+                                    .weight(1f),
                         ) {
                             Text(
                                 text = "Interwał",
                                 color = Color.White,
                                 fontSize = 16.sp,
-                                fontWeight = FontWeight.ExtraBold
+                                fontWeight = FontWeight.ExtraBold,
                             )
                             Spacer(modifier = Modifier.height(4.dp))
 
@@ -251,21 +254,22 @@ class EditTaskView(taskViewModel: TaskViewModel,
                                 value = interval,
                                 onValueChange = { interval = it },
                                 onClick = { showNumberPicker = true },
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
                             )
                         }
 
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Column(
-                            modifier = Modifier
-                                .weight(1f)
+                            modifier =
+                                Modifier
+                                    .weight(1f),
                         ) {
                             Text(
                                 text = "Miara",
                                 color = Color.White,
                                 fontSize = 16.sp,
-                                fontWeight = FontWeight.ExtraBold
+                                fontWeight = FontWeight.ExtraBold,
                             )
                             Spacer(modifier = Modifier.height(4.dp))
 
@@ -275,7 +279,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                                 showMeasurePicker = showMeasurePicker,
                                 setShowMeasurePicker = { showMeasurePicker = it },
                                 onClick = { showMeasurePicker = true },
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
                             )
                         }
                     }
@@ -287,13 +291,14 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         text = "Poziom trudności",
                         color = Color.White,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.ExtraBold
+                        fontWeight = FontWeight.ExtraBold,
                     )
 
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         SelectTaskButton(
                             text = "Łatwy",
@@ -301,7 +306,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                             onClick = { selectedDifficulty = "Łatwe" },
                             iconResId = R.drawable.water,
                             modifier = Modifier.weight(1f),
-                            color = true
+                            color = true,
                         )
 
                         SelectTaskButton(
@@ -310,7 +315,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                             onClick = { selectedDifficulty = "Średni" },
                             iconResId = R.drawable.leaf,
                             modifier = Modifier.weight(1f),
-                            color = true
+                            color = true,
                         )
 
                         SelectTaskButton(
@@ -319,7 +324,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                             onClick = { selectedDifficulty = "Trudny" },
                             iconResId = R.drawable.flame,
                             modifier = Modifier.weight(1f),
-                            color = true
+                            color = true,
                         )
                     }
                 }
@@ -329,7 +334,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         text = "Kategorie",
                         color = Color.White,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.ExtraBold
+                        fontWeight = FontWeight.ExtraBold,
                     )
 
                     SelectTaskButton(
@@ -338,7 +343,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         onClick = { selectedCategory = "Samorozwój" },
                         iconResId = R.drawable.disposable_icon,
                         modifier = Modifier.fillMaxWidth(),
-                        color = false
+                        color = false,
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
@@ -349,7 +354,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         onClick = { selectedCategory = "Ćwiczenia" },
                         iconResId = R.drawable.disposable_icon,
                         modifier = Modifier.fillMaxWidth(),
-                        color = false
+                        color = false,
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
@@ -360,7 +365,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         onClick = { selectedCategory = "Edukacja" },
                         iconResId = R.drawable.disposable_icon,
                         modifier = Modifier.fillMaxWidth(),
-                        color = false
+                        color = false,
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
@@ -371,9 +376,8 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         onClick = { selectedCategory = "Praca" },
                         iconResId = R.drawable.disposable_icon,
                         modifier = Modifier.fillMaxWidth(),
-                        color = false
+                        color = false,
                     )
-
                 }
 
                 Column(modifier = Modifier.padding(8.dp)) {
@@ -393,7 +397,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                             navController.navigate("CalendarsView")
                         },
                         taskViewModel = viewModel,
-                        taskDescription = taskDescription
+                        taskDescription = taskDescription,
                     )
                 }
                 Spacer(modifier = Modifier.height(90.dp))
@@ -406,15 +410,15 @@ class EditTaskView(taskViewModel: TaskViewModel,
                     selectedStartDate = dateTime
                     showStartDatePicker = false
                 },
-                onDismissRequest = { showStartDatePicker = false }
+                onDismissRequest = { showStartDatePicker = false },
             )
-        }else if (showEndDatePicker){
+        } else if (showEndDatePicker) {
             DateTimePickerDialog(
                 onDateTimeSelected = { dateTime ->
                     selectedEndDate = dateTime
                     showEndDatePicker = false
                 },
-                onDismissRequest = { showEndDatePicker = false }
+                onDismissRequest = { showEndDatePicker = false },
             )
         }
         if (showNumberPicker) {
@@ -424,7 +428,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                     interval = number
                     showNumberPicker = false
                 },
-                onDismissRequest = { showNumberPicker = false }
+                onDismissRequest = { showNumberPicker = false },
             )
         }
     }

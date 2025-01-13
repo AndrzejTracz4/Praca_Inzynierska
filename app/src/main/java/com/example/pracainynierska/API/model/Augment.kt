@@ -10,5 +10,5 @@ data class Augment(
     val validForDays: Int,
     val multiplier: Int,
     val categoryName: String,
-    val validUntil: String
+    val validUntil: String,
 )

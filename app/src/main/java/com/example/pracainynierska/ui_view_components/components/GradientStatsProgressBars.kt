@@ -20,21 +20,23 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.rememberLottieComposition
+import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 
 @Composable
 fun GradientStatsProgressBars(
     stats: List<Pair<String, Float>>, // Lista etykiet i wartości postępu
     gradients: List<Brush>, // Lista gradientów dla każdego paska
-    icons: List<Int> // Lista plików Lottie (ID zasobów) dla każdego paska
+    icons: List<Int>, // Lista plików Lottie (ID zasobów) dla każdego paska
 ) {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(0.dp)) {
-
+    Column(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(0.dp),
+    ) {
         stats.forEachIndexed { index, stat ->
             val (label, progress) = stat
 
@@ -47,25 +49,27 @@ fun GradientStatsProgressBars(
             // Animacja postępu
             val animatedProgress by animateFloatAsState(
                 targetValue = normalizedProgress,
-                animationSpec = tween(durationMillis = 1000)
+                animationSpec = tween(durationMillis = 1000),
             )
 
             // Tworzenie paska postępu
             Column {
                 // Pasek postępu
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(12.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(Color(0x11FFFFFF)) // Tło paska
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(12.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Color(0x11FFFFFF)), // Tło paska
                 ) {
                     // Pasek wypełnienia z animacją
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth(animatedProgress)
-                            .height(12.dp)
-                            .background(gradient)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(animatedProgress)
+                                .height(12.dp)
+                                .background(gradient),
                     )
                 }
 
@@ -74,20 +78,21 @@ fun GradientStatsProgressBars(
                 // Etykieta i wartość postępu
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     // Animacja Lottie
                     Box(
-                        modifier = Modifier
-                            .size(24.dp)
-                            .background(Color.Transparent, shape = RoundedCornerShape(50.dp))
+                        modifier =
+                            Modifier
+                                .size(24.dp)
+                                .background(Color.Transparent, shape = RoundedCornerShape(50.dp)),
                     ) {
                         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(icons[index % icons.size]))
                         val isAnimationPlaying by remember { mutableStateOf(true) }
 
                         LottieAnimation(
                             composition = composition,
-                            iterations = if (isAnimationPlaying) LottieConstants.IterateForever else 1
+                            iterations = if (isAnimationPlaying) LottieConstants.IterateForever else 1,
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
@@ -95,15 +100,16 @@ fun GradientStatsProgressBars(
                         text = label,
                         fontSize = 13.sp,
                         color = Color.White,
-                        style = TextStyle(
-                            shadow = Shadow(
-                                color = Color.Black,
-                                offset = Offset(3f, 1f),
-                                blurRadius = 3f
-                            )
-                        )
+                        style =
+                            TextStyle(
+                                shadow =
+                                    Shadow(
+                                        color = Color.Black,
+                                        offset = Offset(3f, 1f),
+                                        blurRadius = 3f,
+                                    ),
+                            ),
                     )
-
 
                     Spacer(modifier = Modifier.weight(1f))
 
@@ -112,13 +118,15 @@ fun GradientStatsProgressBars(
                         text = "${progress.toInt()} / 100",
                         fontSize = 13.sp,
                         color = Color.White,
-                        style = TextStyle(
-                            shadow = Shadow(
-                                color = Color.Black,
-                                offset = Offset(3f, 1f),
-                                blurRadius = 3f
-                            )
-                        )
+                        style =
+                            TextStyle(
+                                shadow =
+                                    Shadow(
+                                        color = Color.Black,
+                                        offset = Offset(3f, 1f),
+                                        blurRadius = 3f,
+                                    ),
+                            ),
                     )
                 }
             }

@@ -3,7 +3,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,21 +18,22 @@ fun DailyTaskDetailsButton(
     text: String,
     color: Color,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
-            .height(35.dp)
-            .background(color = color, shape = RoundedCornerShape(8.dp))
-            .clickable { onClick() }
+        modifier =
+            modifier
+                .height(35.dp)
+                .background(color = color, shape = RoundedCornerShape(8.dp))
+                .clickable { onClick() },
     ) {
         Text(
             text = text,
             color = Color.Black,
             fontWeight = FontWeight.Bold,
             fontSize = 12.sp,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp),
         )
     }
 }

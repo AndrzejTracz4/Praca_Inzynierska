@@ -27,54 +27,55 @@ import androidx.navigation.NavController
 import com.example.pracainynierska.ui_view_components.components.AchievementCard
 import com.example.pracainynierska.view_model.LoginViewModel
 
-class AchievementsView(loginViewModel: LoginViewModel,
-                       navController: NavController,
+class AchievementsView(
+    loginViewModel: LoginViewModel,
+    navController: NavController,
 ) : AbstractView(loginViewModel, navController) {
-
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    public override fun renderContent(
-        innerPadding: PaddingValues
-    ) {
-
+    public override fun renderContent(innerPadding: PaddingValues) {
         val focusManager = LocalFocusManager.current
         val scrollState = rememberScrollState()
 
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFF4C0949),
-                            Color(0xFF470B93)
-                        ),
-                        start = Offset(0f, Float.POSITIVE_INFINITY),
-                        end = Offset(0f, 0f)
-                    )
-                )
-                .pointerInput(Unit) {
-                    detectTapGestures(onTap = { focusManager.clearFocus() })
-                }
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush =
+                            Brush.linearGradient(
+                                colors =
+                                    listOf(
+                                        Color(0xFF4C0949),
+                                        Color(0xFF470B93),
+                                    ),
+                                start = Offset(0f, Float.POSITIVE_INFINITY),
+                                end = Offset(0f, 0f),
+                            ),
+                    ).pointerInput(Unit) {
+                        detectTapGestures(onTap = { focusManager.clearFocus() })
+                    },
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-                    .padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        top = 84.dp,
-                        bottom = 84.dp
-                    ), // Dodanie odstępu od końca ekranu
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                        .padding(
+                            start = 16.dp,
+                            end = 16.dp,
+                            top = 84.dp,
+                            bottom = 84.dp,
+                        ),
+                // Dodanie odstępu od końca ekranu
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
                     text = "Osiągnięcia",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier.padding(bottom = 16.dp),
                 )
 
                 AchievementCard(
@@ -86,7 +87,7 @@ class AchievementsView(loginViewModel: LoginViewModel,
                     tasksToDo = 2,
                     onClaimClick = {
                         // Obsługa kliknięcia todo
-                    }
+                    },
                 )
 
                 AchievementCard(
@@ -98,7 +99,7 @@ class AchievementsView(loginViewModel: LoginViewModel,
                     tasksToDo = 5,
                     onClaimClick = {
                         // Obsługa kliknięcia todo
-                    }
+                    },
                 )
 
                 AchievementCard(
@@ -110,7 +111,7 @@ class AchievementsView(loginViewModel: LoginViewModel,
                     tasksToDo = 10,
                     onClaimClick = {
                         // Obsługa kliknięcia todo
-                    }
+                    },
                 )
 
                 AchievementCard(
@@ -122,7 +123,7 @@ class AchievementsView(loginViewModel: LoginViewModel,
                     tasksToDo = 50,
                     onClaimClick = {
                         // Obsługa kliknięcia todo
-                    }
+                    },
                 )
             }
         }

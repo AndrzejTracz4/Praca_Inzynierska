@@ -49,17 +49,14 @@ import com.example.pracainynierska.ui_view_components.components.progress
 import com.example.pracainynierska.ui_view_components.components.track
 import com.example.pracainynierska.view_model.ShopViewModel
 
-class ShopView(shopViewModel: ShopViewModel,
-               navController: NavController
+class ShopView(
+    shopViewModel: ShopViewModel,
+    navController: NavController,
 ) : AbstractView(shopViewModel, navController) {
-
     @OptIn(ExperimentalMaterial3Api::class)
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    public override fun renderContent(
-        innerPadding: PaddingValues
-    ) {
-
+    public override fun renderContent(innerPadding: PaddingValues) {
         var selectedCategory by remember { mutableStateOf("Determinacja") }
         var selectedShopMode by remember { mutableStateOf(ShopTypes.SHIELD) }
         var sliderValueTime by remember { mutableFloatStateOf(10f) }
@@ -69,47 +66,53 @@ class ShopView(shopViewModel: ShopViewModel,
 
         var isHidden by remember { mutableStateOf(true) }
 
-        if (false == (viewModel is ShopViewModel)){
+        if (false == (viewModel is ShopViewModel)) {
             throw Exception("Invalid View Model")
         }
 
-        costValue = viewModel.calculateCost(
-            type = selectedShopMode,
-            validForDays = validForDays,
-            multiplier = sliderValueMultiplier.toInt()
-        )
+        costValue =
+            viewModel.calculateCost(
+                type = selectedShopMode,
+                validForDays = validForDays,
+                multiplier = sliderValueMultiplier.toInt(),
+            )
 
         val isAffordable = viewModel.checkIfCanAfford(costValue)
 
         val costTextColor = if (isAffordable) Color.White else Color.Red
 
-        val costText = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Normal)) {
-                append("Koszt: ")
+        val costText =
+            buildAnnotatedString {
+                withStyle(style = SpanStyle(color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Normal)) {
+                    append("Koszt: ")
+                }
+                withStyle(style = SpanStyle(color = costTextColor, fontSize = 16.sp, fontWeight = FontWeight.Bold)) {
+                    append("$costValue")
+                }
             }
-            withStyle(style = SpanStyle(color = costTextColor, fontSize = 16.sp, fontWeight = FontWeight.Bold)) {
-                append("$costValue")
-            }
-        }
 
-        Box (
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFF4C0949),
-                            Color(0xFF470B93)
-                        ),
-                        start = Offset(0f, Float.POSITIVE_INFINITY),
-                        end = Offset(0f, 0f)
-                    )
-                )
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush =
+                            Brush.linearGradient(
+                                colors =
+                                    listOf(
+                                        Color(0xFF4C0949),
+                                        Color(0xFF470B93),
+                                    ),
+                                start = Offset(0f, Float.POSITIVE_INFINITY),
+                                end = Offset(0f, 0f),
+                            ),
+                    ),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
             ) {
                 Spacer(modifier = Modifier.height(55.dp))
 
@@ -119,16 +122,18 @@ class ShopView(shopViewModel: ShopViewModel,
                         isSelected = selectedShopMode == ShopTypes.SHIELD,
                         onClick = {
                             selectedShopMode = ShopTypes.SHIELD
-                            isHidden = true },
-                        iconResId = R.drawable.shield
+                            isHidden = true
+                        },
+                        iconResId = R.drawable.shield,
                     )
                     ShopSelectButton(
                         text = "Modyfikator czasowy",
                         isSelected = selectedShopMode == ShopTypes.BOOSTER,
                         onClick = {
                             selectedShopMode = ShopTypes.BOOSTER
-                            isHidden = false },
-                        iconResId = R.drawable.timeout
+                            isHidden = false
+                        },
+                        iconResId = R.drawable.timeout,
                     )
                 }
 
@@ -137,14 +142,15 @@ class ShopView(shopViewModel: ShopViewModel,
                 Text(
                     text = "Czas trwania (d)",
                     color = Color.White,
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
 
                 CustomSlider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 0.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 0.dp),
                     value = sliderValueTime,
                     onValueChange = {
                         sliderValueTime = it
@@ -154,37 +160,39 @@ class ShopView(shopViewModel: ShopViewModel,
                     showIndicator = true,
                     thumb = { thumbValue ->
                         CustomSliderDefaults.Thumb(
-                            thumbValue = (thumbValue /10).toString(),
+                            thumbValue = (thumbValue / 10).toString(),
                             color = Color.Transparent,
                             size = 30.dp,
-                            modifier = Modifier.background(
-                                Color(0xFF32A6F9),
-                                shape = CircleShape
-                            )
+                            modifier =
+                                Modifier.background(
+                                    Color(0xFF32A6F9),
+                                    shape = CircleShape,
+                                ),
                         )
                     },
                     track = { sliderState ->
                         Box(
-                            modifier = Modifier
-                                .track()
-                                .border(
-                                    width = 1.dp,
-                                    color = Color(0x19FFFFFF),
-                                    shape = CircleShape
-                                )
-                                .background(Color(0x19FFFFFF))
-                                .padding(3.5.dp),
-                            contentAlignment = Alignment.CenterStart
+                            modifier =
+                                Modifier
+                                    .track()
+                                    .border(
+                                        width = 1.dp,
+                                        color = Color(0x19FFFFFF),
+                                        shape = CircleShape,
+                                    ).background(Color(0x19FFFFFF))
+                                    .padding(3.5.dp),
+                            contentAlignment = Alignment.CenterStart,
                         ) {
                             Box(
-                                modifier = Modifier
-                                    .progress(sliderState = sliderState)
-                                    .background(
-                                        Color(0xFF32A6F9)
-                                    )
+                                modifier =
+                                    Modifier
+                                        .progress(sliderState = sliderState)
+                                        .background(
+                                            Color(0xFF32A6F9),
+                                        ),
                             )
                         }
-                    }
+                    },
                 )
 
                 if (!isHidden) {
@@ -193,14 +201,15 @@ class ShopView(shopViewModel: ShopViewModel,
                     Text(
                         text = "Mnożnik (x)",
                         color = Color.White,
-                        fontSize = 14.sp
+                        fontSize = 14.sp,
                     )
                     Spacer(modifier = Modifier.height(4.dp))
 
                     CustomSlider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 0.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 0.dp),
                         value = sliderValueMultiplier,
                         onValueChange = {
                             sliderValueMultiplier = it
@@ -210,37 +219,39 @@ class ShopView(shopViewModel: ShopViewModel,
                         showIndicator = true,
                         thumb = { thumbValue ->
                             CustomSliderDefaults.Thumb(
-                                thumbValue = (thumbValue /10).toString(),
+                                thumbValue = (thumbValue / 10).toString(),
                                 color = Color.Transparent,
                                 size = 30.dp,
-                                modifier = Modifier.background(
-                                    Color(0xFF32A6F9),
-                                    shape = CircleShape
-                                )
+                                modifier =
+                                    Modifier.background(
+                                        Color(0xFF32A6F9),
+                                        shape = CircleShape,
+                                    ),
                             )
                         },
                         track = { sliderState ->
                             Box(
-                                modifier = Modifier
-                                    .track()
-                                    .border(
-                                        width = 1.dp,
-                                        color = Color(0x19FFFFFF),
-                                        shape = CircleShape
-                                    )
-                                    .background(Color(0x19FFFFFF))
-                                    .padding(3.5.dp),
-                                contentAlignment = Alignment.CenterStart
+                                modifier =
+                                    Modifier
+                                        .track()
+                                        .border(
+                                            width = 1.dp,
+                                            color = Color(0x19FFFFFF),
+                                            shape = CircleShape,
+                                        ).background(Color(0x19FFFFFF))
+                                        .padding(3.5.dp),
+                                contentAlignment = Alignment.CenterStart,
                             ) {
                                 Box(
-                                    modifier = Modifier
-                                        .progress(sliderState = sliderState)
-                                        .background(
-                                            Color(0xFF32A6F9)
-                                        )
+                                    modifier =
+                                        Modifier
+                                            .progress(sliderState = sliderState)
+                                            .background(
+                                                Color(0xFF32A6F9),
+                                            ),
                                 )
                             }
-                        }
+                        },
                     )
                 }
 
@@ -250,7 +261,7 @@ class ShopView(shopViewModel: ShopViewModel,
                     text = "Kategoria",
                     color = Color.White,
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -260,29 +271,33 @@ class ShopView(shopViewModel: ShopViewModel,
                         text = "Determinacja",
                         isSelected = selectedCategory == "Determinacja",
                         onClick = {
-                            selectedCategory = "Determinacja" },
-                        iconResId = R.drawable.determinacja
+                            selectedCategory = "Determinacja"
+                        },
+                        iconResId = R.drawable.determinacja,
                     )
                     ShopSelectButton(
                         text = "Sprawność fizyczna",
                         isSelected = selectedCategory == "Sprawność fizyczna",
                         onClick = {
-                            selectedCategory = "Sprawność fizyczna" },
-                        iconResId = R.drawable.sprawnosc
+                            selectedCategory = "Sprawność fizyczna"
+                        },
+                        iconResId = R.drawable.sprawnosc,
                     )
                     ShopSelectButton(
                         text = "Inteligencja",
                         isSelected = selectedCategory == "Inteligencja",
                         onClick = {
-                            selectedCategory = "Inteligencja" },
-                        iconResId = R.drawable.inteligencja
+                            selectedCategory = "Inteligencja"
+                        },
+                        iconResId = R.drawable.inteligencja,
                     )
                     ShopSelectButton(
                         text = "Wiedza",
                         isSelected = selectedCategory == "Wiedza",
                         onClick = {
-                            selectedCategory = "Wiedza" },
-                        iconResId = R.drawable.wiedza
+                            selectedCategory = "Wiedza"
+                        },
+                        iconResId = R.drawable.wiedza,
                     )
                 }
 
@@ -290,17 +305,18 @@ class ShopView(shopViewModel: ShopViewModel,
 
                 // Koszt text
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 4.dp)
-                        .wrapContentWidth(Alignment.CenterHorizontally),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 4.dp)
+                            .wrapContentWidth(Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = costText,
                         color = Color.White,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     Spacer(modifier = Modifier.width(4.dp))
 
@@ -308,10 +324,9 @@ class ShopView(shopViewModel: ShopViewModel,
                         painter = painterResource(id = R.drawable.coins),
                         contentDescription = "Ikona monet",
                         tint = Color.Unspecified,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp),
                     )
                 }
-
 
                 AddAugmentButton(
                     onClick = {
@@ -323,9 +338,9 @@ class ShopView(shopViewModel: ShopViewModel,
                             validForDays = (sliderValueTime / 10).toInt(),
                             multiplier = sliderValueMultiplier.toInt(),
                             category = selectedCategory,
-                            price = costValue
+                            price = costValue,
                         )
-                    }
+                    },
                 )
 
                 Spacer(modifier = Modifier.height(75.dp))

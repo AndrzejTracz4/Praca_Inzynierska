@@ -23,28 +23,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ShopSelectButton(text: String, isSelected: Boolean, onClick: () -> Unit, iconResId: Int) {
+fun ShopSelectButton(
+    text: String,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    iconResId: Int,
+) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp)
-            .padding(vertical = 4.dp)
-            .background(
-                color = if (isSelected) Color(0x4DFFFFFF) else Color(0x19FFFFFF),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .padding(vertical = 4.dp)
+                .background(
+                    color = if (isSelected) Color(0x4DFFFFFF) else Color(0x19FFFFFF),
+                    shape = RoundedCornerShape(12.dp),
+                ).clickable { onClick() }
+                .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 painter = painterResource(id = iconResId),
                 contentDescription = null,
                 modifier = Modifier.size(20.dp),
-                tint = Color.White
+                tint = Color.White,
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -53,7 +58,7 @@ fun ShopSelectButton(text: String, isSelected: Boolean, onClick: () -> Unit, ico
                 text = text,
                 color = Color.White,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.ExtraBold
+                fontWeight = FontWeight.ExtraBold,
             )
         }
     }

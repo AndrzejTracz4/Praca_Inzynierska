@@ -40,40 +40,40 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class CalendarsView(taskViewModel: TaskViewModel,
-                    navController: NavController,
+class CalendarsView(
+    taskViewModel: TaskViewModel,
+    navController: NavController,
 ) : AbstractView(taskViewModel, navController) {
-
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    public override fun renderContent(
-        innerPadding: PaddingValues
-    ) {
+    public override fun renderContent(innerPadding: PaddingValues) {
         val focusManager = LocalFocusManager.current
         val selectedDate = remember { mutableStateOf("") }
         val selectedTasks = remember { mutableStateOf<List<Task>?>(null) }
         var selectedTask by remember { mutableStateOf<Task?>(null) }
 
-        if (false == (viewModel is TaskViewModel)){
+        if (false == (viewModel is TaskViewModel)) {
             throw Exception("Invalid View Model")
         }
 
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(Color(0xFF4C0949), Color(0xFF470B93)),
-                        start = Offset(0f, Float.POSITIVE_INFINITY),
-                        end = Offset(0f, 0f)
-                    )
-                )
-                .pointerInput(Unit) { detectTapGestures(onTap = { focusManager.clearFocus() }) }
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush =
+                            Brush.linearGradient(
+                                colors = listOf(Color(0xFF4C0949), Color(0xFF470B93)),
+                                start = Offset(0f, Float.POSITIVE_INFINITY),
+                                end = Offset(0f, 0f),
+                            ),
+                    ).pointerInput(Unit) { detectTapGestures(onTap = { focusManager.clearFocus() }) },
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
             ) {
                 Spacer(modifier = Modifier.height(55.dp))
 
@@ -88,9 +88,10 @@ class CalendarsView(taskViewModel: TaskViewModel,
                         CalendarView(ContextThemeWrapper(localizedContext, R.style.CustomCalendarView)).apply {
                             firstDayOfWeek = Calendar.MONDAY
                             setOnDateChangeListener { _, year, month, dayOfMonth ->
-                                val selectedCalendar = Calendar.getInstance().apply {
-                                    set(year, month, dayOfMonth)
-                                }
+                                val selectedCalendar =
+                                    Calendar.getInstance().apply {
+                                        set(year, month, dayOfMonth)
+                                    }
 
                                 // Format daty
                                 val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
@@ -101,7 +102,7 @@ class CalendarsView(taskViewModel: TaskViewModel,
                             }
                         }
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -109,16 +110,17 @@ class CalendarsView(taskViewModel: TaskViewModel,
                 selectedTasks.value?.let { tasks ->
                     Column(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .verticalScroll(rememberScrollState())
-                            .padding(bottom = 16.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState())
+                                .padding(bottom = 16.dp),
                     ) {
                         tasks.forEach { task ->
 
                             TaskCard(
                                 task = task,
-                                onClick = { selectedTask = task }
+                                onClick = { selectedTask = task },
                             )
                         }
                         Spacer(modifier = Modifier.height(64.dp))
@@ -133,7 +135,7 @@ class CalendarsView(taskViewModel: TaskViewModel,
                     onDismiss = { selectedTask = null },
                     onEdit = {
                         navController.navigate("EditTaskView/${task.id}")
-                    }
+                    },
                 )
             }
         }

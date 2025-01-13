@@ -28,39 +28,41 @@ fun AchievementCard(
     coins: Int,
     tasksCompleted: Int,
     tasksToDo: Int,
-    onClaimClick: () -> Unit
+    onClaimClick: () -> Unit,
 ) {
     val progressValue = tasksCompleted.toFloat() / tasksToDo.toFloat()
     val isClaimable = progressValue >= 1.0f
 
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0x19FFFFFF),
-            contentColor = Color.White
-        )
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+        colors =
+            CardDefaults.cardColors(
+                containerColor = Color(0x19FFFFFF),
+                contentColor = Color.White,
+            ),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             Text(
                 text = title,
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = description,
-                fontSize = 14.sp
+                fontSize = 14.sp,
             )
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = "EXP: $exp | Coins: $coins",
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.height(4.dp))
 
@@ -68,10 +70,11 @@ fun AchievementCard(
                 progress = progressValue,
                 color = Color(0xFF8BC34A),
                 trackColor = Color.LightGray,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(12.dp)
-                    .clip(RoundedCornerShape(6.dp)) // Zaokrąglenie rogów paska progresu
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(12.dp)
+                        .clip(RoundedCornerShape(6.dp)), // Zaokrąglenie rogów paska progresu
             )
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -81,20 +84,22 @@ fun AchievementCard(
                         onClaimClick()
                     }
                 },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isClaimable) Color(0xFF8BC34A) else Color(0xFF2F2F2F),
-                    contentColor = Color.White
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
-                enabled = isClaimable
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = if (isClaimable) Color(0xFF8BC34A) else Color(0xFF2F2F2F),
+                        contentColor = Color.White,
+                    ),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                enabled = isClaimable,
             ) {
                 Text(
                     text = "Odbierz",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White // Napis zawsze biały
+                    color = Color.White, // Napis zawsze biały
                 )
             }
         }

@@ -4,6 +4,6 @@ interface CalculatorInterface {
     fun calculateCost(
         shopMode: String,
         duration: Int,
-        multiplier: Int
+        multiplier: Int,
     ): Int
 }

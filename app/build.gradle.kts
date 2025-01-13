@@ -28,7 +28,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -54,7 +54,6 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1,LICENSE.md,LICENSE.txt,LICENSE-notice.md,NOTICE.md,NOTICE.txt}"
-
         }
     }
 
@@ -76,7 +75,7 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2024.08.00"))
 
     // Compose libraries
-    implementation ("androidx.core:core")
+    implementation("androidx.core:core")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -93,8 +92,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation ("com.google.accompanist:accompanist-flowlayout:0.24.13-rc")
-
+    implementation("com.google.accompanist:accompanist-flowlayout:0.24.13-rc")
 
     // Testing
     testImplementation(libs.junit)
@@ -105,22 +103,21 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    //Lottie
-    implementation ("com.airbnb.android:lottie-compose:6.0.0")
+    // Lottie
+    implementation("com.airbnb.android:lottie-compose:6.0.0")
 
-    //API
-    implementation ("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.21")
-    implementation ("org.jetbrains.kotlin:kotlin-reflect:1.9.21")
-    implementation ("com.squareup.moshi:moshi-kotlin:1.15.1")
-    implementation ("com.squareup.moshi:moshi-adapters:1.15.1")
-    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation ("io.kotlintest:kotlintest-runner-junit5:3.4.2")
-    implementation ("io.kotlintest:kotlintest-assertions:3.4.2")
+    // API
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.21")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.21")
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
+    implementation("com.squareup.moshi:moshi-adapters:1.15.1")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
+    implementation("io.kotlintest:kotlintest-assertions:3.4.2")
 
-    //Serialization
+    // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
-    //Yaml
+    // Yaml
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.0")
-
 }

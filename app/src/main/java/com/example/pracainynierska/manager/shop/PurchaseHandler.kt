@@ -6,26 +6,24 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class PurchaseHandler(
-    private val augmentManager: AugmentManager
+    private val augmentManager: AugmentManager,
 ) : PurchaseHandlerInterface {
-
-    override fun canAfford(player: Player, price: Int): Boolean {
-        return player.balance >= price
-    }
+    override fun canAfford(
+        player: Player,
+        price: Int,
+    ): Boolean = player.balance >= price
 
     override suspend fun handle(
-        type : String,
-        multiplier : Int,
-        validForDays : Int,
-        category : String,
-    ) {
-        return withContext(Dispatchers.IO) {
-            augmentManager.addAugment(
-                type = type,
-                multiplier = multiplier,
-                validForDays = validForDays,
-                category = category
-            )
-        }
+        type: String,
+        multiplier: Int,
+        validForDays: Int,
+        category: String,
+    ) = withContext(Dispatchers.IO) {
+        augmentManager.addAugment(
+            type = type,
+            multiplier = multiplier,
+            validForDays = validForDays,
+            category = category,
+        )
     }
 }

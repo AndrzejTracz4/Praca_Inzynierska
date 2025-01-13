@@ -15,21 +15,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun TaskDetailsButton(text: String, color: Color, onClick: () -> Unit) {
+fun TaskDetailsButton(
+    text: String,
+    color: Color,
+    onClick: () -> Unit,
+) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .width(90.dp)
-            .height(35.dp)
-            .background(color = color, shape = RoundedCornerShape(8.dp))
-            .clickable { onClick() }
+        modifier =
+            Modifier
+                .width(90.dp)
+                .height(35.dp)
+                .background(color = color, shape = RoundedCornerShape(8.dp))
+                .clickable { onClick() },
     ) {
         Text(
             text = text,
             color = Color.Black,
             fontWeight = FontWeight.Bold,
             fontSize = 12.sp,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp),
         )
     }
 }

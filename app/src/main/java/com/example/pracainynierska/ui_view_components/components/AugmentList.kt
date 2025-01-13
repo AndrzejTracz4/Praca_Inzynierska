@@ -1,6 +1,5 @@
 package com.example.pracainynierska.ui_view_components.components
 
-
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -15,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import com.example.pracainynierska.API.model.Augment
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -34,22 +32,23 @@ fun AugmentList(augments: LiveData<List<Augment>>) {
                     if (currentBoosterIndex < boostersList.size - 1) {
                         currentBoosterIndex++
                     }
-                }
+                },
             ) {
                 if (currentBoosterIndex > 0) {
                     currentBoosterIndex--
                 }
             }
-        }else
+        } else {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .background(
-                        color = Color(0x14FFFFFF),
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .padding(4.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .background(
+                            color = Color(0x14FFFFFF),
+                            shape = RoundedCornerShape(12.dp),
+                        ).padding(4.dp),
             )
+        }
     }
 }

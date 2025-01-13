@@ -39,8 +39,10 @@ import com.example.pracainynierska.R
 import com.example.pracainynierska.view_model.LoginViewModel
 
 @Composable
-fun ChangeForgotPasswordView(navController: NavController, loginViewModel: LoginViewModel) {
-
+fun ChangeForgotPasswordView(
+    navController: NavController,
+    loginViewModel: LoginViewModel,
+) {
     var showDialog by remember { mutableStateOf(false) }
     var passwordMessage by remember { mutableStateOf("") }
     var isDialogError by remember { mutableStateOf(false) }
@@ -48,34 +50,35 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
     val focusManager = LocalFocusManager.current
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .pointerInput(Unit) {
-                detectTapGestures(onTap = { focusManager.clearFocus() })
-            }
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = { focusManager.clearFocus() })
+                },
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
-
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .padding(16.dp)
+                    .fillMaxSize(),
         ) {
             Spacer(modifier = Modifier.height(40.dp))
 
             Image(
                 painter = painterResource(id = R.drawable.questa_logo),
                 contentDescription = "Logo Questa",
-                modifier = Modifier.size(450.dp, 150.dp)
+                modifier = Modifier.size(450.dp, 150.dp),
             )
 
             Text(
                 text = "Questa",
                 fontSize = 24.sp,
                 color = Color.Black,
-                fontWeight = FontWeight.ExtraBold
+                fontWeight = FontWeight.ExtraBold,
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -84,7 +87,7 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                 text = "\"Make it happen.\"",
                 color = Color.Black,
                 fontSize = 12.sp,
-                fontStyle = FontStyle.Italic
+                fontStyle = FontStyle.Italic,
             )
 
             Spacer(modifier = Modifier.height(30.dp))
@@ -95,12 +98,13 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                 label = { Text(text = "Nowe hasło") },
                 isError = loginViewModel.newPasswordErrorMessage != null,
                 singleLine = true,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color.Gray,
-                    errorTextColor = Color.Red
-                ),
-                shape = RoundedCornerShape(16.dp)
+                colors =
+                    OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Black,
+                        unfocusedBorderColor = Color.Gray,
+                        errorTextColor = Color.Red,
+                    ),
+                shape = RoundedCornerShape(16.dp),
             )
 
             if (loginViewModel.newPasswordErrorMessage != null) {
@@ -115,12 +119,13 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                 label = { Text(text = "Potwierdź nowe hasło") },
                 isError = loginViewModel.confirmNewPasswordErrorMessage != null,
                 singleLine = true,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color.Gray,
-                    errorTextColor = Color.Red
-                ),
-                shape = RoundedCornerShape(16.dp)
+                colors =
+                    OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Black,
+                        unfocusedBorderColor = Color.Gray,
+                        errorTextColor = Color.Red,
+                    ),
+                shape = RoundedCornerShape(16.dp),
             )
 
             if (loginViewModel.confirmNewPasswordErrorMessage != null) {
@@ -143,13 +148,14 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                             passwordMessage = it
                             isDialogError = true
                             showDialog = true
-                        }
+                        },
                     )
                 },
                 shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .height(OutlinedTextFieldDefaults.MinHeight)
-                    .width(OutlinedTextFieldDefaults.MinWidth)
+                modifier =
+                    Modifier
+                        .height(OutlinedTextFieldDefaults.MinHeight)
+                        .width(OutlinedTextFieldDefaults.MinWidth),
             ) {
                 Text(text = "Zmień hasło")
             }
@@ -164,13 +170,13 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
             confirmButton = {
                 TextButton(onClick = {
                     showDialog = false
-                    navController.navigate("LoginView"){
+                    navController.navigate("LoginView") {
                         popUpTo(navController.graph.startDestinationId) { inclusive = true }
                     }
                 }) {
                     Text("OK")
                 }
-            }
+            },
         )
     }
 }

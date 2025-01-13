@@ -40,7 +40,7 @@ fun EditTaskButton(
     modifier: Modifier = Modifier,
     onTaskUpdated: () -> Unit,
     taskViewModel: TaskViewModel,
-    taskDescription: String
+    taskDescription: String,
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf("") }
@@ -54,69 +54,71 @@ fun EditTaskButton(
     }
 
     Box(
-        modifier = modifier
-            .height(75.dp)
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)
-            .background(
-                color = Color(0x19FFFFFF),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .clickable {
-                val isValid = when (selectedEditTaskMode) {
-                    TaskMode.JEDNORAZOWE -> {
-                        selectedDifficulty.isNotBlank() &&
-                                selectedCategory.isNotBlank() &&
-                                selectedStartDate.isNotBlank() &&
-                                selectedEndDate.isNotBlank()
-                    }
-                    TaskMode.CYKLICZNE -> {
-                        selectedDifficulty.isNotBlank() &&
-                                selectedCategory.isNotBlank() &&
-                                selectedStartDate.isNotBlank() &&
-                                selectedEndDate.isNotBlank() &&
-                                selectedMeasureUnit.isNotBlank() &&
-                                interval > 0
-                    }
-                }
+        modifier =
+            modifier
+                .height(75.dp)
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+                .background(
+                    color = Color(0x19FFFFFF),
+                    shape = RoundedCornerShape(12.dp),
+                ).clickable {
+                    val isValid =
+                        when (selectedEditTaskMode) {
+                            TaskMode.JEDNORAZOWE -> {
+                                selectedDifficulty.isNotBlank() &&
+                                    selectedCategory.isNotBlank() &&
+                                    selectedStartDate.isNotBlank() &&
+                                    selectedEndDate.isNotBlank()
+                            }
+                            TaskMode.CYKLICZNE -> {
+                                selectedDifficulty.isNotBlank() &&
+                                    selectedCategory.isNotBlank() &&
+                                    selectedStartDate.isNotBlank() &&
+                                    selectedEndDate.isNotBlank() &&
+                                    selectedMeasureUnit.isNotBlank() &&
+                                    interval > 0
+                            }
+                        }
 
-                if (!isValid) {
-                    dialogMessage = "Uzupełnij wszystkie pola."
-                    showErrorDialog = true
-                } else if (isEndDateBeforeStartDate(selectedStartDate, selectedEndDate)) {
-                    dialogMessage = "Data końcowa nie może być wcześniejsza niż data startowa."
-                    showDateErrorDialog = true
-                } else {
-                    // Aktualizacja zadania
-                    val updatedTask = taskToEdit.copy(
-                        name = taskName,
-                        difficulty = selectedDifficulty,
-                        category = selectedCategory,
-                        startDate = selectedStartDate,
-                        endDate = selectedEndDate,
-                        interval = if (selectedEditTaskMode == TaskMode.CYKLICZNE) interval else 0,
-                        measureUnit = if (selectedEditTaskMode == TaskMode.CYKLICZNE) selectedMeasureUnit else "",
-                        mode = selectedEditTaskMode,
-                        description = taskDescription
-                    )
-                    taskViewModel.updateTask(updatedTask)
+                    if (!isValid) {
+                        dialogMessage = "Uzupełnij wszystkie pola."
+                        showErrorDialog = true
+                    } else if (isEndDateBeforeStartDate(selectedStartDate, selectedEndDate)) {
+                        dialogMessage = "Data końcowa nie może być wcześniejsza niż data startowa."
+                        showDateErrorDialog = true
+                    } else {
+                        // Aktualizacja zadania
+                        val updatedTask =
+                            taskToEdit.copy(
+                                name = taskName,
+                                difficulty = selectedDifficulty,
+                                category = selectedCategory,
+                                startDate = selectedStartDate,
+                                endDate = selectedEndDate,
+                                interval = if (selectedEditTaskMode == TaskMode.CYKLICZNE) interval else 0,
+                                measureUnit = if (selectedEditTaskMode == TaskMode.CYKLICZNE) selectedMeasureUnit else "",
+                                mode = selectedEditTaskMode,
+                                description = taskDescription,
+                            )
+                        taskViewModel.updateTask(updatedTask)
 
-                    dialogMessage = "Pomyślnie zaktualizowano zadanie"
-                    showDialog = true
-                }
-            }
-            .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.Center
+                        dialogMessage = "Pomyślnie zaktualizowano zadanie"
+                        showDialog = true
+                    }
+                }.padding(horizontal = 16.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 painter = painterResource(R.drawable.edit),
                 contentDescription = null,
-                modifier = Modifier
-                    .size(24.dp),
-                tint = Color.White
+                modifier =
+                    Modifier
+                        .size(24.dp),
+                tint = Color.White,
             )
 
             Text(
@@ -124,8 +126,9 @@ fun EditTaskButton(
                 color = Color.White,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.ExtraBold,
-                modifier = Modifier
-                    .padding(start = 8.dp)
+                modifier =
+                    Modifier
+                        .padding(start = 8.dp),
             )
         }
     }
@@ -140,11 +143,11 @@ fun EditTaskButton(
                     onClick = {
                         onTaskUpdated()
                         showDialog = false
-                    }
+                    },
                 ) {
                     Text("OK")
                 }
-            }
+            },
         )
     }
 
@@ -157,11 +160,11 @@ fun EditTaskButton(
                 TextButton(
                     onClick = {
                         showErrorDialog = false
-                    }
+                    },
                 ) {
                     Text("OK")
                 }
-            }
+            },
         )
     }
 
@@ -174,11 +177,11 @@ fun EditTaskButton(
                 TextButton(
                     onClick = {
                         showDateErrorDialog = false
-                    }
+                    },
                 ) {
                     Text("OK")
                 }
-            }
+            },
         )
     }
 }

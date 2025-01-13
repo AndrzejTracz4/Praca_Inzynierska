@@ -50,34 +50,42 @@ import com.example.pracainynierska.ui_view_components.components.CustomCreateCat
 import com.example.pracainynierska.ui_view_components.components.TaskTextField
 import com.example.pracainynierska.view_model.LoginViewModel
 
-class AddCategoryView(loginViewModel: LoginViewModel,
-                      navController: NavController,
+class AddCategoryView(
+    loginViewModel: LoginViewModel,
+    navController: NavController,
 ) : AbstractView(loginViewModel, navController) {
-
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    public override fun renderContent(
-        innerPadding: PaddingValues
-    ) {
-
+    public override fun renderContent(innerPadding: PaddingValues) {
         var categoryName by remember { mutableStateOf("") }
         var searchQuery by remember { mutableStateOf("") } // Zmienna dla wyszukiwania
         var isCategoryValid by remember { mutableStateOf(false) }
         var isStatsValid by remember { mutableStateOf(false) }
         var activeDialogIndex by remember { mutableStateOf(-1) }
-        val showAlert = remember { mutableStateOf(false) }  // Przechowywanie stanu alertu
-        val showSuccessAlert = remember { mutableStateOf(false) }  // Stan alertu sukcesu
+        val showAlert = remember { mutableStateOf(false) } // Przechowywanie stanu alertu
+        val showSuccessAlert = remember { mutableStateOf(false) } // Stan alertu sukcesu
         val selectedStats = remember { mutableStateListOf<String?>(null, null, null, null) } // Na początku 4 puste pola (null)
 
-        val availableStats = remember {
-            mutableStateListOf(
-                "Determinacja", "Sprawność fizyczna", "Inteligencja", "Wiedza",
-                "Cierpliwość", "Kreatywność", "Zdolności przywódcze",
-                "Zarządzanie stresem", "Adaptacja do zmian", "Komunikacja",
-                "Praca zespołowa", "Rozwiązywanie problemów", "Innowacyjność",
-                "Elastyczność", "Zarządzanie czasem"
-            )
-        }
+        val availableStats =
+            remember {
+                mutableStateListOf(
+                    "Determinacja",
+                    "Sprawność fizyczna",
+                    "Inteligencja",
+                    "Wiedza",
+                    "Cierpliwość",
+                    "Kreatywność",
+                    "Zdolności przywódcze",
+                    "Zarządzanie stresem",
+                    "Adaptacja do zmian",
+                    "Komunikacja",
+                    "Praca zespołowa",
+                    "Rozwiązywanie problemów",
+                    "Innowacyjność",
+                    "Elastyczność",
+                    "Zarządzanie czasem",
+                )
+            }
 
         fun validateCategory() {
             // Walidacja nazwy kategorii
@@ -91,20 +99,22 @@ class AddCategoryView(loginViewModel: LoginViewModel,
         }
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFF4C0949),
-                            Color(0xFF470B93)
-                        ),
-                        start = Offset(0f, Float.POSITIVE_INFINITY),
-                        end = Offset(0f, 0f)
-                    )
-                )
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()) // Włączamy przewijanie
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush =
+                            Brush.linearGradient(
+                                colors =
+                                    listOf(
+                                        Color(0xFF4C0949),
+                                        Color(0xFF470B93),
+                                    ),
+                                start = Offset(0f, Float.POSITIVE_INFINITY),
+                                end = Offset(0f, 0f),
+                            ),
+                    ).padding(16.dp)
+                    .verticalScroll(rememberScrollState()), // Włączamy przewijanie
         ) {
             Spacer(modifier = Modifier.height(55.dp))
 
@@ -113,22 +123,23 @@ class AddCategoryView(loginViewModel: LoginViewModel,
                     text = "Nazwa",
                     color = Color.White,
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.ExtraBold
+                    fontWeight = FontWeight.ExtraBold,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(55.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0x4DFFFFFF)),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(55.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0x4DFFFFFF)),
+                    contentAlignment = Alignment.Center,
                 ) {
                     TaskTextField(
                         string = categoryName,
                         onStringChange = { categoryName = it },
-                        singleLine = true
+                        singleLine = true,
                     )
                 }
             }
@@ -136,41 +147,42 @@ class AddCategoryView(loginViewModel: LoginViewModel,
             Spacer(modifier = Modifier.height(4.dp))
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
             ) {
                 Text(
                     text = "Wybierz statystyki",
                     color = Color.White,
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.ExtraBold
+                    fontWeight = FontWeight.ExtraBold,
                 )
 
                 selectedStats.forEachIndexed { index, selectedStat ->
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(60.dp)
-                            .padding(vertical = 4.dp)
-                            .background(
-                                color = Color(0x19FFFFFF),
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .clickable { activeDialogIndex = index }
-                            .padding(horizontal = 16.dp),
-                        contentAlignment = Alignment.Center
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(60.dp)
+                                .padding(vertical = 4.dp)
+                                .background(
+                                    color = Color(0x19FFFFFF),
+                                    shape = RoundedCornerShape(12.dp),
+                                ).clickable { activeDialogIndex = index }
+                                .padding(horizontal = 16.dp),
+                        contentAlignment = Alignment.Center,
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
                         ) {
                             Text(
                                 text = selectedStat?.ifEmpty { "Wybierz statystykę ${index + 1}" } ?: "Wybierz statystykę ${index + 1}",
                                 color = if (selectedStat == null) Color(0xFFbdc3c7) else Color.White,
                                 fontSize = 14.sp,
-                                fontWeight = FontWeight.Normal
+                                fontWeight = FontWeight.Normal,
                             )
 
                             if (selectedStat != null) {
@@ -179,12 +191,12 @@ class AddCategoryView(loginViewModel: LoginViewModel,
                                         selectedStats[index] = null
                                         validateCategory()
                                     },
-                                    modifier = Modifier.size(24.dp)
+                                    modifier = Modifier.size(24.dp),
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.Clear, // Ikona do wyczyszczenia
                                         contentDescription = "Wyczyść statystykę",
-                                        tint = Color.White
+                                        tint = Color.White,
                                     )
                                 }
                             }
@@ -206,37 +218,41 @@ class AddCategoryView(loginViewModel: LoginViewModel,
                                     value = searchQuery,
                                     onValueChange = { searchQuery = it },
                                     label = { Text("Szukaj statystyki") },
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier.fillMaxWidth(),
                                 )
 
                                 Spacer(modifier = Modifier.height(8.dp))
 
                                 // Filtrowana lista statystyk
-                                val filteredStats = availableStats.filter {
-                                    it.contains(
-                                        searchQuery,
-                                        ignoreCase = true
-                                    ) && !selectedStats.contains(it)
-                                }
+                                val filteredStats =
+                                    availableStats.filter {
+                                        it.contains(
+                                            searchQuery,
+                                            ignoreCase = true,
+                                        ) &&
+                                            !selectedStats.contains(it)
+                                    }
 
                                 LazyColumn(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .heightIn(max = 200.dp)
+                                    modifier =
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .heightIn(max = 200.dp),
                                 ) {
                                     itemsIndexed(filteredStats) { index, stat ->
                                         TextButton(
                                             onClick = {
                                                 selectedStats[activeDialogIndex] = stat
                                                 activeDialogIndex =
-                                                    -1  // Zamknij dialog po wyborze
+                                                    -1 // Zamknij dialog po wyborze
                                                 searchQuery =
-                                                    ""        // Wyczyść zapytanie wyszukiwania
+                                                    "" // Wyczyść zapytanie wyszukiwania
                                                 validateCategory()
                                             },
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(vertical = 4.dp)
+                                            modifier =
+                                                Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(vertical = 4.dp),
                                         ) {
                                             Text(stat, color = Color.Black)
                                         }
@@ -249,11 +265,11 @@ class AddCategoryView(loginViewModel: LoginViewModel,
                                 onClick = {
                                     activeDialogIndex = -1
                                     searchQuery = ""
-                                }
+                                },
                             ) {
                                 Text("Zamknij")
                             }
-                        }
+                        },
                     )
                 }
             }
@@ -267,14 +283,15 @@ class AddCategoryView(loginViewModel: LoginViewModel,
                 isValid = isCategoryValid && isStatsValid, // Stan walidacji
                 isCategoryValid = isCategoryValid,
                 isStatsValid = isStatsValid,
-                showAlert = showAlert,  // Przekazywanie stanu alertu błędu
-                showSuccessAlert = showSuccessAlert,  // Przekazywanie stanu alertu sukcesu
-                alertMessage = when {
-                    !isCategoryValid -> "Nazwa kategorii nie może być pusta."
-                    !isStatsValid -> "Wybierz przynajmniej jedną statystykę."
-                    else -> ""
-                },
-                successMessage = "Kategoria została pomyślnie utworzona!" // Wiadomość sukcesu
+                showAlert = showAlert, // Przekazywanie stanu alertu błędu
+                showSuccessAlert = showSuccessAlert, // Przekazywanie stanu alertu sukcesu
+                alertMessage =
+                    when {
+                        !isCategoryValid -> "Nazwa kategorii nie może być pusta."
+                        !isStatsValid -> "Wybierz przynajmniej jedną statystykę."
+                        else -> ""
+                    },
+                successMessage = "Kategoria została pomyślnie utworzona!", // Wiadomość sukcesu
             )
 
             Spacer(modifier = Modifier.height(75.dp))

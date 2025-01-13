@@ -27,23 +27,23 @@ import kotlinx.coroutines.launch
 fun ModalDrawer(
     navController: NavController,
     drawerState: DrawerState,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
-
     val scope = rememberCoroutineScope()
 
     val navBackStackEntry = navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry.value?.destination?.route
 
-    val items = listOf(
-        DrawerItem("Strona Główna", R.drawable.home, "HomepageView"),
-        DrawerItem("Profil", R.drawable.profile, "ProfileView"),
-        DrawerItem("Statystyki", R.drawable.stats, "StatisticView"),
-        DrawerItem("Kalendarz", R.drawable.calendar, "CalendarsView"),
-        DrawerItem("Sklep", R.drawable.shop, "ShopView"),
-        DrawerItem("Ustawienia", R.drawable.settings, "HomepageView"),
-        DrawerItem("Wyloguj", R.drawable.logout, "LoginView")
-    )
+    val items =
+        listOf(
+            DrawerItem("Strona Główna", R.drawable.home, "HomepageView"),
+            DrawerItem("Profil", R.drawable.profile, "ProfileView"),
+            DrawerItem("Statystyki", R.drawable.stats, "StatisticView"),
+            DrawerItem("Kalendarz", R.drawable.calendar, "CalendarsView"),
+            DrawerItem("Sklep", R.drawable.shop, "ShopView"),
+            DrawerItem("Ustawienia", R.drawable.settings, "HomepageView"),
+            DrawerItem("Wyloguj", R.drawable.logout, "LoginView"),
+        )
 
     // Zmienna do śledzenia zaznaczonego elementu
     val selectedItemIndex = remember { mutableStateOf(0) }
@@ -57,32 +57,35 @@ fun ModalDrawer(
         drawerState = drawerState,
         drawerContent = {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .fillMaxHeight()
-                    .background(
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                Color(0xFF4C0949),
-                                Color(0xFF470B93)
-                            ),
-                            start = Offset(0f, Float.POSITIVE_INFINITY),
-                            end = Offset(0f, 0f)
-                        )
-                    )
-                    .padding(horizontal = 16.dp, vertical = 48.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth(0.8f)
+                        .fillMaxHeight()
+                        .background(
+                            brush =
+                                Brush.linearGradient(
+                                    colors =
+                                        listOf(
+                                            Color(0xFF4C0949),
+                                            Color(0xFF470B93),
+                                        ),
+                                    start = Offset(0f, Float.POSITIVE_INFINITY),
+                                    end = Offset(0f, 0f),
+                                ),
+                        ).padding(horizontal = 16.dp, vertical = 48.dp),
             ) {
                 // Drawer header
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 24.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 24.dp),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.questa_logo),
                         contentDescription = "App Icon",
-                        modifier = Modifier.size(40.dp)
+                        modifier = Modifier.size(40.dp),
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -91,7 +94,7 @@ fun ModalDrawer(
                         text = "Questa",
                         color = Color.White,
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
 
@@ -100,7 +103,7 @@ fun ModalDrawer(
                     color = Color.White.copy(alpha = 0.7f),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Normal,
-                    modifier = Modifier.padding(bottom = 24.dp)
+                    modifier = Modifier.padding(bottom = 24.dp),
                 )
 
                 // Main menu items
@@ -122,9 +125,9 @@ fun ModalDrawer(
                                 painter = painterResource(id = item.iconRes),
                                 contentDescription = item.text,
                                 modifier = Modifier.size(20.dp),
-                                colorFilter = ColorFilter.tint(Color.White)
+                                colorFilter = ColorFilter.tint(Color.White),
                             )
-                        }
+                        },
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
@@ -147,14 +150,14 @@ fun ModalDrawer(
                                 painter = painterResource(id = item.iconRes),
                                 contentDescription = item.text,
                                 modifier = Modifier.size(20.dp),
-                                colorFilter = ColorFilter.tint(Color.White)
+                                colorFilter = ColorFilter.tint(Color.White),
                             )
-                        }
+                        },
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }
-        }
+        },
     ) {
         content()
     }

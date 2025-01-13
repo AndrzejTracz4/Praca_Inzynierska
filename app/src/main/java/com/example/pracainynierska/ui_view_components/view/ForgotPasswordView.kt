@@ -53,8 +53,10 @@ import com.example.pracainynierska.R
 import com.example.pracainynierska.view_model.LoginViewModel
 
 @Composable
-fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewModel) {
-
+fun ForgotPasswordView(
+    navController: NavController,
+    loginViewModel: LoginViewModel,
+) {
     var showDialog by remember { mutableStateOf(false) }
     var forgotPasswordMessage by remember { mutableStateOf("") }
     var isDialogError by remember { mutableStateOf(false) }
@@ -66,34 +68,35 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
     val focusManager = LocalFocusManager.current
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .pointerInput(Unit) {
-                detectTapGestures(onTap = { focusManager.clearFocus() })
-            }
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = { focusManager.clearFocus() })
+                },
     ) {
-        Column (
+        Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
-
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .padding(16.dp)
+                    .fillMaxSize(),
         ) {
             Spacer(modifier = Modifier.height(40.dp))
 
             Image(
                 painter = painterResource(id = R.drawable.questa_logo),
                 contentDescription = "Logo Questa",
-                modifier = Modifier.size(450.dp, 150.dp)
+                modifier = Modifier.size(450.dp, 150.dp),
             )
 
             Text(
                 text = "Questa",
                 fontSize = 24.sp,
                 color = Color.Black,
-                fontWeight = FontWeight.ExtraBold
+                fontWeight = FontWeight.ExtraBold,
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -102,7 +105,7 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                 text = "\"Make it happen.\"",
                 color = Color.Black,
                 fontSize = 12.sp,
-                fontStyle = FontStyle.Italic
+                fontStyle = FontStyle.Italic,
             )
 
             Spacer(modifier = Modifier.height(30.dp))
@@ -110,14 +113,15 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
             if (isResetCodeSent == true) {
                 // Dodaj kafelki do wprowadzenia kodu
                 Column(
-                    modifier = Modifier.padding(top = 16.dp)
+                    modifier = Modifier.padding(top = 16.dp),
                 ) {
                     Text("Wprowadź kod resetujący:", color = Color.Black, fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(8.dp))
 
                     // Kafelki do wprowadzenia kodu
                     Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-                        repeat(6) { index -> // 6 kafelków dla 6-cyfrowego kodu
+                        repeat(6) { index ->
+                            // 6 kafelków dla 6-cyfrowego kodu
                             OutlinedTextField(
                                 value = codeInputs[index],
                                 onValueChange = {
@@ -134,11 +138,12 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                                 textStyle = TextStyle(fontSize = 24.sp, color = Color.Black, textAlign = TextAlign.Center),
                                 singleLine = true,
                                 shape = RoundedCornerShape(8.dp),
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = Color.Black,
-                                    unfocusedBorderColor = Color.Gray,
-                                    errorTextColor = Color.Red
-                                ),
+                                colors =
+                                    OutlinedTextFieldDefaults.colors(
+                                        focusedBorderColor = Color.Black,
+                                        unfocusedBorderColor = Color.Gray,
+                                        errorTextColor = Color.Red,
+                                    ),
                             )
                         }
                     }
@@ -159,51 +164,55 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                             }
                         },
                         shape = RoundedCornerShape(16.dp),
-                        modifier = Modifier
-                            .height(OutlinedTextFieldDefaults.MinHeight)
-                            .fillMaxWidth()
+                        modifier =
+                            Modifier
+                                .height(OutlinedTextFieldDefaults.MinHeight)
+                                .fillMaxWidth(),
                     ) {
                         Text(text = "Potwierdź kod")
                     }
-
                 }
             } else {
                 OutlinedTextField(
                     value = loginViewModel.email,
-                    onValueChange = {loginViewModel.onEmailChange(it)},
-                    label = { Text(text = "Email")},
+                    onValueChange = { loginViewModel.onEmailChange(it) },
+                    label = { Text(text = "Email") },
                     isError = loginViewModel.emailErrorMessage != null,
                     singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.Black,
-                        unfocusedBorderColor = Color.Gray,
-                        errorTextColor = Color.Red
-                    ),
+                    colors =
+                        OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color.Black,
+                            unfocusedBorderColor = Color.Gray,
+                            errorTextColor = Color.Red,
+                        ),
                     shape = RoundedCornerShape(16.dp),
                     trailingIcon = {
-                        if(loginViewModel.emailErrorMessage != null){
+                        if (loginViewModel.emailErrorMessage != null) {
                             Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
                         } else {
                             Image(
                                 painter = painterResource(id = R.drawable.email),
                                 contentDescription = "Email",
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .alpha(0.5f)
+                                modifier =
+                                    Modifier
+                                        .size(24.dp)
+                                        .alpha(0.5f),
                             )
                         }
                     },
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            focusManager.clearFocus()
-                        }
-                    ),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done
-                    )
+                    keyboardActions =
+                        KeyboardActions(
+                            onNext = {
+                                focusManager.clearFocus()
+                            },
+                        ),
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done,
+                        ),
                 )
 
-                if (loginViewModel.emailErrorMessage != null){
+                if (loginViewModel.emailErrorMessage != null) {
                     Text(text = loginViewModel.emailErrorMessage!!, color = Color.Red, fontSize = 12.sp)
                 }
 
@@ -222,13 +231,14 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                                 forgotPasswordMessage = it
                                 isDialogError = true
                                 showDialog = true
-                            }
+                            },
                         )
                     },
                     shape = RoundedCornerShape(16.dp),
-                    modifier = Modifier
-                        .height(OutlinedTextFieldDefaults.MinHeight)
-                        .width(OutlinedTextFieldDefaults.MinWidth)
+                    modifier =
+                        Modifier
+                            .height(OutlinedTextFieldDefaults.MinHeight)
+                            .width(OutlinedTextFieldDefaults.MinWidth),
                 ) {
                     Text(text = "Zresetuj hasło")
                 }
@@ -248,7 +258,7 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                         }) {
                             Text("OK")
                         }
-                    }
+                    },
                 )
             }
         }

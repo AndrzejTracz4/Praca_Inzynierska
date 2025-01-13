@@ -24,23 +24,23 @@ fun CustomDrawerItem(
     text: String,
     isSelected: Boolean,
     onClick: () -> Unit,
-    icon: @Composable () -> Unit
+    icon: @Composable () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp)
-            .padding(vertical = 4.dp)
-            .background(
-                color = if (isSelected) Color(0x4DFFFFFF) else Color(0x19FFFFFF),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .padding(vertical = 4.dp)
+                .background(
+                    color = if (isSelected) Color(0x4DFFFFFF) else Color(0x19FFFFFF),
+                    shape = RoundedCornerShape(12.dp),
+                ).clickable(onClick = onClick)
+                .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             // Ikona
             icon() // Wywołanie przekazanej funkcji ikony
@@ -52,7 +52,7 @@ fun CustomDrawerItem(
                 text = text,
                 color = Color.White,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.ExtraBold
+                fontWeight = FontWeight.ExtraBold,
             )
         }
     }

@@ -23,42 +23,42 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 
-
 @Composable
 fun NumberPickerDialog(
     range: IntRange = 0..100,
     selectedNumber: Int,
     onNumberSelected: (Int) -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(
             modifier = Modifier.padding(16.dp),
             shape = RoundedCornerShape(8.dp),
-            color = MaterialTheme.colorScheme.surface
+            color = MaterialTheme.colorScheme.surface,
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(text = "Wybierz liczbę", fontSize = 18.sp, fontWeight = FontWeight.Bold)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 LazyColumn(
-                    modifier = Modifier.height(200.dp)
+                    modifier = Modifier.height(200.dp),
                 ) {
                     items(range.toList()) { value ->
                         Text(
                             text = value.toString(),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { onNumberSelected(value) }
-                                .padding(8.dp),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .clickable { onNumberSelected(value) }
+                                    .padding(8.dp),
                             textAlign = TextAlign.Center,
                             fontSize = 20.sp,
                             color = Color.Black,
-                            fontWeight = if (value == selectedNumber) FontWeight.Bold else FontWeight.Normal
+                            fontWeight = if (value == selectedNumber) FontWeight.Bold else FontWeight.Normal,
                         )
                     }
                 }

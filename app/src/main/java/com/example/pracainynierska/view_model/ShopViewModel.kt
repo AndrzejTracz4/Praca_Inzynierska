@@ -12,16 +12,13 @@ import kotlinx.coroutines.launch
 class ShopViewModel(
     pc: PlayerContextInterface,
     private val calculator: CalculatorInterface,
-    private val purchaseHandler: PurchaseHandlerInterface
+    private val purchaseHandler: PurchaseHandlerInterface,
 ) : AbstractViewModel(pc) {
-
     fun calculateCost(
         type: String,
         validForDays: Int,
-        multiplier: Int
-    ): Int {
-        return calculator.calculateCost(type, validForDays, multiplier)
-    }
+        multiplier: Int,
+    ): Int = calculator.calculateCost(type, validForDays, multiplier)
 
     fun checkIfCanAfford(price: Int): Boolean {
         val currentPlayer = playerContext.getPlayer() ?: return false
@@ -34,11 +31,11 @@ class ShopViewModel(
         validForDays: Int,
         multiplier: Int,
         category: String,
-        price: Int
+        price: Int,
     ) {
         if (!checkIfCanAfford(price)) {
             throw Exception("Insufficient funds")
-            //todo add insufficient funds message
+            // todo add insufficient funds message
         }
         viewModelScope.launch {
             purchaseHandler.handle(

@@ -15,17 +15,13 @@ import androidx.navigation.NavController
 import com.example.pracainynierska.ui.components.ModalDrawer
 import com.example.pracainynierska.ui_view_components.components.TopMenu
 import com.example.pracainynierska.view_model.AbstractViewModel
-import com.example.pracainynierska.view_model.ShopViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlin.jvm.Throws
 
 abstract class AbstractView(
     protected val viewModel: AbstractViewModel,
     protected val navController: NavController,
 ) {
-
-
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
@@ -42,16 +38,19 @@ abstract class AbstractView(
                 bottomBar = {
                     renderBottom()
                 },
-                containerColor = Color.Transparent
-            ) {
-                innerPadding->
+                containerColor = Color.Transparent,
+            ) { innerPadding ->
                 renderContent(innerPadding)
             }
         }
     }
 
     @Composable
-    protected fun renderTop(drawerState: androidx.compose.material3.DrawerState, scope: CoroutineScope, username: String?) {
+    protected fun renderTop(
+        drawerState: androidx.compose.material3.DrawerState,
+        scope: CoroutineScope,
+        username: String?,
+    ) {
         TopMenu(
             navController = navController,
             username = username ?: "",
@@ -60,7 +59,7 @@ abstract class AbstractView(
                 scope.launch {
                     drawerState.open()
                 }
-            }
+            },
         )
     }
 
@@ -69,10 +68,7 @@ abstract class AbstractView(
         BottomMenu(navController = navController)
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    protected open fun renderContent(innerPadding: PaddingValues){
-        throw Exception ("Implement method")
-    }
+    protected open fun renderContent(innerPadding: PaddingValues): Unit = throw Exception("Implement method")
 }
