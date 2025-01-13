@@ -35,12 +35,6 @@ import com.example.pracainynierska.view_model.ShopViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AddAugmentButton(
-    selectedCategory: String,
-    selectedShopMode: String,
-    sliderValueTime: Float,
-    sliderValueMultiplier: Float,
-    costValue: Int,
-    shopViewModel: ShopViewModel,
     onClick: () -> Unit = {}
 ) {
     var showDialog by remember { mutableStateOf(false) }
@@ -56,29 +50,10 @@ fun AddAugmentButton(
                 color = Color(0x19FFFFFF),
                 shape = RoundedCornerShape(12.dp)
             )
+            .padding(horizontal = 16.dp)
             .clickable {
-                val booster = shopViewModel.buyBooster(
-                    type = selectedShopMode,
-                    categoryName = selectedCategory,
-                    validForDays = sliderValueTime.toInt(),
-                    multiplier = sliderValueMultiplier.toInt(),
-                    price = costValue
-                )
-
-                if (booster) {
-                    dialogTitle = "Sukces!"
-                    dialogMessage = "Pomyślnie zakupiono booster!"
-                    showDialog = true
-
-                } else {
-                    dialogTitle = "Błąd!"
-                    dialogMessage = "Nie udało się zakupić boostera!"
-                    showDialog = true
-                }
-
                 onClick()
-            }
-            .padding(horizontal = 16.dp),
+            },
         contentAlignment = Alignment.Center
     ) {
         Row(

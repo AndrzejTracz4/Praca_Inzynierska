@@ -2,11 +2,12 @@ package com.example.pracainynierska.view_model
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.viewModelScope
 import com.example.pracainynierska.context.PlayerContextInterface
 import com.example.pracainynierska.dictionary.types.ShopTypes
 import com.example.pracainynierska.manager.shop.CalculatorInterface
 import com.example.pracainynierska.manager.shop.PurchaseHandlerInterface
-import java.time.LocalDate
+import kotlinx.coroutines.launch
 
 class ShopViewModel(
     pc: PlayerContextInterface,
@@ -24,31 +25,28 @@ class ShopViewModel(
 
     fun checkIfCanAfford(price: Int): Boolean {
         val currentPlayer = playerContext.getPlayer() ?: return false
-        return purchaseHandler.canAfford(currentPlayer.balance, price)
+        return purchaseHandler.canAfford(currentPlayer, price)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun buyBooster(
         type: String,
-        categoryName: String,
         validForDays: Int,
         multiplier: Int,
+        category: String,
         price: Int
-    ): Boolean {
-
+    ) {
         if (!checkIfCanAfford(price)) {
-            return false
+            throw Exception("Insufficient funds")
+            //todo add insufficient funds message
         }
-
-        val augment = AugmentModel(
-            type = type,
-            categoryName = "/api/categories/15",
-            multiplier = if (type == ShopTypes.BOOSTER) (multiplier / 10) else 1,
-            validForDays = (validForDays / 10),
-            price = price,
-            createdAt = LocalDate.now()
-        )
-
-        return purchaseHandler.handlePurchase(augment)
+        viewModelScope.launch {
+            purchaseHandler.handle(
+                type = type,
+                category = category,
+                multiplier = if (type == ShopTypes.BOOSTER) (multiplier / 10) else 2,
+                validForDays = validForDays,
+            )
+        }
     }
 }

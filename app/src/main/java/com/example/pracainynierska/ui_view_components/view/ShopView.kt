@@ -63,6 +63,7 @@ class ShopView(shopViewModel: ShopViewModel,
         var selectedCategory by remember { mutableStateOf("Determinacja") }
         var selectedShopMode by remember { mutableStateOf(ShopTypes.SHIELD) }
         var sliderValueTime by remember { mutableFloatStateOf(10f) }
+        var validForDays by remember { mutableStateOf((sliderValueTime / 10).toInt()) }
         var sliderValueMultiplier by remember { mutableFloatStateOf(20f) }
         var costValue by remember { mutableStateOf(0) }
 
@@ -73,8 +74,8 @@ class ShopView(shopViewModel: ShopViewModel,
         }
 
         costValue = viewModel.calculateCost(
-            shopMode = selectedShopMode,
-            duration = sliderValueTime.toInt(),
+            type = selectedShopMode,
+            validForDays = validForDays,
             multiplier = sliderValueMultiplier.toInt()
         )
 
@@ -313,12 +314,18 @@ class ShopView(shopViewModel: ShopViewModel,
 
 
                 AddAugmentButton(
-                    selectedCategory = selectedCategory,
-                    selectedShopMode = selectedShopMode,
-                    sliderValueTime = sliderValueTime,
-                    sliderValueMultiplier = sliderValueMultiplier,
-                    costValue = costValue,
-                    shopViewModel = viewModel,
+                    onClick = {
+                        if (false != viewModel is ShopViewModel) {
+                            throw Exception("Invalid View Model")
+                        }
+                        viewModel.buyBooster(
+                            type = selectedShopMode,
+                            validForDays = (sliderValueTime / 10).toInt(),
+                            multiplier = sliderValueMultiplier.toInt(),
+                            category = selectedCategory,
+                            price = costValue
+                        )
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(75.dp))

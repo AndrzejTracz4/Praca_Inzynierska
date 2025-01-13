@@ -23,15 +23,12 @@ class AugmentManager (
         return _boosters
     }
 
-    override suspend fun addAugmentAPI(
+    override fun addAugment(
         type: String,
         validForDays: Int,
         multiplier: Int,
         category: String
     ) {
-        return withContext(Dispatchers.IO) {
-            apiClient.addAugment(type, validForDays, multiplier, category)
-        }
+        apiClient.addAugment(type, validForDays, multiplier, category)
     }
-
 }
