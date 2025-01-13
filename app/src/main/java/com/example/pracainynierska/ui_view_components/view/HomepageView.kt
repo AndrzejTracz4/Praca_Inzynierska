@@ -54,7 +54,6 @@ import com.example.pracainynierska.view_model.HomepageViewModel
 
 class HomepageView(homepageViewModel: HomepageViewModel,
                    navController: NavController,
-                   private val augmentManager: AugmentManager
 ) : AbstractView(homepageViewModel, navController) {
 
 
@@ -310,7 +309,10 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                                     .fillMaxHeight(0.9f)
                                     .clip(RoundedCornerShape(10.dp))
                             ){
-                                AugmentList(augmentManager = augmentManager)
+                                if (false == (viewModel is HomepageViewModel)) {
+                                    throw Exception("Invalid View Model")
+                                }
+                                AugmentList(viewModel.getAugmentsList())
                             }
 
                         }

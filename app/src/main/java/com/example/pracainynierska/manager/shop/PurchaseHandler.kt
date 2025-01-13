@@ -1,7 +1,6 @@
 package com.example.pracainynierska.manager.shop
 
 import com.example.pracainynierska.manager.augment.AugmentManager
-import com.example.pracainynierska.model.Augment
 
 class PurchaseHandler(
     private val augmentManager: AugmentManager
@@ -11,8 +10,8 @@ class PurchaseHandler(
         return balance >= price
     }
 
-    override fun handlePurchase(augment: Augment): Boolean {
-        augmentManager.addBooster(augment)
+    override fun handlePurchase(augment: AugmentModel): Boolean {
+        augmentManager.addAugment(augment)
         return true
     }
 }

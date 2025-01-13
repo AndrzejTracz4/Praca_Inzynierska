@@ -58,9 +58,9 @@ fun AddAugmentButton(
             )
             .clickable {
                 val booster = shopViewModel.buyBooster(
-                    shopMode = selectedShopMode,
-                    category = selectedCategory,
-                    duration = sliderValueTime.toInt(),
+                    type = selectedShopMode,
+                    categoryName = selectedCategory,
+                    validForDays = sliderValueTime.toInt(),
                     multiplier = sliderValueMultiplier.toInt(),
                     price = costValue
                 )

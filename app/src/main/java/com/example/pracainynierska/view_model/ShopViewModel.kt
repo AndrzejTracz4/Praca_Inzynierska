@@ -6,7 +6,6 @@ import com.example.pracainynierska.context.PlayerContextInterface
 import com.example.pracainynierska.dictionary.types.ShopTypes
 import com.example.pracainynierska.manager.shop.CalculatorInterface
 import com.example.pracainynierska.manager.shop.PurchaseHandlerInterface
-import com.example.pracainynierska.model.Augment
 import java.time.LocalDate
 
 class ShopViewModel(
@@ -16,11 +15,11 @@ class ShopViewModel(
 ) : AbstractViewModel(pc) {
 
     fun calculateCost(
-        shopMode: String,
-        duration: Int,
+        type: String,
+        validForDays: Int,
         multiplier: Int
     ): Int {
-        return calculator.calculateCost(shopMode, duration, multiplier)
+        return calculator.calculateCost(type, validForDays, multiplier)
     }
 
     fun checkIfCanAfford(price: Int): Boolean {
@@ -30,9 +29,9 @@ class ShopViewModel(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun buyBooster(
-        shopMode: String,
-        category: String,
-        duration: Int,
+        type: String,
+        categoryName: String,
+        validForDays: Int,
         multiplier: Int,
         price: Int
     ): Boolean {
@@ -41,14 +40,13 @@ class ShopViewModel(
             return false
         }
 
-        val augment = Augment(
-            shopMode = shopMode,
-            category = category,
-            multiplier = if (shopMode == ShopTypes.BOOSTER) (multiplier / 10) else 1,
-            duration = (duration / 10),
+        val augment = AugmentModel(
+            type = type,
+            categoryName = "/api/categories/15",
+            multiplier = if (type == ShopTypes.BOOSTER) (multiplier / 10) else 1,
+            validForDays = (validForDays / 10),
             price = price,
-            isActive = true,
-            startDate = LocalDate.now()
+            createdAt = LocalDate.now()
         )
 
         return purchaseHandler.handlePurchase(augment)

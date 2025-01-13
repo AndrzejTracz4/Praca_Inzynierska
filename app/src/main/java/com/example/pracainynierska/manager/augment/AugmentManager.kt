@@ -1,28 +1,37 @@
 package com.example.pracainynierska.manager.augment
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.pracainynierska.context.PlayerContextInterface
-import com.example.pracainynierska.model.Augment
-import com.example.pracainynierska.view_model.AbstractViewModel
+import com.example.pracainynierska.API.api_client.AugmentApi
+import com.example.pracainynierska.API.model.Augment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class AugmentManager (
-    pc: PlayerContextInterface,
-) : AbstractViewModel(pc) {
+    private val apiClient: AugmentApi
+) : AugmentManagerInterface {
+
 
     private val _boosters = MutableLiveData<List<Augment>>()
     val boosters: LiveData<List<Augment>> get() = _boosters
 
-    fun getBoosters(): List<Augment> {
+    override fun getAugments(): List<Augment> {
         return _boosters.value ?: emptyList()
     }
 
-    fun addBooster(augment: Augment) {
-        val currentBoosters = _boosters.value?.toMutableList() ?: mutableListOf()
-        currentBoosters.add(augment)
-        _boosters.value = currentBoosters
-        Log.d("BoosterViewModel", "Dodano booster: $augment")
+     override fun getAugmentsList(): LiveData<List<Augment>> {
+        return _boosters
+    }
+
+    override suspend fun addAugmentAPI(
+        type: String,
+        validForDays: Int,
+        multiplier: Int,
+        category: String
+    ) {
+        return withContext(Dispatchers.IO) {
+            apiClient.addAugment(type, validForDays, multiplier, category)
+        }
     }
 
 }

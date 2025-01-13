@@ -16,10 +16,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.pracainynierska.API.api_client.AugmentApi
 import com.example.pracainynierska.context.PlayerContext
 import com.example.pracainynierska.context.PlayerContextInterface
 import com.example.pracainynierska.manager.augment.AugmentManager
-import com.example.pracainynierska.manager.augment.AugmentManagerFactory
 import com.example.pracainynierska.ui.theme.PracaInżynierskaTheme
 import com.example.pracainynierska.ui_view_components.ProfileView
 import com.example.pracainynierska.ui_view_components.view.AchievementsView
@@ -50,12 +50,15 @@ import com.example.pracainynierska.view_model.TaskViewModelFactory
 class MainActivity : ComponentActivity() {
 
     private lateinit var playerContext: PlayerContextInterface
+    private lateinit var augmentManager: AugmentManager
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         playerContext = PlayerContext()
+        augmentManager = AugmentManager(AugmentApi(playerContext))
 
         setContent {
             val context = LocalContext.current
@@ -73,13 +76,10 @@ class MainActivity : ComponentActivity() {
                         factory = RegistrationViewModelFactory(playerContext)
                     )
                     val homepageViewModel : HomepageViewModel = viewModel(
-                        factory = HomepageViewModelFactory(playerContext, context)
+                        factory = HomepageViewModelFactory(playerContext, context, augmentManager)
                     )
                     val taskViewModel : TaskViewModel = viewModel(
                         factory = TaskViewModelFactory(playerContext)
-                    )
-                    val augmentManager : AugmentManager = viewModel(
-                        factory = AugmentManagerFactory(playerContext)
                     )
                     val shopViewModel : ShopViewModel = viewModel(
                         factory = ShopViewModelFactory(playerContext, augmentManager)
@@ -93,7 +93,6 @@ class MainActivity : ComponentActivity() {
                         registrationViewModel = registrationViewModel,
                         homepageViewModel = homepageViewModel,
                         taskViewModel = taskViewModel,
-                        augmentManager = augmentManager,
                         shopViewModel = shopViewModel,
                         profileViewModel = profileViewModel
                     )
@@ -112,7 +111,6 @@ fun SetupNavGraph(
     registrationViewModel: RegistrationViewModel,
     homepageViewModel: HomepageViewModel,
     taskViewModel: TaskViewModel,
-    augmentManager: AugmentManager,
     shopViewModel: ShopViewModel,
     profileViewModel: ProfileViewModel
 ) {
@@ -127,7 +125,7 @@ fun SetupNavGraph(
             RegisterView(navController = navController, registrationViewModel = registrationViewModel)
         }
         composable("HomepageView") {
-            HomepageView(navController = navController, homepageViewModel = homepageViewModel, augmentManager = augmentManager)
+            HomepageView(navController = navController, homepageViewModel = homepageViewModel)
                 .renderView()
         }
         composable("ForgotPasswordView") {

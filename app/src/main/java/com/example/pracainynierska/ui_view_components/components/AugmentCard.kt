@@ -17,7 +17,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.pracainynierska.model.Augment
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.types.ShopTypes
 import java.time.LocalDate
@@ -26,7 +25,7 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AugmentCard(
-    augment: Augment,
+    augment: com.example.pracainynierska.API.model.Augment,
     showNext: Boolean,
     showPrevious: Boolean,
     onClickNext: () -> Unit,
