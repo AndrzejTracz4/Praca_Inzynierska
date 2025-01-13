@@ -4,9 +4,12 @@ import androidx.lifecycle.LiveData
 import com.example.pracainynierska.API.model.Augment
 
 interface AugmentManagerInterface {
-    suspend fun addAugmentAPI(type: String, validForDays: Int, multiplier: Int, category: String)
-
-    fun addAugment(augment: AugmentModel)
+    fun addAugment(
+        type : String,
+        multiplier : Int,
+        validForDays : Int,
+        category : String
+    )
 
     fun getAugments(): List<Augment>
 
