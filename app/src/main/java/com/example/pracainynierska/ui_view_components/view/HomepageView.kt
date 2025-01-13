@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.dictionary.RankDictionary
 import com.example.pracainynierska.manager.augment.AugmentManager
 import com.example.pracainynierska.model.FakeData
 import com.example.pracainynierska.ui_view_components.components.AugmentList
@@ -63,9 +64,16 @@ class HomepageView(homepageViewModel: HomepageViewModel,
         innerPadding: PaddingValues
     ) {
 
+        if (false == (viewModel is HomepageViewModel)){
+            throw Exception("Invalid View Model")
+        }
+
+        val rankDictionary = RankDictionary()
+
         var userLevel = 1
         var playerExperience = 0f
         var playerBalance = 0
+        val playerPhotoResId = viewModel.getPhotoResId()
         val playerModel = viewModel.getPlayerModel()
         val player = viewModel.getPlayer()
 
@@ -77,40 +85,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
             }
         }
 
-        val levelNames = mapOf(
-            1 to "Rekrut",
-            2 to "Szeregowy",
-            3 to "Starszy Szeregowy",
-            4 to "Kapral",
-            5 to "Starszy Kapral",
-            6 to "Plutonowy",
-            7 to "Sierżant",
-            8 to "Starszy Sierżant",
-            9 to "Major Sierżant",
-            10 to "Chorąży",
-            11 to "Starszy Chorąży",
-            12 to "Sztabowy Chorąży",
-            13 to "Podporucznik",
-            14 to "Porucznik",
-            15 to "Starszy Porucznik",
-            16 to "Kapitan",
-            17 to "Sztabowy Kapitan",
-            18 to "Major",
-            19 to "Starszy Major",
-            20 to "Podpułkownik",
-            21 to "Pułkownik",
-            22 to "Starszy Pułkownik",
-            23 to "Generał Brygady",
-            24 to "Generał Dywizji",
-            25 to "Generał Broni",
-            26 to "Generał Armii",
-            27 to "Marszałek",
-            28 to "Marszałek Polowy",
-            29 to "Naczelny Wódz",
-            30 to "Mistrz Strategii"
-        )
-
-        val userRank = levelNames[userLevel] ?: "Nieznany poziom"
+        val userRank = rankDictionary.levelNames[userLevel] ?: "Nieznany poziom"
 
         val stats = player?.playerStatistics?.statistics?.map{ it.name to it.experience.toFloat() } ?: emptyList()
 
@@ -130,7 +105,6 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
         val scrollState = rememberScrollState()
         var showTaskDetailsDialog by remember { mutableStateOf(false) }
-
 
         Box(
             modifier = Modifier
@@ -168,8 +142,9 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        // Miejsce na zdjęcie użytkownika
-                        UserImagePicker(playerModel)
+                        UserImagePicker(
+                            userResId = playerPhotoResId,
+                        )
 
                         Spacer(modifier = Modifier.width(16.dp))
 
@@ -229,7 +204,6 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                             }
 
                             Spacer(modifier = Modifier.height(8.dp))
-
 
                             GradientLevelProgressBar(playerExperience) // Procent doświadczenia
 

@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -20,6 +21,7 @@ import com.example.pracainynierska.context.PlayerContextInterface
 import com.example.pracainynierska.manager.augment.AugmentManager
 import com.example.pracainynierska.manager.augment.AugmentManagerFactory
 import com.example.pracainynierska.ui.theme.PracaInżynierskaTheme
+import com.example.pracainynierska.ui_view_components.ProfileView
 import com.example.pracainynierska.ui_view_components.view.AchievementsView
 import com.example.pracainynierska.ui_view_components.view.AddCategoryView
 import com.example.pracainynierska.ui_view_components.view.AddTaskView
@@ -38,6 +40,8 @@ import com.example.pracainynierska.view_model.HomepageViewModelFactory
 import com.example.pracainynierska.ui_view_components.view.RegisterView as RegisterView
 import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.view_model.LoginViewModelFactory
+import com.example.pracainynierska.view_model.ProfileViewModel
+import com.example.pracainynierska.view_model.ProfileViewModelFactory
 import com.example.pracainynierska.view_model.RegistrationViewModel
 import com.example.pracainynierska.view_model.RegistrationViewModelFactory
 import com.example.pracainynierska.view_model.ShopViewModel
@@ -58,6 +62,8 @@ class MainActivity : ComponentActivity() {
         playerContext = PlayerContext()
 
         setContent {
+            val context = LocalContext.current
+
             PracaInżynierskaTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -72,7 +78,7 @@ class MainActivity : ComponentActivity() {
                         factory = RegistrationViewModelFactory(playerContext)
                     )
                     val homepageViewModel : HomepageViewModel = viewModel(
-                        factory = HomepageViewModelFactory(playerContext)
+                        factory = HomepageViewModelFactory(playerContext, context)
                     )
                     val taskViewModel : TaskViewModel = viewModel(
                         factory = TaskViewModelFactory(playerContext)
@@ -83,11 +89,15 @@ class MainActivity : ComponentActivity() {
                     val shopViewModel : ShopViewModel = viewModel(
                         factory = ShopViewModelFactory(playerContext, augmentManager)
                     )
+
                     val statisticViewModel : StatisticViewModel = viewModel(
                         factory = StatisticViewModelFactory(playerContext)
                     )
                     val addCategoryViewModel : AddCategoryViewModel = viewModel(
                         factory = AddCategoryViewModelFactory(playerContext)
+
+                    val profileViewModel : ProfileViewModel = viewModel(
+                        factory = ProfileViewModelFactory(playerContext, context)
                     )
                     SetupNavGraph(
                         navController = navController,
@@ -98,7 +108,8 @@ class MainActivity : ComponentActivity() {
                         augmentManager = augmentManager,
                         shopViewModel = shopViewModel,
                         statisticViewModel = statisticViewModel,
-                        addCategoryViewModel = addCategoryViewModel
+                        addCategoryViewModel = addCategoryViewModel,
+                        profileViewModel = profileViewModel
                     )
                 }
             }
@@ -118,7 +129,8 @@ fun SetupNavGraph(
     augmentManager: AugmentManager,
     shopViewModel: ShopViewModel,
     statisticViewModel: StatisticViewModel,
-    addCategoryViewModel: AddCategoryViewModel
+    addCategoryViewModel: AddCategoryViewModel,
+    profileViewModel: ProfileViewModel
 ) {
     NavHost(
         navController = navController,
@@ -142,6 +154,10 @@ fun SetupNavGraph(
         }
         composable("ShopView") {
             ShopView(navController = navController, shopViewModel = shopViewModel)
+                .renderView()
+        }
+        composable("ProfileView") {
+            ProfileView(navController = navController, profileViewModel = profileViewModel)
                 .renderView()
         }
         composable("AddTaskView") {
