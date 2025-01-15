@@ -315,14 +315,13 @@ class ShopView(shopViewModel: ShopViewModel,
 
                 AddAugmentButton(
                     onClick = {
-                        if (false != viewModel is ShopViewModel) {
-                            throw Exception("Invalid View Model")
-                        }
+                        require(viewModel is ShopViewModel) { "Invalid View Model" }
                         viewModel.buyBooster(
                             type = selectedShopMode,
                             validForDays = (sliderValueTime / 10).toInt(),
                             multiplier = sliderValueMultiplier.toInt(),
-                            category = selectedCategory,
+                            //category = selectedCategory,
+                            category = "/api/categories/4",
                             price = costValue
                         )
                     }

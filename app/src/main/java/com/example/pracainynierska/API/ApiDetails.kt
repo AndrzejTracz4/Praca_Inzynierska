@@ -29,6 +29,8 @@ open class ApiDetails(private var playerContext: PlayerContextInterface) {
 
         if (response.isSuccessful && responseBody != null) {
             Log.d("Category API Success", responseBody.toString())
+            val jsonBuilder = Json { ignoreUnknownKeys = true }
+            return jsonBuilder.decodeFromString(responseBody)
         }
 
         if (!response.isSuccessful) {

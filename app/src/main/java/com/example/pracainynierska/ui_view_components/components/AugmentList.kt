@@ -23,8 +23,7 @@ fun AugmentList(augments: LiveData<List<Augment>>) {
     val boostersList = augments.value
     var currentBoosterIndex by remember { mutableStateOf(0) }
 
-    if (boostersList != null) {
-        if (boostersList.isNotEmpty()) {
+        if (boostersList?.isNotEmpty() == true) {
             val currentBooster = boostersList[currentBoosterIndex]
             AugmentCard(
                 augment = currentBooster,
@@ -40,7 +39,7 @@ fun AugmentList(augments: LiveData<List<Augment>>) {
                     currentBoosterIndex--
                 }
             }
-        }else
+        } else
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -51,5 +50,4 @@ fun AugmentList(augments: LiveData<List<Augment>>) {
                     )
                     .padding(4.dp)
             )
-    }
 }

@@ -21,11 +21,12 @@ import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.types.ShopTypes
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import com.example.pracainynierska.API.model.Augment
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AugmentCard(
-    augment: com.example.pracainynierska.API.model.Augment,
+    augment: Augment,
     showNext: Boolean,
     showPrevious: Boolean,
     onClickNext: () -> Unit,
@@ -33,8 +34,8 @@ fun AugmentCard(
 ) {
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val startDate = LocalDate.parse(augment.startDate.toString(), formatter)
-    val endDate = startDate.plusDays(augment.duration.toLong())
+    val startDate = LocalDate.parse(augment.createdAt, formatter)
+    val endDate = startDate.plusDays(augment.validForDays.toLong())
     val endDateFormatted = endDate.format(formatter)
     Box(
         modifier = Modifier
@@ -48,7 +49,7 @@ fun AugmentCard(
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            if (augment.shopMode == ShopTypes.SHIELD) {
+            if (augment.type == ShopTypes.SHIELD) {
                 Icon(
                     painter = painterResource(R.drawable.shield),
                     contentDescription = "BoosterIcon",
@@ -58,7 +59,7 @@ fun AugmentCard(
                         .align(Alignment.CenterVertically)
                         .padding(10.dp)
                 )
-            }else if (augment.shopMode == ShopTypes.BOOSTER){
+            }else if (augment.type == ShopTypes.BOOSTER){
                 Icon(
                     painter = painterResource(R.drawable.timeout),
                     contentDescription = "BoosterIcon",
@@ -74,7 +75,7 @@ fun AugmentCard(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = augment.category,
+                    text = augment.categoryName,
                     color = Color.White,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
@@ -87,7 +88,7 @@ fun AugmentCard(
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
-                if (augment.shopMode == ShopTypes.BOOSTER) {
+                if (augment.type == ShopTypes.BOOSTER) {
                     Text(
                         text = "Mnożnik: x${augment.multiplier}",
                         color = Color.White,

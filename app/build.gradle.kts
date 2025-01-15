@@ -123,4 +123,6 @@ dependencies {
     //Yaml
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.0")
 
+    implementation("com.google.code.gson:gson:2.10.1")
+
 }
