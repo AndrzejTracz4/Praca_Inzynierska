@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pracainynierska.R
-import com.example.pracainynierska.dictionary.types.ShopTypes
+import com.example.pracainynierska.dictionary.types.AugmentTypes
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import com.example.pracainynierska.API.model.Augment
@@ -50,7 +50,7 @@ fun AugmentCard(
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            if (augment.type == ShopTypes.SHIELD) {
+            if (augment.type == AugmentTypes.SHIELD) {
                 Icon(
                     painter = painterResource(R.drawable.shield),
                     contentDescription = "BoosterIcon",
@@ -60,7 +60,7 @@ fun AugmentCard(
                         .align(Alignment.CenterVertically)
                         .padding(10.dp)
                 )
-            }else if (augment.type == ShopTypes.BOOSTER){
+            }else if (augment.type == AugmentTypes.BOOSTER){
                 Icon(
                     painter = painterResource(R.drawable.timeout),
                     contentDescription = "BoosterIcon",
@@ -89,7 +89,7 @@ fun AugmentCard(
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
-                if (augment.type == ShopTypes.BOOSTER) {
+                if (augment.type == AugmentTypes.BOOSTER) {
                     Text(
                         text = "Mnożnik: x${augment.multiplier}",
                         color = Color.White,

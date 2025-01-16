@@ -1,10 +1,11 @@
 package com.example.pracainynierska.view_model
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.viewModelScope
 import com.example.pracainynierska.context.PlayerContextInterface
-import com.example.pracainynierska.dictionary.types.ShopTypes
+import com.example.pracainynierska.dictionary.types.AugmentTypes
 import com.example.pracainynierska.manager.shop.CalculatorInterface
 import com.example.pracainynierska.manager.shop.PurchaseHandlerInterface
 import kotlinx.coroutines.launch
@@ -40,11 +41,12 @@ class ShopViewModel(
             throw Exception("Insufficient funds")
             //todo add insufficient funds message
         }
+        Log.d("Shopviewmodel", type)
         viewModelScope.launch {
             purchaseHandler.handle(
                 type = type,
                 category = category,
-                multiplier = if (type == ShopTypes.BOOSTER) (multiplier / 10) else 2,
+                multiplier = if (type == AugmentTypes.BOOSTER) (multiplier / 10) else 2,
                 validForDays = validForDays,
             )
         }
