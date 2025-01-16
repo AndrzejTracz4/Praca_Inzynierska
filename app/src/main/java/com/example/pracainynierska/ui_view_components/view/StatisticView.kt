@@ -59,10 +59,11 @@ import com.example.pracainynierska.model.Category
 import com.example.pracainynierska.model.Statistic
 import com.example.pracainynierska.ui_view_components.components.GradientStatsProgressBars
 import com.example.pracainynierska.view_model.LoginViewModel
+import com.example.pracainynierska.view_model.StatisticViewModel
 
-class StatisticView(loginViewModel: LoginViewModel,
-               navController: NavController
-) : AbstractView(loginViewModel, navController) {
+class StatisticView(viewModel: StatisticViewModel,
+                    navController: NavController
+) : AbstractView(viewModel, navController) {
 
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -86,30 +87,30 @@ class StatisticView(loginViewModel: LoginViewModel,
         val statisticsData = remember {
             mutableStateListOf(
                 Category("Kategoria 1", listOf(
-                    Statistic("Determinacja", 80f),
-                    Statistic("Sprawność fizyczna", 65f),
-                    Statistic("Inteligencja", 75f),
-                    Statistic("Wiedza", 90f)
+                    Statistic(6, "Determinacja", 80f),
+                    Statistic(7, "Sprawność fizyczna", 65f),
+                    Statistic(5, "Inteligencja", 75f),
+                    Statistic(8, "Wiedza", 90f)
                 )),
-                Category("Kategoria 2", listOf(
-                    Statistic("Cierpliwość", 70f),
-                    Statistic("Kreatywność", 85f),
-                    Statistic("Zdolności przywódcze", 60f)
-                )),
-                Category("Kategoria 3", listOf(
-                    Statistic("Zarządzanie stresem", 50f),
-                    Statistic("Adaptacja do zmian", 90f)
-                )),
-                Category("Kategoria 4", listOf(
-                    Statistic("Komunikacja", 80f),
-                    Statistic("Praca zespołowa", 85f),
-                    Statistic("Rozwiązywanie problemów", 70f)
-                )),
-                Category("Kategoria 5", listOf(
-                    Statistic("Innowacyjność", 90f),
-                    Statistic("Elastyczność", 80f),
-                    Statistic("Zarządzanie czasem", 75f)
-                ))
+//                Category("Kategoria 2", listOf(
+//                    Statistic("Cierpliwość", 70f),
+//                    Statistic("Kreatywność", 85f),
+//                    Statistic("Zdolności przywódcze", 60f)
+//                )),
+//                Category("Kategoria 3", listOf(
+//                    Statistic("Zarządzanie stresem", 50f),
+//                    Statistic("Adaptacja do zmian", 90f)
+//                )),
+//                Category("Kategoria 4", listOf(
+//                    Statistic("Komunikacja", 80f),
+//                    Statistic("Praca zespołowa", 85f),
+//                    Statistic("Rozwiązywanie problemów", 70f)
+//                )),
+//                Category("Kategoria 5", listOf(
+//                    Statistic("Innowacyjność", 90f),
+//                    Statistic("Elastyczność", 80f),
+//                    Statistic("Zarządzanie czasem", 75f)
+//                ))
             )
         }
 

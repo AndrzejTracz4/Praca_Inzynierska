@@ -48,11 +48,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.ui_view_components.components.CustomCreateCategoryButton
 import com.example.pracainynierska.ui_view_components.components.TaskTextField
-import com.example.pracainynierska.view_model.LoginViewModel
+import com.example.pracainynierska.view_model.AddCategoryViewModel
 
-class AddCategoryView(loginViewModel: LoginViewModel,
+class AddCategoryView(viewModel: AddCategoryViewModel,
                       navController: NavController,
-) : AbstractView(loginViewModel, navController) {
+) : AbstractView(viewModel, navController) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
@@ -71,7 +71,7 @@ class AddCategoryView(loginViewModel: LoginViewModel,
 
         val availableStats = remember {
             mutableStateListOf(
-                "Determinacja", "Sprawność fizyczna", "Inteligencja", "Wiedza",
+                "5", "6", "7", "8",
                 "Cierpliwość", "Kreatywność", "Zdolności przywódcze",
                 "Zarządzanie stresem", "Adaptacja do zmian", "Komunikacja",
                 "Praca zespołowa", "Rozwiązywanie problemów", "Innowacyjność",
@@ -262,7 +262,11 @@ class AddCategoryView(loginViewModel: LoginViewModel,
 
             CustomCreateCategoryButton(
                 onCreateClick = {
-                    // Dodatkowa logika przy tworzeniu kategorii
+                    if (false == viewModel is AddCategoryViewModel) {
+                        throw IllegalStateException("Invalid view model type")
+                    }
+                    val list = ArrayList(selectedStats.filterNotNull())
+                    viewModel.addCategory(categoryName, list)
                 },
                 isValid = isCategoryValid && isStatsValid, // Stan walidacji
                 isCategoryValid = isCategoryValid,
