@@ -10,12 +10,11 @@ import com.example.pracainynierska.manager.augment.AugmentManager
 
 class HomepageViewModelFactory(
     private val playerContext: PlayerContextInterface,
-    private val appContext: Context,
-    private val augmentManager: AugmentManager
+    private val appContext: Context
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HomepageViewModel::class.java)) {
-            return HomepageViewModel(playerContext, appContext, augmentManager) as T
+            return HomepageViewModel(playerContext, appContext) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")

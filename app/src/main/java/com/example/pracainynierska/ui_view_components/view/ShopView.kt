@@ -33,6 +33,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -87,7 +88,7 @@ class ShopView(shopViewModel: ShopViewModel,
 
         val costText = buildAnnotatedString {
             withStyle(style = SpanStyle(color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Normal)) {
-                append("Koszt: ")
+                append(stringResource(R.string.cost))
             }
             withStyle(style = SpanStyle(color = costTextColor, fontSize = 16.sp, fontWeight = FontWeight.Bold)) {
                 append("$costValue")
@@ -117,7 +118,7 @@ class ShopView(shopViewModel: ShopViewModel,
 
                 Column {
                     ShopSelectButton(
-                        text = "Osłona antyredukcyjna statystyk",
+                        text = stringResource(R.string.shield_text_button),
                         isSelected = selectedShopMode == AugmentTypes.SHIELD,
                         onClick = {
                             selectedShopMode = AugmentTypes.SHIELD
@@ -125,7 +126,7 @@ class ShopView(shopViewModel: ShopViewModel,
                         iconResId = R.drawable.shield
                     )
                     ShopSelectButton(
-                        text = "Modyfikator czasowy",
+                        text = stringResource(R.string.booster_text_button),
                         isSelected = selectedShopMode == AugmentTypes.BOOSTER,
                         onClick = {
                             selectedShopMode = AugmentTypes.BOOSTER
@@ -137,7 +138,7 @@ class ShopView(shopViewModel: ShopViewModel,
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Czas trwania (d)",
+                    text = stringResource(R.string.duration),
                     color = Color.White,
                     fontSize = 14.sp
                 )
@@ -193,7 +194,7 @@ class ShopView(shopViewModel: ShopViewModel,
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = "Mnożnik (x)",
+                        text = stringResource(R.string.multiplier),
                         color = Color.White,
                         fontSize = 14.sp
                     )
@@ -249,7 +250,7 @@ class ShopView(shopViewModel: ShopViewModel,
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Kategoria",
+                    text = stringResource(R.string.category),
                     color = Color.White,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold
@@ -290,7 +291,6 @@ class ShopView(shopViewModel: ShopViewModel,
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                // Koszt text
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -308,7 +308,7 @@ class ShopView(shopViewModel: ShopViewModel,
 
                     Icon(
                         painter = painterResource(id = R.drawable.coins),
-                        contentDescription = "Ikona monet",
+                        contentDescription = stringResource(R.string.icon_cost_description),
                         tint = Color.Unspecified,
                         modifier = Modifier.size(20.dp)
                     )

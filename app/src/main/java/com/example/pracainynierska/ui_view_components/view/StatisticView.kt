@@ -44,6 +44,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -55,6 +56,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.pracainynierska.R
+import com.example.pracainynierska.ViewRoutes
 import com.example.pracainynierska.model.Category
 import com.example.pracainynierska.model.Statistic
 import com.example.pracainynierska.ui_view_components.components.GradientStatsProgressBars
@@ -141,8 +143,8 @@ class StatisticView(viewModel: StatisticViewModel,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 CustomButton(
-                    text = "Dodaj kategorię",
-                    onClick = { navController.navigate("AddCategoryView") },
+                    text = stringResource(R.string.add_category),
+                    onClick = { navController.navigate(ViewRoutes.ADDCATEGORY.viewName) },
                     iconResId = R.drawable.plus,
                     modifier = Modifier
                         .weight(1f)
@@ -151,7 +153,7 @@ class StatisticView(viewModel: StatisticViewModel,
                 Spacer(modifier = Modifier.width(10.dp))
 
                 CustomButton(
-                    text = "Dodaj statystykę",
+                    text = stringResource(R.string.add_statistic),
                     onClick = { showStatModal = true },
                     iconResId = R.drawable.plus,
                     modifier = Modifier
@@ -175,7 +177,7 @@ class StatisticView(viewModel: StatisticViewModel,
                                 TextField(
                                     value = statName,
                                     onValueChange = { statName = it },
-                                    label = { Text("Nazwa statystyki") },
+                                    label = { Text(stringResource(R.string.statistic_name)) },
                                     modifier = Modifier.fillMaxWidth(),
                                     colors = TextFieldDefaults.textFieldColors(
                                         containerColor = Color.Transparent
@@ -184,7 +186,7 @@ class StatisticView(viewModel: StatisticViewModel,
 
                                 if (error) {
                                     Text(
-                                        text = "Nazwa statystyki jest wymagana",
+                                        text = stringResource(R.string.validation_required_name_statistic),
                                         color = Color.Red,
                                         style = MaterialTheme.typography.bodySmall
                                     )
@@ -192,11 +194,13 @@ class StatisticView(viewModel: StatisticViewModel,
 
                                 Spacer(modifier = Modifier.height(16.dp))
 
-                                Text("Wybierz ikonę", color = Color.Black)
+                                Text(stringResource(R.string.change_icon), color = Color.Black)
 
                                 LazyVerticalGrid(
                                     columns = GridCells.Fixed(3),
-                                    modifier = Modifier.fillMaxWidth().height(200.dp)
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(200.dp)
                                 ) {
                                     itemsIndexed(icons) { index, iconRes ->
                                         Box(
@@ -237,7 +241,7 @@ class StatisticView(viewModel: StatisticViewModel,
                                             showSuccessDialog = true
                                         }
                                     }) {
-                                    Text("Utwórz statystykę")
+                                    Text(stringResource(R.string.create_statistic))
                                 }
                             }
                         }
@@ -253,8 +257,8 @@ class StatisticView(viewModel: StatisticViewModel,
                             Text("OK")
                         }
                     },
-                    title = { Text("Sukces") },
-                    text = { Text("Statystyka została pomyślnie utworzona.") }
+                    title = { Text(stringResource(R.string.success)) },
+                    text = { Text(stringResource(R.string.success_creation_statistics)) }
                 )
             }
 
@@ -264,7 +268,7 @@ class StatisticView(viewModel: StatisticViewModel,
                 onValueChange = { searchQuery = it },
                 label = {
                     Text(
-                        text = "Wyszukaj kategorię",
+                        text = stringResource(R.string.search_category),
                         color = Color.White
                     )
                 },
@@ -324,7 +328,7 @@ class StatisticView(viewModel: StatisticViewModel,
                             ) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.edit),
-                                    contentDescription = "Edytuj kategorię",
+                                    contentDescription = stringResource(R.string.icon_edit_category_description),
                                     tint = Color.White
                                 )
                             }

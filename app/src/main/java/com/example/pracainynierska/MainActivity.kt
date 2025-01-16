@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
                         factory = RegistrationViewModelFactory(playerContext)
                     )
                     val homepageViewModel : HomepageViewModel = viewModel(
-                        factory = HomepageViewModelFactory(playerContext, context, augmentManager)
+                        factory = HomepageViewModelFactory(playerContext, context)
                     )
                     val taskViewModel : TaskViewModel = viewModel(
                         factory = TaskViewModelFactory(playerContext)
@@ -95,7 +95,7 @@ class MainActivity : ComponentActivity() {
                     )
                     val addCategoryViewModel : AddCategoryViewModel = viewModel(
                         factory = AddCategoryViewModelFactory(playerContext)
-
+                    )
                     val profileViewModel : ProfileViewModel = viewModel(
                         factory = ProfileViewModelFactory(playerContext, context)
                     )

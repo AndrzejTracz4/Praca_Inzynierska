@@ -41,10 +41,12 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.ViewRoutes
 import com.example.pracainynierska.view_model.RegistrationViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -82,7 +84,7 @@ fun RegisterView(navController: NavController, registrationViewModel: Registrati
             )
 
             Text(
-                text = "Questa",
+                text = stringResource(R.string.app_name),
                 fontSize = 24.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.ExtraBold
@@ -91,7 +93,7 @@ fun RegisterView(navController: NavController, registrationViewModel: Registrati
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "\"Make it happen.\"",
+                text = stringResource(R.string.app_quote),
                 color = Color.Black,
                 fontSize = 12.sp,
                 fontStyle = FontStyle.Italic
@@ -103,7 +105,7 @@ fun RegisterView(navController: NavController, registrationViewModel: Registrati
                 value = registrationViewModel.username,
                 onValueChange = {
                     registrationViewModel.onUsernameChange(it)},
-                label = { Text(text = "Username")},
+                label = { Text(text = stringResource(R.string.username))},
                 isError = registrationViewModel.getUserNameErrorMessage() != null,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
@@ -120,7 +122,7 @@ fun RegisterView(navController: NavController, registrationViewModel: Registrati
                     {
                         Image(
                             painter = painterResource(id = R.drawable.user),
-                            contentDescription = "Username",
+                            contentDescription = stringResource(R.string.icon_username_description),
                             modifier = Modifier
                                 .size(24.dp)
                                 .alpha(0.5f)
@@ -147,7 +149,7 @@ fun RegisterView(navController: NavController, registrationViewModel: Registrati
                 value = registrationViewModel.email,
                 onValueChange = {
                     registrationViewModel.onEmailChange(it)},
-                label = { Text(text = "Email")},
+                label = { Text(text = stringResource(R.string.email))},
                 isError = registrationViewModel.getEmailErrorMessage() != null,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
@@ -162,7 +164,7 @@ fun RegisterView(navController: NavController, registrationViewModel: Registrati
                     } else {
                         Image(
                             painter = painterResource(id = R.drawable.email),
-                            contentDescription = "Email",
+                            contentDescription = stringResource(R.string.icon_email_description),
                             modifier = Modifier
                                 .size(24.dp)
                                 .alpha(0.5f)
@@ -188,7 +190,7 @@ fun RegisterView(navController: NavController, registrationViewModel: Registrati
             OutlinedTextField(
                 value = registrationViewModel.password,
                 onValueChange = {registrationViewModel.onPasswordChange(it)},
-                label = { Text(text = "Password")},
+                label = { Text(text = stringResource(R.string.password))},
                 isError = registrationViewModel.getPasswordErrorMessage() != null,
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
@@ -204,7 +206,7 @@ fun RegisterView(navController: NavController, registrationViewModel: Registrati
                     } else {
                         Image(
                             painter = painterResource(id = R.drawable.password),
-                            contentDescription = "Password",
+                            contentDescription = stringResource(R.string.icon_password_description),
                             modifier = Modifier
                                 .size(24.dp)
                                 .alpha(0.5f)
@@ -230,7 +232,7 @@ fun RegisterView(navController: NavController, registrationViewModel: Registrati
             OutlinedTextField(
                 value = registrationViewModel.confirmPassword,
                 onValueChange = {registrationViewModel.onConfirmPasswordChange(it)},
-                label = { Text(text = "Confirm password")},
+                label = { Text(text = stringResource(R.string.repeat_password))},
                 isError = registrationViewModel.getConfirmPasswordErrorMessage() != null,
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
@@ -246,7 +248,7 @@ fun RegisterView(navController: NavController, registrationViewModel: Registrati
                     } else {
                         Image(
                             painter = painterResource(id = R.drawable.password),
-                            contentDescription = "Password",
+                            contentDescription = stringResource(R.string.icon_repeat_password_description),
                             modifier = Modifier
                                 .size(24.dp)
                                 .alpha(0.5f)
@@ -273,7 +275,7 @@ fun RegisterView(navController: NavController, registrationViewModel: Registrati
                 onClick = {
                     registrationViewModel.registerUser(
                         onSuccess = {
-                            registrationMessage = "Registration successful"
+                            registrationMessage = R.string.success_registration_user.toString()
                             showDialog = true
                         },
                         onError = {
@@ -287,22 +289,22 @@ fun RegisterView(navController: NavController, registrationViewModel: Registrati
                     .height(OutlinedTextFieldDefaults.MinHeight)
                     .width(OutlinedTextFieldDefaults.MinWidth)
             ) {
-                Text(text = "Register", fontSize = 16.sp)
+                Text(text = stringResource(R.string.registration), fontSize = 16.sp)
             }
 
             if (showDialog) {
                 AlertDialog(
                     onDismissRequest = { showDialog = false },
-                    title = { Text(text = "Registration Status") },
+                    title = { Text(text = stringResource(R.string.registration_status)) },
                     text = { Text(text = registrationMessage) },
                     confirmButton = {
                         TextButton(onClick = {
                             showDialog = false
-                            if (registrationMessage == "Registration successful") {
-                                navController.navigate("LoginView")
+                            if (registrationMessage == R.string.success_registration_user.toString()) {
+                                navController.navigate(ViewRoutes.LOGIN.viewName)
                             }
                         }) {
-                            Text("OK")
+                            Text(stringResource(R.string.ok))
                         }
                     }
                 )

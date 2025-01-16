@@ -15,6 +15,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.ViewRoutes
 import com.example.pracainynierska.ui_view_components.components.BottomMenuItem
 import com.example.pracainynierska.ui_view_components.components.navigateIfNotCurrent
 
@@ -43,43 +44,37 @@ fun BottomMenu(navController: NavController) {
                     )
                 )
         ) {
-            // Statystyki
             BottomMenuItem(
                 icon = R.drawable.stats,
                 label = "Kategorie",
-                onClick = { navigateIfNotCurrent(navController, "StatisticView") },
-                modifier = Modifier.weight(1f) // Ustawiamy wagę w rodzicu
+                onClick = { navigateIfNotCurrent(navController, ViewRoutes.STATISTICS.viewName) },
+                modifier = Modifier.weight(1f)
             )
 
-            // Osiągnięcia
             BottomMenuItem(
                 icon = R.drawable.achievements,
                 label = "Osiągnięcia",
-                onClick = { navigateIfNotCurrent(navController, "AchievementsView") },
+                onClick = { navigateIfNotCurrent(navController, ViewRoutes.ACHIEVEMENTS.viewName) },
                 modifier = Modifier.weight(1f)
             )
 
-            // Placeholder na przycisk "Dodaj zadanie"
             Spacer(modifier = Modifier.weight(1f))
 
-            // Kalendarz
             BottomMenuItem(
                 icon = R.drawable.calendar,
                 label = "Kalendarz",
-                onClick = { navigateIfNotCurrent(navController, "CalendarsView") },
+                onClick = { navigateIfNotCurrent(navController, ViewRoutes.CALENDAR.viewName) },
                 modifier = Modifier.weight(1f)
             )
 
-            // Sklep
             BottomMenuItem(
                 icon = R.drawable.shop,
                 label = "Sklep",
-                onClick = { navigateIfNotCurrent(navController, "ShopView") },
+                onClick = { navigateIfNotCurrent(navController, ViewRoutes.SHOP.viewName) },
                 modifier = Modifier.weight(1f)
             )
         }
 
-        // Przycisk "Dodaj zadanie"
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -97,7 +92,7 @@ fun BottomMenu(navController: NavController) {
                     )
                 )
         ) {
-            IconButton(onClick = { navigateIfNotCurrent(navController, "AddTaskView") }) {
+            IconButton(onClick = { navigateIfNotCurrent(navController, ViewRoutes.ADDTASK.viewName) }) {
                 Image(
                     painter = painterResource(id = R.drawable.plus),
                     contentDescription = "AddTask",

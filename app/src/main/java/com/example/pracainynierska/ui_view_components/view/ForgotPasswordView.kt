@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -50,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.ViewRoutes
 import com.example.pracainynierska.view_model.LoginViewModel
 
 @Composable
@@ -85,12 +87,12 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
 
             Image(
                 painter = painterResource(id = R.drawable.questa_logo),
-                contentDescription = "Logo Questa",
+                contentDescription = stringResource(R.string.icon_logo_questa_description),
                 modifier = Modifier.size(450.dp, 150.dp)
             )
 
             Text(
-                text = "Questa",
+                text = stringResource(R.string.app_name),
                 fontSize = 24.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.ExtraBold
@@ -99,7 +101,7 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "\"Make it happen.\"",
+                text = stringResource(R.string.app_quote),
                 color = Color.Black,
                 fontSize = 12.sp,
                 fontStyle = FontStyle.Italic
@@ -107,24 +109,21 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            if (isResetCodeSent == true) {
-                // Dodaj kafelki do wprowadzenia kodu
+            if (isResetCodeSent) {
                 Column(
                     modifier = Modifier.padding(top = 16.dp)
                 ) {
-                    Text("Wprowadź kod resetujący:", color = Color.Black, fontSize = 16.sp)
+                    Text(stringResource(R.string.enter_reset_code), color = Color.Black, fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Kafelki do wprowadzenia kodu
                     Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-                        repeat(6) { index -> // 6 kafelków dla 6-cyfrowego kodu
+                        repeat(6) { index ->
                             OutlinedTextField(
                                 value = codeInputs[index],
                                 onValueChange = {
                                     if (it.length <= 1) {
                                         codeInputs[index] = it
                                         if (it.isNotEmpty() && index < 5) {
-                                            // Przenieś fokus do następnego pola
                                             focusManager.moveFocus(FocusDirection.Next)
                                         }
                                     }
@@ -147,13 +146,11 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
 
                     Button(
                         onClick = {
-                            // Logika weryfikacji kodu
                             val enteredCode = codeInputs.joinToString("")
-                            if (enteredCode == "111111") { // Weryfikacja kodu
-                                // Kod poprawny, przejdź do zmiany hasła
-                                navController.navigate("ChangeForgotPasswordView")
+                            if (enteredCode == "111111") {
+                                navController.navigate(ViewRoutes.CHANGEFORGOTPASSWORD.viewName)
                             } else {
-                                forgotPasswordMessage = "Niepoprawny kod resetujący."
+                                forgotPasswordMessage =R.string.invalid_reset_code.toString()
                                 isDialogError = true
                                 showDialog = true
                             }
@@ -163,7 +160,7 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                             .height(OutlinedTextFieldDefaults.MinHeight)
                             .fillMaxWidth()
                     ) {
-                        Text(text = "Potwierdź kod")
+                        Text(text = stringResource(R.string.confirm_code))
                     }
 
                 }
@@ -171,7 +168,7 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                 OutlinedTextField(
                     value = loginViewModel.email,
                     onValueChange = {loginViewModel.onEmailChange(it)},
-                    label = { Text(text = "Email")},
+                    label = { Text(text = stringResource(R.string.email))},
                     isError = loginViewModel.emailErrorMessage != null,
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
@@ -186,7 +183,7 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                         } else {
                             Image(
                                 painter = painterResource(id = R.drawable.email),
-                                contentDescription = "Email",
+                                contentDescription = stringResource(R.string.icon_email_description),
                                 modifier = Modifier
                                     .size(24.dp)
                                     .alpha(0.5f)
@@ -214,7 +211,7 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                         loginViewModel.forgotPassword(
                             loginViewModel.email,
                             onSuccess = {
-                                forgotPasswordMessage = "Na twój adres email został wysłany tymczasowy kod resetujący hasło."
+                                forgotPasswordMessage = R.string.information_email_reset_code.toString()
                                 isDialogError = false
                                 showDialog = true
                             },
@@ -230,7 +227,7 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                         .height(OutlinedTextFieldDefaults.MinHeight)
                         .width(OutlinedTextFieldDefaults.MinWidth)
                 ) {
-                    Text(text = "Zresetuj hasło")
+                    Text(text = stringResource(R.string.reset_password))
                 }
             }
 
@@ -239,14 +236,14 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                     onDismissRequest = {
                         showDialog = false
                     },
-                    title = { Text(text = if (isDialogError) "Błąd" else "Sukces") },
+                    title = { Text(text = if (isDialogError) stringResource(R.string.error) else stringResource(R.string.success)) },
                     text = { Text(text = forgotPasswordMessage) },
                     confirmButton = {
                         TextButton(onClick = {
                             showDialog = false
                             isResetCodeSent = true
                         }) {
-                            Text("OK")
+                            Text(stringResource(R.string.ok))
                         }
                     }
                 )

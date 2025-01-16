@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -67,12 +68,12 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
 
             Image(
                 painter = painterResource(id = R.drawable.questa_logo),
-                contentDescription = "Logo Questa",
+                contentDescription = stringResource(R.string.icon_logo_questa_description),
                 modifier = Modifier.size(450.dp, 150.dp)
             )
 
             Text(
-                text = "Questa",
+                text = stringResource(R.string.app_name),
                 fontSize = 24.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.ExtraBold
@@ -81,7 +82,7 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "\"Make it happen.\"",
+                text = stringResource(R.string.app_quote),
                 color = Color.Black,
                 fontSize = 12.sp,
                 fontStyle = FontStyle.Italic
