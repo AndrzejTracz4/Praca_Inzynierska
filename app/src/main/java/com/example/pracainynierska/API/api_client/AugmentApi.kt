@@ -24,15 +24,6 @@ class AugmentApi(playerContext: PlayerContextInterface) : ApiDetails(playerConte
         )
     }
 
-    fun getAugments() {
-        return request(Request
-            .Builder()
-            .addHeader("Authorization", "Bearer ${this.getToken()}")
-            .url(buildPath(createPath))
-            .get()
-            .build()
-        )
-    }
     private fun getCreateRequestBody(type: String, validForDays: Int, multiplier: Int, category: String): RequestBody {
 
         val json = """

@@ -34,7 +34,8 @@ fun AugmentCard(
 ) {
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val startDate = LocalDate.parse(augment.createdAt, formatter)
+    val dateOnly = augment.createdAt.substringBefore("T")
+    val startDate = LocalDate.parse(dateOnly, formatter)
     val endDate = startDate.plusDays(augment.validForDays.toLong())
     val endDateFormatted = endDate.format(formatter)
     Box(
