@@ -40,6 +40,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.pracainynierska.API.model.Augment
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.RankDictionary
 import com.example.pracainynierska.manager.augment.AugmentManager
@@ -54,7 +55,6 @@ import com.example.pracainynierska.view_model.HomepageViewModel
 
 class HomepageView(homepageViewModel: HomepageViewModel,
                    navController: NavController,
-                   private val augmentManager: AugmentManager
 ) : AbstractView(homepageViewModel, navController) {
 
 
@@ -76,6 +76,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
         val playerPhotoResId = viewModel.getPhotoResId()
         val playerModel = viewModel.getPlayerModel()
         val player = viewModel.getPlayer()
+        var playerAugments = viewModel.getPlayerAugments()
 
         playerModel.observeAsState().value.let {
             if (it != null) {
@@ -310,7 +311,10 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                                     .fillMaxHeight(0.9f)
                                     .clip(RoundedCornerShape(10.dp))
                             ){
-                                AugmentList(augmentManager = augmentManager)
+                                if (false == (viewModel is HomepageViewModel)) {
+                                    throw Exception("Invalid View Model")
+                                }
+                                AugmentList(playerAugments)
                             }
 
                         }

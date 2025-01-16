@@ -23,6 +23,8 @@ class PlayerApi(playerContext: PlayerContextInterface) : ApiDetails(playerContex
 
     private val registerPath : String = "api/register"
 
+    private val updatePlayerPath : String = "api/players"
+
     private val RequestValidationExceptionFactory = RequestValidationExceptionFactory()
 
     fun registerPlayer(username: String, email: String, password: String) {
@@ -110,6 +112,19 @@ class PlayerApi(playerContext: PlayerContextInterface) : ApiDetails(playerContex
         return this.getPlayer()!!
     }
 
+    fun updateUserPhotoPath(userPhotoPath: String) {
+        val body = getUpdatePhotoPathRequestBody(userPhotoPath)
+        Log.d("Augment API", "Created body")
+
+        return request(Request
+            .Builder()
+            .addHeader("Authorization", "Bearer ${this.getToken()}")
+            .url(buildPath(updatePlayerPath + "/${getPlayer()?.id}"))
+            .patch(body)
+            .build()
+        )
+    }
+
     private fun getLoginRequestBody(email: String, password: String): RequestBody {
         val json = """
                 {
@@ -127,6 +142,16 @@ class PlayerApi(playerContext: PlayerContextInterface) : ApiDetails(playerContex
                     "name": "$name",
                     "email": "$email",
                     "password": "$password"
+                }
+            """.trimIndent()
+        val body = json.toRequestBody("application/json".toMediaTypeOrNull())
+        return body
+    }
+
+    private fun getUpdatePhotoPathRequestBody(userPhotoPath: String): RequestBody {
+        val json = """
+                {
+                    "userPhotoPath": "$userPhotoPath",
                 }
             """.trimIndent()
         val body = json.toRequestBody("application/json".toMediaTypeOrNull())

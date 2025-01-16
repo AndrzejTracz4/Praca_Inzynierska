@@ -1,12 +1,18 @@
 package com.example.pracainynierska.API
 
+import android.util.Log
+import com.example.pracainynierska.API.Exception.RequestFailedException
 import com.example.pracainynierska.API.model.Player
+import com.example.pracainynierska.API.model.error_response.ValidationErrorResponse
 import com.example.pracainynierska.context.PlayerContextInterface
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
+import okhttp3.Request
+import com.example.pracainynierska.API.factory.RequestValidationExceptionFactory
 
 
 open class ApiDetails(private var playerContext: PlayerContextInterface) {
-    private val apiPath: String = "https://cac7-83-31-123-5.ngrok-free.app"
+    private val apiPath: String = ""
 
     protected val apiClient = OkHttpClient()
 
@@ -23,6 +29,8 @@ open class ApiDetails(private var playerContext: PlayerContextInterface) {
 
         if (response.isSuccessful && responseBody != null) {
             Log.d("Category API Success", responseBody.toString())
+            val jsonBuilder = Json { ignoreUnknownKeys = true }
+            return jsonBuilder.decodeFromString(responseBody)
         }
 
         if (!response.isSuccessful) {

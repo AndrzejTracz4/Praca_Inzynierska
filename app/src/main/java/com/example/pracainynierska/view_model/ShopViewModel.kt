@@ -1,13 +1,14 @@
 package com.example.pracainynierska.view_model
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.viewModelScope
 import com.example.pracainynierska.context.PlayerContextInterface
-import com.example.pracainynierska.dictionary.types.ShopTypes
+import com.example.pracainynierska.dictionary.types.AugmentTypes
 import com.example.pracainynierska.manager.shop.CalculatorInterface
 import com.example.pracainynierska.manager.shop.PurchaseHandlerInterface
-import com.example.pracainynierska.model.Augment
-import java.time.LocalDate
+import kotlinx.coroutines.launch
 
 class ShopViewModel(
     pc: PlayerContextInterface,
@@ -16,41 +17,38 @@ class ShopViewModel(
 ) : AbstractViewModel(pc) {
 
     fun calculateCost(
-        shopMode: String,
-        duration: Int,
+        type: String,
+        validForDays: Int,
         multiplier: Int
     ): Int {
-        return calculator.calculateCost(shopMode, duration, multiplier)
+        return calculator.calculateCost(type, validForDays, multiplier)
     }
 
     fun checkIfCanAfford(price: Int): Boolean {
         val currentPlayer = playerContext.getPlayer() ?: return false
-        return purchaseHandler.canAfford(currentPlayer.balance, price)
+        return purchaseHandler.canAfford(currentPlayer, price)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun buyBooster(
-        shopMode: String,
-        category: String,
-        duration: Int,
+        type: String,
+        validForDays: Int,
         multiplier: Int,
+        category: String,
         price: Int
-    ): Boolean {
-
+    ) {
         if (!checkIfCanAfford(price)) {
-            return false
+            throw Exception("Insufficient funds")
+            //todo add insufficient funds message
         }
-
-        val augment = Augment(
-            shopMode = shopMode,
-            category = category,
-            multiplier = if (shopMode == ShopTypes.BOOSTER) (multiplier / 10) else 1,
-            duration = (duration / 10),
-            price = price,
-            isActive = true,
-            startDate = LocalDate.now()
-        )
-
-        return purchaseHandler.handlePurchase(augment)
+        Log.d("Shopviewmodel", type)
+        viewModelScope.launch {
+            purchaseHandler.handle(
+                type = type,
+                category = category,
+                multiplier = if (type == AugmentTypes.BOOSTER) (multiplier / 10) else 2,
+                validForDays = validForDays,
+            )
+        }
     }
 }

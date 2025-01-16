@@ -10,45 +10,42 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.pracainynierska.manager.augment.AugmentManager
+import com.example.pracainynierska.API.model.Augment
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AugmentList(augmentManager: AugmentManager) {
-    val boostersList = augmentManager.boosters.observeAsState(initial = emptyList()).value
+fun AugmentList(augments: List<Augment>) {
     var currentBoosterIndex by remember { mutableStateOf(0) }
 
-    if (boostersList.isNotEmpty()) {
-        val currentBooster = boostersList[currentBoosterIndex]
-        AugmentCard(
-            augment = currentBooster,
-            showNext = currentBoosterIndex < boostersList.size - 1,
-            showPrevious = currentBoosterIndex > 0,
-            onClickNext = {
-                if (currentBoosterIndex < boostersList.size - 1) {
-                    currentBoosterIndex++
+        if (augments.isNotEmpty()) {
+            val currentBooster = augments[currentBoosterIndex]
+            AugmentCard(
+                augment = currentBooster,
+                showNext = currentBoosterIndex < augments.size - 1,
+                showPrevious = currentBoosterIndex > 0,
+                onClickNext = {
+                    if (currentBoosterIndex < augments.size - 1) {
+                        currentBoosterIndex++
+                    }
                 }
-            },
-            onClickPrevious = {
+            ) {
                 if (currentBoosterIndex > 0) {
                     currentBoosterIndex--
                 }
             }
-        )
-    }else
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .background(
-                    color = Color(0x14FFFFFF),
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .padding(4.dp)
-        )
+        } else
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .background(
+                        color = Color(0x14FFFFFF),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .padding(4.dp)
+            )
 }

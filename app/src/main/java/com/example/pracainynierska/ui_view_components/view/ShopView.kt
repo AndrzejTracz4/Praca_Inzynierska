@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
-import com.example.pracainynierska.dictionary.types.ShopTypes
+import com.example.pracainynierska.dictionary.types.AugmentTypes
 import com.example.pracainynierska.ui_view_components.components.AddAugmentButton
 import com.example.pracainynierska.ui_view_components.components.CustomSlider
 import com.example.pracainynierska.ui_view_components.components.CustomSliderDefaults
@@ -61,10 +62,11 @@ class ShopView(shopViewModel: ShopViewModel,
     ) {
 
         var selectedCategory by remember { mutableStateOf("Determinacja") }
-        var selectedShopMode by remember { mutableStateOf(ShopTypes.SHIELD) }
+        var selectedShopMode by remember { mutableStateOf(AugmentTypes.SHIELD) }
         var sliderValueTime by remember { mutableFloatStateOf(10f) }
+        var validForDays by remember { mutableStateOf((sliderValueTime / 10).toInt()) }
         var sliderValueMultiplier by remember { mutableFloatStateOf(20f) }
-        var costValue by remember { mutableStateOf(0) }
+        var costValue by remember { mutableIntStateOf(0) }
 
         var isHidden by remember { mutableStateOf(true) }
 
@@ -73,10 +75,11 @@ class ShopView(shopViewModel: ShopViewModel,
         }
 
         costValue = viewModel.calculateCost(
-            shopMode = selectedShopMode,
-            duration = sliderValueTime.toInt(),
+            type = selectedShopMode,
+            validForDays = sliderValueTime.toInt(),
             multiplier = sliderValueMultiplier.toInt()
         )
+
 
         val isAffordable = viewModel.checkIfCanAfford(costValue)
 
@@ -115,17 +118,17 @@ class ShopView(shopViewModel: ShopViewModel,
                 Column {
                     ShopSelectButton(
                         text = "Osłona antyredukcyjna statystyk",
-                        isSelected = selectedShopMode == ShopTypes.SHIELD,
+                        isSelected = selectedShopMode == AugmentTypes.SHIELD,
                         onClick = {
-                            selectedShopMode = ShopTypes.SHIELD
+                            selectedShopMode = AugmentTypes.SHIELD
                             isHidden = true },
                         iconResId = R.drawable.shield
                     )
                     ShopSelectButton(
                         text = "Modyfikator czasowy",
-                        isSelected = selectedShopMode == ShopTypes.BOOSTER,
+                        isSelected = selectedShopMode == AugmentTypes.BOOSTER,
                         onClick = {
-                            selectedShopMode = ShopTypes.BOOSTER
+                            selectedShopMode = AugmentTypes.BOOSTER
                             isHidden = false },
                         iconResId = R.drawable.timeout
                     )
@@ -313,12 +316,17 @@ class ShopView(shopViewModel: ShopViewModel,
 
 
                 AddAugmentButton(
-                    selectedCategory = selectedCategory,
-                    selectedShopMode = selectedShopMode,
-                    sliderValueTime = sliderValueTime,
-                    sliderValueMultiplier = sliderValueMultiplier,
-                    costValue = costValue,
-                    shopViewModel = viewModel,
+                    onClick = {
+                        require(viewModel is ShopViewModel) { "Invalid View Model" }
+                        viewModel.buyBooster(
+                            type = selectedShopMode,
+                            validForDays = (sliderValueTime / 10).toInt(),
+                            multiplier = sliderValueMultiplier.toInt(),
+                            //category = selectedCategory,
+                            category = "/api/categories/4",
+                            price = costValue
+                        )
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(75.dp))
