@@ -33,6 +33,8 @@ import com.example.pracainynierska.ui_view_components.view.HomepageView
 import com.example.pracainynierska.ui_view_components.view.LoginView
 import com.example.pracainynierska.ui_view_components.view.ShopView
 import com.example.pracainynierska.ui_view_components.view.StatisticView
+import com.example.pracainynierska.view_model.AddCategoryViewModel
+import com.example.pracainynierska.view_model.AddCategoryViewModelFactory
 import com.example.pracainynierska.view_model.HomepageViewModel
 import com.example.pracainynierska.view_model.HomepageViewModelFactory
 import com.example.pracainynierska.ui_view_components.view.RegisterView as RegisterView
@@ -44,6 +46,8 @@ import com.example.pracainynierska.view_model.RegistrationViewModel
 import com.example.pracainynierska.view_model.RegistrationViewModelFactory
 import com.example.pracainynierska.view_model.ShopViewModel
 import com.example.pracainynierska.view_model.ShopViewModelFactory
+import com.example.pracainynierska.view_model.StatisticViewModel
+import com.example.pracainynierska.view_model.StatisticViewModelFactory
 import com.example.pracainynierska.view_model.TaskViewModel
 import com.example.pracainynierska.view_model.TaskViewModelFactory
 
@@ -69,6 +73,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
+
                     val loginViewModel: LoginViewModel = viewModel(
                         factory = LoginViewModelFactory(playerContext)
                     )
@@ -84,6 +89,13 @@ class MainActivity : ComponentActivity() {
                     val shopViewModel : ShopViewModel = viewModel(
                         factory = ShopViewModelFactory(playerContext, augmentManager)
                     )
+
+                    val statisticViewModel : StatisticViewModel = viewModel(
+                        factory = StatisticViewModelFactory(playerContext)
+                    )
+                    val addCategoryViewModel : AddCategoryViewModel = viewModel(
+                        factory = AddCategoryViewModelFactory(playerContext)
+
                     val profileViewModel : ProfileViewModel = viewModel(
                         factory = ProfileViewModelFactory(playerContext, context)
                     )
@@ -94,6 +106,8 @@ class MainActivity : ComponentActivity() {
                         homepageViewModel = homepageViewModel,
                         taskViewModel = taskViewModel,
                         shopViewModel = shopViewModel,
+                        statisticViewModel = statisticViewModel,
+                        addCategoryViewModel = addCategoryViewModel,
                         profileViewModel = profileViewModel
                     )
                 }
@@ -112,6 +126,8 @@ fun SetupNavGraph(
     homepageViewModel: HomepageViewModel,
     taskViewModel: TaskViewModel,
     shopViewModel: ShopViewModel,
+    statisticViewModel: StatisticViewModel,
+    addCategoryViewModel: AddCategoryViewModel,
     profileViewModel: ProfileViewModel
 ) {
     NavHost(
@@ -151,11 +167,11 @@ fun SetupNavGraph(
                 .renderView()
         }
         composable("StatisticView") {
-            StatisticView(navController = navController, loginViewModel = loginViewModel)
+            StatisticView(navController = navController, viewModel = statisticViewModel)
                 .renderView()
         }
         composable("AddCategoryView") {
-            AddCategoryView(navController = navController, loginViewModel = loginViewModel)
+            AddCategoryView(navController = navController, viewModel = addCategoryViewModel)
                 .renderView()
         }
         composable("EditTaskView/{taskId}") { backStackEntry ->
