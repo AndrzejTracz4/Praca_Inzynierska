@@ -137,7 +137,7 @@ class ProfileView(
                             ) {
                                 Icon(
                                     painter = painterResource(R.drawable.change_image_icon),
-                                    contentDescription = stringResource(R.string.change_icon_description),
+                                    contentDescription = stringResource(R.string.icon_change_description),
                                     modifier = Modifier.size(24.dp),
                                     tint = Color.White
                                 )

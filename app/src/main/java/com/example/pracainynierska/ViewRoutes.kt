@@ -9,6 +9,7 @@ public enum class ViewRoutes(val viewName: String) {
     ACHIEVEMENTS("AchievementsView"),
     ADDCATEGORY("AddCategoryView"),
     ADDTASK("AddTaskView"),
+    EDITTASK("EditTaskView"),
     SETTINGS("SettingsView"),
     LOGIN("LoginView"),
     REGISTER("RegisterView"),

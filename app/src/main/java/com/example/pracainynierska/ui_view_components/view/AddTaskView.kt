@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -114,7 +115,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
                         .padding(8.dp)
                 ) {
                     SelectTaskButton(
-                        text = "Jednorazowe",
+                        text = stringResource(R.string.daily_task),
                         isSelected = selectedAddTaskMode == TaskMode.JEDNORAZOWE,
                         onClick = {
                             selectedAddTaskMode = TaskMode.JEDNORAZOWE
@@ -128,7 +129,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
                     Spacer(modifier = Modifier.width(8.dp))
 
                     SelectTaskButton(
-                        text = "Cykliczne",
+                        text = stringResource(R.string.cyclical_task),
                         isSelected = selectedAddTaskMode == TaskMode.CYKLICZNE,
                         onClick = {
                             selectedAddTaskMode = TaskMode.CYKLICZNE
@@ -142,7 +143,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(
-                        text = "Nazwa",
+                        text = stringResource(R.string.name),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
@@ -168,7 +169,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(
-                        text = "Opis",
+                        text = stringResource(R.string.description),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
@@ -193,7 +194,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(
-                        text = "Data rozpoczęcia",
+                        text = stringResource(R.string.start_date),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
@@ -210,7 +211,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(
-                        text = "Data zakończenia",
+                        text = stringResource(R.string.end_date),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
@@ -235,7 +236,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
                                 .weight(1f)
                         ) {
                             Text(
-                                text = "Interwał",
+                                text = stringResource(R.string.interval),
                                 color = Color.White,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.ExtraBold
@@ -258,7 +259,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
                                 .weight(1f)
                         ) {
                             Text(
-                                text = "Miara",
+                                text = stringResource(R.string.measure),
                                 color = Color.White,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.ExtraBold
@@ -280,7 +281,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(
-                        text = "Poziom trudności",
+                        text = stringResource(R.string.difficulty_level),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
@@ -291,6 +292,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
+                        // TODO: CREATE ENUM FOR DIFFICULTY LEVELS
                         SelectTaskButton(
                             text = "Łatwy",
                             isSelected = selectedDifficulty == "Łatwe",

@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.ViewRoutes
 import com.example.pracainynierska.view_model.LoginViewModel
 
 @Composable
@@ -93,7 +94,7 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
             OutlinedTextField(
                 value = loginViewModel.newPassword,
                 onValueChange = { loginViewModel.onNewPasswordChange(it) },
-                label = { Text(text = "Nowe hasło") },
+                label = { Text(text = stringResource(R.string.new_password)) },
                 isError = loginViewModel.newPasswordErrorMessage != null,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
@@ -113,7 +114,7 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
             OutlinedTextField(
                 value = loginViewModel.confirmNewPassword,
                 onValueChange = { loginViewModel.onConfirmNewPasswordChange(it) },
-                label = { Text(text = "Potwierdź nowe hasło") },
+                label = { Text(text = stringResource(R.string.reset_password)) },
                 isError = loginViewModel.confirmNewPasswordErrorMessage != null,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
@@ -136,7 +137,7 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                         email = loginViewModel.email,
                         newPassword = loginViewModel.newPassword,
                         onSuccess = {
-                            passwordMessage = "Hasło zostało zmienione pomyślnie."
+                            passwordMessage = R.string.success_password_change.toString()
                             isDialogError = false
                             showDialog = true
                         },
@@ -152,7 +153,7 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                     .height(OutlinedTextFieldDefaults.MinHeight)
                     .width(OutlinedTextFieldDefaults.MinWidth)
             ) {
-                Text(text = "Zmień hasło")
+                Text(text = stringResource(R.string.change_password))
             }
         }
     }
@@ -160,12 +161,12 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(text = if (isDialogError) "Błąd" else "Sukces") },
+            title = { Text(text = if (isDialogError) stringResource(R.string.error) else stringResource(R.string.success)) },
             text = { Text(text = passwordMessage) },
             confirmButton = {
                 TextButton(onClick = {
                     showDialog = false
-                    navController.navigate("LoginView"){
+                    navController.navigate(ViewRoutes.LOGIN.viewName){
                         popUpTo(navController.graph.startDestinationId) { inclusive = true }
                     }
                 }) {

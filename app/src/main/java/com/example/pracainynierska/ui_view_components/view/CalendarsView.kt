@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.ViewRoutes
 import com.example.pracainynierska.model.Task
 import com.example.pracainynierska.ui_view_components.components.TaskCard
 import com.example.pracainynierska.ui_view_components.components.TaskDetailsDialog
@@ -92,11 +93,9 @@ class CalendarsView(taskViewModel: TaskViewModel,
                                     set(year, month, dayOfMonth)
                                 }
 
-                                // Format daty
                                 val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
                                 selectedDate.value = dateFormat.format(selectedCalendar.time)
 
-                                // Pobranie zadania dla wybranej daty
                                 selectedTasks.value = viewModel.getTasksForDate(selectedDate.value)
                             }
                         }
@@ -132,7 +131,7 @@ class CalendarsView(taskViewModel: TaskViewModel,
                     task = task,
                     onDismiss = { selectedTask = null },
                     onEdit = {
-                        navController.navigate("EditTaskView/${task.id}")
+                        navController.navigate("${ViewRoutes.EDITTASK.viewName}/${task.id}")
                     }
                 )
             }

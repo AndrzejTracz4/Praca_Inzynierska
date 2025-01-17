@@ -16,9 +16,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pracainynierska.R
 
 @Composable
 fun AchievementCard(
@@ -71,7 +73,7 @@ fun AchievementCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(12.dp)
-                    .clip(RoundedCornerShape(6.dp)) // Zaokrąglenie rogów paska progresu
+                    .clip(RoundedCornerShape(6.dp))
             )
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -91,10 +93,10 @@ fun AchievementCard(
                 enabled = isClaimable
             ) {
                 Text(
-                    text = "Odbierz",
+                    text = stringResource(R.string.pick_up),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White // Napis zawsze biały
+                    color = Color.White
                 )
             }
         }
