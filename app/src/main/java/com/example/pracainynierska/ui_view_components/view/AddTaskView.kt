@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.dictionary.types.TaskTypes
 import com.example.pracainynierska.ui_view_components.components.CreateTaskButton
 import com.example.pracainynierska.ui_view_components.components.CustomDatePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomMeasurePickerField
@@ -46,7 +47,6 @@ import com.example.pracainynierska.ui_view_components.components.CustomNumberPic
 import com.example.pracainynierska.ui_view_components.components.DateTimePickerDialog
 import com.example.pracainynierska.ui_view_components.components.NumberPickerDialog
 import com.example.pracainynierska.ui_view_components.components.SelectTaskButton
-import com.example.pracainynierska.ui_view_components.components.TaskMode
 import com.example.pracainynierska.ui_view_components.components.TaskTextField
 import com.example.pracainynierska.view_model.TaskViewModel
 
@@ -61,7 +61,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
     ) {
 
         val focusManager = LocalFocusManager.current
-        var selectedAddTaskMode by remember { mutableStateOf(TaskMode.JEDNORAZOWE) }
+        var selectedAddTaskMode by remember { mutableStateOf(TaskTypes.JEDNORAZOWE) }
         var isHidden by remember { mutableStateOf(true) }
         var taskName by remember { mutableStateOf("") }
         var taskDescription by remember { mutableStateOf("") }
@@ -115,9 +115,9 @@ class AddTaskView(taskViewModel: TaskViewModel,
                 ) {
                     SelectTaskButton(
                         text = "Jednorazowe",
-                        isSelected = selectedAddTaskMode == TaskMode.JEDNORAZOWE,
+                        isSelected = selectedAddTaskMode == TaskTypes.JEDNORAZOWE,
                         onClick = {
-                            selectedAddTaskMode = TaskMode.JEDNORAZOWE
+                            selectedAddTaskMode = TaskTypes.JEDNORAZOWE
                             isHidden = true
                         },
                         iconResId = R.drawable.repeat_single,
@@ -129,9 +129,9 @@ class AddTaskView(taskViewModel: TaskViewModel,
 
                     SelectTaskButton(
                         text = "Cykliczne",
-                        isSelected = selectedAddTaskMode == TaskMode.CYKLICZNE,
+                        isSelected = selectedAddTaskMode == TaskTypes.CYKLICZNE,
                         onClick = {
-                            selectedAddTaskMode = TaskMode.CYKLICZNE
+                            selectedAddTaskMode = TaskTypes.CYKLICZNE
                             isHidden = false
                         },
                         iconResId = R.drawable.repeat,

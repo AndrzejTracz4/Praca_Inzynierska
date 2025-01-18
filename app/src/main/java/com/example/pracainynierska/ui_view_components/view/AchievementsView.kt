@@ -66,7 +66,7 @@ class AchievementsView(loginViewModel: LoginViewModel,
                         end = 16.dp,
                         top = 84.dp,
                         bottom = 84.dp
-                    ), // Dodanie odstępu od końca ekranu
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(

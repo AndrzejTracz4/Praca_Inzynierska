@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
-import com.example.pracainynierska.model.Task
+import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.view_model.TaskViewModel
 
