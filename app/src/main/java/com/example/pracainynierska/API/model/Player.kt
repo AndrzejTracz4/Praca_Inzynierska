@@ -8,11 +8,12 @@ data class Player(
     val name: String,
     val email: String,
     val enabled: Boolean,
+    val roles: List<String>,
     val playerLevel: Int,
     val playerExperience: Int,
-    val roles: List<String>,
-    val playerStatistics: PlayerStatistics,
     var userPhotoPath: String,
     val balance: Int,
+    val playerStatistics: PlayerStatistics,
     val activeAugments: List<Augment>,
+    val categories: List<Category>
 )
