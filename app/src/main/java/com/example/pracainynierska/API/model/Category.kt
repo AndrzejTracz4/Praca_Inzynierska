@@ -2,12 +2,8 @@ package com.example.pracainynierska.API.model
 
 import kotlinx.serialization.Serializable
 
-
 @Serializable
-data class Statistics(
+data class Category(
     val id: Int,
     val name: String,
-    val iconPath: String,
-    val experience: Int,
-    val level: Int,
 )
