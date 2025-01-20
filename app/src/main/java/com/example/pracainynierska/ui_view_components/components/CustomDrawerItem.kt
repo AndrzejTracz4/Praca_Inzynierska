@@ -42,12 +42,10 @@ fun CustomDrawerItem(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Ikona
-            icon() // Wywołanie przekazanej funkcji ikony
+            icon()
 
-            Spacer(modifier = Modifier.width(8.dp)) // Odstęp między ikoną a tekstem
+            Spacer(modifier = Modifier.width(8.dp))
 
-            // Tekst
             Text(
                 text = text,
                 color = Color.White,

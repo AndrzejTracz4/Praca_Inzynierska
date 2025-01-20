@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,29 +28,28 @@ import com.example.pracainynierska.R
 
 @Composable
 fun CustomCreateCategoryButton(
-    onCreateClick: () -> Unit,  // Funkcja wywołania zwrotnego po kliknięciu
-    isValid: Boolean,          // Stan walidacji
-    isCategoryValid: Boolean,  // Walidacja dla nazwy kategorii
-    isStatsValid: Boolean,     // Walidacja dla statystyk
-    showAlert: MutableState<Boolean>, // Stan alertu
-    showSuccessAlert: MutableState<Boolean>, // Stan alertu sukcesu
-    alertMessage: String,       // Wiadomość alertu
-    successMessage: String     // Wiadomość sukcesu
+    onCreateClick: () -> Unit,
+    isValid: Boolean,
+    isCategoryValid: Boolean,
+    isStatsValid: Boolean,
+    showAlert: MutableState<Boolean>,
+    showSuccessAlert: MutableState<Boolean>,
+    alertMessage: String,
+    successMessage: String
 ) {
     Box(
         modifier = Modifier
             .height(75.dp)
             .padding(vertical = 4.dp)
             .background(
-                color = Color(0x19FFFFFF), // Zmiana koloru w zależności od walidacji
+                color = Color(0x19FFFFFF),
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable {
                 if (isCategoryValid && isStatsValid) {
-                    onCreateClick() // Tylko jeśli walidacja jest prawidłowa
-                    showSuccessAlert.value = true // Pokazanie alertu sukcesu po kliknięciu
+                    onCreateClick()
+                    showSuccessAlert.value = true
                 } else {
-                    // Ustawienie alertu w przypadku błędnej walidacji
                     showAlert.value = true
                 }
             }
@@ -57,17 +57,17 @@ fun CustomCreateCategoryButton(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize() // Rozciągamy Row na całą szerokość Boxa
+            modifier = Modifier.fillMaxSize()
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.plus_square),
-                contentDescription = "Plus icon",
+                contentDescription = stringResource(R.string.icon_add_category_description),
                 modifier = Modifier.size(24.dp),
                 tint = Color.White
             )
 
             Text(
-                text = "Utwórz",
+                text = stringResource(R.string.create),
                 color = Color.White,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.ExtraBold,
@@ -76,17 +76,16 @@ fun CustomCreateCategoryButton(
         }
     }
 
-    // AlertDialog do obsługi błędu
     if (showAlert.value) {
         AlertDialog(
-            onDismissRequest = { showAlert.value = false },  // Zamknięcie dialogu
-            title = { Text("Błąd walidacji") },
+            onDismissRequest = { showAlert.value = false },
+            title = { Text(stringResource(R.string.validation_error)) },
             text = { Text(alertMessage) },
             confirmButton = {
                 TextButton(
-                    onClick = { showAlert.value = false }  // Zamknięcie dialogu po kliknięciu "OK"
+                    onClick = { showAlert.value = false }
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             }
         )

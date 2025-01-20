@@ -60,7 +60,6 @@ import com.example.pracainynierska.ViewRoutes
 import com.example.pracainynierska.model.Category
 import com.example.pracainynierska.model.Statistic
 import com.example.pracainynierska.ui_view_components.components.GradientStatsProgressBars
-import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.view_model.StatisticViewModel
 
 class StatisticView(viewModel: StatisticViewModel,
@@ -254,7 +253,7 @@ class StatisticView(viewModel: StatisticViewModel,
                     onDismissRequest = { showSuccessDialog = false },
                     confirmButton = {
                         Button(onClick = { showSuccessDialog = false }) {
-                            Text("OK")
+                            Text(stringResource(R.string.ok))
                         }
                     },
                     title = { Text(stringResource(R.string.success)) },

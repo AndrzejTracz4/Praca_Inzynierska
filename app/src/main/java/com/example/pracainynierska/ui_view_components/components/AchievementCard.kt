@@ -60,7 +60,7 @@ fun AchievementCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "EXP: $exp | Coins: $coins",
+                text = stringResource(R.string.exp_coins, exp, coins),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold
             )

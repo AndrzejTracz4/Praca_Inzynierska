@@ -2,12 +2,15 @@ package com.example.pracainynierska.view_model
 
 import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.pracainynierska.API.handler.authorization.AuthorizationHandlerInterface
+import com.example.pracainynierska.R
 import com.example.pracainynierska.context.PlayerContextInterface
 import com.example.pracainynierska.model.User
 import kotlinx.coroutines.launch
@@ -33,16 +36,16 @@ class LoginViewModel(
     var loginSuccess by mutableStateOf(false)
         private set
 
-    var usernameErrorMessage by mutableStateOf<String?>(null)
+    var usernameErrorMessageId by mutableIntStateOf(0)
         private set
 
-    var passwordErrorMessage by mutableStateOf<String?>(null)
+    var passwordErrorMessageId by mutableIntStateOf(0)
         private set
 
-    var confirmPasswordErrorMessage by mutableStateOf<String?>(null)
+    var confirmPasswordErrorMessageId by mutableIntStateOf(0)
         private set
 
-    var emailErrorMessage by mutableStateOf<String?>(null)
+    var emailErrorMessageId by mutableIntStateOf(0)
         private set
 
     private val _user = MutableLiveData<User>()
@@ -60,15 +63,15 @@ class LoginViewModel(
     var confirmNewPassword by mutableStateOf("")
         private set
 
-    var newPasswordErrorMessage by mutableStateOf<String?>(null)
+    var newPasswordErrorMessageId by mutableIntStateOf(0)
         private set
 
-    var confirmNewPasswordErrorMessage by mutableStateOf<String?>(null)
+    var confirmNewPasswordErrorMessageId by mutableIntStateOf(0)
         private set
 
     fun onNewPasswordChange(newPassword: String) {
         this.newPassword = newPassword
-        newPasswordErrorMessage = validatePassword(newPassword)
+        newPasswordErrorMessageId = validatePassword(newPassword)
     }
 
     fun onConfirmNewPasswordChange(newConfirmPassword: String) {
@@ -77,10 +80,10 @@ class LoginViewModel(
     }
 
     private fun validateNewPasswords() {
-        confirmNewPasswordErrorMessage = if (newPassword != confirmNewPassword) {
-            "Passwords do not match!"
+        confirmNewPasswordErrorMessageId = if (newPassword != confirmNewPassword) {
+            R.string.validation_passwords_does_not_match
         } else {
-            null
+            0
         }
     }
 
@@ -99,17 +102,17 @@ class LoginViewModel(
 
     fun onUsernameChange(newUsername: String) {
         username = newUsername
-        usernameErrorMessage = validateUsername(newUsername)
+        usernameErrorMessageId = validateUsername(newUsername)
     }
 
     fun onPasswordChange(newPassword: String) {
         password = newPassword
-        passwordErrorMessage = validatePassword(newPassword)
+        passwordErrorMessageId = validatePassword(newPassword)
     }
 
     fun onEmailChange(newEmail: String) {
         email = newEmail
-        emailErrorMessage = validateEmail(newEmail)
+        emailErrorMessageId = validateEmail(newEmail)
     }
 
     fun onConfirmPasswordChange(newConfirmPassword: String) {
@@ -117,24 +120,24 @@ class LoginViewModel(
         validatePasswords()
     }
 
-    private fun validateUsername(username: String): String? {
-        return if (username.isBlank()) "Username cannot be empty!" else null
+    private fun validateUsername(username: String): Int {
+        return if (username.isBlank()) R.string.validation_username_cannot_be_empty else 0
     }
 
-    private fun validatePassword(password: String): String? {
-        return if (password.isBlank()) "Password cannot be empty" else null
+    private fun validatePassword(password: String): Int {
+        return if (password.isBlank()) R.string.validation_password_cannot_be_empty else 0
     }
 
     private fun validatePasswords() {
-        confirmPasswordErrorMessage = if (password != confirmPassword) {
-            "Passwords do not match!"
+        confirmPasswordErrorMessageId = if (password != confirmPassword) {
+            R.string.validation_passwords_does_not_match
         } else {
-            null
+            0
         }
     }
 
-    private fun validateEmail(email: String): String? {
-        return if (email.isBlank()) "Email cannot be empty" else null
+    private fun validateEmail(email: String): Int {
+        return if (email.isBlank()) R.string.validation_email_cannot_be_empty else 0
     }
 
     fun login(onLoginResult: (Boolean) -> Unit) {
@@ -146,8 +149,8 @@ class LoginViewModel(
                 onLoginResult(true)
             } else {
                 Log.d("LoginViewModel", "Player is null")
-                emailErrorMessage = "Invalid username or password"
-                passwordErrorMessage = "Invalid username or password"
+                emailErrorMessageId = R.string.invalid_username_or_password
+                passwordErrorMessageId = R.string.invalid_username_or_password
                 onLoginResult(false)
             }
         }

@@ -13,6 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.ViewRoutes
@@ -46,14 +47,14 @@ fun BottomMenu(navController: NavController) {
         ) {
             BottomMenuItem(
                 icon = R.drawable.stats,
-                label = "Kategorie",
+                label = stringResource(R.string.categories),
                 onClick = { navigateIfNotCurrent(navController, ViewRoutes.STATISTICS.viewName) },
                 modifier = Modifier.weight(1f)
             )
 
             BottomMenuItem(
                 icon = R.drawable.achievements,
-                label = "Osiągnięcia",
+                label = stringResource(R.string.Achievements),
                 onClick = { navigateIfNotCurrent(navController, ViewRoutes.ACHIEVEMENTS.viewName) },
                 modifier = Modifier.weight(1f)
             )
@@ -62,14 +63,14 @@ fun BottomMenu(navController: NavController) {
 
             BottomMenuItem(
                 icon = R.drawable.calendar,
-                label = "Kalendarz",
+                label = stringResource(R.string.calendar),
                 onClick = { navigateIfNotCurrent(navController, ViewRoutes.CALENDAR.viewName) },
                 modifier = Modifier.weight(1f)
             )
 
             BottomMenuItem(
                 icon = R.drawable.shop,
-                label = "Sklep",
+                label = stringResource(R.string.shop),
                 onClick = { navigateIfNotCurrent(navController, ViewRoutes.SHOP.viewName) },
                 modifier = Modifier.weight(1f)
             )
@@ -95,7 +96,7 @@ fun BottomMenu(navController: NavController) {
             IconButton(onClick = { navigateIfNotCurrent(navController, ViewRoutes.ADDTASK.viewName) }) {
                 Image(
                     painter = painterResource(id = R.drawable.plus),
-                    contentDescription = "AddTask",
+                    contentDescription = stringResource(R.string.icon_add_task_description),
                     modifier = Modifier
                         .size(30.dp),
                     colorFilter = ColorFilter.tint(Color.White)

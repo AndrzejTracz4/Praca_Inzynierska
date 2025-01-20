@@ -39,6 +39,7 @@ fun DailyTaskCard(
         else -> R.drawable.calendar
     }
 
+    // TODO: TO ENUM
     val backgroundColor = when (task.difficulty) {
         "Łatwy" -> Color(0xFF3CB043)
         "Średni" -> Color(0xFFFFFF00)

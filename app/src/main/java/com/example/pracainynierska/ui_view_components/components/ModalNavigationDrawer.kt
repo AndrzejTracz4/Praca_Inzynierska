@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,13 +38,13 @@ fun ModalDrawer(
     val currentRoute = navBackStackEntry.value?.destination?.route
 
     val items = listOf(
-        DrawerItem("Strona Główna", R.drawable.home, ViewRoutes.HOMEPAGE),
-        DrawerItem("Profil", R.drawable.profile, ViewRoutes.PROFILE),
-        DrawerItem("Statystyki", R.drawable.stats, ViewRoutes.STATISTICS),
-        DrawerItem("Kalendarz", R.drawable.calendar, ViewRoutes.CALENDAR),
-        DrawerItem("Sklep", R.drawable.shop, ViewRoutes.SHOP),
-        DrawerItem("Ustawienia", R.drawable.settings, ViewRoutes.HOMEPAGE),
-        DrawerItem("Wyloguj", R.drawable.logout, ViewRoutes.LOGIN)
+        DrawerItem(stringResource(R.string.homepage), R.drawable.home, ViewRoutes.HOMEPAGE),
+        DrawerItem(stringResource(R.string.profile), R.drawable.profile, ViewRoutes.PROFILE),
+        DrawerItem(stringResource(R.string.statistics), R.drawable.stats, ViewRoutes.STATISTICS),
+        DrawerItem(stringResource(R.string.calendar), R.drawable.calendar, ViewRoutes.CALENDAR),
+        DrawerItem(stringResource(R.string.shop), R.drawable.shop, ViewRoutes.SHOP),
+        DrawerItem(stringResource(R.string.settings), R.drawable.settings, ViewRoutes.HOMEPAGE),
+        DrawerItem(stringResource(R.string.logout), R.drawable.logout, ViewRoutes.LOGIN)
     )
 
     val selectedItemIndex = remember { mutableIntStateOf(0) }
@@ -80,14 +81,14 @@ fun ModalDrawer(
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.questa_logo),
-                        contentDescription = "App Icon",
+                        contentDescription = stringResource(R.string.icon_logo_questa_description),
                         modifier = Modifier.size(40.dp)
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Text(
-                        text = "Questa",
+                        text = stringResource(R.string.app_name),
                         color = Color.White,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
@@ -95,7 +96,7 @@ fun ModalDrawer(
                 }
 
                 Text(
-                    text = "Wersja: 1.0.0",
+                    text = stringResource(R.string.version, "1.0.0"),
                     color = Color.White.copy(alpha = 0.7f),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Normal,

@@ -41,7 +41,7 @@ class ShopViewModel(
             throw Exception("Insufficient funds")
             //todo add insufficient funds message
         }
-        Log.d("Shopviewmodel", type)
+
         viewModelScope.launch {
             purchaseHandler.handle(
                 type = type,

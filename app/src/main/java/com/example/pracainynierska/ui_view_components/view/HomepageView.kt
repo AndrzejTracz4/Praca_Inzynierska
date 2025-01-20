@@ -41,10 +41,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.pracainynierska.API.model.Augment
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.RankDictionary
-import com.example.pracainynierska.manager.augment.AugmentManager
 import com.example.pracainynierska.model.FakeData
 import com.example.pracainynierska.ui_view_components.components.AugmentList
 import com.example.pracainynierska.ui_view_components.components.DailyTaskCard
@@ -69,7 +67,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
             throw Exception("Invalid View Model")
         }
 
-        val rankDictionary = RankDictionary()
+        val rankDictionary = RankDictionary(viewModel.appContext)
 
         var userLevel = 1
         var playerExperience = 0f

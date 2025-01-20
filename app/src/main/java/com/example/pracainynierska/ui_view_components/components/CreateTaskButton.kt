@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,7 +51,7 @@ fun CreateTaskButton(
     taskDescription: String
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    var dialogMessage by remember { mutableStateOf("") }
+    var dialogMessageId by remember { mutableStateOf(0) }
     var showErrorDialog by remember { mutableStateOf(false) }
     var showDateErrorDialog by remember { mutableStateOf(false) }
     var taskList by remember { mutableStateOf(emptyList<Task>()) }
@@ -68,7 +69,6 @@ fun CreateTaskButton(
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable {
-                // Sprawdzenie, czy wszystkie wymagane pola są uzupełnione
                 val isValid = when (selectedAddTaskMode) {
                     TaskMode.JEDNORAZOWE -> {
                         taskName.isNotBlank() &&
@@ -77,6 +77,7 @@ fun CreateTaskButton(
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank()
                     }
+
                     TaskMode.CYKLICZNE -> {
                         taskName.isNotBlank() &&
                                 selectedDifficulty.isNotBlank() &&
@@ -89,10 +90,10 @@ fun CreateTaskButton(
                 }
 
                 if (!isValid) {
-                    dialogMessage = "Uzupełnij wszystkie pola."
+                    dialogMessageId = R.string.validation_add_task_fields
                     showErrorDialog = true
                 } else if (isEndDateBeforeStartDate(selectedStartDate, selectedEndDate)) {
-                    dialogMessage = "Data końcowa nie może być wcześniejsza niż data startowa."
+                    dialogMessageId = R.string.validation_date_earlier_that_start
                     showDateErrorDialog = true
                 } else {
                     val lastTaskId = taskList.maxOfOrNull { it.id } ?: 0
@@ -111,7 +112,7 @@ fun CreateTaskButton(
                     )
                     taskViewModel.addTask(task)
 
-                    dialogMessage = "Pomyślnie utworzono zadanie"
+                    dialogMessageId = R.string.success_create_task
                     showDialog = true
                 }
             }
@@ -140,12 +141,12 @@ fun CreateTaskButton(
         }
     }
 
-    // AlertDialog dla potwierdzenia utworzenia zadania
+    // TODO: MAKE ONE FUNCTION FOR DIALOGS
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(text = "Sukces!") },
-            text = { Text(text = dialogMessage) },
+            title = { Text(text = stringResource(R.string.success)) },
+            text = { Text(text = stringResource(dialogMessageId)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -153,50 +154,48 @@ fun CreateTaskButton(
                         showDialog = false
                     }
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             }
         )
     }
 
-    // AlertDialog dla błędnych danych
     if (showErrorDialog) {
         AlertDialog(
             onDismissRequest = { showErrorDialog = false },
-            title = { Text(text = "Błąd") },
-            text = { Text(text = dialogMessage) },
+            title = { Text(text = stringResource(R.string.error)) },
+            text = { Text(text = stringResource(dialogMessageId)) },
             confirmButton = {
                 TextButton(
                     onClick = {
                         showErrorDialog = false
                     }
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             }
         )
     }
 
-    // AlertDialog dla złych dat
     if (showDateErrorDialog) {
         AlertDialog(
             onDismissRequest = { showDateErrorDialog = false },
-            title = { Text(text = "Błąd daty") },
-            text = { Text(text = dialogMessage) },
+            title = { Text(text = stringResource(R.string.invalid_date)) },
+            text = { Text(text = stringResource(dialogMessageId)) },
             confirmButton = {
                 TextButton(
                     onClick = {
                         showDateErrorDialog = false
                     }
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             }
         )
     }
 }
 
-// Funkcja sprawdzająca, czy data końcowa jest wcześniejsza niż data startowa
+// Function that checks if the end date is earlier than the start date
 fun isEndDateBeforeStartDate(startDate: String, endDate: String): Boolean {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     return try {

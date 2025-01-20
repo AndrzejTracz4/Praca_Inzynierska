@@ -1,7 +1,6 @@
 package com.example.pracainynierska.ui_view_components
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,7 +28,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -60,7 +58,7 @@ class ProfileView(
             throw Exception("Invalid View Model")
         }
 
-        val rankDictionary = RankDictionary()
+        val rankDictionary = RankDictionary(viewModel.appContext)
 
         var userLevel = 1
         var playerExperience = 0f

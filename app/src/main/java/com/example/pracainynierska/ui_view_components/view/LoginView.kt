@@ -14,36 +14,36 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.ViewRoutes
@@ -113,7 +113,7 @@ fun LoginView(navController: NavController, loginViewModel: LoginViewModel){
                 onValueChange = {
                     loginViewModel.onEmailChange(it)},
                 label = { Text(text = stringResource(R.string.email))},
-                isError = loginViewModel.emailErrorMessage != null,
+                isError = loginViewModel.emailErrorMessageId != 0,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Black,
@@ -122,8 +122,8 @@ fun LoginView(navController: NavController, loginViewModel: LoginViewModel){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
-                    if (loginViewModel.emailErrorMessage != null){
-                        Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
+                    if (loginViewModel.emailErrorMessageId != 0){
+                        Icon(Icons.Default.Warning, contentDescription = stringResource(R.string.icon_error_description), tint = Color.Red)
                     }
                     else
                     {
@@ -146,8 +146,8 @@ fun LoginView(navController: NavController, loginViewModel: LoginViewModel){
                 )
             )
             
-            if (loginViewModel.emailErrorMessage != null){
-                Text(text = loginViewModel.emailErrorMessage!!, color = Color.Red, fontSize = 12.sp)
+            if (loginViewModel.emailErrorMessageId != 0){
+                Text(text = stringResource(loginViewModel.emailErrorMessageId), color = Color.Red, fontSize = 12.sp)
             }
             
             Spacer(modifier = Modifier.height(8.dp))
@@ -156,7 +156,7 @@ fun LoginView(navController: NavController, loginViewModel: LoginViewModel){
                 value = loginViewModel.password,
                 onValueChange = {loginViewModel.onPasswordChange(it)},
                 label = { Text(text = stringResource(R.string.password))},
-                isError = loginViewModel.passwordErrorMessage != null,
+                isError = loginViewModel.passwordErrorMessageId != 0,
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -166,8 +166,8 @@ fun LoginView(navController: NavController, loginViewModel: LoginViewModel){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
-                    if(loginViewModel.passwordErrorMessage != null){
-                        Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
+                    if(loginViewModel.passwordErrorMessageId != 0){
+                        Icon(Icons.Default.Warning, contentDescription = stringResource(R.string.icon_error_description), tint = Color.Red)
                     } else {
                         Image(
                             painter = painterResource(id = R.drawable.password),
@@ -188,8 +188,8 @@ fun LoginView(navController: NavController, loginViewModel: LoginViewModel){
                 )
             )
 
-            if (loginViewModel.passwordErrorMessage != null){
-                Text(text = loginViewModel.passwordErrorMessage!!, color = Color.Red, fontSize = 12.sp)
+            if (loginViewModel.passwordErrorMessageId != 0){
+                Text(text = stringResource(loginViewModel.passwordErrorMessageId), color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))

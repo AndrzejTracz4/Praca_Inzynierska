@@ -95,7 +95,7 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                 value = loginViewModel.newPassword,
                 onValueChange = { loginViewModel.onNewPasswordChange(it) },
                 label = { Text(text = stringResource(R.string.new_password)) },
-                isError = loginViewModel.newPasswordErrorMessage != null,
+                isError = loginViewModel.newPasswordErrorMessageId != 0,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Black,
@@ -105,8 +105,8 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                 shape = RoundedCornerShape(16.dp)
             )
 
-            if (loginViewModel.newPasswordErrorMessage != null) {
-                Text(text = loginViewModel.newPasswordErrorMessage!!, color = Color.Red, fontSize = 12.sp)
+            if (loginViewModel.newPasswordErrorMessageId != 0) {
+                Text(text = stringResource(loginViewModel.newPasswordErrorMessageId), color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -115,7 +115,7 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                 value = loginViewModel.confirmNewPassword,
                 onValueChange = { loginViewModel.onConfirmNewPasswordChange(it) },
                 label = { Text(text = stringResource(R.string.reset_password)) },
-                isError = loginViewModel.confirmNewPasswordErrorMessage != null,
+                isError = loginViewModel.confirmNewPasswordErrorMessageId != 0,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Black,
@@ -125,8 +125,8 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                 shape = RoundedCornerShape(16.dp)
             )
 
-            if (loginViewModel.confirmNewPasswordErrorMessage != null) {
-                Text(text = loginViewModel.confirmNewPasswordErrorMessage!!, color = Color.Red, fontSize = 12.sp)
+            if (loginViewModel.confirmNewPasswordErrorMessageId != 0) {
+                Text(text = stringResource(loginViewModel.confirmNewPasswordErrorMessageId), color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -170,7 +170,7 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                         popUpTo(navController.graph.startDestinationId) { inclusive = true }
                     }
                 }) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             }
         )

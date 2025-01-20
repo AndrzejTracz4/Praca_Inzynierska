@@ -19,23 +19,19 @@ import com.example.pracainynierska.view_model.LoginViewModel
 
 @Composable
 fun GradientLevelProgressBar(userExperience: Float) {
-        // Ograniczenie wartości progress do zakresu 0-100
     val normalizedProgress = userExperience.coerceIn(0f, 100f) / 100f
 
-    // Animacja wartości progress
     val animatedProgress by animateFloatAsState(
         targetValue = normalizedProgress,
-        animationSpec = tween(durationMillis = 1000) // Czas trwania animacji w milisekundach
+        animationSpec = tween(durationMillis = 1000)
     )
 
-    // Tworzenie gradientu w zależności od wartości progress
     val gradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFF72F51E), Color(0xFFF9E80B), Color(0xFFEF090D)),
         startX = 0.0f,
         endX = animatedProgress * 600f
     )
 
-    // Tło paska
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,10 +39,9 @@ fun GradientLevelProgressBar(userExperience: Float) {
             .clip(RoundedCornerShape(4.dp))
             .background(Color(0x11FFFFFF))
     ) {
-        // Pasek postępu
         Box(
             modifier = Modifier
-                .fillMaxWidth(animatedProgress) // Skaluje szerokość paska proporcjonalnie do wartości progress
+                .fillMaxWidth(animatedProgress)
                 .height(8.dp)
                 .background(gradient)
         )

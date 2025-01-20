@@ -169,7 +169,7 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                     value = loginViewModel.email,
                     onValueChange = {loginViewModel.onEmailChange(it)},
                     label = { Text(text = stringResource(R.string.email))},
-                    isError = loginViewModel.emailErrorMessage != null,
+                    isError = loginViewModel.emailErrorMessageId != 0,
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.Black,
@@ -178,8 +178,8 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                     ),
                     shape = RoundedCornerShape(16.dp),
                     trailingIcon = {
-                        if(loginViewModel.emailErrorMessage != null){
-                            Icon(Icons.Default.Warning, contentDescription = "Error", tint = Color.Red)
+                        if(loginViewModel.emailErrorMessageId != 0){
+                            Icon(Icons.Default.Warning, contentDescription = stringResource(R.string.icon_error_description), tint = Color.Red)
                         } else {
                             Image(
                                 painter = painterResource(id = R.drawable.email),
@@ -200,8 +200,8 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                     )
                 )
 
-                if (loginViewModel.emailErrorMessage != null){
-                    Text(text = loginViewModel.emailErrorMessage!!, color = Color.Red, fontSize = 12.sp)
+                if (loginViewModel.emailErrorMessageId != 0){
+                    Text(text = stringResource(loginViewModel.emailErrorMessageId), color = Color.Red, fontSize = 12.sp)
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

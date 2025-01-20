@@ -63,13 +63,13 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
     ) {
 
         var categoryName by remember { mutableStateOf("") }
-        var searchQuery by remember { mutableStateOf("") } // Zmienna dla wyszukiwania
+        var searchQuery by remember { mutableStateOf("") }
         var isCategoryValid by remember { mutableStateOf(false) }
         var isStatsValid by remember { mutableStateOf(false) }
         var activeDialogIndex by remember { mutableStateOf(-1) }
-        val showAlert = remember { mutableStateOf(false) }  // Przechowywanie stanu alertu
-        val showSuccessAlert = remember { mutableStateOf(false) }  // Stan alertu sukcesu
-        val selectedStats = remember { mutableStateListOf<String?>(null, null, null, null) } // Na początku 4 puste pola (null)
+        val showAlert = remember { mutableStateOf(false) }
+        val showSuccessAlert = remember { mutableStateOf(false) }
+        val selectedStats = remember { mutableStateListOf<String?>(null, null, null, null) }
 
         val availableStats = remember {
             mutableStateListOf(
@@ -82,9 +82,7 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
         }
 
         fun validateCategory() {
-            // Walidacja nazwy kategorii
             isCategoryValid = categoryName.isNotEmpty()
-            // Walidacja statystyk
             isStatsValid = selectedStats.any { it != null }
         }
 
@@ -106,7 +104,7 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
                     )
                 )
                 .padding(16.dp)
-                .verticalScroll(rememberScrollState()) // Włączamy przewijanie
+                .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(55.dp))
 
