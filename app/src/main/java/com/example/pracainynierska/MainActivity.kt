@@ -95,6 +95,7 @@ class MainActivity : ComponentActivity() {
                     )
                     val addCategoryViewModel : AddCategoryViewModel = viewModel(
                         factory = AddCategoryViewModelFactory(playerContext)
+                    )
 
                     val profileViewModel : ProfileViewModel = viewModel(
                         factory = ProfileViewModelFactory(playerContext, context)

@@ -18,6 +18,7 @@ class CategoryApi(playerContext: PlayerContextInterface) : ApiDetails(playerCont
         return request(Request
             .Builder()
             .url(buildPath(createPath))
+            .addHeader("Authorization", "Bearer ${this.getToken()}")
             .post(body)
             .build()
         )
