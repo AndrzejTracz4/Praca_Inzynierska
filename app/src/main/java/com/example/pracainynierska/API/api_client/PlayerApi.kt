@@ -8,7 +8,6 @@ import com.example.pracainynierska.API.Exception.RequestFailedException
 import com.example.pracainynierska.API.factory.RequestValidationExceptionFactory
 import com.example.pracainynierska.API.model.Player
 import com.example.pracainynierska.API.model.error_response.ValidationErrorResponse
-import com.example.pracainynierska.context.PlayerContext
 import com.example.pracainynierska.context.PlayerContextInterface
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
