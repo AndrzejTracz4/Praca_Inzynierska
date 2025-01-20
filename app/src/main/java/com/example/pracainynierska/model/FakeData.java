@@ -7,7 +7,7 @@ public class FakeData {
 
     public static final Task fakeTask = new Task(
             1,
-            TaskTypes.JEDNORAZOWE,
+            TaskTypes.ONE_TIME,
             "Maraton Warszawski",
             "Siema",
             "Trening",
@@ -15,7 +15,7 @@ public class FakeData {
             7,
             "dni",
             "2024-12-01",
-            "siema",
+            "2024-12-02",
             "Nowe"
     );
 }

@@ -62,16 +62,15 @@ fun CreateTaskButton(
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable {
-                // Sprawdzenie, czy wszystkie wymagane pola są uzupełnione
                 val isValid = when (selectedAddTaskMode) {
-                    TaskTypes.JEDNORAZOWE -> {
+                    TaskTypes.ONE_TIME -> {
                         taskName.isNotBlank() &&
                                 selectedDifficulty.isNotBlank() &&
                                 selectedCategory.isNotBlank() &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank()
                     }
-                    TaskTypes.CYKLICZNE -> {
+                    TaskTypes.RECURRING -> {
                         taskName.isNotBlank() &&
                                 selectedDifficulty.isNotBlank() &&
                                 selectedCategory.isNotBlank() &&
@@ -98,16 +97,16 @@ fun CreateTaskButton(
                         category = selectedCategory,
                         startDate = selectedStartDate,
                         endDate = selectedEndDate,
-                        interval = if (selectedAddTaskMode == TaskTypes.CYKLICZNE) interval else 0,
-                        measureUnit = if (selectedAddTaskMode == TaskTypes.CYKLICZNE) selectedMeasureUnit else "",
+                        interval = if (selectedAddTaskMode == TaskTypes.RECURRING) interval else 0,
+                        measureUnit = if (selectedAddTaskMode == TaskTypes.RECURRING) selectedMeasureUnit else "",
                         type = selectedAddTaskMode,
                         status = "Pending",
                         description = taskDescription
                     )
 
-                    taskViewModel.addTask(task)
+                    taskViewModel.addLocalTask(task)
 
-                    taskViewModel.addTaskApi(
+                    taskViewModel.addTaskViaApi(
                         type = selectedAddTaskMode,
                         name = taskName,
                         description = taskDescription,

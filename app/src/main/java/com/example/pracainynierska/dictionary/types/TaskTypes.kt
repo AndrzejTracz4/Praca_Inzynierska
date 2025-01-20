@@ -1,6 +1,7 @@
 package com.example.pracainynierska.dictionary.types
 
 object TaskTypes {
-    const val JEDNORAZOWE = "jednorazowe"
-    const val CYKLICZNE = "cykliczne"
+    const val RECURRING = "recurring"
+    const val ONE_TIME = "one_time"
+    const val CHALLENGE = "challenge"
 }

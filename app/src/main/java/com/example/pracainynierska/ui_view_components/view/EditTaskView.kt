@@ -67,7 +67,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
         val focusManager = LocalFocusManager.current
 
         var selectedEditTaskMode by remember { mutableStateOf(taskToEdit.type) }
-        var isHidden by remember { mutableStateOf(selectedEditTaskMode == TaskTypes.JEDNORAZOWE) }
+        var isHidden by remember { mutableStateOf(selectedEditTaskMode == TaskTypes.ONE_TIME) }
         var taskName by remember { mutableStateOf(taskToEdit.name) }
         var selectedDifficulty by remember { mutableStateOf(taskToEdit.difficulty) }
         var selectedCategory by remember { mutableStateOf(taskToEdit.category) }
@@ -122,9 +122,9 @@ class EditTaskView(taskViewModel: TaskViewModel,
                 ) {
                     SelectTaskButton(
                         text = "Jednorazowe",
-                        isSelected = selectedEditTaskMode == TaskTypes.JEDNORAZOWE,
+                        isSelected = selectedEditTaskMode == TaskTypes.ONE_TIME,
                         onClick = {
-                            selectedEditTaskMode = TaskTypes.JEDNORAZOWE
+                            selectedEditTaskMode = TaskTypes.ONE_TIME
                             isHidden = true
                         },
                         iconResId = R.drawable.repeat_single,
@@ -136,9 +136,9 @@ class EditTaskView(taskViewModel: TaskViewModel,
 
                     SelectTaskButton(
                         text = "Cykliczne",
-                        isSelected = selectedEditTaskMode == TaskTypes.CYKLICZNE,
+                        isSelected = selectedEditTaskMode == TaskTypes.RECURRING,
                         onClick = {
-                            selectedEditTaskMode = TaskTypes.CYKLICZNE
+                            selectedEditTaskMode = TaskTypes.RECURRING
                             isHidden = false
                         },
                         iconResId = R.drawable.repeat,

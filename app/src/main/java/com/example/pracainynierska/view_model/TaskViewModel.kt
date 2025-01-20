@@ -23,11 +23,11 @@ class TaskViewModel(
     private val _tasks = MutableLiveData<List<Task>>(emptyList())
     val tasks: LiveData<List<Task>> = _tasks
 
-    fun addTask(task: Task) {
+    fun addLocalTask(task: Task) {
         _tasks.value = _tasks.value?.plus(task)
     }
 
-    fun addTaskApi(
+    fun addTaskViaApi(
         type: String,
         name: String,
         description: String,
@@ -47,7 +47,6 @@ class TaskViewModel(
                     startsAt,
                     endsAt
                 )
-                //_tasks.value = taskManager.getTasks()
             } catch (e: Exception) {
                 Log.e("TaskViewModel", "Błąd dodawania zadania: ${e.message}")
             }

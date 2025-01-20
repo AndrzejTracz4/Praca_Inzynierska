@@ -61,7 +61,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
     ) {
 
         val focusManager = LocalFocusManager.current
-        var selectedAddTaskMode by remember { mutableStateOf(TaskTypes.JEDNORAZOWE) }
+        var selectedAddTaskMode by remember { mutableStateOf(TaskTypes.ONE_TIME) }
         var isHidden by remember { mutableStateOf(true) }
         var taskName by remember { mutableStateOf("") }
         var taskDescription by remember { mutableStateOf("") }
@@ -115,9 +115,9 @@ class AddTaskView(taskViewModel: TaskViewModel,
                 ) {
                     SelectTaskButton(
                         text = "Jednorazowe",
-                        isSelected = selectedAddTaskMode == TaskTypes.JEDNORAZOWE,
+                        isSelected = selectedAddTaskMode == TaskTypes.ONE_TIME,
                         onClick = {
-                            selectedAddTaskMode = TaskTypes.JEDNORAZOWE
+                            selectedAddTaskMode = TaskTypes.ONE_TIME
                             isHidden = true
                         },
                         iconResId = R.drawable.repeat_single,
@@ -129,9 +129,9 @@ class AddTaskView(taskViewModel: TaskViewModel,
 
                     SelectTaskButton(
                         text = "Cykliczne",
-                        isSelected = selectedAddTaskMode == TaskTypes.CYKLICZNE,
+                        isSelected = selectedAddTaskMode == TaskTypes.RECURRING,
                         onClick = {
-                            selectedAddTaskMode = TaskTypes.CYKLICZNE
+                            selectedAddTaskMode = TaskTypes.RECURRING
                             isHidden = false
                         },
                         iconResId = R.drawable.repeat,
