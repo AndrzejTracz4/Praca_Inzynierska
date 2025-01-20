@@ -270,7 +270,7 @@ class ProfileView(
                         color = Color(0x19FFFFFF)
                     )
                     .clickable {
-                        navController.navigate(ViewRoutes.LOGIN.name)
+                        navController.navigate(ViewRoutes.LOGIN.viewName)
                     }
                     .padding(horizontal = 16.dp),
                 contentAlignment = Alignment.Center
