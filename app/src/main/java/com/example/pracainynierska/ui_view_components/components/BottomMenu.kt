@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
-import com.example.pracainynierska.ViewRoutes
+import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.ui_view_components.components.BottomMenuItem
 import com.example.pracainynierska.ui_view_components.components.navigateIfNotCurrent
 

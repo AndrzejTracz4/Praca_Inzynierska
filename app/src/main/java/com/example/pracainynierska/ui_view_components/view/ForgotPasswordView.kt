@@ -51,7 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
-import com.example.pracainynierska.ViewRoutes
+import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.view_model.LoginViewModel
 
 @Composable

@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pracainynierska.R
+import com.example.pracainynierska.dictionary.TaskDifficulty
 import com.example.pracainynierska.model.Task
 
 @Composable
@@ -39,13 +40,8 @@ fun DailyTaskCard(
         else -> R.drawable.calendar
     }
 
-    // TODO: TO ENUM
-    val backgroundColor = when (task.difficulty) {
-        "Łatwy" -> Color(0xFF3CB043)
-        "Średni" -> Color(0xFFFFFF00)
-        "Trudny" -> Color(0xFFFF0000)
-        else -> Color(0xFF3CB043)
-    }
+    val backgroundColor = TaskDifficulty.fromDisplayName(task.difficulty)?.color
+        ?: TaskDifficulty.EASY.color
 
     Box(
         modifier = Modifier

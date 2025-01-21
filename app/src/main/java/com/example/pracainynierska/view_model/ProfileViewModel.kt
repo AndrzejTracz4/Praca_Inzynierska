@@ -8,7 +8,7 @@ import com.example.pracainynierska.resolver.UserPhotoResourceResolver
 
 class ProfileViewModel (
     pc: PlayerContextInterface,
-    val appContext: Context
+    private val appContext: Context
 ) : AbstractViewModel(pc) {
 
     private val userPhotoResourceResolver = UserPhotoResourceResolver()

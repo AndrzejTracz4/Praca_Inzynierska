@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Labels-->
+    <string name="username">Użytkownik</string>
+    <string name="email">Email</string>
+    <string name="repeat_password">Powtórz hasło</string>
+    <string name="password">Hasło</string>
+    <string name="change_password">Zmień hasło</string>
+    <string name="new_password">Nowe hasło</string>
+    <string name="experience">Doświadczenie</string>
+    <string name="unknown_level">Nieznany poziom</string>
+    <string name="search_category">Wyszukaj kategorię</string>
+    <string name="cost">"Koszt: "</string>
+    <string name="success">Sukces</string>
+    <string name="duration">Czas trwania (d)</string>
+    <string name="multiplier">Mnożnik (x)</string>
+    <string name="category">Kategoria</string>
+    <string name="registration_status">Status rejestracji</string>
+    <string name="ok">OK</string>
+    <string name="active_boosters">Aktywne boostery</string>
+    <string name="challenge_of_the_day">Wyzwanie dnia!</string>
+    <string name="enter_reset_code">Wprowadź kod resetujący:</string>
+    <string name="confirm_code">Potwierdź kod</string>
+    <string name="reset_password">Zresetuj hasło</string>
+    <string name="error">Błąd</string>
+    <string name="name">Nazwa</string>
+    <string name="description">Opis</string>
+    <string name="start_date">Data rozpoczęcia</string>
+    <string name="end_date">Data zakończenia</string>
+    <string name="interval">Interwał</string>
+    <string name="measure">Miara</string>
+    <string name="difficulty_level">Poziom trudności</string>
+    <string name="categories">Kategorie</string>
+    <string name="select_statistics">Wybierz statystyki</string>
+    <string name="select_statistic_label">Wybierz statystykę</string>
+    <string name="search_statistic">Szukaj statystyki</string>
+    <string name="Close">Zamknij</string>
+    <string name="Achievements">Osiągnięcia</string>
+    <string name="pick_up">Odbierz</string>
+    <string name="confirm">Potwierdź</string>
+    <string name="minute">Minuta</string>
+    <string name="hour">Godzina</string>
+    <string name="day">Dzień</string>
+    <string name="month">Miesiąc</string>
+    <string name="select_time_unit">Wybierz jednostkę czasu</string>
+    <string name="task_details">Szczegóły zadania</string>
+    <string name="select_number">Wybierz liczbę</string>
+    <string name="task_name">"Nazwa zadania: "</string>
+    <string name="begining">"Rozpoczęcie: "</string>
+    <string name="ending">"Zakończenie: "</string>
+    <string name="calendar">Kalendarz</string>
+    <string name="shop">Sklep</string>
+</resources>

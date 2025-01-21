@@ -41,7 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
-import com.example.pracainynierska.ViewRoutes
+import com.example.pracainynierska.dictionary.TaskDifficulty
+import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.model.Task
 import com.example.pracainynierska.ui_view_components.components.CustomDatePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomMeasurePickerField
@@ -294,33 +295,17 @@ class EditTaskView(taskViewModel: TaskViewModel,
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        // TODO: CREATE ENUM FOR DIFFICULTY LEVELS
-                        SelectTaskButton(
-                            text = "Łatwy",
-                            isSelected = selectedDifficulty == "Łatwe",
-                            onClick = { selectedDifficulty = "Łatwe" },
-                            iconResId = R.drawable.water,
-                            modifier = Modifier.weight(1f),
-                            color = true
-                        )
+                        TaskDifficulty.entries.forEach { difficulty ->
+                            SelectTaskButton(
+                                text = difficulty.displayName,
+                                isSelected = selectedDifficulty == difficulty.displayName,
+                                onClick = { selectedDifficulty = difficulty.displayName },
+                                iconResId = difficulty.iconResId,
+                                modifier = Modifier.weight(1f),
+                                color = true
+                            )
+                        }
 
-                        SelectTaskButton(
-                            text = "Średni",
-                            isSelected = selectedDifficulty == "Średni",
-                            onClick = { selectedDifficulty = "Średni" },
-                            iconResId = R.drawable.leaf,
-                            modifier = Modifier.weight(1f),
-                            color = true
-                        )
-
-                        SelectTaskButton(
-                            text = "Trudny",
-                            isSelected = selectedDifficulty == "Trudny",
-                            onClick = { selectedDifficulty = "Trudny" },
-                            iconResId = R.drawable.flame,
-                            modifier = Modifier.weight(1f),
-                            color = true
-                        )
                     }
                 }
 

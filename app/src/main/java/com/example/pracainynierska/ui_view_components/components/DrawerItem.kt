@@ -1,6 +1,6 @@
 package com.example.pracainynierska.ui_view_components.components
 
-import com.example.pracainynierska.ViewRoutes
+import com.example.pracainynierska.dictionary.ViewRoutes
 
 data class DrawerItem(
     val title: String,

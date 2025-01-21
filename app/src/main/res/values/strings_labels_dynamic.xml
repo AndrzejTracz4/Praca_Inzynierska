@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="balance">Monety: %1$s</string>
+    <string name="level">Poziom %1$s</string>
+    <string name="exp_coins">Doświadczenie: %1$s | Monety: %2$s</string>
+    <string name="version">Wersja: %1$s</string>
+    <string name="select_statistic">Wybierz statystykę %1$s</string>
+    <string name="multiplier_variable">Mnożnik: x%1$s</string>
+    <string name="end_date_variable">Data zakończenia: %1$s</string>
+</resources>

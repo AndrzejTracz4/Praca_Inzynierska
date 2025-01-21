@@ -67,8 +67,6 @@ class HomepageView(homepageViewModel: HomepageViewModel,
             throw Exception("Invalid View Model")
         }
 
-        val rankDictionary = RankDictionary(viewModel.appContext)
-
         var userLevel = 1
         var playerExperience = 0f
         var playerBalance = 0
@@ -85,7 +83,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
             }
         }
 
-        val userRank = rankDictionary.levelNames[userLevel] ?: stringResource(R.string.unknown_level)
+        val userRank = RankDictionary.fromLevel(userLevel)?.displayName ?: stringResource(R.string.unknown_level)
 
         val stats = player?.playerStatistics?.statistics?.map{ it.name to it.experience.toFloat() } ?: emptyList()
 

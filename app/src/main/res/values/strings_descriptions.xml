@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Descriptions-->
+    <string name="icon_change_description">Ikona zmiany obrazka</string>
+    <string name="icon_balance_description">Ikona monet</string>
+    <string name="icon_logout_description">Ikona wylogowania</string>
+    <string name="icon_edit_category_description">Edytuj kategorię</string>
+    <string name="icon_cost_description">Ikona monet</string>
+    <string name="icon_username_description">Użytkownik</string>
+    <string name="icon_email_description">Email</string>
+    <string name="icon_password_description">Hasło</string>
+    <string name="icon_repeat_password_description">Powtórz hasło</string>
+    <string name="icon_logo_questa_description">Logo Questa</string>
+    <string name="icon_statistic_clear_description">Wyczyść statystykę</string>
+    <string name="icon_booster_description">BoosterIcon</string>
+    <string name="icon_previous_booster_description">Poprzedni booster</string>
+    <string name="icon_next_booster_description">Następny booster</string>
+    <string name="icon_add_category_description">Plus icon</string>
+    <string name="icon_menu_description">Menu</string>
+    <string name="icon_back_description">Back</string>
+    <string name="icon_error_description">Błąd</string>
+    <string name="icon_add_task_description">Dodaj zadanie</string>
+</resources>

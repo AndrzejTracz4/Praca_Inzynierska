@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
-import com.example.pracainynierska.ViewRoutes
+import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.dictionary.RankDictionary
 import com.example.pracainynierska.ui_view_components.components.GradientLevelProgressBar
 import com.example.pracainynierska.ui_view_components.components.UserImagePicker
@@ -54,11 +54,9 @@ class ProfileView(
         innerPadding: PaddingValues
     ) {
 
-        if (false == (viewModel is ProfileViewModel)){
+        if (false == (viewModel is ProfileViewModel)) {
             throw Exception("Invalid View Model")
         }
-
-        val rankDictionary = RankDictionary(viewModel.appContext)
 
         var userLevel = 1
         var playerExperience = 0f
@@ -76,7 +74,7 @@ class ProfileView(
             }
         }
 
-        val userRank = rankDictionary.levelNames[userLevel] ?: stringResource(R.string.unknown_level)
+        val userRank = RankDictionary.fromLevel(userLevel)?.displayName ?: stringResource(R.string.unknown_level)
 
         Column(
             modifier = Modifier

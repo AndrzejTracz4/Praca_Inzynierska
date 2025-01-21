@@ -56,7 +56,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.pracainynierska.R
-import com.example.pracainynierska.ViewRoutes
+import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.model.Category
 import com.example.pracainynierska.model.Statistic
 import com.example.pracainynierska.ui_view_components.components.GradientStatsProgressBars

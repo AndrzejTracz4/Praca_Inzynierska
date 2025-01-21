@@ -1,6 +1,6 @@
-package com.example.pracainynierska
+package com.example.pracainynierska.dictionary
 
-public enum class ViewRoutes(val viewName: String) {
+enum class ViewRoutes(val viewName: String) {
     HOMEPAGE("HomepageView"),
     PROFILE("ProfileView"),
     STATISTICS("StatisticView"), // TODO: RENAME TO CATEGORYVIEW

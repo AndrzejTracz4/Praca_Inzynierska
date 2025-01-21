@@ -167,14 +167,7 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = selectedStat?.ifEmpty {
-                                    stringResource(
-                                        R.string.select_statistic,
-                                        index + 1
-                                    ) } ?: stringResource(
-                                    R.string.select_statistic,
-                                    index + 1
-                                ),
+                                text = getStatisticText(selectedStat, index),
                                 color = if (selectedStat == null) Color(0xFFbdc3c7) else Color.White,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Normal
@@ -289,4 +282,11 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
             Spacer(modifier = Modifier.height(75.dp))
         }
     }
+}
+
+@Composable
+fun getStatisticText(selectedStat: String?, index: Int): String {
+    return selectedStat?.ifEmpty {
+        stringResource(R.string.select_statistic, index + 1)
+    } ?: stringResource(R.string.select_statistic, index + 1)
 }

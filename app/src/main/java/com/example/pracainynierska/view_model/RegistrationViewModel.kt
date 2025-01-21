@@ -82,19 +82,6 @@ class RegistrationViewModel(
         }
     }
 
-//    private fun addValidationMessages(validation: ValidationErrorResponse) {
-//        validation.violations.forEach {
-//            when (it.propertyPath) {
-//                usernameProperty -> errorMessages[usernameProperty]?.value = it.message
-//                emailProperty -> errorMessages[emailProperty]?.value = it.message
-//                passwordProperty -> errorMessages[passwordProperty]?.value = it.message
-//                confirmPasswordProperty -> errorMessages[confirmPasswordProperty]?.value = it.message
-//            }
-//        }
-//
-//        Log.d("RegistrationViewModel", "Validation messages added : ${errorMessages}")
-//    }
-
     private fun fieldsAreEmpty() = username.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()
     private fun passwordsMismatch() = password != confirmPassword
 

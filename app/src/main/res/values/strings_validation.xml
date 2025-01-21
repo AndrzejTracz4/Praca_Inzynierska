@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Validation-->
+    <string name="validation_required_name_statistic">Nazwa statystyki jest wymagana</string>
+    <string name="validation_invalid_category">Nazwa kategorii nie może być pusta.</string>
+    <string name="validation_empty_statistics">Wybierz przynajmniej jedną statystykę.</string>
+    <string name="validation_add_task_fields">Uzupełnij wszystkie pola.</string>
+    <string name="validation_date_earlier_that_start">Data końcowa nie może być wcześniejsza niż data startowa.</string>
+    <string name="validation_error">Błąd walidacji</string>
+    <string name="validation_no_date_selected">Nie wybrano daty</string>
+    <string name="validation_passwords_does_not_match">Hasła się nie zgadzają!</string>
+    <string name="validation_all_fields_must_be_filled">Wszystkie pola muszą być wypełnione!</string>
+    <string name="validation_invalid_email_format">Nieprawidłowy format email!</string>
+    <string name="validation_username_cannot_be_empty">Nazwa użytkownika nie może być pusta!</string>
+    <string name="validation_password_cannot_be_empty">Hasło nie może być puste!</string>
+    <string name="validation_email_cannot_be_empty">E-mail nie może być pusty!</string>
+    <string name="validation_username_must_be_at_least_3_characters_long">Nazwa użytkownika musi składać się z co najmniej 3 znaków</string>
+    <string name="validation_password_must_be_at_least_8_characters_long">Hasło musi składać się z co najmniej 8 znaków</string>
+    <string name="invalid_username_or_password">Nieprawidłowa nazwa użytkownika lub hasło</string>
+    <string name="invalid_reset_code">Niepoprawny kod resetujący.</string>
+    <string name="invalid_date">Błąd daty</string>
+    <string name="information_email_reset_code">Na twój adres email został wysłany tymczasowy kod resetujący hasło.</string>
+    <string name="registration_failed">Rejestracja nie powiodła się.</string>
+    <string name="success_create_task">Pomyślnie utworzono zadanie</string>
+    <string name="success_category_create">Kategoria została pomyślnie utworzona!</string>
+    <string name="success_password_change">Hasło zostało zmienione pomyślnie.</string>
+    <string name="success_creation_statistics">Statystyka została pomyślnie utworzona.</string>
+    <string name="success_registration_user">Pomyślnie zarejestrowano użytkownika</string>
+</resources>
