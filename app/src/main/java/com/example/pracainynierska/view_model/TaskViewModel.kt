@@ -3,9 +3,12 @@ package com.example.pracainynierska.view_model
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.pracainynierska.API.handler.authorization.AuthorizationHandlerInterface
+import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.context.PlayerContextInterface
-import com.example.pracainynierska.model.Task
+import com.example.pracainynierska.manager.task.TaskManagerInterface
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -13,15 +16,43 @@ import java.util.Locale
 
 class TaskViewModel(
     pc: PlayerContextInterface,
-    private val playerAuthorizationHandler: AuthorizationHandlerInterface
+    private val playerAuthorizationHandler: AuthorizationHandlerInterface,
+    private val taskManager: TaskManagerInterface
 ) : AbstractViewModel(pc) {
 
     private val _tasks = MutableLiveData<List<Task>>(emptyList())
     val tasks: LiveData<List<Task>> = _tasks
 
-    fun addTask(task: Task) {
+    fun addLocalTask(task: Task) {
         _tasks.value = _tasks.value?.plus(task)
     }
+
+    fun addTaskViaApi(
+        type: String,
+        name: String,
+        description: String,
+        category: String,
+        difficulty: String,
+        startsAt: String,
+        endsAt: String
+    ) {
+        viewModelScope.launch {
+            try {
+                taskManager.addTask(
+                    type,
+                    name,
+                    description,
+                    category,
+                    difficulty,
+                    startsAt,
+                    endsAt
+                )
+            } catch (e: Exception) {
+                Log.e("TaskViewModel", "Błąd dodawania zadania: ${e.message}")
+            }
+        }
+    }
+
 
     fun completeTask(taskId: Int) {
         _tasks.value = _tasks.value?.map { if (it.id == taskId) it.copy(status = "Completed") else it }

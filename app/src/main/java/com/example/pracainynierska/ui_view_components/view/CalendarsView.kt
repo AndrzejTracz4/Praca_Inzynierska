@@ -31,9 +31,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.ViewRoutes
-import com.example.pracainynierska.model.Task
 import com.example.pracainynierska.ui_view_components.components.TaskCard
 import com.example.pracainynierska.ui_view_components.components.TaskDetailsDialog
 import com.example.pracainynierska.view_model.TaskViewModel

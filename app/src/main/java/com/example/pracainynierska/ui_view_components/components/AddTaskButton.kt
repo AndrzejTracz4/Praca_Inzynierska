@@ -1,7 +1,5 @@
 package com.example.pracainynierska.ui_view_components.components
 
-import android.app.ActivityManager.TaskDescription
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -23,16 +21,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
-import com.example.pracainynierska.model.Task
+import com.example.pracainynierska.dictionary.types.TaskTypes
 import com.example.pracainynierska.view_model.TaskViewModel
 import java.text.SimpleDateFormat
 import java.util.*
-
-enum class TaskMode {
-    JEDNORAZOWE,
-    CYKLICZNE
-}
 
 @Composable
 fun CreateTaskButton(
@@ -44,7 +38,7 @@ fun CreateTaskButton(
     selectedEndDate: String,
     interval: Int,
     selectedMeasureUnit: String,
-    selectedAddTaskMode: TaskMode,
+    selectedAddTaskMode: String,
     modifier: Modifier = Modifier,
     onTaskCreated: () -> Unit,
     taskViewModel: TaskViewModel,
@@ -70,15 +64,14 @@ fun CreateTaskButton(
             )
             .clickable {
                 val isValid = when (selectedAddTaskMode) {
-                    TaskMode.JEDNORAZOWE -> {
+                    TaskTypes.ONE_TIME -> {
                         taskName.isNotBlank() &&
                                 selectedDifficulty.isNotBlank() &&
                                 selectedCategory.isNotBlank() &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank()
                     }
-
-                    TaskMode.CYKLICZNE -> {
+                    TaskTypes.RECURRING -> {
                         taskName.isNotBlank() &&
                                 selectedDifficulty.isNotBlank() &&
                                 selectedCategory.isNotBlank() &&
@@ -87,6 +80,7 @@ fun CreateTaskButton(
                                 selectedMeasureUnit.isNotBlank() &&
                                 interval > 0
                     }
+                    else -> false
                 }
 
                 if (!isValid) {
@@ -104,13 +98,24 @@ fun CreateTaskButton(
                         category = selectedCategory,
                         startDate = selectedStartDate,
                         endDate = selectedEndDate,
-                        interval = if (selectedAddTaskMode == TaskMode.CYKLICZNE) interval else 0,
-                        measureUnit = if (selectedAddTaskMode == TaskMode.CYKLICZNE) selectedMeasureUnit else "",
-                        mode = selectedAddTaskMode,
+                        interval = if (selectedAddTaskMode == TaskTypes.RECURRING) interval else 0,
+                        measureUnit = if (selectedAddTaskMode == TaskTypes.RECURRING) selectedMeasureUnit else "",
+                        type = selectedAddTaskMode,
                         status = "Pending",
                         description = taskDescription
                     )
-                    taskViewModel.addTask(task)
+
+                    taskViewModel.addLocalTask(task)
+
+                    taskViewModel.addTaskViaApi(
+                        type = selectedAddTaskMode,
+                        name = taskName,
+                        description = taskDescription,
+                        category = "/api/categories/4",
+                        difficulty = selectedDifficulty,
+                        startsAt = selectedStartDate,
+                        endsAt = selectedEndDate
+                    )
 
                     dialogMessageId = R.string.success_create_task
                     showDialog = true

@@ -1,5 +1,6 @@
 package com.example.pracainynierska
 
+import TaskManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -17,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.pracainynierska.API.api_client.AugmentApi
+import com.example.pracainynierska.API.api_client.TaskApi
 import com.example.pracainynierska.context.PlayerContext
 import com.example.pracainynierska.context.PlayerContextInterface
 import com.example.pracainynierska.dictionary.ViewRoutes
@@ -56,6 +58,7 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var playerContext: PlayerContextInterface
     private lateinit var augmentManager: AugmentManager
+    private lateinit var taskManager: TaskManager
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -64,6 +67,7 @@ class MainActivity : ComponentActivity() {
 
         playerContext = PlayerContext()
         augmentManager = AugmentManager(AugmentApi(playerContext))
+        taskManager = TaskManager(TaskApi(playerContext))
 
         setContent {
             val context = LocalContext.current
@@ -85,7 +89,7 @@ class MainActivity : ComponentActivity() {
                         factory = HomepageViewModelFactory(playerContext, context)
                     )
                     val taskViewModel : TaskViewModel = viewModel(
-                        factory = TaskViewModelFactory(playerContext)
+                        factory = TaskViewModelFactory(playerContext, taskManager)
                     )
                     val shopViewModel : ShopViewModel = viewModel(
                         factory = ShopViewModelFactory(playerContext, augmentManager)

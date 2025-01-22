@@ -1,7 +1,6 @@
 package com.example.pracainynierska.ui_view_components.components
 
 import DailyTaskDetailsButton
-import TaskDetailsButton
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.pracainynierska.R
-import com.example.pracainynierska.model.Task
+import com.example.pracainynierska.API.model.Task
 
 @Composable
 fun DailyTaskDetailsDialog(task: Task, onDismiss: () -> Unit) {

@@ -23,9 +23,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.TaskDifficulty
-import com.example.pracainynierska.model.Task
 
 @Composable
 fun TaskCard(

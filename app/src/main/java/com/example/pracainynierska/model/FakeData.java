@@ -1,20 +1,21 @@
 package com.example.pracainynierska.model;
 
-import com.example.pracainynierska.ui_view_components.components.TaskMode;
+import com.example.pracainynierska.API.model.Task;
+import com.example.pracainynierska.dictionary.types.TaskTypes;
 
 public class FakeData {
 
     public static final Task fakeTask = new Task(
             1,
-            "Przebiegnij maraton",
-            "Trudny",
+            TaskTypes.ONE_TIME,
+            "Maraton Warszawski",
+            "Siema",
             "Trening",
-            "2024-12-01",
-            "2024-12-31",
+            "Trudny",
             7,
             "dni",
-            TaskMode.CYKLICZNE,
-            "Aktywne",
-            "Opis"
+            "2024-12-01",
+            "2024-12-02",
+            "Nowe"
     );
 }

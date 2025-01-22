@@ -27,7 +27,11 @@ class AugmentManager(
         validForDays: Int,
         category: String
     ) {
-        apiClient.addAugment(type, validForDays, multiplier, category)
+        apiClient.addAugment(
+            type,
+            validForDays,
+            multiplier,
+            category
+        )
     }
-
 }

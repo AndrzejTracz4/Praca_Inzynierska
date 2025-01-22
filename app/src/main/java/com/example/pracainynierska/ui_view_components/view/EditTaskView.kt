@@ -40,10 +40,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.TaskDifficulty
 import com.example.pracainynierska.dictionary.ViewRoutes
-import com.example.pracainynierska.model.Task
+import com.example.pracainynierska.dictionary.types.TaskTypes
 import com.example.pracainynierska.ui_view_components.components.CustomDatePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomMeasurePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomNumberPickerField
@@ -51,7 +52,6 @@ import com.example.pracainynierska.ui_view_components.components.DateTimePickerD
 import com.example.pracainynierska.ui_view_components.components.EditTaskButton
 import com.example.pracainynierska.ui_view_components.components.NumberPickerDialog
 import com.example.pracainynierska.ui_view_components.components.SelectTaskButton
-import com.example.pracainynierska.ui_view_components.components.TaskMode
 import com.example.pracainynierska.ui_view_components.components.TaskTextField
 import com.example.pracainynierska.view_model.TaskViewModel
 
@@ -69,8 +69,8 @@ class EditTaskView(taskViewModel: TaskViewModel,
 
         val focusManager = LocalFocusManager.current
 
-        var selectedEditTaskMode by remember { mutableStateOf(taskToEdit.mode) }
-        var isHidden by remember { mutableStateOf(selectedEditTaskMode == TaskMode.JEDNORAZOWE) }
+        var selectedEditTaskMode by remember { mutableStateOf(taskToEdit.type) }
+        var isHidden by remember { mutableStateOf(selectedEditTaskMode == TaskTypes.ONE_TIME) }
         var taskName by remember { mutableStateOf(taskToEdit.name) }
         var selectedDifficulty by remember { mutableStateOf(taskToEdit.difficulty) }
         var selectedCategory by remember { mutableStateOf(taskToEdit.category) }
@@ -124,9 +124,9 @@ class EditTaskView(taskViewModel: TaskViewModel,
                 ) {
                     SelectTaskButton(
                         text = stringResource(R.string.daily_task),
-                        isSelected = selectedEditTaskMode == TaskMode.JEDNORAZOWE,
+                        isSelected = selectedEditTaskMode == TaskTypes.ONE_TIME,
                         onClick = {
-                            selectedEditTaskMode = TaskMode.JEDNORAZOWE
+                            selectedEditTaskMode = TaskTypes.ONE_TIME
                             isHidden = true
                         },
                         iconResId = R.drawable.repeat_single,
@@ -138,9 +138,9 @@ class EditTaskView(taskViewModel: TaskViewModel,
 
                     SelectTaskButton(
                         text = stringResource(R.string.cyclical_task),
-                        isSelected = selectedEditTaskMode == TaskMode.CYKLICZNE,
+                        isSelected = selectedEditTaskMode == TaskTypes.RECURRING,
                         onClick = {
-                            selectedEditTaskMode = TaskMode.CYKLICZNE
+                            selectedEditTaskMode = TaskTypes.RECURRING
                             isHidden = false
                         },
                         iconResId = R.drawable.repeat,
