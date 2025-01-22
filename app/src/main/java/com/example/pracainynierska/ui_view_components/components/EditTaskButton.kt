@@ -21,8 +21,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
-import com.example.pracainynierska.model.Task
+import com.example.pracainynierska.dictionary.types.TaskTypes
 import com.example.pracainynierska.view_model.TaskViewModel
 
 @Composable
@@ -36,7 +37,7 @@ fun EditTaskButton(
     selectedEndDate: String,
     interval: Int,
     selectedMeasureUnit: String,
-    selectedEditTaskMode: TaskMode,
+    selectedEditTaskMode: String,
     modifier: Modifier = Modifier,
     onTaskUpdated: () -> Unit,
     taskViewModel: TaskViewModel,
@@ -64,13 +65,13 @@ fun EditTaskButton(
             )
             .clickable {
                 val isValid = when (selectedEditTaskMode) {
-                    TaskMode.JEDNORAZOWE -> {
+                    TaskTypes.ONE_TIME -> {
                         selectedDifficulty.isNotBlank() &&
                                 selectedCategory.isNotBlank() &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank()
                     }
-                    TaskMode.CYKLICZNE -> {
+                    TaskTypes.RECURRING -> {
                         selectedDifficulty.isNotBlank() &&
                                 selectedCategory.isNotBlank() &&
                                 selectedStartDate.isNotBlank() &&
@@ -78,6 +79,7 @@ fun EditTaskButton(
                                 selectedMeasureUnit.isNotBlank() &&
                                 interval > 0
                     }
+                    else -> false
                 }
 
                 if (!isValid) {
@@ -94,9 +96,9 @@ fun EditTaskButton(
                         category = selectedCategory,
                         startDate = selectedStartDate,
                         endDate = selectedEndDate,
-                        interval = if (selectedEditTaskMode == TaskMode.CYKLICZNE) interval else 0,
-                        measureUnit = if (selectedEditTaskMode == TaskMode.CYKLICZNE) selectedMeasureUnit else "",
-                        mode = selectedEditTaskMode,
+                        interval = if (selectedEditTaskMode == TaskTypes.RECURRING) interval else 0,
+                        measureUnit = if (selectedEditTaskMode == TaskTypes.RECURRING) selectedMeasureUnit else "",
+                        type = selectedEditTaskMode,
                         description = taskDescription
                     )
                     taskViewModel.updateTask(updatedTask)
