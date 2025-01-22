@@ -66,7 +66,7 @@ fun TaskCard(
 
             Column {
                 Text(
-                    text = task.category.toString(),
+                    text = task.category.name,
                     color = Color.White,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
@@ -110,7 +110,7 @@ fun TaskCard(
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Text(
-                                text = task.category.toString(),
+                                text = task.category.name,
                                 color = Color.White,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Bold

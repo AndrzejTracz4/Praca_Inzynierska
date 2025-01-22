@@ -34,7 +34,7 @@ fun CreateTaskButton(
     text: String,
     taskName: String,
     selectedDifficulty: String,
-    selectedCategory: Int,
+    selectedCategory: Category?,
     selectedStartDate: String,
     selectedEndDate: String,
     interval: Int,
@@ -68,19 +68,21 @@ fun CreateTaskButton(
                     TaskTypes.ONE_TIME -> {
                         taskName.isNotBlank() &&
                                 selectedDifficulty.isNotBlank() &&
-                                selectedCategory != 0 &&
+                                selectedCategory != null &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank()
                     }
+
                     TaskTypes.RECURRING -> {
                         taskName.isNotBlank() &&
                                 selectedDifficulty.isNotBlank() &&
-                                selectedCategory != 0 &&
+                                selectedCategory != null &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank() &&
                                 selectedMeasureUnit.isNotBlank() &&
                                 interval > 0
                     }
+
                     else -> false
                 }
 
@@ -96,7 +98,7 @@ fun CreateTaskButton(
                         id = lastTaskId + 1,
                         name = taskName,
                         difficulty = selectedDifficulty,
-                        category = selectedCategory,
+                        category = selectedCategory ?: Category(0, ""),
                         startDate = selectedStartDate,
                         endDate = selectedEndDate,
                         interval = if (selectedAddTaskMode == TaskTypes.RECURRING) interval else 0,
@@ -112,7 +114,7 @@ fun CreateTaskButton(
                         type = selectedAddTaskMode,
                         name = taskName,
                         description = taskDescription,
-                        category = "/api/categories/$selectedCategory",
+                        category = selectedCategory?.let { "/api/categories/${it.id}" } ?: "0",
                         difficulty = selectedDifficulty,
                         startsAt = selectedStartDate,
                         endsAt = selectedEndDate

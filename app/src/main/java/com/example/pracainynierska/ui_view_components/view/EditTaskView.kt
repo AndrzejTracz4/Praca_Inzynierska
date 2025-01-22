@@ -73,7 +73,8 @@ class EditTaskView(taskViewModel: TaskViewModel,
         var isHidden by remember { mutableStateOf(selectedEditTaskMode == TaskTypes.ONE_TIME) }
         var taskName by remember { mutableStateOf(taskToEdit.name) }
         var selectedDifficulty by remember { mutableStateOf(taskToEdit.difficulty) }
-        var selectedCategory by remember { mutableIntStateOf(taskToEdit.category) }
+        var selectedCategoryId by remember { mutableIntStateOf(taskToEdit.category.id) }
+        var selectedCategory by remember { mutableStateOf(taskToEdit.category) }
         var showStartDatePicker by remember { mutableStateOf(false) }
         var showEndDatePicker by remember { mutableStateOf(false) }
         var showNumberPicker by remember { mutableStateOf(false) }
@@ -321,8 +322,8 @@ class EditTaskView(taskViewModel: TaskViewModel,
                     playerCategories.forEach{category ->
                         SelectTaskButton(
                             text = category.name,
-                            isSelected = selectedCategory == category.id,
-                            onClick = { selectedCategory = category.id },
+                            isSelected = selectedCategoryId == category.id,
+                            onClick = { selectedCategoryId = category.id },
                             iconResId = null,
                             modifier = Modifier.fillMaxWidth(),
                             color = false
@@ -338,7 +339,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         taskToEdit = taskToEdit,
                         taskName = taskName,
                         selectedDifficulty = selectedDifficulty,
-                        selectedCategory = selectedCategory,
+                        selectedCategory = playerCategories.find { it.id == selectedCategoryId },
                         selectedStartDate = selectedStartDate,
                         selectedEndDate = selectedEndDate,
                         interval = interval,

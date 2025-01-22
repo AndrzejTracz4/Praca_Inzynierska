@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.types.TaskTypes
 import com.example.pracainynierska.ui_view_components.components.CreateTaskButton
@@ -67,7 +68,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
         var taskName by remember { mutableStateOf("") }
         var taskDescription by remember { mutableStateOf("") }
         var selectedDifficulty by remember { mutableStateOf("") }
-        var selectedCategory by remember { mutableIntStateOf(0) }
+        var selectedCategoryId by remember { mutableIntStateOf(0) }
         var showStartDatePicker by remember { mutableStateOf(false) }
         var showEndDatePicker by remember { mutableStateOf(false) }
         var showNumberPicker by remember { mutableStateOf(false) }
@@ -335,8 +336,8 @@ class AddTaskView(taskViewModel: TaskViewModel,
                     playerCategories.forEach{category ->
                         SelectTaskButton(
                             text = category.name,
-                            isSelected = selectedCategory == category.id,
-                            onClick = { selectedCategory = category.id },
+                            isSelected = selectedCategoryId == category.id,
+                            onClick = { selectedCategoryId = category.id },
                             iconResId = null,
                             modifier = Modifier.fillMaxWidth(),
                             color = false
@@ -351,7 +352,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
                         text = "Utwórz",
                         taskName = taskName,
                         selectedDifficulty = selectedDifficulty,
-                        selectedCategory = selectedCategory,
+                        selectedCategory = playerCategories.find { it.id == selectedCategoryId },
                         selectedStartDate = selectedStartDate,
                         selectedEndDate = selectedEndDate,
                         interval = interval,
@@ -361,7 +362,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
                         onTaskCreated = {
                             taskName = ""
                             selectedDifficulty = ""
-                            selectedCategory = 0
+                            selectedCategoryId = 0
                             selectedStartDate = ""
                             selectedEndDate = ""
                             interval = 0

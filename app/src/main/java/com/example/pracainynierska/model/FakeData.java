@@ -1,5 +1,6 @@
 package com.example.pracainynierska.model;
 
+import com.example.pracainynierska.API.model.Category;
 import com.example.pracainynierska.API.model.Task;
 import com.example.pracainynierska.dictionary.types.TaskTypes;
 
@@ -10,7 +11,7 @@ public class FakeData {
             TaskTypes.ONE_TIME,
             "Maraton Warszawski",
             "Siema",
-            1,
+            new Category(1, "Test"),
             "Trudny",
             7,
             "dni",

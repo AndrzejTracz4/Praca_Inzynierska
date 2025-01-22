@@ -67,7 +67,7 @@ fun DailyTaskCard(
 
              Column {
                 Text(
-                    text = task.category.toString(),
+                    text = task.category.name,
                     color = Color.White,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,

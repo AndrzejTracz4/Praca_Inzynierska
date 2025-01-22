@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.types.TaskTypes
@@ -33,7 +34,7 @@ fun EditTaskButton(
     taskName: String,
     taskToEdit: Task,
     selectedDifficulty: String,
-    selectedCategory: Int,
+    selectedCategory: Category?,
     selectedStartDate: String,
     selectedEndDate: String,
     interval: Int,
@@ -68,14 +69,14 @@ fun EditTaskButton(
                 val isValid = when (selectedEditTaskMode) {
                     TaskTypes.ONE_TIME -> {
                         selectedDifficulty.isNotBlank() &&
-                                selectedCategory != 0 &&
+                                selectedCategory != null &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank()
                     }
 
                     TaskTypes.RECURRING -> {
                         selectedDifficulty.isNotBlank() &&
-                                selectedCategory != 0 &&
+                                selectedCategory != null &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank() &&
                                 selectedMeasureUnit.isNotBlank() &&
@@ -95,7 +96,7 @@ fun EditTaskButton(
                     val updatedTask = taskToEdit.copy(
                         name = taskName,
                         difficulty = selectedDifficulty,
-                        category = selectedCategory,
+                        category = selectedCategory ?: Category(0, ""),
                         startDate = selectedStartDate,
                         endDate = selectedEndDate,
                         interval = if (selectedEditTaskMode == TaskTypes.RECURRING) interval else 0,
