@@ -10,7 +10,7 @@ public class FakeData {
             TaskTypes.ONE_TIME,
             "Maraton Warszawski",
             "Siema",
-            "Trening",
+            1,
             "Trudny",
             7,
             "dni",

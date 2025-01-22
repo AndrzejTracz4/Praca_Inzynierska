@@ -67,7 +67,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
         var taskName by remember { mutableStateOf("") }
         var taskDescription by remember { mutableStateOf("") }
         var selectedDifficulty by remember { mutableStateOf("") }
-        var selectedCategory by remember { mutableStateOf("") }
+        var selectedCategory by remember { mutableIntStateOf(0) }
         var showStartDatePicker by remember { mutableStateOf(false) }
         var showEndDatePicker by remember { mutableStateOf(false) }
         var showNumberPicker by remember { mutableStateOf(false) }
@@ -77,6 +77,8 @@ class AddTaskView(taskViewModel: TaskViewModel,
         var selectedEndDate by remember { mutableStateOf("") }
         var interval by remember { mutableIntStateOf(0) }
         val scrollState = rememberScrollState()
+
+        val playerCategories = viewModel.getPlayerCategories()
 
         if (false == (viewModel is TaskViewModel)){
             throw Exception("Invalid View Model")
@@ -330,48 +332,18 @@ class AddTaskView(taskViewModel: TaskViewModel,
                         fontWeight = FontWeight.ExtraBold
                     )
 
-                    SelectTaskButton(
-                        text = "Samorozwój",
-                        isSelected = selectedCategory == "Samorozwój",
-                        onClick = { selectedCategory = "Samorozwój" },
-                        iconResId = R.drawable.disposable_icon,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = false
-                    )
+                    playerCategories.forEach{category ->
+                        SelectTaskButton(
+                            text = category.name,
+                            isSelected = selectedCategory == category.id,
+                            onClick = { selectedCategory = category.id },
+                            iconResId = null,
+                            modifier = Modifier.fillMaxWidth(),
+                            color = false
+                        )
 
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    SelectTaskButton(
-                        text = "Ćwiczenia",
-                        isSelected = selectedCategory == "Ćwiczenia",
-                        onClick = { selectedCategory = "Ćwiczenia" },
-                        iconResId = R.drawable.disposable_icon,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = false
-                    )
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    SelectTaskButton(
-                        text = "Edukacja",
-                        isSelected = selectedCategory == "Edukacja",
-                        onClick = { selectedCategory = "Edukacja" },
-                        iconResId = R.drawable.disposable_icon,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = false
-                    )
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    SelectTaskButton(
-                        text = "Praca",
-                        isSelected = selectedCategory == "Praca",
-                        onClick = { selectedCategory = "Praca" },
-                        iconResId = R.drawable.disposable_icon,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = false
-                    )
-
+                        Spacer(modifier = Modifier.height(4.dp))
+                    }
                 }
 
                 Column(modifier = Modifier.padding(8.dp)) {
@@ -389,7 +361,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
                         onTaskCreated = {
                             taskName = ""
                             selectedDifficulty = ""
-                            selectedCategory = ""
+                            selectedCategory = 0
                             selectedStartDate = ""
                             selectedEndDate = ""
                             interval = 0

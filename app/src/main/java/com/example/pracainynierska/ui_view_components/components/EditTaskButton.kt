@@ -33,7 +33,7 @@ fun EditTaskButton(
     taskName: String,
     taskToEdit: Task,
     selectedDifficulty: String,
-    selectedCategory: String,
+    selectedCategory: Int,
     selectedStartDate: String,
     selectedEndDate: String,
     interval: Int,
@@ -68,14 +68,14 @@ fun EditTaskButton(
                 val isValid = when (selectedEditTaskMode) {
                     TaskTypes.ONE_TIME -> {
                         selectedDifficulty.isNotBlank() &&
-                                selectedCategory.isNotBlank() &&
+                                selectedCategory != 0 &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank()
                     }
 
                     TaskTypes.RECURRING -> {
                         selectedDifficulty.isNotBlank() &&
-                                selectedCategory.isNotBlank() &&
+                                selectedCategory != 0 &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank() &&
                                 selectedMeasureUnit.isNotBlank() &&

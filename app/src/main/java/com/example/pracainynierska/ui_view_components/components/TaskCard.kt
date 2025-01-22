@@ -32,13 +32,6 @@ fun TaskCard(
     task: Task,
     onClick: (Task) -> Unit
 ) {
-    val iconResId = when (task.category) {
-        "Samorozwój" -> R.drawable.calendar
-        "Ćwiczenia" -> R.drawable.dumbbell_icon
-        "Edukacja" -> R.drawable.calendar
-        "Praca" -> R.drawable.calendar
-        else -> R.drawable.calendar
-    }
 
     val backgroundColor = TaskDifficulty.fromDisplayName(task.difficulty)?.color
         ?: TaskDifficulty.EASY.color
@@ -73,7 +66,7 @@ fun TaskCard(
 
             Column {
                 Text(
-                    text = task.category,
+                    text = task.category.toString(),
                     color = Color.White,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
@@ -116,17 +109,8 @@ fun TaskCard(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            Icon(
-                                painter = painterResource(id = iconResId),
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(24.dp)
-                            )
-
-                            Spacer(modifier = Modifier.width(4.dp))
-
                             Text(
-                                text = task.category,
+                                text = task.category.toString(),
                                 color = Color.White,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Bold

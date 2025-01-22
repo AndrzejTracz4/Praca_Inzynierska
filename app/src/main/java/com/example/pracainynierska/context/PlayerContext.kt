@@ -1,6 +1,7 @@
 package com.example.pracainynierska.context
 
 import com.example.pracainynierska.API.model.Augment
+import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.API.model.Player
 import com.example.pracainynierska.API.model.PlayerStatistics
 
@@ -15,6 +16,10 @@ class PlayerContext : PlayerContextInterface {
 
     override fun getPlayerAugments(): List<Augment> {
         return getPlayer().activeAugments
+    }
+
+    override fun getPlayerCategories(): List<Category> {
+        return getPlayer().categories
     }
 
     override fun getToken(): String? {

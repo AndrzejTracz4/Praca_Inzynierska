@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.types.TaskTypes
@@ -33,7 +34,7 @@ fun CreateTaskButton(
     text: String,
     taskName: String,
     selectedDifficulty: String,
-    selectedCategory: String,
+    selectedCategory: Int,
     selectedStartDate: String,
     selectedEndDate: String,
     interval: Int,
@@ -67,14 +68,14 @@ fun CreateTaskButton(
                     TaskTypes.ONE_TIME -> {
                         taskName.isNotBlank() &&
                                 selectedDifficulty.isNotBlank() &&
-                                selectedCategory.isNotBlank() &&
+                                selectedCategory != 0 &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank()
                     }
                     TaskTypes.RECURRING -> {
                         taskName.isNotBlank() &&
                                 selectedDifficulty.isNotBlank() &&
-                                selectedCategory.isNotBlank() &&
+                                selectedCategory != 0 &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank() &&
                                 selectedMeasureUnit.isNotBlank() &&
@@ -111,7 +112,7 @@ fun CreateTaskButton(
                         type = selectedAddTaskMode,
                         name = taskName,
                         description = taskDescription,
-                        category = "/api/categories/4",
+                        category = "/api/categories/$selectedCategory",
                         difficulty = selectedDifficulty,
                         startsAt = selectedStartDate,
                         endsAt = selectedEndDate

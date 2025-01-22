@@ -8,7 +8,7 @@ data class Task(
     val type: String,
     val name: String,
     val description: String,
-    val category: String,
+    val category: Int,
     val difficulty: String,
     val interval: Int,
     val measureUnit: String,
