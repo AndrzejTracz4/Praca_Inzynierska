@@ -36,14 +36,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.pracainynierska.API.model.Augment
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.RankDictionary
-import com.example.pracainynierska.manager.augment.AugmentManager
 import com.example.pracainynierska.model.FakeData
 import com.example.pracainynierska.ui_view_components.components.AugmentList
 import com.example.pracainynierska.ui_view_components.components.DailyTaskCard
@@ -68,8 +67,6 @@ class HomepageView(homepageViewModel: HomepageViewModel,
             throw Exception("Invalid View Model")
         }
 
-        val rankDictionary = RankDictionary()
-
         var userLevel = 1
         var playerExperience = 0f
         var playerBalance = 0
@@ -86,7 +83,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
             }
         }
 
-        val userRank = rankDictionary.levelNames[userLevel] ?: "Nieznany poziom"
+        val userRank = RankDictionary.fromLevel(userLevel)?.displayName ?: stringResource(R.string.unknown_level)
 
         val stats = player?.playerStatistics?.statistics?.map{ it.name to it.experience.toFloat() } ?: emptyList()
 
@@ -129,7 +126,6 @@ class HomepageView(homepageViewModel: HomepageViewModel,
             ) {
                 Spacer(modifier = Modifier.height(0.dp))
 
-                // użytkownik
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -168,7 +164,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                             )
 
                             Text(
-                                text = "Poziom $userLevel",
+                                text = stringResource(R.string.level, userLevel),
                                 fontSize = 16.sp,
                                 color = Color.White,
                                 style = TextStyle(
@@ -182,7 +178,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
-                                    text = "Monety: $playerBalance",
+                                    text = stringResource(R.string.balance, playerBalance),
                                     fontSize = 16.sp,
                                     color = Color.White,
                                     style = TextStyle(
@@ -198,7 +194,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
                                 Icon(
                                     painter = painterResource(id = R.drawable.coins),
-                                    contentDescription = "Ikona monet",
+                                    contentDescription = stringResource(R.string.icon_balance_description),
                                     tint = Color.Unspecified,
                                     modifier = Modifier.size(20.dp)
                                 )
@@ -206,13 +202,13 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                            GradientLevelProgressBar(playerExperience) // Procent doświadczenia
+                            GradientLevelProgressBar(playerExperience)
 
                             Spacer(modifier = Modifier.height(4.dp))
 
                             Row {
                                 Text(
-                                    text = "Doświadczenie",
+                                    text = stringResource(R.string.experience),
                                     fontSize = 12.sp,
                                     color = Color.White,
                                     style = TextStyle(
@@ -227,7 +223,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                                 Spacer(modifier = Modifier.width(105.dp))
 
                                 Text(
-                                    text = "${playerExperience.toInt()}/100", // Doświadczenie
+                                    text = "${playerExperience.toInt()}/100",
                                     fontSize = 12.sp,
                                     color = Color.White,
                                     style = TextStyle(
@@ -245,7 +241,6 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // statystyki
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -273,7 +268,6 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Aktywne boostery
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -288,7 +282,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                             verticalArrangement = Arrangement.Top
                         ) {
                             Text(
-                                text = "Aktywne boostery",
+                                text = stringResource(R.string.active_boosters),
                                 fontSize = 13.sp,
                                 color = Color.White,
                                 style = TextStyle(
@@ -322,7 +316,6 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Zadanie dnia
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -337,7 +330,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                             verticalArrangement = Arrangement.Top
                         ) {
                             Text(
-                                text = "Wyzwanie dnia!",
+                                text = stringResource(R.string.challenge_of_the_day),
                                 fontSize = 13.sp,
                                 color = Color.White,
                                 style = TextStyle(

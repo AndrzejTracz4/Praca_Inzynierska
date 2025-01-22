@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -20,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.pracainynierska.R
 import com.example.pracainynierska.ui_view_components.components.CustomDrawerItem
 import com.example.pracainynierska.ui_view_components.components.DrawerItem
+import com.example.pracainynierska.dictionary.ViewRoutes
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,21 +38,20 @@ fun ModalDrawer(
     val currentRoute = navBackStackEntry.value?.destination?.route
 
     val items = listOf(
-        DrawerItem("Strona Główna", R.drawable.home, "HomepageView"),
-        DrawerItem("Profil", R.drawable.profile, "ProfileView"),
-        DrawerItem("Statystyki", R.drawable.stats, "StatisticView"),
-        DrawerItem("Kalendarz", R.drawable.calendar, "CalendarsView"),
-        DrawerItem("Sklep", R.drawable.shop, "ShopView"),
-        DrawerItem("Ustawienia", R.drawable.settings, "HomepageView"),
-        DrawerItem("Wyloguj", R.drawable.logout, "LoginView")
+        DrawerItem(stringResource(R.string.homepage), R.drawable.home, ViewRoutes.HOMEPAGE),
+        DrawerItem(stringResource(R.string.profile), R.drawable.profile, ViewRoutes.PROFILE),
+        DrawerItem(stringResource(R.string.statistics), R.drawable.stats, ViewRoutes.STATISTICS),
+        DrawerItem(stringResource(R.string.calendar), R.drawable.calendar, ViewRoutes.CALENDAR),
+        DrawerItem(stringResource(R.string.shop), R.drawable.shop, ViewRoutes.SHOP),
+        DrawerItem(stringResource(R.string.settings), R.drawable.settings, ViewRoutes.HOMEPAGE),
+        DrawerItem(stringResource(R.string.logout), R.drawable.logout, ViewRoutes.LOGIN)
     )
 
-    // Zmienna do śledzenia zaznaczonego elementu
-    val selectedItemIndex = remember { mutableStateOf(0) }
+    val selectedItemIndex = remember { mutableIntStateOf(0) }
 
-    // Użycie LaunchedEffect do aktualizacji indeksu zaznaczonego elementu
+    // Using LaunchedEffect to update the index of a selected item
     LaunchedEffect(currentRoute) {
-        selectedItemIndex.value = items.indexOfFirst { it.route == currentRoute }.takeIf { it != -1 } ?: 0
+        selectedItemIndex.intValue = items.indexOfFirst { it.route.viewName == currentRoute }.takeIf { it != -1 } ?: 0
     }
 
     ModalNavigationDrawer(
@@ -72,7 +73,6 @@ fun ModalDrawer(
                     )
                     .padding(horizontal = 16.dp, vertical = 48.dp)
             ) {
-                // Drawer header
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -81,14 +81,14 @@ fun ModalDrawer(
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.questa_logo),
-                        contentDescription = "App Icon",
+                        contentDescription = stringResource(R.string.icon_logo_questa_description),
                         modifier = Modifier.size(40.dp)
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Text(
-                        text = "Questa",
+                        text = stringResource(R.string.app_name),
                         color = Color.White,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
@@ -96,7 +96,7 @@ fun ModalDrawer(
                 }
 
                 Text(
-                    text = "Wersja: 1.0.0",
+                    text = stringResource(R.string.version, "1.0.0"),
                     color = Color.White.copy(alpha = 0.7f),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Normal,
@@ -106,12 +106,12 @@ fun ModalDrawer(
                 // Main menu items
                 items.take(items.size - 2).forEachIndexed { index, item ->
                     CustomDrawerItem(
-                        text = item.text,
-                        isSelected = selectedItemIndex.value == index,
+                        text = item.title,
+                        isSelected = selectedItemIndex.intValue == index,
                         onClick = {
-                            if (currentRoute != item.route) { // Sprawdzanie, czy nie jesteśmy już w tym widoku
-                                selectedItemIndex.value = index
-                                navController.navigate(item.route) // Nawiguj do nowego widoku
+                            if (currentRoute != item.route.viewName) {
+                                selectedItemIndex.intValue = index
+                                navController.navigate(item.route.viewName)
                                 scope.launch {
                                     drawerState.close()
                                 }
@@ -120,7 +120,7 @@ fun ModalDrawer(
                         icon = {
                             Image(
                                 painter = painterResource(id = item.iconRes),
-                                contentDescription = item.text,
+                                contentDescription = item.title,
                                 modifier = Modifier.size(20.dp),
                                 colorFilter = ColorFilter.tint(Color.White)
                             )
@@ -134,10 +134,10 @@ fun ModalDrawer(
                 // Footer items (last 2)
                 items.takeLast(2).forEachIndexed { index, item ->
                     CustomDrawerItem(
-                        text = item.text,
-                        isSelected = selectedItemIndex.value == (items.size - 2 + index),
+                        text = item.title,
+                        isSelected = selectedItemIndex.intValue == (items.size - 2 + index),
                         onClick = {
-                            selectedItemIndex.value = items.size - 2 + index
+                            selectedItemIndex.intValue = items.size - 2 + index
                             scope.launch {
                                 drawerState.close()
                             }
@@ -145,7 +145,7 @@ fun ModalDrawer(
                         icon = {
                             Image(
                                 painter = painterResource(id = item.iconRes),
-                                contentDescription = item.text,
+                                contentDescription = item.title,
                                 modifier = Modifier.size(20.dp),
                                 colorFilter = ColorFilter.tint(Color.White)
                             )

@@ -35,12 +35,15 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
+import com.example.pracainynierska.dictionary.TaskDifficulty
+import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.dictionary.types.TaskTypes
 import com.example.pracainynierska.ui_view_components.components.CustomDatePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomMeasurePickerField
@@ -114,14 +117,13 @@ class EditTaskView(taskViewModel: TaskViewModel,
             ) {
                 Spacer(modifier = Modifier.height(55.dp))
 
-                // Tryb zadania (Jednorazowe/Cykliczne)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
                 ) {
                     SelectTaskButton(
-                        text = "Jednorazowe",
+                        text = stringResource(R.string.daily_task),
                         isSelected = selectedEditTaskMode == TaskTypes.ONE_TIME,
                         onClick = {
                             selectedEditTaskMode = TaskTypes.ONE_TIME
@@ -135,7 +137,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                     Spacer(modifier = Modifier.width(8.dp))
 
                     SelectTaskButton(
-                        text = "Cykliczne",
+                        text = stringResource(R.string.cyclical_task),
                         isSelected = selectedEditTaskMode == TaskTypes.RECURRING,
                         onClick = {
                             selectedEditTaskMode = TaskTypes.RECURRING
@@ -147,10 +149,9 @@ class EditTaskView(taskViewModel: TaskViewModel,
                     )
                 }
 
-                // Edytuj dane zadania
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(
-                        text = "Nazwa",
+                        text = stringResource(R.string.name),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
@@ -175,7 +176,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(
-                        text = "Opis",
+                        text = stringResource(R.string.description),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
@@ -200,7 +201,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(
-                        text = "Data rozpoczęcia",
+                        text = stringResource(R.string.start_date),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
@@ -215,7 +216,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(
-                        text = "Data zakończenia",
+                        text = stringResource(R.string.end_date),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
@@ -239,7 +240,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                                 .weight(1f)
                         ) {
                             Text(
-                                text = "Interwał",
+                                text = stringResource(R.string.interval),
                                 color = Color.White,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.ExtraBold
@@ -262,7 +263,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                                 .weight(1f)
                         ) {
                             Text(
-                                text = "Miara",
+                                text = stringResource(R.string.measure),
                                 color = Color.White,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.ExtraBold
@@ -281,10 +282,9 @@ class EditTaskView(taskViewModel: TaskViewModel,
                     }
                 }
 
-                // Poziom trudności
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(
-                        text = "Poziom trudności",
+                        text = stringResource(R.string.difficulty_level),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
@@ -295,38 +295,23 @@ class EditTaskView(taskViewModel: TaskViewModel,
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        SelectTaskButton(
-                            text = "Łatwy",
-                            isSelected = selectedDifficulty == "Łatwe",
-                            onClick = { selectedDifficulty = "Łatwe" },
-                            iconResId = R.drawable.water,
-                            modifier = Modifier.weight(1f),
-                            color = true
-                        )
+                        TaskDifficulty.entries.forEach { difficulty ->
+                            SelectTaskButton(
+                                text = difficulty.displayName,
+                                isSelected = selectedDifficulty == difficulty.displayName,
+                                onClick = { selectedDifficulty = difficulty.displayName },
+                                iconResId = difficulty.iconResId,
+                                modifier = Modifier.weight(1f),
+                                color = true
+                            )
+                        }
 
-                        SelectTaskButton(
-                            text = "Średni",
-                            isSelected = selectedDifficulty == "Średni",
-                            onClick = { selectedDifficulty = "Średni" },
-                            iconResId = R.drawable.leaf,
-                            modifier = Modifier.weight(1f),
-                            color = true
-                        )
-
-                        SelectTaskButton(
-                            text = "Trudny",
-                            isSelected = selectedDifficulty == "Trudny",
-                            onClick = { selectedDifficulty = "Trudny" },
-                            iconResId = R.drawable.flame,
-                            modifier = Modifier.weight(1f),
-                            color = true
-                        )
                     }
                 }
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(
-                        text = "Kategorie",
+                        text = stringResource(R.string.categories),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
@@ -378,7 +363,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     EditTaskButton(
-                        text = "Zapisz zmiany",
+                        text = stringResource(R.string.save_changes),
                         taskToEdit = taskToEdit,
                         taskName = taskName,
                         selectedDifficulty = selectedDifficulty,
@@ -390,7 +375,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         selectedEditTaskMode = selectedEditTaskMode,
                         onTaskUpdated = {
                             Log.d("TaskUpdated", "Zadanie zostało zaktualizowane.")
-                            navController.navigate("CalendarsView")
+                            navController.navigate(ViewRoutes.CALENDAR.viewName)
                         },
                         taskViewModel = viewModel,
                         taskDescription = taskDescription

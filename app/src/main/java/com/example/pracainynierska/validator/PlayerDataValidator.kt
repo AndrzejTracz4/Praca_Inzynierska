@@ -1,24 +1,26 @@
 package com.example.pracainynierska.validator
 
+import com.example.pracainynierska.R
+
 
 class PlayerDataValidator {
-    fun validateUsername(username: String): String? {
-        return if (username.length < 3) "Username must be at least 3 characters long" else null
+    fun validateUsername(username: String): Int {
+        return if (username.length < 3) R.string.validation_username_must_be_at_least_3_characters_long else 0
     }
 
-    fun validatePassword(password: String): String? {
-        return if (password.length < 8) "Password must be at least 8 characters long" else null
+    fun validatePassword(password: String): Int {
+        return if (password.length < 8) R.string.validation_password_must_be_at_least_8_characters_long else 0
     }
 
-    fun validateEmail(email: String): String? {
-        return if (!email.contains("@")) "Invalid email address" else null
+    fun validateEmail(email: String): Int {
+        return if (!email.contains("@")) R.string.validation_invalid_email_format else 0
     }
 
-    fun validatePasswordsMatch(password: String, confirmPassword: String): String? {
+    fun validatePasswordsMatch(password: String, confirmPassword: String): Int {
         if (password.isEmpty()) {
-            return "Password cannot be empty"
+            return R.string.validation_password_cannot_be_empty
         }
 
-        return if (password != confirmPassword) "Passwords do not match" else null
+        return if (password != confirmPassword) R.string.validation_passwords_does_not_match else 0
     }
 }

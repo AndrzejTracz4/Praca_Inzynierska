@@ -16,9 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pracainynierska.R
 
 @Composable
 fun CustomMeasurePickerField(
@@ -29,8 +31,9 @@ fun CustomMeasurePickerField(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    // Lista jednostek czasu
-    val timeUnits = listOf("Minuta", "Godzina", "Dzień", "Miesiąc")
+    val timeUnits = listOf(stringResource(R.string.minute),
+        stringResource(R.string.hour), stringResource(R.string.day), stringResource(R.string.month)
+    )
 
     Box(
         modifier = modifier
@@ -52,11 +55,10 @@ fun CustomMeasurePickerField(
         )
     }
 
-    // Okno dialogowe wyboru jednostki czasu
     if (showMeasurePicker) {
         AlertDialog(
             onDismissRequest = { setShowMeasurePicker(false) },
-            title = { Text("Wybierz jednostkę czasu") },
+            title = { Text(stringResource(R.string.select_time_unit)) },
             text = {
                 Column {
                     timeUnits.forEach { unit ->
@@ -85,7 +87,7 @@ fun CustomMeasurePickerField(
             },
             confirmButton = {
                 Button(onClick = { setShowMeasurePicker(false) }) {
-                    Text("Zamknij")
+                    Text(stringResource(R.string.Close))
                 }
             }
         )

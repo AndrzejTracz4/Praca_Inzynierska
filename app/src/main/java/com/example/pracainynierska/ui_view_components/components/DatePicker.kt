@@ -23,9 +23,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.pracainynierska.R
 import java.util.Date
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -57,19 +59,18 @@ fun DateTimePickerDialog(onDateTimeSelected: (String) -> Unit, onDismissRequest:
             ) {
                 DatePicker(
                     state = dateState,
-                    title = { Text("Wybierz datę", color = Color.Black) }
+                    title = { Text(stringResource(R.string.select_date), color = Color.Black) }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {
                     dateState.selectedDateMillis?.let { millis ->
-                        // Po wyborze daty otwiera się okno dialogowe z wyborem godziny
+                        // After selecting the date, a dialog box opens with the time selection
                         val timePickerDialog = android.app.TimePickerDialog(
                             context,
                             { _, hour, minute ->
                                 selectedHour = hour
                                 selectedMinute = minute
 
-                                // Formatowanie wybranej daty i godziny
                                 val date = Date(millis)
                                 date.hours = selectedHour
                                 date.minutes = selectedMinute
@@ -81,13 +82,13 @@ fun DateTimePickerDialog(onDateTimeSelected: (String) -> Unit, onDismissRequest:
                             true
                         )
                         timePickerDialog.show()
-                    } ?: onDateTimeSelected("Nie wybrano daty")
+                    } ?: onDateTimeSelected(context.getString(R.string.validation_no_date_selected))
                 }) {
-                    Text("Wybierz datę i godzinę")
+                    Text(stringResource(R.string.select_timedate))
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 TextButton(onClick = onDismissRequest) {
-                    Text("Zamknij")
+                    Text(stringResource(R.string.Close))
                 }
             }
         }

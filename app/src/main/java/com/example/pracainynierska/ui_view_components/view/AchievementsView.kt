@@ -20,10 +20,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.pracainynierska.R
 import com.example.pracainynierska.ui_view_components.components.AchievementCard
 import com.example.pracainynierska.view_model.LoginViewModel
 
@@ -70,7 +72,7 @@ class AchievementsView(loginViewModel: LoginViewModel,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Osiągnięcia",
+                    text = stringResource(R.string.Achievements),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,

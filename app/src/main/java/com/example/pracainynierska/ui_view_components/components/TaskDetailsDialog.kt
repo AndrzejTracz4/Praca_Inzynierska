@@ -16,13 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import com.example.pracainynierska.R
 import com.example.pracainynierska.API.model.Task
-import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.view_model.TaskViewModel
 
 @Composable
@@ -38,7 +39,7 @@ fun TaskDetailsDialog(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "Szczegóły zadania",
+                text = stringResource(R.string.task_details),
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
@@ -66,13 +67,13 @@ fun TaskDetailsDialog(
 
                     Row {
                         Text(
-                            text = "Poziom trudności: ",
+                            text = stringResource(R.string.difficulty_level),
                             color = Color.White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal
                         )
                         Text(
-                            text = task.difficulty.toString(),
+                            text = task.difficulty,
                             color = Color.White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
@@ -81,7 +82,7 @@ fun TaskDetailsDialog(
 
                     Row {
                         Text(
-                            text = "Nazwa zadania: ",
+                            text = stringResource(R.string.task_name),
                             color = Color.White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal
@@ -98,7 +99,7 @@ fun TaskDetailsDialog(
 
                     Row {
                         Text(
-                            text = "Opis: ",
+                            text = "${stringResource(R.string.description)}: ",
                             color = Color.White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal
@@ -115,7 +116,7 @@ fun TaskDetailsDialog(
 
                     Row {
                         Text(
-                            text = "Rozpoczęcie: ",
+                            text = stringResource(R.string.begining),
                             color = Color.White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal
@@ -130,7 +131,7 @@ fun TaskDetailsDialog(
 
                     Row {
                         Text(
-                            text = "Zakończenie: ",
+                            text = stringResource(R.string.ending),
                             color = Color.White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal
@@ -150,19 +151,19 @@ fun TaskDetailsDialog(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         TaskDetailsButton(
-                            text = "Wykonaj",
+                            text = stringResource(R.string.execute),
                             color = Color(0xFF3CB043),
-                            onClick = { /* Obsługa wykonania zadania todo */ }
+                            onClick = { /* TODO: TASK EXECUTION */ }
                         )
 
                         TaskDetailsButton(
-                            text = "Edytuj",
+                            text = stringResource(R.string.edit),
                             color = Color(0xFFFFFF00),
                             onClick = onEdit
                         )
 
                         TaskDetailsButton(
-                            text = "Anuluj",
+                            text = stringResource(R.string.cancel),
                             color = Color(0xFFFF0000),
                             onClick = {
                                 taskViewModel.deleteTask(task.id)

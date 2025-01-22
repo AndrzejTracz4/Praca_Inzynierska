@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,7 +54,7 @@ fun AugmentCard(
             if (augment.type == AugmentTypes.SHIELD) {
                 Icon(
                     painter = painterResource(R.drawable.shield),
-                    contentDescription = "BoosterIcon",
+                    contentDescription = stringResource(R.string.icon_booster_description),
                     tint = Color.White,
                     modifier = Modifier
                         .size(80.dp)
@@ -63,7 +64,7 @@ fun AugmentCard(
             }else if (augment.type == AugmentTypes.BOOSTER){
                 Icon(
                     painter = painterResource(R.drawable.timeout),
-                    contentDescription = "BoosterIcon",
+                    contentDescription = stringResource(R.string.icon_booster_description),
                     tint = Color.White,
                     modifier = Modifier
                         .size(80.dp)
@@ -91,14 +92,14 @@ fun AugmentCard(
                 Spacer(modifier = Modifier.height(4.dp))
                 if (augment.type == AugmentTypes.BOOSTER) {
                     Text(
-                        text = "Mnożnik: x${augment.multiplier}",
+                        text = stringResource(R.string.multiplier_variable, augment.multiplier),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
                 Text(
-                    text = "Data zakończenia: $endDateFormatted",
+                    text = stringResource(R.string.end_date_variable, endDateFormatted),
                     color = Color.White,
                     fontSize = 14.sp
                 )
@@ -116,7 +117,7 @@ fun AugmentCard(
                     if (showPrevious) {
                         Icon(
                             painter = painterResource(R.drawable.next_previous_arrow),
-                            contentDescription = "Previous Booster",
+                            contentDescription = stringResource(R.string.icon_previous_booster_description),
                             modifier = Modifier
                                 .size(32.dp)
                                 .rotate(180f)
@@ -128,7 +129,7 @@ fun AugmentCard(
                     if (showNext) {
                         Icon(
                             painter = painterResource(R.drawable.next_previous_arrow),
-                            contentDescription = "Next Booster",
+                            contentDescription = stringResource(R.string.icon_next_booster_description),
                             modifier = Modifier
                                 .size(32.dp)
                                 .clickable { onClickNext() },

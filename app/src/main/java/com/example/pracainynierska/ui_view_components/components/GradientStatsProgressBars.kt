@@ -27,9 +27,9 @@ import com.airbnb.lottie.compose.LottieConstants
 
 @Composable
 fun GradientStatsProgressBars(
-    stats: List<Pair<String, Float>>, // Lista etykiet i wartości postępu
-    gradients: List<Brush>, // Lista gradientów dla każdego paska
-    icons: List<Int> // Lista plików Lottie (ID zasobów) dla każdego paska
+    stats: List<Pair<String, Float>>,
+    gradients: List<Brush>,
+    icons: List<Int>
 ) {
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -38,29 +38,25 @@ fun GradientStatsProgressBars(
         stats.forEachIndexed { index, stat ->
             val (label, progress) = stat
 
-            // Wybór gradientu dla danego paska na podstawie indeksu
+            // Selecting the gradient for a given bar based on the index
             val gradient = gradients.getOrNull(index % gradients.size) ?: gradients.first()
 
-            // Normalizacja postępu (przekształcenie wartości na zakres 0-1)
+            // Normalization of progress (transformation of values to a range of 0-1)
             val normalizedProgress = progress.coerceIn(0f, 100f) / 100f
 
-            // Animacja postępu
             val animatedProgress by animateFloatAsState(
                 targetValue = normalizedProgress,
                 animationSpec = tween(durationMillis = 1000)
             )
 
-            // Tworzenie paska postępu
             Column {
-                // Pasek postępu
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(12.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(Color(0x11FFFFFF)) // Tło paska
+                        .background(Color(0x11FFFFFF))
                 ) {
-                    // Pasek wypełnienia z animacją
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(animatedProgress)
@@ -71,12 +67,10 @@ fun GradientStatsProgressBars(
 
                 Spacer(modifier = Modifier.height(1.dp))
 
-                // Etykieta i wartość postępu
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Animacja Lottie
                     Box(
                         modifier = Modifier
                             .size(24.dp)
@@ -107,7 +101,6 @@ fun GradientStatsProgressBars(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    // Wartość postępu
                     Text(
                         text = "${progress.toInt()} / 100",
                         fontSize = 13.sp,

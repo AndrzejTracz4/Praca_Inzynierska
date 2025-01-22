@@ -30,12 +30,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.view_model.LoginViewModel
 
 @Composable
@@ -67,12 +69,12 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
 
             Image(
                 painter = painterResource(id = R.drawable.questa_logo),
-                contentDescription = "Logo Questa",
+                contentDescription = stringResource(R.string.icon_logo_questa_description),
                 modifier = Modifier.size(450.dp, 150.dp)
             )
 
             Text(
-                text = "Questa",
+                text = stringResource(R.string.app_name),
                 fontSize = 24.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.ExtraBold
@@ -81,7 +83,7 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "\"Make it happen.\"",
+                text = stringResource(R.string.app_quote),
                 color = Color.Black,
                 fontSize = 12.sp,
                 fontStyle = FontStyle.Italic
@@ -92,8 +94,8 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
             OutlinedTextField(
                 value = loginViewModel.newPassword,
                 onValueChange = { loginViewModel.onNewPasswordChange(it) },
-                label = { Text(text = "Nowe hasło") },
-                isError = loginViewModel.newPasswordErrorMessage != null,
+                label = { Text(text = stringResource(R.string.new_password)) },
+                isError = loginViewModel.newPasswordErrorMessageId != 0,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Black,
@@ -103,8 +105,8 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                 shape = RoundedCornerShape(16.dp)
             )
 
-            if (loginViewModel.newPasswordErrorMessage != null) {
-                Text(text = loginViewModel.newPasswordErrorMessage!!, color = Color.Red, fontSize = 12.sp)
+            if (loginViewModel.newPasswordErrorMessageId != 0) {
+                Text(text = stringResource(loginViewModel.newPasswordErrorMessageId), color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -112,8 +114,8 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
             OutlinedTextField(
                 value = loginViewModel.confirmNewPassword,
                 onValueChange = { loginViewModel.onConfirmNewPasswordChange(it) },
-                label = { Text(text = "Potwierdź nowe hasło") },
-                isError = loginViewModel.confirmNewPasswordErrorMessage != null,
+                label = { Text(text = stringResource(R.string.reset_password)) },
+                isError = loginViewModel.confirmNewPasswordErrorMessageId != 0,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Black,
@@ -123,8 +125,8 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                 shape = RoundedCornerShape(16.dp)
             )
 
-            if (loginViewModel.confirmNewPasswordErrorMessage != null) {
-                Text(text = loginViewModel.confirmNewPasswordErrorMessage!!, color = Color.Red, fontSize = 12.sp)
+            if (loginViewModel.confirmNewPasswordErrorMessageId != 0) {
+                Text(text = stringResource(loginViewModel.confirmNewPasswordErrorMessageId), color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -135,7 +137,7 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                         email = loginViewModel.email,
                         newPassword = loginViewModel.newPassword,
                         onSuccess = {
-                            passwordMessage = "Hasło zostało zmienione pomyślnie."
+                            passwordMessage = R.string.success_password_change.toString()
                             isDialogError = false
                             showDialog = true
                         },
@@ -151,7 +153,7 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                     .height(OutlinedTextFieldDefaults.MinHeight)
                     .width(OutlinedTextFieldDefaults.MinWidth)
             ) {
-                Text(text = "Zmień hasło")
+                Text(text = stringResource(R.string.change_password))
             }
         }
     }
@@ -159,16 +161,16 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(text = if (isDialogError) "Błąd" else "Sukces") },
+            title = { Text(text = if (isDialogError) stringResource(R.string.error) else stringResource(R.string.success)) },
             text = { Text(text = passwordMessage) },
             confirmButton = {
                 TextButton(onClick = {
                     showDialog = false
-                    navController.navigate("LoginView"){
+                    navController.navigate(ViewRoutes.LOGIN.viewName){
                         popUpTo(navController.graph.startDestinationId) { inclusive = true }
                     }
                 }) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             }
         )

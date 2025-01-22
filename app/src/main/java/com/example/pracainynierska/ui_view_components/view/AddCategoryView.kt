@@ -42,10 +42,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.pracainynierska.R
 import com.example.pracainynierska.ui_view_components.components.CustomCreateCategoryButton
 import com.example.pracainynierska.ui_view_components.components.TaskTextField
 import com.example.pracainynierska.view_model.AddCategoryViewModel
@@ -61,13 +63,13 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
     ) {
 
         var categoryName by remember { mutableStateOf("") }
-        var searchQuery by remember { mutableStateOf("") } // Zmienna dla wyszukiwania
+        var searchQuery by remember { mutableStateOf("") }
         var isCategoryValid by remember { mutableStateOf(false) }
         var isStatsValid by remember { mutableStateOf(false) }
         var activeDialogIndex by remember { mutableStateOf(-1) }
-        val showAlert = remember { mutableStateOf(false) }  // Przechowywanie stanu alertu
-        val showSuccessAlert = remember { mutableStateOf(false) }  // Stan alertu sukcesu
-        val selectedStats = remember { mutableStateListOf<String?>(null, null, null, null) } // Na początku 4 puste pola (null)
+        val showAlert = remember { mutableStateOf(false) }
+        val showSuccessAlert = remember { mutableStateOf(false) }
+        val selectedStats = remember { mutableStateListOf<String?>(null, null, null, null) }
 
         val availableStats = remember {
             mutableStateListOf(
@@ -80,9 +82,7 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
         }
 
         fun validateCategory() {
-            // Walidacja nazwy kategorii
             isCategoryValid = categoryName.isNotEmpty()
-            // Walidacja statystyk
             isStatsValid = selectedStats.any { it != null }
         }
 
@@ -104,13 +104,13 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
                     )
                 )
                 .padding(16.dp)
-                .verticalScroll(rememberScrollState()) // Włączamy przewijanie
+                .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(55.dp))
 
             Column(modifier = Modifier.padding(8.dp)) {
                 Text(
-                    text = "Nazwa",
+                    text = stringResource(R.string.name),
                     color = Color.White,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.ExtraBold
@@ -141,7 +141,7 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
                     .padding(8.dp)
             ) {
                 Text(
-                    text = "Wybierz statystyki",
+                    text = stringResource(R.string.select_statistics),
                     color = Color.White,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.ExtraBold
@@ -167,7 +167,7 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = selectedStat?.ifEmpty { "Wybierz statystykę ${index + 1}" } ?: "Wybierz statystykę ${index + 1}",
+                                text = getStatisticText(selectedStat, index),
                                 color = if (selectedStat == null) Color(0xFFbdc3c7) else Color.White,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Normal
@@ -182,8 +182,8 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
                                     modifier = Modifier.size(24.dp)
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Default.Clear, // Ikona do wyczyszczenia
-                                        contentDescription = "Wyczyść statystykę",
+                                        imageVector = Icons.Default.Clear,
+                                        contentDescription = stringResource(R.string.icon_statistic_clear_description),
                                         tint = Color.White
                                     )
                                 }
@@ -192,26 +192,24 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
                     }
                 }
 
-                // Dialog do wyboru statystyki
                 if (activeDialogIndex != -1) {
                     AlertDialog(
                         onDismissRequest = {
                             activeDialogIndex = -1
                             searchQuery = ""
                         },
-                        title = { Text("Wybierz statystykę") },
+                        title = { Text(stringResource(R.string.select_statistic_label)) },
                         text = {
                             Column {
                                 TextField(
                                     value = searchQuery,
                                     onValueChange = { searchQuery = it },
-                                    label = { Text("Szukaj statystyki") },
+                                    label = { Text(stringResource(R.string.search_statistic)) },
                                     modifier = Modifier.fillMaxWidth()
                                 )
 
                                 Spacer(modifier = Modifier.height(8.dp))
 
-                                // Filtrowana lista statystyk
                                 val filteredStats = availableStats.filter {
                                     it.contains(
                                         searchQuery,
@@ -229,9 +227,9 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
                                             onClick = {
                                                 selectedStats[activeDialogIndex] = stat
                                                 activeDialogIndex =
-                                                    -1  // Zamknij dialog po wyborze
+                                                    -1
                                                 searchQuery =
-                                                    ""        // Wyczyść zapytanie wyszukiwania
+                                                    ""
                                                 validateCategory()
                                             },
                                             modifier = Modifier
@@ -251,7 +249,7 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
                                     searchQuery = ""
                                 }
                             ) {
-                                Text("Zamknij")
+                                Text(stringResource(R.string.Close))
                             }
                         }
                     )
@@ -268,20 +266,27 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
                     val list = ArrayList(selectedStats.filterNotNull())
                     viewModel.addCategory(categoryName, list)
                 },
-                isValid = isCategoryValid && isStatsValid, // Stan walidacji
+                isValid = isCategoryValid && isStatsValid,
                 isCategoryValid = isCategoryValid,
                 isStatsValid = isStatsValid,
-                showAlert = showAlert,  // Przekazywanie stanu alertu błędu
-                showSuccessAlert = showSuccessAlert,  // Przekazywanie stanu alertu sukcesu
+                showAlert = showAlert,
+                showSuccessAlert = showSuccessAlert,
                 alertMessage = when {
-                    !isCategoryValid -> "Nazwa kategorii nie może być pusta."
-                    !isStatsValid -> "Wybierz przynajmniej jedną statystykę."
+                    !isCategoryValid -> stringResource(R.string.validation_invalid_category)
+                    !isStatsValid -> stringResource(R.string.validation_empty_statistics)
                     else -> ""
                 },
-                successMessage = "Kategoria została pomyślnie utworzona!" // Wiadomość sukcesu
+                successMessage = stringResource(R.string.success_category_create)
             )
 
             Spacer(modifier = Modifier.height(75.dp))
         }
     }
+}
+
+@Composable
+fun getStatisticText(selectedStat: String?, index: Int): String {
+    return selectedStat?.ifEmpty {
+        stringResource(R.string.select_statistic, index + 1)
+    } ?: stringResource(R.string.select_statistic, index + 1)
 }

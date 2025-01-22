@@ -19,18 +19,20 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.pracainynierska.R
+import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.view_model.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +50,7 @@ fun TopMenu (
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    val isHomepage = currentDestination?.hierarchy?.any { it.route == "HomepageView" } == true
+    val isHomepage = currentDestination?.hierarchy?.any { it.route == ViewRoutes.HOMEPAGE.viewName } == true
 
     Log.i("TopMenu", "isHomepage: $isHomepage")
 
@@ -59,11 +61,11 @@ fun TopMenu (
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        Color(0xFF070709),  // Początkowy kolor
-                        Color(0xFF1B1871)   // Końcowy kolor
+                        Color(0xFF070709),
+                        Color(0xFF1B1871)
                     ),
                     start = Offset(0f, 0f),
-                    end = Offset(400f, 400f)  // Ustawienia na prawo-dół
+                    end = Offset(400f, 400f)
                 )
             )
     ) {
@@ -74,7 +76,7 @@ fun TopMenu (
                 }) {
                     Icon(
                         imageVector = Icons.Filled.Menu,
-                        contentDescription = "Menu",
+                        contentDescription = stringResource(R.string.icon_menu_description),
                         tint = Color.White
                     )
                 }
@@ -101,14 +103,14 @@ fun TopMenu (
                     }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.icon_back_description),
                             tint = Color.White
                         )
                     }
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent // Ustaw przezroczystość, żeby tło nie nadpisywało gradientu
+                containerColor = Color.Transparent
             )
         )
 

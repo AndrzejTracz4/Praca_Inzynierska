@@ -21,6 +21,7 @@ import com.example.pracainynierska.API.api_client.AugmentApi
 import com.example.pracainynierska.API.api_client.TaskApi
 import com.example.pracainynierska.context.PlayerContext
 import com.example.pracainynierska.context.PlayerContextInterface
+import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.manager.augment.AugmentManager
 import com.example.pracainynierska.ui.theme.PracaInżynierskaTheme
 import com.example.pracainynierska.ui_view_components.ProfileView
@@ -85,7 +86,7 @@ class MainActivity : ComponentActivity() {
                         factory = RegistrationViewModelFactory(playerContext)
                     )
                     val homepageViewModel : HomepageViewModel = viewModel(
-                        factory = HomepageViewModelFactory(playerContext, context, augmentManager)
+                        factory = HomepageViewModelFactory(playerContext, context)
                     )
                     val taskViewModel : TaskViewModel = viewModel(
                         factory = TaskViewModelFactory(playerContext, taskManager)
@@ -136,49 +137,49 @@ fun SetupNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "LoginView"
+        startDestination = ViewRoutes.LOGIN.viewName
     ) {
-        composable("LoginView") {
+        composable(ViewRoutes.LOGIN.viewName) {
             LoginView(navController = navController, loginViewModel = loginViewModel)
         }
-        composable("RegisterView") {
+        composable(ViewRoutes.REGISTER.viewName) {
             RegisterView(navController = navController, registrationViewModel = registrationViewModel)
         }
-        composable("HomepageView") {
+        composable(ViewRoutes.HOMEPAGE.viewName) {
             HomepageView(navController = navController, homepageViewModel = homepageViewModel)
                 .renderView()
         }
-        composable("ForgotPasswordView") {
+        composable(ViewRoutes.FORGOTPASSWORD.viewName) {
             ForgotPasswordView(navController = navController, loginViewModel = loginViewModel)
         }
-        composable("ChangeForgotPasswordView") {
+        composable(ViewRoutes.CHANGEFORGOTPASSWORD.viewName) {
             ChangeForgotPasswordView(navController = navController, loginViewModel = loginViewModel)
         }
-        composable("ShopView") {
+        composable(ViewRoutes.SHOP.viewName) {
             ShopView(navController = navController, shopViewModel = shopViewModel)
                 .renderView()
         }
-        composable("ProfileView") {
+        composable(ViewRoutes.PROFILE.viewName) {
             ProfileView(navController = navController, profileViewModel = profileViewModel)
                 .renderView()
         }
-        composable("AddTaskView") {
+        composable(ViewRoutes.ADDTASK.viewName) {
             AddTaskView(navController = navController, taskViewModel = taskViewModel)
                 .renderView()
         }
-        composable("CalendarsView") {
+        composable(ViewRoutes.CALENDAR.viewName) {
             CalendarsView(navController = navController, taskViewModel = taskViewModel)
                 .renderView()
         }
-        composable("StatisticView") {
+        composable(ViewRoutes.STATISTICS.viewName) {
             StatisticView(navController = navController, viewModel = statisticViewModel)
                 .renderView()
         }
-        composable("AddCategoryView") {
+        composable(ViewRoutes.ADDCATEGORY.viewName) {
             AddCategoryView(navController = navController, viewModel = addCategoryViewModel)
                 .renderView()
         }
-        composable("EditTaskView/{taskId}") { backStackEntry ->
+        composable("{${ViewRoutes.EDITTASK.viewName}}/{taskId}") { backStackEntry ->
             val taskId = backStackEntry.arguments?.getString("taskId")
             val taskToEdit = taskViewModel.getTaskById(taskId)
             if (taskToEdit != null) {
@@ -190,7 +191,7 @@ fun SetupNavGraph(
                     .renderView()
             }
         }
-        composable("AchievementsView") {
+        composable(ViewRoutes.ACHIEVEMENTS.viewName) {
             AchievementsView(navController = navController, loginViewModel = loginViewModel)
                 .renderView()
         }

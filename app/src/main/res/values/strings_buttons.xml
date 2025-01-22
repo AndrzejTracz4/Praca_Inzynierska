@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Buttons-->
+    <string name="change_photo">Zmień obrazek</string>
+    <string name="logout">Wyloguj się</string>
+    <string name="add_category">Dodaj kategorię</string>
+    <string name="add_statistic">Dodaj statystykę</string>
+    <string name="statistic_name">Nazwa statystyki</string>
+    <string name="change_icon">Wybierz ikonę</string>
+    <string name="create_statistic">Utwórz statystykę</string>
+    <string name="shield_text_button">Osłona antyredukcyjna statystyk</string>
+    <string name="booster_text_button">Modyfikator czasowy</string>
+    <string name="daily_task">Jednorazowe</string>
+    <string name="cyclical_task">Cykliczne</string>
+    <string name="save_changes">Zapisz zmiany</string>
+    <string name="register">Zarejestruj</string>
+    <string name="registration">Rejestracja</string>
+    <string name="forgot_password">Zapomniałem hasło</string>
+    <string name="login">Zaloguj</string>
+    <string name="create">Utwórz</string>
+    <string name="execute">Wykonaj</string>
+    <string name="cancel">Anuluj</string>
+    <string name="select_date">Wybierz datę</string>
+    <string name="select_timedate">Wybierz datę i godzinę</string>
+    <string name="homepage">Strona Główna</string>
+    <string name="profile">Profil</string>
+    <string name="statistics">Statystyki</string>
+    <string name="settings">Ustawienia</string>
+    <string name="edit">Edytuj</string>
+</resources>

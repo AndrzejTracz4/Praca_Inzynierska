@@ -1,7 +1,6 @@
 package com.example.pracainynierska.ui_view_components
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,14 +28,15 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.dictionary.RankDictionary
 import com.example.pracainynierska.ui_view_components.components.GradientLevelProgressBar
 import com.example.pracainynierska.ui_view_components.components.UserImagePicker
@@ -54,11 +54,9 @@ class ProfileView(
         innerPadding: PaddingValues
     ) {
 
-        if (false == (viewModel is ProfileViewModel)){
+        if (false == (viewModel is ProfileViewModel)) {
             throw Exception("Invalid View Model")
         }
-
-        val rankDictionary = RankDictionary()
 
         var userLevel = 1
         var playerExperience = 0f
@@ -66,9 +64,6 @@ class ProfileView(
         var playerEmail = ""
         val playerPhotoResId = viewModel.getPhotoResId()
         val playerModel = viewModel.getPlayerModel()
-        val player = viewModel.getPlayer()
-
-        val appContext = LocalContext.current
 
         playerModel.observeAsState().value.let {
             if (it != null) {
@@ -79,7 +74,7 @@ class ProfileView(
             }
         }
 
-        val userRank = rankDictionary.levelNames[userLevel] ?: "Nieznany poziom"
+        val userRank = RankDictionary.fromLevel(userLevel)?.displayName ?: stringResource(R.string.unknown_level)
 
         Column(
             modifier = Modifier
@@ -118,7 +113,6 @@ class ProfileView(
 
                         Spacer(modifier = Modifier.width(16.dp))
 
-                        // Przycisk do zmiany obrazka
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -139,7 +133,7 @@ class ProfileView(
                             ) {
                                 Icon(
                                     painter = painterResource(R.drawable.change_image_icon),
-                                    contentDescription = "Ikona zmiany obrazka",
+                                    contentDescription = stringResource(R.string.icon_change_description),
                                     modifier = Modifier.size(24.dp),
                                     tint = Color.White
                                 )
@@ -147,7 +141,7 @@ class ProfileView(
                                 Spacer(modifier = Modifier.width(8.dp))
 
                                 Text(
-                                    text = "Zmień obrazek",
+                                    text = stringResource(R.string.change_photo),
                                     color = Color.White,
                                     fontSize = 14.sp,
                                     fontWeight = FontWeight.ExtraBold
@@ -190,7 +184,7 @@ class ProfileView(
                         )
 
                         Text(
-                            text = "Poziom $userLevel",
+                            text = stringResource(R.string.level, userLevel),
                             fontSize = 16.sp,
                             color = Color.White,
                             style = TextStyle(
@@ -204,7 +198,7 @@ class ProfileView(
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = "Monety: $playerBalance",
+                                text = stringResource(R.string.balance, playerBalance),
                                 fontSize = 16.sp,
                                 color = Color.White,
                                 style = TextStyle(
@@ -220,7 +214,7 @@ class ProfileView(
 
                             Icon(
                                 painter = painterResource(id = R.drawable.coins),
-                                contentDescription = "Ikona monet",
+                                contentDescription = stringResource(R.string.icon_balance_description),
                                 tint = Color.Unspecified,
                                 modifier = Modifier.size(20.dp)
                             )
@@ -233,7 +227,7 @@ class ProfileView(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = "Doświadczenie",
+                                text = stringResource(R.string.experience),
                                 fontSize = 12.sp,
                                 color = Color.White,
                                 style = TextStyle(
@@ -264,7 +258,6 @@ class ProfileView(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Przycisk wylogowania
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -275,7 +268,7 @@ class ProfileView(
                         color = Color(0x19FFFFFF)
                     )
                     .clickable {
-                        navController.navigate("LoginView")
+                        navController.navigate(ViewRoutes.LOGIN.viewName)
                     }
                     .padding(horizontal = 16.dp),
                 contentAlignment = Alignment.Center
@@ -285,7 +278,7 @@ class ProfileView(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.logout),
-                        contentDescription = "Ikona wylogowania",
+                        contentDescription = stringResource(R.string.icon_logout_description),
                         modifier = Modifier.size(24.dp),
                         tint = Color.White
                     )
@@ -293,7 +286,7 @@ class ProfileView(
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Text(
-                        text = "Wyloguj się",
+                        text = stringResource(R.string.logout),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold

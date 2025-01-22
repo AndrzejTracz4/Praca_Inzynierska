@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +45,7 @@ fun EditTaskButton(
     taskDescription: String
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    var dialogMessage by remember { mutableStateOf("") }
+    var dialogMessageId by remember { mutableStateOf(0) }
     var showErrorDialog by remember { mutableStateOf(false) }
     var showDateErrorDialog by remember { mutableStateOf(false) }
 
@@ -71,6 +72,7 @@ fun EditTaskButton(
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank()
                     }
+
                     TaskTypes.RECURRING -> {
                         selectedDifficulty.isNotBlank() &&
                                 selectedCategory.isNotBlank() &&
@@ -83,13 +85,13 @@ fun EditTaskButton(
                 }
 
                 if (!isValid) {
-                    dialogMessage = "Uzupełnij wszystkie pola."
+                    dialogMessageId = R.string.validation_add_task_fields
                     showErrorDialog = true
                 } else if (isEndDateBeforeStartDate(selectedStartDate, selectedEndDate)) {
-                    dialogMessage = "Data końcowa nie może być wcześniejsza niż data startowa."
+                    dialogMessageId = R.string.validation_date_earlier_that_start
                     showDateErrorDialog = true
                 } else {
-                    // Aktualizacja zadania
+                    // Task update
                     val updatedTask = taskToEdit.copy(
                         name = taskName,
                         difficulty = selectedDifficulty,
@@ -103,7 +105,7 @@ fun EditTaskButton(
                     )
                     taskViewModel.updateTask(updatedTask)
 
-                    dialogMessage = "Pomyślnie zaktualizowano zadanie"
+                    dialogMessageId = R.string.success_create_task
                     showDialog = true
                 }
             }
@@ -135,8 +137,8 @@ fun EditTaskButton(
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(text = "Sukces!") },
-            text = { Text(text = dialogMessage) },
+            title = { Text(text = stringResource(R.string.success)) },
+            text = { Text(text = stringResource(dialogMessageId)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -144,7 +146,7 @@ fun EditTaskButton(
                         showDialog = false
                     }
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             }
         )
@@ -153,15 +155,15 @@ fun EditTaskButton(
     if (showErrorDialog) {
         AlertDialog(
             onDismissRequest = { showErrorDialog = false },
-            title = { Text(text = "Błąd") },
-            text = { Text(text = dialogMessage) },
+            title = { Text(text = stringResource(R.string.error)) },
+            text = { Text(text = stringResource(dialogMessageId)) },
             confirmButton = {
                 TextButton(
                     onClick = {
                         showErrorDialog = false
                     }
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             }
         )
@@ -170,15 +172,15 @@ fun EditTaskButton(
     if (showDateErrorDialog) {
         AlertDialog(
             onDismissRequest = { showDateErrorDialog = false },
-            title = { Text(text = "Błąd daty") },
-            text = { Text(text = dialogMessage) },
+            title = { Text(text = stringResource(R.string.invalid_date)) },
+            text = { Text(text = stringResource(dialogMessageId)) },
             confirmButton = {
                 TextButton(
                     onClick = {
                         showDateErrorDialog = false
                     }
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             }
         )
