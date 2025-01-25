@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.R
+import com.example.pracainynierska.dictionary.TaskDifficulty
 import com.example.pracainynierska.dictionary.types.TaskTypes
 import com.example.pracainynierska.ui_view_components.components.CreateTaskButton
 import com.example.pracainynierska.ui_view_components.components.CustomDatePickerField
@@ -295,39 +296,22 @@ class AddTaskView(taskViewModel: TaskViewModel,
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        // TODO: CREATE ENUM FOR DIFFICULTY LEVELS
-                        SelectTaskButton(
-                            text = "Łatwy",
-                            isSelected = selectedDifficulty == "Łatwe",
-                            onClick = { selectedDifficulty = "Łatwe" },
-                            iconResId = R.drawable.water,
-                            modifier = Modifier.weight(1f),
-                            color = true
-                        )
-
-                        SelectTaskButton(
-                            text = "Średni",
-                            isSelected = selectedDifficulty == "Średni",
-                            onClick = { selectedDifficulty = "Średni" },
-                            iconResId = R.drawable.leaf,
-                            modifier = Modifier.weight(1f),
-                            color = true
-                        )
-
-                        SelectTaskButton(
-                            text = "Trudny",
-                            isSelected = selectedDifficulty == "Trudny",
-                            onClick = { selectedDifficulty = "Trudny" },
-                            iconResId = R.drawable.flame,
-                            modifier = Modifier.weight(1f),
-                            color = true
-                        )
+                        TaskDifficulty.entries.forEach { difficulty ->
+                            SelectTaskButton(
+                                text = difficulty.displayName,
+                                isSelected = selectedDifficulty == difficulty.displayName,
+                                onClick = { selectedDifficulty = difficulty.displayName },
+                                iconResId = difficulty.iconResId,
+                                modifier = Modifier.weight(1f),
+                                color = true
+                            )
+                        }
                     }
                 }
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(
-                        text = "Kategorie",
+                        text = stringResource(R.string.categories),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
@@ -349,7 +333,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     CreateTaskButton(
-                        text = "Utwórz",
+                        text = stringResource(R.string.create),
                         taskName = taskName,
                         selectedDifficulty = selectedDifficulty,
                         selectedCategory = playerCategories.find { it.id == selectedCategoryId },
@@ -359,17 +343,18 @@ class AddTaskView(taskViewModel: TaskViewModel,
                         selectedMeasureUnit = selectedMeasureUnit,
                         selectedAddTaskMode = selectedAddTaskMode,
                         modifier = Modifier.fillMaxWidth(),
+                        taskViewModel = viewModel,
+                        taskDescription = taskDescription,
                         onTaskCreated = {
                             taskName = ""
+                            taskDescription = ""
                             selectedDifficulty = ""
                             selectedCategoryId = 0
                             selectedStartDate = ""
                             selectedEndDate = ""
                             interval = 0
                             selectedMeasureUnit = ""
-                        },
-                        taskViewModel = viewModel,
-                        taskDescription = taskDescription
+                        }
                     )
                 }
 

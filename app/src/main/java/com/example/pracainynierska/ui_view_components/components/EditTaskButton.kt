@@ -41,9 +41,9 @@ fun EditTaskButton(
     selectedMeasureUnit: String,
     selectedEditTaskMode: String,
     modifier: Modifier = Modifier,
-    onTaskUpdated: () -> Unit,
     taskViewModel: TaskViewModel,
-    taskDescription: String
+    taskDescription: String,
+    onTaskUpdated: () -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessageId by remember { mutableStateOf(0) }

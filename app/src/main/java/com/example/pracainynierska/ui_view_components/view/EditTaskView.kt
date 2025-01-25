@@ -74,7 +74,6 @@ class EditTaskView(taskViewModel: TaskViewModel,
         var taskName by remember { mutableStateOf(taskToEdit.name) }
         var selectedDifficulty by remember { mutableStateOf(taskToEdit.difficulty) }
         var selectedCategoryId by remember { mutableIntStateOf(taskToEdit.category.id) }
-        var selectedCategory by remember { mutableStateOf(taskToEdit.category) }
         var showStartDatePicker by remember { mutableStateOf(false) }
         var showEndDatePicker by remember { mutableStateOf(false) }
         var showNumberPicker by remember { mutableStateOf(false) }
@@ -319,7 +318,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
                     )
-                    playerCategories.forEach{category ->
+                    playerCategories.forEach{ category ->
                         SelectTaskButton(
                             text = category.name,
                             isSelected = selectedCategoryId == category.id,
@@ -345,12 +344,12 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         interval = interval,
                         selectedMeasureUnit = selectedMeasureUnit,
                         selectedEditTaskMode = selectedEditTaskMode,
+                        taskViewModel = viewModel,
+                        taskDescription = taskDescription,
                         onTaskUpdated = {
                             Log.d("TaskUpdated", "Zadanie zostało zaktualizowane.")
                             navController.navigate(ViewRoutes.CALENDAR.viewName)
-                        },
-                        taskViewModel = viewModel,
-                        taskDescription = taskDescription
+                        }
                     )
                 }
                 Spacer(modifier = Modifier.height(90.dp))
