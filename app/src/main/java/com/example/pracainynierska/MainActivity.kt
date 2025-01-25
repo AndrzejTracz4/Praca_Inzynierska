@@ -33,7 +33,7 @@ import com.example.pracainynierska.ui_view_components.view.AddStatisticView
 import com.example.pracainynierska.ui_view_components.view.AddTaskView
 import com.example.pracainynierska.ui_view_components.view.CalendarsView
 import com.example.pracainynierska.ui_view_components.view.CategoryView
-import com.example.pracainynierska.ui_view_components.view.ChangeForgotPasswordView
+import com.example.pracainynierska.ui_view_components.view.ChangePasswordView
 import com.example.pracainynierska.ui_view_components.view.EditCategoryView
 import com.example.pracainynierska.ui_view_components.view.EditStatisticView
 import com.example.pracainynierska.ui_view_components.view.EditTaskView
@@ -41,6 +41,7 @@ import com.example.pracainynierska.ui_view_components.view.ForgotPasswordView
 import com.example.pracainynierska.ui_view_components.view.HomepageView
 import com.example.pracainynierska.ui_view_components.view.LoginView
 import com.example.pracainynierska.ui_view_components.view.RegisterView
+import com.example.pracainynierska.ui_view_components.view.ResetCodeView
 import com.example.pracainynierska.ui_view_components.view.ShopView
 import com.example.pracainynierska.view_model.AchievementViewModel
 import com.example.pracainynierska.view_model.AchievementViewModelFactory
@@ -208,8 +209,11 @@ fun SetupNavGraph(
         composable(ViewRoutes.FORGOTPASSWORD.viewName) {
             ForgotPasswordView(navController = navController, loginViewModel = loginViewModel)
         }
-        composable(ViewRoutes.CHANGEFORGOTPASSWORD.viewName) {
-            ChangeForgotPasswordView(navController = navController, loginViewModel = loginViewModel)
+        composable(ViewRoutes.CHANGEPASSWORD.viewName) {
+            ChangePasswordView(navController = navController, loginViewModel = loginViewModel)
+        }
+        composable(ViewRoutes.RESETCODE.viewName) {
+            ResetCodeView(navController = navController, loginViewModel = loginViewModel)
         }
         composable(ViewRoutes.SHOP.viewName) {
             ShopView(navController = navController, shopViewModel = shopViewModel)

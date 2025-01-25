@@ -41,7 +41,7 @@ import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.view_model.LoginViewModel
 
 @Composable
-fun ChangeForgotPasswordView(navController: NavController, loginViewModel: LoginViewModel) {
+fun ChangePasswordView(navController: NavController, loginViewModel: LoginViewModel) {
 
     var showDialog by remember { mutableStateOf(false) }
     var passwordMessage by remember { mutableStateOf("") }
