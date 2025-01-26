@@ -46,10 +46,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.ViewRoutes
-import com.example.pracainynierska.view_model.LoginViewModel
+import com.example.pracainynierska.view_model.ResetCodeViewModel
 
 @Composable
-fun ResetCodeView(navController: NavController, loginViewModel: LoginViewModel) {
+fun ResetCodeView(navController: NavController, resetCodeViewModel: ResetCodeViewModel) {
     var showDialog by remember { mutableStateOf(false) }
     var messageId by remember { mutableIntStateOf(0) }
     var isDialogError by remember { mutableStateOf(false) }
@@ -148,14 +148,25 @@ fun ResetCodeView(navController: NavController, loginViewModel: LoginViewModel) 
                 Button(
                     onClick = {
                         val enteredCode = codeInputs.joinToString("")
-                        if (enteredCode == "111111") {
-                            navController.navigate(ViewRoutes.CHANGEPASSWORD.viewName)
+                        if (enteredCode.matches("^\\d{6}$".toRegex())) {
+                            resetCodeViewModel.verifyResetCode(
+                                enteredCode,
+                                onSuccess = {
+                                    navController.navigate(ViewRoutes.CHANGEPASSWORD.viewName)
+                                },
+                                onError = {
+                                    messageId = R.string.invalid_reset_code
+                                    isDialogError = true
+                                    showDialog = true
+                                }
+                            )
                         } else {
                             messageId = R.string.invalid_reset_code
                             isDialogError = true
                             showDialog = true
                         }
                     },
+
                     shape = RoundedCornerShape(16.dp),
                     modifier = Modifier
                         .height(OutlinedTextFieldDefaults.MinHeight)

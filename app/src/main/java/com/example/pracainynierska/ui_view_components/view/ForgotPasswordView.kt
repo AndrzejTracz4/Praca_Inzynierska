@@ -46,10 +46,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.ViewRoutes
-import com.example.pracainynierska.view_model.LoginViewModel
+import com.example.pracainynierska.view_model.ForgotPasswordViewModel
 
 @Composable
-fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewModel) {
+fun ForgotPasswordView(
+    navController: NavController,
+    forgotPasswordViewModel: ForgotPasswordViewModel
+) {
 
     var showDialog by remember { mutableStateOf(false) }
     var messageId by remember { mutableIntStateOf(0) }
@@ -100,10 +103,10 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
             Spacer(modifier = Modifier.height(30.dp))
 
             OutlinedTextField(
-                value = loginViewModel.email,
-                onValueChange = { loginViewModel.onEmailChange(it) },
+                value = forgotPasswordViewModel.email,
+                onValueChange = { forgotPasswordViewModel.onEmailChange(it) },
                 label = { Text(text = stringResource(R.string.email)) },
-                isError = loginViewModel.emailErrorMessageId != 0,
+                isError = forgotPasswordViewModel.emailErrorMessageId != 0,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Black,
@@ -112,7 +115,7 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
-                    if (loginViewModel.emailErrorMessageId != 0) {
+                    if (forgotPasswordViewModel.emailErrorMessageId != 0) {
                         Icon(
                             Icons.Default.Warning,
                             contentDescription = stringResource(R.string.icon_error_description),
@@ -138,9 +141,9 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                 )
             )
 
-            if (loginViewModel.emailErrorMessageId != 0) {
+            if (forgotPasswordViewModel.emailErrorMessageId != 0) {
                 Text(
-                    text = stringResource(loginViewModel.emailErrorMessageId),
+                    text = stringResource(forgotPasswordViewModel.emailErrorMessageId),
                     color = Color.Red,
                     fontSize = 12.sp
                 )
@@ -150,19 +153,20 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
 
             Button(
                 onClick = {
-                    loginViewModel.forgotPassword(
-                        loginViewModel.email,
-                        onSuccess = {
-                            messageId = R.string.information_email_reset_code
-                            isDialogError = false
-                            showDialog = true
-                        },
-                        onError = {
-                            messageId = R.string.reset_password_code_failed
-                            isDialogError = true
-                            showDialog = true
-                        }
-                    )
+                    if (forgotPasswordViewModel.emailErrorMessageId == 0) {
+                        forgotPasswordViewModel.getResetCode(
+                            onSuccess = {
+                                messageId = R.string.information_email_reset_code
+                                isDialogError = false
+                                showDialog = true
+                            },
+                            onError = {
+                                messageId = R.string.reset_password_code_failed
+                                isDialogError = true
+                                showDialog = true
+                            }
+                        )
+                    }
                 },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
@@ -189,13 +193,15 @@ fun ForgotPasswordView(navController: NavController, loginViewModel: LoginViewMo
                 confirmButton = {
                     TextButton(onClick = {
                         showDialog = false
-                        navController.navigate(ViewRoutes.RESETCODE.viewName)
+                        if (!isDialogError) {
+                            navController.navigate(ViewRoutes.RESETCODE.viewName)
+                        }
                     }) {
                         Text(stringResource(R.string.ok))
                     }
                 }
             )
-
         }
+
     }
 }

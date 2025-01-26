@@ -18,12 +18,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.pracainynierska.API.api_client.AchievementApi
 import com.example.pracainynierska.API.api_client.AugmentApi
+import com.example.pracainynierska.API.api_client.ResetCodeApi
 import com.example.pracainynierska.API.api_client.TaskApi
 import com.example.pracainynierska.context.PlayerContext
 import com.example.pracainynierska.context.PlayerContextInterface
 import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.manager.achievement.AchievementManager
 import com.example.pracainynierska.manager.augment.AugmentManager
+import com.example.pracainynierska.manager.reset_code.ResetCodeManager
 import com.example.pracainynierska.manager.task.TaskManager
 import com.example.pracainynierska.ui.theme.PracaInżynierskaTheme
 import com.example.pracainynierska.ui_view_components.ProfileView
@@ -61,6 +63,8 @@ import com.example.pracainynierska.view_model.EditStatisticViewModel
 import com.example.pracainynierska.view_model.EditStatisticViewModelFactory
 import com.example.pracainynierska.view_model.EditTaskViewModel
 import com.example.pracainynierska.view_model.EditTaskViewModelFactory
+import com.example.pracainynierska.view_model.ForgotPasswordViewModel
+import com.example.pracainynierska.view_model.ForgotPasswordViewModelFactory
 import com.example.pracainynierska.view_model.HomepageViewModel
 import com.example.pracainynierska.view_model.HomepageViewModelFactory
 import com.example.pracainynierska.view_model.LoginViewModel
@@ -69,6 +73,8 @@ import com.example.pracainynierska.view_model.ProfileViewModel
 import com.example.pracainynierska.view_model.ProfileViewModelFactory
 import com.example.pracainynierska.view_model.RegistrationViewModel
 import com.example.pracainynierska.view_model.RegistrationViewModelFactory
+import com.example.pracainynierska.view_model.ResetCodeViewModel
+import com.example.pracainynierska.view_model.ResetCodeViewModelFactory
 import com.example.pracainynierska.view_model.ShopViewModel
 import com.example.pracainynierska.view_model.ShopViewModelFactory
 
@@ -78,7 +84,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var augmentManager: AugmentManager
     private lateinit var taskManager: TaskManager
     private lateinit var achievementManager: AchievementManager
-
+    private lateinit var resetCodeManager: ResetCodeManager
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +94,7 @@ class MainActivity : ComponentActivity() {
         augmentManager = AugmentManager(AugmentApi(playerContext))
         taskManager = TaskManager(TaskApi(playerContext))
         achievementManager = AchievementManager(AchievementApi(playerContext))
+        resetCodeManager = ResetCodeManager(ResetCodeApi(playerContext))
 
         setContent {
             val context = LocalContext.current
@@ -117,6 +124,12 @@ class MainActivity : ComponentActivity() {
                     )
                     val editTaskViewModel: EditTaskViewModel = viewModel(
                         factory = EditTaskViewModelFactory(playerContext, taskManager)
+                    )
+                    val resetCodeViewModel: ResetCodeViewModel = viewModel(
+                        factory = ResetCodeViewModelFactory(resetCodeManager)
+                    )
+                    val forgotPasswordViewModel: ForgotPasswordViewModel = viewModel(
+                        factory = ForgotPasswordViewModelFactory(resetCodeManager)
                     )
                     val shopViewModel: ShopViewModel = viewModel(
                         factory = ShopViewModelFactory(playerContext, augmentManager)
@@ -150,6 +163,8 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         loginViewModel = loginViewModel,
                         registrationViewModel = registrationViewModel,
+                        resetCodeViewModel = resetCodeViewModel,
+                        forgotPasswordViewModel = forgotPasswordViewModel,
                         homepageViewModel = homepageViewModel,
                         addTaskViewModel = addTaskViewModel,
                         editTaskViewModel = editTaskViewModel,
@@ -176,6 +191,8 @@ fun SetupNavGraph(
     navController: NavHostController,
     loginViewModel: LoginViewModel,
     registrationViewModel: RegistrationViewModel,
+    resetCodeViewModel: ResetCodeViewModel,
+    forgotPasswordViewModel: ForgotPasswordViewModel,
     homepageViewModel: HomepageViewModel,
     addTaskViewModel: AddTaskViewModel,
     editTaskViewModel: EditTaskViewModel,
@@ -207,13 +224,16 @@ fun SetupNavGraph(
                 .renderView()
         }
         composable(ViewRoutes.FORGOTPASSWORD.viewName) {
-            ForgotPasswordView(navController = navController, loginViewModel = loginViewModel)
+            ForgotPasswordView(
+                navController = navController,
+                forgotPasswordViewModel = forgotPasswordViewModel
+            )
         }
         composable(ViewRoutes.CHANGEPASSWORD.viewName) {
             ChangePasswordView(navController = navController, loginViewModel = loginViewModel)
         }
         composable(ViewRoutes.RESETCODE.viewName) {
-            ResetCodeView(navController = navController, loginViewModel = loginViewModel)
+            ResetCodeView(navController = navController, resetCodeViewModel = resetCodeViewModel)
         }
         composable(ViewRoutes.SHOP.viewName) {
             ShopView(navController = navController, shopViewModel = shopViewModel)
