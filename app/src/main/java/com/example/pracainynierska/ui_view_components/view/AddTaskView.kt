@@ -39,7 +39,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.R
+import com.example.pracainynierska.dictionary.TaskDifficulty
 import com.example.pracainynierska.dictionary.types.TaskTypes
 import com.example.pracainynierska.ui_view_components.components.CreateTaskButton
 import com.example.pracainynierska.ui_view_components.components.CustomDatePickerField
@@ -67,7 +69,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
         var taskName by remember { mutableStateOf("") }
         var taskDescription by remember { mutableStateOf("") }
         var selectedDifficulty by remember { mutableStateOf("") }
-        var selectedCategory by remember { mutableStateOf("") }
+        var selectedCategoryId by remember { mutableIntStateOf(0) }
         var showStartDatePicker by remember { mutableStateOf(false) }
         var showEndDatePicker by remember { mutableStateOf(false) }
         var showNumberPicker by remember { mutableStateOf(false) }
@@ -77,6 +79,8 @@ class AddTaskView(taskViewModel: TaskViewModel,
         var selectedEndDate by remember { mutableStateOf("") }
         var interval by remember { mutableIntStateOf(0) }
         val scrollState = rememberScrollState()
+
+        val playerCategories = viewModel.getPlayerCategories()
 
         if (false == (viewModel is TaskViewModel)){
             throw Exception("Invalid View Model")
@@ -292,111 +296,65 @@ class AddTaskView(taskViewModel: TaskViewModel,
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        // TODO: CREATE ENUM FOR DIFFICULTY LEVELS
-                        SelectTaskButton(
-                            text = "Łatwy",
-                            isSelected = selectedDifficulty == "Łatwe",
-                            onClick = { selectedDifficulty = "Łatwe" },
-                            iconResId = R.drawable.water,
-                            modifier = Modifier.weight(1f),
-                            color = true
-                        )
-
-                        SelectTaskButton(
-                            text = "Średni",
-                            isSelected = selectedDifficulty == "Średni",
-                            onClick = { selectedDifficulty = "Średni" },
-                            iconResId = R.drawable.leaf,
-                            modifier = Modifier.weight(1f),
-                            color = true
-                        )
-
-                        SelectTaskButton(
-                            text = "Trudny",
-                            isSelected = selectedDifficulty == "Trudny",
-                            onClick = { selectedDifficulty = "Trudny" },
-                            iconResId = R.drawable.flame,
-                            modifier = Modifier.weight(1f),
-                            color = true
-                        )
+                        TaskDifficulty.entries.forEach { difficulty ->
+                            SelectTaskButton(
+                                text = difficulty.displayName,
+                                isSelected = selectedDifficulty == difficulty.displayName,
+                                onClick = { selectedDifficulty = difficulty.displayName },
+                                iconResId = difficulty.iconResId,
+                                modifier = Modifier.weight(1f),
+                                color = true
+                            )
+                        }
                     }
                 }
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     Text(
-                        text = "Kategorie",
+                        text = stringResource(R.string.categories),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
                     )
 
-                    SelectTaskButton(
-                        text = "Samorozwój",
-                        isSelected = selectedCategory == "Samorozwój",
-                        onClick = { selectedCategory = "Samorozwój" },
-                        iconResId = R.drawable.disposable_icon,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = false
-                    )
+                    playerCategories.forEach{category ->
+                        SelectTaskButton(
+                            text = category.name,
+                            isSelected = selectedCategoryId == category.id,
+                            onClick = { selectedCategoryId = category.id },
+                            iconResId = null,
+                            modifier = Modifier.fillMaxWidth(),
+                            color = false
+                        )
 
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    SelectTaskButton(
-                        text = "Ćwiczenia",
-                        isSelected = selectedCategory == "Ćwiczenia",
-                        onClick = { selectedCategory = "Ćwiczenia" },
-                        iconResId = R.drawable.disposable_icon,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = false
-                    )
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    SelectTaskButton(
-                        text = "Edukacja",
-                        isSelected = selectedCategory == "Edukacja",
-                        onClick = { selectedCategory = "Edukacja" },
-                        iconResId = R.drawable.disposable_icon,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = false
-                    )
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    SelectTaskButton(
-                        text = "Praca",
-                        isSelected = selectedCategory == "Praca",
-                        onClick = { selectedCategory = "Praca" },
-                        iconResId = R.drawable.disposable_icon,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = false
-                    )
-
+                        Spacer(modifier = Modifier.height(4.dp))
+                    }
                 }
 
                 Column(modifier = Modifier.padding(8.dp)) {
                     CreateTaskButton(
-                        text = "Utwórz",
+                        text = stringResource(R.string.create),
                         taskName = taskName,
                         selectedDifficulty = selectedDifficulty,
-                        selectedCategory = selectedCategory,
+                        selectedCategory = playerCategories.find { it.id == selectedCategoryId },
                         selectedStartDate = selectedStartDate,
                         selectedEndDate = selectedEndDate,
                         interval = interval,
                         selectedMeasureUnit = selectedMeasureUnit,
                         selectedAddTaskMode = selectedAddTaskMode,
                         modifier = Modifier.fillMaxWidth(),
+                        taskViewModel = viewModel,
+                        taskDescription = taskDescription,
                         onTaskCreated = {
                             taskName = ""
+                            taskDescription = ""
                             selectedDifficulty = ""
-                            selectedCategory = ""
+                            selectedCategoryId = 0
                             selectedStartDate = ""
                             selectedEndDate = ""
                             interval = 0
                             selectedMeasureUnit = ""
-                        },
-                        taskViewModel = viewModel,
-                        taskDescription = taskDescription
+                        }
                     )
                 }
 

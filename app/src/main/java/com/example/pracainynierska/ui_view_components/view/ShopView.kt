@@ -50,6 +50,7 @@ import com.example.pracainynierska.ui_view_components.components.ShopSelectButto
 import com.example.pracainynierska.ui_view_components.components.progress
 import com.example.pracainynierska.ui_view_components.components.track
 import com.example.pracainynierska.view_model.ShopViewModel
+import java.util.Locale.Category
 
 class ShopView(shopViewModel: ShopViewModel,
                navController: NavController
@@ -62,14 +63,14 @@ class ShopView(shopViewModel: ShopViewModel,
         innerPadding: PaddingValues
     ) {
 
-        var selectedCategory by remember { mutableStateOf("Determinacja") }
+        var selectedCategory by remember { mutableIntStateOf(0) }
         var selectedShopMode by remember { mutableStateOf(AugmentTypes.SHIELD) }
         var sliderValueTime by remember { mutableFloatStateOf(10f) }
         var validForDays by remember { mutableStateOf((sliderValueTime / 10).toInt()) }
         var sliderValueMultiplier by remember { mutableFloatStateOf(20f) }
         var costValue by remember { mutableIntStateOf(0) }
-
         var isHidden by remember { mutableStateOf(true) }
+        val playerCategories = viewModel.getPlayerCategories()
 
         if (false == (viewModel is ShopViewModel)){
             throw Exception("Invalid View Model")
@@ -259,34 +260,15 @@ class ShopView(shopViewModel: ShopViewModel,
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Column {
-                    ShopSelectButton(
-                        text = "Determinacja",
-                        isSelected = selectedCategory == "Determinacja",
-                        onClick = {
-                            selectedCategory = "Determinacja" },
-                        iconResId = R.drawable.determinacja
-                    )
-                    ShopSelectButton(
-                        text = "Sprawność fizyczna",
-                        isSelected = selectedCategory == "Sprawność fizyczna",
-                        onClick = {
-                            selectedCategory = "Sprawność fizyczna" },
-                        iconResId = R.drawable.sprawnosc
-                    )
-                    ShopSelectButton(
-                        text = "Inteligencja",
-                        isSelected = selectedCategory == "Inteligencja",
-                        onClick = {
-                            selectedCategory = "Inteligencja" },
-                        iconResId = R.drawable.inteligencja
-                    )
-                    ShopSelectButton(
-                        text = "Wiedza",
-                        isSelected = selectedCategory == "Wiedza",
-                        onClick = {
-                            selectedCategory = "Wiedza" },
-                        iconResId = R.drawable.wiedza
-                    )
+                    playerCategories.forEach{category ->
+                        ShopSelectButton(
+                            text = category.name,
+                            isSelected = selectedCategory == category.id,
+                            onClick = {
+                                selectedCategory = category.id },
+                            iconResId = null
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -322,8 +304,7 @@ class ShopView(shopViewModel: ShopViewModel,
                             type = selectedShopMode,
                             validForDays = (sliderValueTime / 10).toInt(),
                             multiplier = sliderValueMultiplier.toInt(),
-                            //category = selectedCategory,
-                            category = "/api/categories/4",
+                            category = "/api/categories/$selectedCategory",
                             price = costValue
                         )
                     }

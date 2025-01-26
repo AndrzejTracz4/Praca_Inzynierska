@@ -51,7 +51,7 @@ fun DailyTaskDetailsDialog(task: Task, onDismiss: () -> Unit) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = task.category,
+                        text = task.category.name,
                         color = Color(0xFF3CB043),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold

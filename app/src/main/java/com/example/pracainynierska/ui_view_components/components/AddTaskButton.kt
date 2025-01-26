@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.types.TaskTypes
@@ -33,7 +34,7 @@ fun CreateTaskButton(
     text: String,
     taskName: String,
     selectedDifficulty: String,
-    selectedCategory: String,
+    selectedCategory: Category?,
     selectedStartDate: String,
     selectedEndDate: String,
     interval: Int,
@@ -67,19 +68,21 @@ fun CreateTaskButton(
                     TaskTypes.ONE_TIME -> {
                         taskName.isNotBlank() &&
                                 selectedDifficulty.isNotBlank() &&
-                                selectedCategory.isNotBlank() &&
+                                selectedCategory != null &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank()
                     }
+
                     TaskTypes.RECURRING -> {
                         taskName.isNotBlank() &&
                                 selectedDifficulty.isNotBlank() &&
-                                selectedCategory.isNotBlank() &&
+                                selectedCategory != null &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank() &&
                                 selectedMeasureUnit.isNotBlank() &&
                                 interval > 0
                     }
+
                     else -> false
                 }
 
@@ -95,7 +98,7 @@ fun CreateTaskButton(
                         id = lastTaskId + 1,
                         name = taskName,
                         difficulty = selectedDifficulty,
-                        category = selectedCategory,
+                        category = selectedCategory ?: Category(0, ""),
                         startDate = selectedStartDate,
                         endDate = selectedEndDate,
                         interval = if (selectedAddTaskMode == TaskTypes.RECURRING) interval else 0,
@@ -111,7 +114,7 @@ fun CreateTaskButton(
                         type = selectedAddTaskMode,
                         name = taskName,
                         description = taskDescription,
-                        category = "/api/categories/4",
+                        category = selectedCategory?.let { "/api/categories/${it.id}" } ?: "0",
                         difficulty = selectedDifficulty,
                         startsAt = selectedStartDate,
                         endsAt = selectedEndDate

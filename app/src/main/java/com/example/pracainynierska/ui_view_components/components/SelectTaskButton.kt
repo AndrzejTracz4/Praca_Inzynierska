@@ -26,7 +26,7 @@ fun SelectTaskButton(
     text: String,
     isSelected: Boolean,
     onClick: () -> Unit,
-    iconResId: Int,
+    iconResId: Int?,
     color: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -45,15 +45,17 @@ fun SelectTaskButton(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                painter = painterResource(id = iconResId),
-                contentDescription = null,
-                modifier = Modifier.size(20.dp),
-                tint = if (color) Color.Unspecified else Color.White
-            )
+            if (iconResId != null){
+                Icon(
+                    painter = painterResource(id = iconResId),
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                    tint = if (color) Color.Unspecified else Color.White
+                )
 
-            Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(8.dp))
 
+            }
             Text(
                 text = text,
                 color = Color.White,

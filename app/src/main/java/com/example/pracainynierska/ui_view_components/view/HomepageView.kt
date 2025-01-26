@@ -1,6 +1,7 @@
 package com.example.pracainynierska.ui_view_components.view
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

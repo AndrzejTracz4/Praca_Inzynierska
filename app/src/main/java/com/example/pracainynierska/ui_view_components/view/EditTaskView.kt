@@ -73,7 +73,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
         var isHidden by remember { mutableStateOf(selectedEditTaskMode == TaskTypes.ONE_TIME) }
         var taskName by remember { mutableStateOf(taskToEdit.name) }
         var selectedDifficulty by remember { mutableStateOf(taskToEdit.difficulty) }
-        var selectedCategory by remember { mutableStateOf(taskToEdit.category) }
+        var selectedCategoryId by remember { mutableIntStateOf(taskToEdit.category.id) }
         var showStartDatePicker by remember { mutableStateOf(false) }
         var showEndDatePicker by remember { mutableStateOf(false) }
         var showNumberPicker by remember { mutableStateOf(false) }
@@ -85,6 +85,8 @@ class EditTaskView(taskViewModel: TaskViewModel,
         var taskDescription by remember { mutableStateOf(taskToEdit.description) }
 
         val scrollState = rememberScrollState()
+
+        val playerCategories = viewModel.getPlayerCategories()
 
         if (false == (viewModel is TaskViewModel)){
             throw Exception("Invalid View Model")
@@ -316,49 +318,18 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold
                     )
+                    playerCategories.forEach{ category ->
+                        SelectTaskButton(
+                            text = category.name,
+                            isSelected = selectedCategoryId == category.id,
+                            onClick = { selectedCategoryId = category.id },
+                            iconResId = null,
+                            modifier = Modifier.fillMaxWidth(),
+                            color = false
+                        )
 
-                    SelectTaskButton(
-                        text = "Samorozwój",
-                        isSelected = selectedCategory == "Samorozwój",
-                        onClick = { selectedCategory = "Samorozwój" },
-                        iconResId = R.drawable.disposable_icon,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = false
-                    )
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    SelectTaskButton(
-                        text = "Ćwiczenia",
-                        isSelected = selectedCategory == "Ćwiczenia",
-                        onClick = { selectedCategory = "Ćwiczenia" },
-                        iconResId = R.drawable.disposable_icon,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = false
-                    )
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    SelectTaskButton(
-                        text = "Edukacja",
-                        isSelected = selectedCategory == "Edukacja",
-                        onClick = { selectedCategory = "Edukacja" },
-                        iconResId = R.drawable.disposable_icon,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = false
-                    )
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    SelectTaskButton(
-                        text = "Praca",
-                        isSelected = selectedCategory == "Praca",
-                        onClick = { selectedCategory = "Praca" },
-                        iconResId = R.drawable.disposable_icon,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = false
-                    )
-
+                        Spacer(modifier = Modifier.height(4.dp))
+                    }
                 }
 
                 Column(modifier = Modifier.padding(8.dp)) {
@@ -367,18 +338,18 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         taskToEdit = taskToEdit,
                         taskName = taskName,
                         selectedDifficulty = selectedDifficulty,
-                        selectedCategory = selectedCategory,
+                        selectedCategory = playerCategories.find { it.id == selectedCategoryId },
                         selectedStartDate = selectedStartDate,
                         selectedEndDate = selectedEndDate,
                         interval = interval,
                         selectedMeasureUnit = selectedMeasureUnit,
                         selectedEditTaskMode = selectedEditTaskMode,
+                        taskViewModel = viewModel,
+                        taskDescription = taskDescription,
                         onTaskUpdated = {
                             Log.d("TaskUpdated", "Zadanie zostało zaktualizowane.")
                             navController.navigate(ViewRoutes.CALENDAR.viewName)
-                        },
-                        taskViewModel = viewModel,
-                        taskDescription = taskDescription
+                        }
                     )
                 }
                 Spacer(modifier = Modifier.height(90.dp))

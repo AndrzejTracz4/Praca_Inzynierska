@@ -32,13 +32,7 @@ fun DailyTaskCard(
     task: Task,
     onClick: (Task) -> Unit
 ) {
-    val iconResId = when (task.category) {
-        "Samorozwój" -> R.drawable.calendar
-        "Ćwiczenia" -> R.drawable.dumbbell_icon
-        "Edukacja" -> R.drawable.calendar
-        "Praca" -> R.drawable.calendar
-        else -> R.drawable.calendar
-    }
+
 
     val backgroundColor = TaskDifficulty.fromDisplayName(task.difficulty)?.color
         ?: TaskDifficulty.EASY.color
@@ -73,7 +67,7 @@ fun DailyTaskCard(
 
              Column {
                 Text(
-                    text = task.category,
+                    text = task.category.name,
                     color = Color.White,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,

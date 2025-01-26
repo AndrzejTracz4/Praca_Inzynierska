@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ShopSelectButton(text: String, isSelected: Boolean, onClick: () -> Unit, iconResId: Int) {
+fun ShopSelectButton(text: String, isSelected: Boolean, onClick: () -> Unit, iconResId: Int?) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -40,15 +40,16 @@ fun ShopSelectButton(text: String, isSelected: Boolean, onClick: () -> Unit, ico
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                painter = painterResource(id = iconResId),
-                contentDescription = null,
-                modifier = Modifier.size(20.dp),
-                tint = Color.White
-            )
+            if (iconResId != null){
+                Icon(
+                    painter = painterResource(id = iconResId),
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                    tint = Color.White
+                )
 
-            Spacer(modifier = Modifier.width(8.dp))
-
+                Spacer(modifier = Modifier.width(8.dp))
+            }
             Text(
                 text = text,
                 color = Color.White,
