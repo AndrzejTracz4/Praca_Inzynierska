@@ -264,9 +264,6 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                         .padding(0.dp)
                         .verticalScroll(scrollState)
                 ) {
-                    Spacer(modifier = Modifier.height(0.dp))
-
-                    Spacer(modifier = Modifier.height(8.dp))
 
                     Box(
                         modifier = Modifier
