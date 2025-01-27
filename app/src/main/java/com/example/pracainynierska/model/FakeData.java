@@ -1,8 +1,12 @@
 package com.example.pracainynierska.model;
 
 import com.example.pracainynierska.API.model.Category;
+import com.example.pracainynierska.API.model.Statistics;
 import com.example.pracainynierska.API.model.Task;
 import com.example.pracainynierska.dictionary.types.TaskTypes;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class FakeData {
 
@@ -11,7 +15,8 @@ public class FakeData {
             TaskTypes.ONE_TIME,
             "Maraton Warszawski",
             "Siema",
-            new Category(1, "Test"),
+            new Category(1,"Test", new ArrayList<>(Collections.singleton(new Statistics(1, "Statistic", "knowledge_bar", 80, 1)))
+            ),
             "Trudny",
             7,
             "dni",

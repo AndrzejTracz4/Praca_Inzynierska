@@ -98,7 +98,7 @@ fun CreateTaskButton(
                         id = lastTaskId + 1,
                         name = taskName,
                         difficulty = selectedDifficulty,
-                        category = selectedCategory ?: Category(0, ""),
+                        category = selectedCategory ?: Category(0, "", emptyList()),
                         startDate = selectedStartDate,
                         endDate = selectedEndDate,
                         interval = if (selectedAddTaskMode == TaskTypes.RECURRING) interval else 0,
