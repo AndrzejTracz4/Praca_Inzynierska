@@ -18,10 +18,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -65,6 +71,7 @@ class ProfileView(
         var playerEmail = ""
         val playerPhotoResId = viewModel.getPhotoResId()
         val playerModel = viewModel.getPlayerModel()
+        var isVacationMode by remember { mutableStateOf(false) }
 
         playerModel.observeAsState().value.let {
             if (it != null) {
@@ -264,6 +271,44 @@ class ProfileView(
             }
 
             Spacer(modifier = Modifier.weight(1f))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .padding(vertical = 4.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(color = Color(0x19FFFFFF))
+                    .padding(horizontal = 16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(R.string.vacation_mode),
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Switch(
+                        checked = isVacationMode,
+                        onCheckedChange = { newState ->
+                            isVacationMode = newState
+                        },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.Green,
+                            uncheckedThumbColor = Color.Gray
+                        )
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             Box(
                 modifier = Modifier
