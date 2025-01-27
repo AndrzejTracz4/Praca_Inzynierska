@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,6 +76,12 @@ class ProfileView(
         }
 
         val userRank = RankDictionary.fromLevel(userLevel)?.displayName ?: stringResource(R.string.unknown_level)
+
+        DisposableEffect(Unit) {
+            onDispose {
+                viewModel.uploadImageToApi()
+            }
+        }
 
         Column(
             modifier = Modifier
