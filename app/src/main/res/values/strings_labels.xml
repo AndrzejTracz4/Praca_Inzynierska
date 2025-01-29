@@ -50,4 +50,5 @@
     <string name="ending">"Zakończenie: "</string>
     <string name="calendar">Kalendarz</string>
     <string name="shop">Sklep</string>
+    <string name="vacation_mode">Tryb wakacyjny</string>
 </resources>

@@ -113,7 +113,7 @@ class PlayerApi(playerContext: PlayerContextInterface) : ApiDetails(playerContex
 
     fun updateUserPhotoPath(userPhotoPath: String) {
         val body = getUpdatePhotoPathRequestBody(userPhotoPath)
-        Log.d("Augment API", "Created body")
+        Log.d("Player API", "Created body")
 
         return request(Request
             .Builder()
@@ -150,10 +150,10 @@ class PlayerApi(playerContext: PlayerContextInterface) : ApiDetails(playerContex
     private fun getUpdatePhotoPathRequestBody(userPhotoPath: String): RequestBody {
         val json = """
                 {
-                    "userPhotoPath": "$userPhotoPath",
+                    "userPhotoPath": "$userPhotoPath"
                 }
             """.trimIndent()
-        val body = json.toRequestBody("application/json".toMediaTypeOrNull())
+        val body = json.toRequestBody("application/merge-patch+json".toMediaTypeOrNull())
         return body
     }
 }
