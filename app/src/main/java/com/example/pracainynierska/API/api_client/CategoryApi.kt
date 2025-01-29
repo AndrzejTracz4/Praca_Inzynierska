@@ -9,7 +9,7 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
 class CategoryApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext) {
-    private val createPath : String = "api/categories"
+    private val categoryPath : String = "api/categories"
 
     fun addCategory(name: String, statisticsIds: ArrayList<String>) {
         val body = getCreateRequestBody(name, statisticsIds)
@@ -17,9 +17,22 @@ class CategoryApi(playerContext: PlayerContextInterface) : ApiDetails(playerCont
 
         return request(Request
             .Builder()
-            .url(buildPath(createPath))
+            .url(buildPath(categoryPath))
             .addHeader("Authorization", "Bearer ${this.getToken()}")
             .post(body)
+            .build()
+        )
+    }
+
+    fun editCategory(id: Int, name: String, statisticsIds: ArrayList<String>) {
+        val body = getUpdateRequestBody(name, statisticsIds)
+        Log.d("Category API", "Created body")
+
+        return request(Request
+            .Builder()
+            .url(buildPath("$categoryPath/$id"))
+            .addHeader("Authorization", "Bearer ${this.getToken()}")
+            .patch(body)
             .build()
         )
     }
@@ -33,6 +46,18 @@ class CategoryApi(playerContext: PlayerContextInterface) : ApiDetails(playerCont
                 }
             """.trimIndent()
         val body = json.toRequestBody("application/json".toMediaTypeOrNull())
+        return body
+    }
+
+    private fun getUpdateRequestBody(name: String, statisticsIds: ArrayList<String>): RequestBody {
+
+        val json = """
+                {
+                    "name": "$name",
+                    "statisticsIds": $statisticsIds
+                }
+            """.trimIndent()
+        val body = json.toRequestBody("application/merge-patch+json".toMediaTypeOrNull())
         return body
     }
 }

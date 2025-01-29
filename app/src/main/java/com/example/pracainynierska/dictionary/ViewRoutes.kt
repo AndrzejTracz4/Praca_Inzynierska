@@ -3,14 +3,15 @@ package com.example.pracainynierska.dictionary
 enum class ViewRoutes(val viewName: String) {
     HOMEPAGE("HomepageView"),
     PROFILE("ProfileView"),
-    STATISTICS("StatisticView"), // TODO: RENAME TO CATEGORYVIEW
+    CATEGORIES("CategoryView"),
     CALENDAR("CalendarsView"),
     SHOP("ShopView"),
     ACHIEVEMENTS("AchievementsView"),
     ADDCATEGORY("AddCategoryView"),
     ADDTASK("AddTaskView"),
+    ADDSTATISTIC("AddStatisticView"),
     EDITTASK("EditTaskView"),
-    SETTINGS("SettingsView"),
+    EDITCATEGORY("EditCategoryView"),
     LOGIN("LoginView"),
     REGISTER("RegisterView"),
     FORGOTPASSWORD("ForgotPasswordView"),

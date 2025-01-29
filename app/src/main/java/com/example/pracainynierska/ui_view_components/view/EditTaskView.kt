@@ -52,7 +52,7 @@ import com.example.pracainynierska.ui_view_components.components.DateTimePickerD
 import com.example.pracainynierska.ui_view_components.components.EditTaskButton
 import com.example.pracainynierska.ui_view_components.components.NumberPickerDialog
 import com.example.pracainynierska.ui_view_components.components.SelectTaskButton
-import com.example.pracainynierska.ui_view_components.components.TaskTextField
+import com.example.pracainynierska.ui_view_components.components.GeneralTextField
 import com.example.pracainynierska.view_model.TaskViewModel
 
 class EditTaskView(taskViewModel: TaskViewModel,
@@ -168,7 +168,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                             .background(Color(0x4DFFFFFF)),
                         contentAlignment = Alignment.Center
                     ) {
-                        TaskTextField(
+                        GeneralTextField(
                             string = taskName,
                             onStringChange = { taskName = it },
                             singleLine = true
@@ -193,7 +193,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                             .background(Color(0x4DFFFFFF)),
                         contentAlignment = Alignment.Center
                     ) {
-                        TaskTextField(
+                        GeneralTextField(
                             string = taskDescription,
                             onStringChange = { taskDescription = it },
                             singleLine = false

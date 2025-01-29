@@ -1,7 +1,6 @@
 package com.example.pracainynierska.ui_view_components.view
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -44,12 +43,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.RankDictionary
+import com.example.pracainynierska.dictionary.StatGradient
+import com.example.pracainynierska.dictionary.StatIcon
 import com.example.pracainynierska.model.FakeData
 import com.example.pracainynierska.ui_view_components.components.AugmentList
 import com.example.pracainynierska.ui_view_components.components.DailyTaskCard
 import com.example.pracainynierska.ui_view_components.components.DailyTaskDetailsDialog
 import com.example.pracainynierska.ui_view_components.components.GradientLevelProgressBar
-import com.example.pracainynierska.ui_view_components.components.GradientStatsProgressBars
+import com.example.pracainynierska.ui_view_components.components.GradientStatProgressBar
 import com.example.pracainynierska.ui_view_components.components.UserImagePicker
 import com.example.pracainynierska.view_model.HomepageViewModel
 
@@ -71,7 +72,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
         var userLevel = 1
         var playerExperience = 0f
         var playerBalance = 0
-        val playerPhotoResId = viewModel.getPhotoResId()
+        val playerPhotoResId = viewModel.getUserPhotoResId()
         val playerModel = viewModel.getPlayerModel()
         val player = viewModel.getPlayer()
         var playerAugments = viewModel.getPlayerAugments()
@@ -86,21 +87,9 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
         val userRank = RankDictionary.fromLevel(userLevel)?.displayName ?: stringResource(R.string.unknown_level)
 
-        val stats = player?.playerStatistics?.statistics?.map{ it.name to it.experience.toFloat() } ?: emptyList()
-
-        val gradients = listOf(
-            Brush.horizontalGradient(colors = listOf(Color(0xFFFFA726), Color(0xFFFF7043))),
-            Brush.horizontalGradient(colors = listOf(Color(0xFF66BB6A), Color(0xFF43A047))),
-            Brush.horizontalGradient(colors = listOf(Color(0xFFAB47BC), Color(0xFF8E24AA))),
-            Brush.horizontalGradient(colors = listOf(Color(0xFF29B6F6), Color(0xFF0288D1)))
-        )
-
-        val icons = listOf(
-            R.raw.determination_bar,
-            R.raw.physical_fitness_bar,
-            R.raw.intelligence_bar,
-            R.raw.knowledge_bar
-        )
+        val stats = player?.playerStatistics?.statistics
+            ?.sortedByDescending { it.experience }
+            ?.take(4)
 
         val scrollState = rememberScrollState()
         var showTaskDetailsDialog by remember { mutableStateOf(false) }
@@ -249,13 +238,23 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                         .clip(RoundedCornerShape(10.dp))
                         .background(Color(0x19FFFFFF))
                         .padding(20.dp)
-                ){
-                    GradientStatsProgressBars(
-                        stats = stats,
-                        gradients = gradients,
-                        icons = icons
-                    )
+                ) {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        stats?.forEachIndexed { index, stat ->
+                            val gradient = StatGradient.getGradientByIndex(index).gradient
+
+                            GradientStatProgressBar(
+                                iconResId = StatIcon.fromIconPath(stat.iconPath)?.rawResId ?: R.raw.intelligence_bar,
+                                name = stat.name,
+                                experience = stat.experience,
+                                gradient = gradient
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    }
                 }
+
 
                 Spacer(modifier = Modifier.height(8.dp))
 

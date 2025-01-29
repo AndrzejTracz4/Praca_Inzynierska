@@ -9,10 +9,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.pracainynierska.API.api_client.PlayerApi
 import com.example.pracainynierska.context.PlayerContextInterface
 import com.example.pracainynierska.dictionary.UserPhotoDictionary
-import com.example.pracainynierska.resolver.UserPhotoResourceResolver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.example.pracainynierska.resolver.PhotoResourceResolver
 
 class ProfileViewModel (
     pc: PlayerContextInterface,
@@ -20,7 +20,7 @@ class ProfileViewModel (
     private val appContext: Context
 ) : AbstractViewModel(pc) {
 
-    private val userPhotoResourceResolver = UserPhotoResourceResolver()
+    private val photoResourceResolver = PhotoResourceResolver()
 
     private var selectedAnimationIndex = 1
 
@@ -32,7 +32,7 @@ class ProfileViewModel (
     fun getPhotoResId(): Int {
         val userPhotoPath = playerContext.getPlayer()?.userPhotoPath
         userPhotoResId.value = if (!userPhotoPath.isNullOrBlank()) {
-            userPhotoResourceResolver.getResId(appContext, userPhotoPath)
+            photoResourceResolver.getResId(appContext, userPhotoPath)
         } else {
             0
         }
@@ -43,7 +43,7 @@ class ProfileViewModel (
         selectedAnimationIndex = (selectedAnimationIndex % 7) + 1
         newPhotoPath = UserPhotoDictionary.getFileName(selectedAnimationIndex) ?: "user_photo_1"
         playerContext.getPlayer()?.userPhotoPath = newPhotoPath as String
-        userPhotoResId.value = userPhotoResourceResolver.getResId(appContext, newPhotoPath!!)
+        userPhotoResId.value = photoResourceResolver.getResId(appContext, newPhotoPath!!)
     }
 
     fun uploadImageToApi() {

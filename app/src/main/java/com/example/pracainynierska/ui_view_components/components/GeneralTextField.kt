@@ -23,7 +23,7 @@ import androidx.compose.ui.text.input.ImeAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskTextField(
+fun GeneralTextField(
     string: String,
     onStringChange: (String) -> Unit,
     singleLine: Boolean

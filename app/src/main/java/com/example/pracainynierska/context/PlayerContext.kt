@@ -11,7 +11,7 @@ class PlayerContext : PlayerContextInterface {
     private var player: Player? = null
 
     override fun getPlayerStatistics(): PlayerStatistics {
-        return getPlayer().playerStatistics!!
+        return getPlayer().playerStatistics
     }
 
     override fun getPlayerAugments(): List<Augment> {

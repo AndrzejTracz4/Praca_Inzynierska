@@ -15,7 +15,8 @@
     <string name="icon_booster_description">BoosterIcon</string>
     <string name="icon_previous_booster_description">Poprzedni booster</string>
     <string name="icon_next_booster_description">Następny booster</string>
-    <string name="icon_add_category_description">Plus icon</string>
+    <string name="icon_category_description">Plus icon</string>
+    <string name="icon_statistic_description">Plus icon</string>
     <string name="icon_menu_description">Menu</string>
     <string name="icon_back_description">Back</string>
     <string name="icon_error_description">Błąd</string>
