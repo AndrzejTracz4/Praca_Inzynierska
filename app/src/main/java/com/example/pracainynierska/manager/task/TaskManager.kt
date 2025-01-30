@@ -43,4 +43,11 @@ class TaskManager(
             )
         }
     }
+
+    override suspend fun getTasksViaApi() {
+        return withContext(Dispatchers.IO) {
+            val tasksList = apiClient.getTasks()
+            _tasks.postValue(tasksList)
+        }
+    }
 }

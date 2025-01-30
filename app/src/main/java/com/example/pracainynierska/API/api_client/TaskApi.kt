@@ -2,11 +2,14 @@ package com.example.pracainynierska.API.api_client
 
 import android.util.Log
 import com.example.pracainynierska.API.ApiDetails
+import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.context.PlayerContextInterface
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import kotlinx.serialization.json.Json
+
 
 class TaskApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext) {
     private val createPath : String = "api/tasks"
@@ -31,6 +34,26 @@ class TaskApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext)
             .build()
         )
     }
+
+    fun getTasks(): List<Task> {
+        val tasksRequest = Request
+            .Builder()
+            .addHeader("Authorization", "Bearer ${this.getToken()}")
+            .url(buildPath(createPath))
+            .get()
+            .build()
+
+        val tasksResponse = apiClient.newCall(tasksRequest).execute()
+        val tasksResponseBody = tasksResponse.body?.string()
+        Log.d("Task API", tasksResponseBody.toString())
+
+        return if (tasksResponse.isSuccessful && tasksResponseBody != null) {
+            Json.decodeFromString<List<Task>>(tasksResponseBody)
+        } else {
+            emptyList()
+        }
+    }
+
 
     private fun getCreateRequestBody(
         type: String,
