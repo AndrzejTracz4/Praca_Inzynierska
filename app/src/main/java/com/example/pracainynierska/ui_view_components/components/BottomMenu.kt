@@ -48,7 +48,7 @@ fun BottomMenu(navController: NavController) {
             BottomMenuItem(
                 icon = R.drawable.stats,
                 label = stringResource(R.string.categories),
-                onClick = { navigateIfNotCurrent(navController, ViewRoutes.STATISTICS.viewName) },
+                onClick = { navigateIfNotCurrent(navController, ViewRoutes.CATEGORIES.viewName) },
                 modifier = Modifier.weight(1f)
             )
 

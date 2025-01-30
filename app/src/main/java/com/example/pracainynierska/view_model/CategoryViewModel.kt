@@ -1,28 +1,24 @@
 package com.example.pracainynierska.view_model
 
 import android.content.Context
-import androidx.compose.runtime.mutableIntStateOf
+import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.context.PlayerContextInterface
 import com.example.pracainynierska.resolver.PhotoResourceResolver
 
-class HomepageViewModel(
+class CategoryViewModel (
     pc: PlayerContextInterface,
-    val appContext: Context
+    private val appContext: Context
 ) : AbstractViewModel(pc) {
 
     private val photoResourceResolver = PhotoResourceResolver()
-
-    var userPhotoResId = mutableIntStateOf(0)
 
     fun getPhotoResId(file: String): Int {
         return photoResourceResolver.getResId(appContext, file)
     }
 
-    fun getUserPhotoResId(): Int {
-        val userPhotoPath = playerContext.getPlayer()?.userPhotoPath
-        userPhotoResId.intValue = userPhotoPath?.takeIf { it.isNotBlank() }
-            ?.let { getPhotoResId(it) } ?: 0
-
-        return userPhotoResId.intValue
+    fun getCategoryById(categoryId: String?): Category? {
+        if (categoryId.isNullOrEmpty()) return null
+        return playerContext.getPlayerCategories().firstOrNull { it.id.toString() == categoryId }
     }
+
 }

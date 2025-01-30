@@ -40,7 +40,7 @@ fun ModalDrawer(
     val items = listOf(
         DrawerItem(stringResource(R.string.homepage), R.drawable.home, ViewRoutes.HOMEPAGE),
         DrawerItem(stringResource(R.string.profile), R.drawable.profile, ViewRoutes.PROFILE),
-        DrawerItem(stringResource(R.string.statistics), R.drawable.stats, ViewRoutes.STATISTICS),
+        DrawerItem(stringResource(R.string.categories), R.drawable.stats, ViewRoutes.CATEGORIES),
         DrawerItem(stringResource(R.string.calendar), R.drawable.calendar, ViewRoutes.CALENDAR),
         DrawerItem(stringResource(R.string.shop), R.drawable.shop, ViewRoutes.SHOP),
         DrawerItem(stringResource(R.string.settings), R.drawable.settings, ViewRoutes.HOMEPAGE),

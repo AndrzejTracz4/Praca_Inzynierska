@@ -27,6 +27,7 @@ import com.example.pracainynierska.ui.theme.PracaInżynierskaTheme
 import com.example.pracainynierska.ui_view_components.ProfileView
 import com.example.pracainynierska.ui_view_components.view.AchievementsView
 import com.example.pracainynierska.ui_view_components.view.AddCategoryView
+import com.example.pracainynierska.ui_view_components.view.AddStatisticView
 import com.example.pracainynierska.ui_view_components.view.AddTaskView
 import com.example.pracainynierska.ui_view_components.view.CalendarsView
 import com.example.pracainynierska.ui_view_components.view.ChangeForgotPasswordView
@@ -35,9 +36,12 @@ import com.example.pracainynierska.ui_view_components.view.ForgotPasswordView
 import com.example.pracainynierska.ui_view_components.view.HomepageView
 import com.example.pracainynierska.ui_view_components.view.LoginView
 import com.example.pracainynierska.ui_view_components.view.ShopView
-import com.example.pracainynierska.ui_view_components.view.StatisticView
+import com.example.pracainynierska.ui_view_components.view.CategoryView
+import com.example.pracainynierska.ui_view_components.view.EditCategoryView
 import com.example.pracainynierska.view_model.AddCategoryViewModel
 import com.example.pracainynierska.view_model.AddCategoryViewModelFactory
+import com.example.pracainynierska.view_model.AddStatisticViewModel
+import com.example.pracainynierska.view_model.AddStatisticViewModelFactory
 import com.example.pracainynierska.view_model.HomepageViewModel
 import com.example.pracainynierska.view_model.HomepageViewModelFactory
 import com.example.pracainynierska.ui_view_components.view.RegisterView as RegisterView
@@ -49,8 +53,10 @@ import com.example.pracainynierska.view_model.RegistrationViewModel
 import com.example.pracainynierska.view_model.RegistrationViewModelFactory
 import com.example.pracainynierska.view_model.ShopViewModel
 import com.example.pracainynierska.view_model.ShopViewModelFactory
-import com.example.pracainynierska.view_model.StatisticViewModel
-import com.example.pracainynierska.view_model.StatisticViewModelFactory
+import com.example.pracainynierska.view_model.CategoryViewModel
+import com.example.pracainynierska.view_model.CategoryViewModelFactory
+import com.example.pracainynierska.view_model.EditCategoryViewModel
+import com.example.pracainynierska.view_model.EditCategoryViewModelFactory
 import com.example.pracainynierska.view_model.TaskViewModel
 import com.example.pracainynierska.view_model.TaskViewModelFactory
 
@@ -95,11 +101,17 @@ class MainActivity : ComponentActivity() {
                         factory = ShopViewModelFactory(playerContext, augmentManager)
                     )
 
-                    val statisticViewModel : StatisticViewModel = viewModel(
-                        factory = StatisticViewModelFactory(playerContext)
+                    val categoryViewModel : CategoryViewModel = viewModel(
+                        factory = CategoryViewModelFactory(playerContext, context)
                     )
                     val addCategoryViewModel : AddCategoryViewModel = viewModel(
                         factory = AddCategoryViewModelFactory(playerContext)
+                    )
+                    val addStatisticViewModel : AddStatisticViewModel = viewModel(
+                        factory = AddStatisticViewModelFactory(playerContext)
+                    )
+                    val editCategoryViewModel : EditCategoryViewModel = viewModel(
+                        factory = EditCategoryViewModelFactory(playerContext)
                     )
                     val profileViewModel : ProfileViewModel = viewModel(
                         factory = ProfileViewModelFactory(playerContext, context)
@@ -111,8 +123,10 @@ class MainActivity : ComponentActivity() {
                         homepageViewModel = homepageViewModel,
                         taskViewModel = taskViewModel,
                         shopViewModel = shopViewModel,
-                        statisticViewModel = statisticViewModel,
+                        categoryViewModel = categoryViewModel,
                         addCategoryViewModel = addCategoryViewModel,
+                        addStatisticViewModel = addStatisticViewModel,
+                        editCategoryViewModel = editCategoryViewModel,
                         profileViewModel = profileViewModel
                     )
                 }
@@ -131,8 +145,10 @@ fun SetupNavGraph(
     homepageViewModel: HomepageViewModel,
     taskViewModel: TaskViewModel,
     shopViewModel: ShopViewModel,
-    statisticViewModel: StatisticViewModel,
+    categoryViewModel: CategoryViewModel,
     addCategoryViewModel: AddCategoryViewModel,
+    addStatisticViewModel : AddStatisticViewModel,
+    editCategoryViewModel: EditCategoryViewModel,
     profileViewModel: ProfileViewModel
 ) {
     NavHost(
@@ -171,12 +187,16 @@ fun SetupNavGraph(
             CalendarsView(navController = navController, taskViewModel = taskViewModel)
                 .renderView()
         }
-        composable(ViewRoutes.STATISTICS.viewName) {
-            StatisticView(navController = navController, viewModel = statisticViewModel)
+        composable(ViewRoutes.CATEGORIES.viewName) {
+            CategoryView(navController = navController, viewModel = categoryViewModel)
                 .renderView()
         }
         composable(ViewRoutes.ADDCATEGORY.viewName) {
             AddCategoryView(navController = navController, viewModel = addCategoryViewModel)
+                .renderView()
+        }
+        composable(ViewRoutes.ADDSTATISTIC.viewName) {
+            AddStatisticView(navController = navController, viewModel = addStatisticViewModel)
                 .renderView()
         }
         composable("{${ViewRoutes.EDITTASK.viewName}}/{taskId}") { backStackEntry ->
@@ -187,6 +207,18 @@ fun SetupNavGraph(
                     taskToEdit = taskToEdit,
                     navController = navController,
                     taskViewModel = taskViewModel
+                )
+                    .renderView()
+            }
+        }
+        composable("{${ViewRoutes.EDITCATEGORY.viewName}}/{categoryId}") { backStackEntry ->
+            val categoryId = backStackEntry.arguments?.getString("categoryId")
+            val categoryToEdit = categoryViewModel.getCategoryById(categoryId)
+            if (categoryToEdit != null) {
+                EditCategoryView(
+                    categoryToEdit = categoryToEdit,
+                    viewModel = editCategoryViewModel,
+                    navController = navController
                 )
                     .renderView()
             }

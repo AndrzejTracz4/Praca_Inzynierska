@@ -27,11 +27,9 @@ import androidx.compose.ui.unit.sp
 import com.example.pracainynierska.R
 
 @Composable
-fun CustomCreateCategoryButton(
+fun CustomCreateStatisticButton(
     onCreateClick: () -> Unit,
-    isValid: Boolean,
-    isCategoryValid: Boolean,
-    isStatsValid: Boolean,
+    isStatValid: Boolean,
     showAlert: MutableState<Boolean>,
     showSuccessAlert: MutableState<Boolean>,
     alertMessage: String,
@@ -46,7 +44,7 @@ fun CustomCreateCategoryButton(
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable {
-                if (isCategoryValid && isStatsValid) {
+                if (isStatValid) {
                     onCreateClick()
                     showSuccessAlert.value = true
                 } else {
@@ -61,7 +59,7 @@ fun CustomCreateCategoryButton(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.plus_square),
-                contentDescription = stringResource(R.string.icon_add_category_description),
+                contentDescription = stringResource(R.string.icon_statistic_description),
                 modifier = Modifier.size(24.dp),
                 tint = Color.White
             )
@@ -91,16 +89,15 @@ fun CustomCreateCategoryButton(
         )
     }
 
-    // AlertDialog do obsługi sukcesu
     if (showSuccessAlert.value) {
         AlertDialog(
-            onDismissRequest = { showSuccessAlert.value = false },  // Zamknięcie dialogu
+            onDismissRequest = { showSuccessAlert.value = false },
             title = { Text("Sukces!") },
             text = { Text(successMessage) },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        showSuccessAlert.value = false // Zamknięcie alertu sukcesu po kliknięciu "OK"
+                        showSuccessAlert.value = false
                     }
                 ) {
                     Text("OK")

@@ -47,14 +47,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.API.model.Statistics
 import com.example.pracainynierska.R
 import com.example.pracainynierska.ui_view_components.components.CustomSubmitCategoryButton
 import com.example.pracainynierska.ui_view_components.components.GeneralTextField
 import com.example.pracainynierska.view_model.AddCategoryViewModel
+import com.example.pracainynierska.view_model.EditCategoryViewModel
 
-class AddCategoryView(viewModel: AddCategoryViewModel,
-                      navController: NavController,
+class EditCategoryView (private var categoryToEdit: Category,
+                        viewModel: EditCategoryViewModel,
+                        navController: NavController,
 ) : AbstractView(viewModel, navController) {
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -63,14 +66,21 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
         innerPadding: PaddingValues
     ) {
 
-        var categoryName by remember { mutableStateOf("") }
+        var categoryName by remember { mutableStateOf(categoryToEdit.name) }
         var searchQuery by remember { mutableStateOf("") }
-        var isCategoryValid by remember { mutableStateOf(false) }
-        var isStatsValid by remember { mutableStateOf(false) }
+        var isCategoryValid by remember { mutableStateOf(true) }
+        var isStatsValid by remember { mutableStateOf(true) }
         var activeDialogIndex by remember { mutableStateOf(-1) }
         val showAlert = remember { mutableStateOf(false) }
         val showSuccessAlert = remember { mutableStateOf(false) }
-        val selectedStats = remember { mutableStateListOf<Statistics?>(null, null, null, null) }
+        val selectedStats = remember {
+            mutableStateListOf<Statistics?>().apply {
+                addAll(categoryToEdit.statistics)
+                while (size < 4) {
+                    add(null)
+                }
+            }
+        }
 
         val availableStats = viewModel.getPlayerStatistics()
 
@@ -248,17 +258,17 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
             Spacer(modifier = Modifier.weight(1f))
 
             CustomSubmitCategoryButton(
-                label = stringResource(R.string.create),
-                icon = R.drawable.plus_square,
+                label = stringResource(R.string.edit),
+                icon = R.drawable.edit,
                 onCreateClick = {
-                    if (false == viewModel is AddCategoryViewModel) {
+                    if (false == viewModel is EditCategoryViewModel) {
                         throw IllegalStateException("Invalid view model type")
                     }
                     val list = ArrayList(selectedStats
                         .filterNotNull()
                         .map { it.id.toString() }
                     )
-                    viewModel.addCategory(categoryName, list)
+                    viewModel.editCategory(categoryToEdit.id, categoryName, list)
                 },
                 isCategoryValid = isCategoryValid,
                 isStatsValid = isStatsValid,
@@ -269,7 +279,7 @@ class AddCategoryView(viewModel: AddCategoryViewModel,
                     !isStatsValid -> stringResource(R.string.validation_empty_statistics)
                     else -> ""
                 },
-                successMessage = stringResource(R.string.success_category_create)
+                successMessage = stringResource(R.string.success_category_update)
             )
 
             Spacer(modifier = Modifier.height(75.dp))

@@ -3,6 +3,7 @@
     <!--Validation-->
     <string name="validation_required_name_statistic">Nazwa statystyki jest wymagana</string>
     <string name="validation_invalid_category">Nazwa kategorii nie może być pusta.</string>
+    <string name="validation_invalid_statistic">Nazwa statystyki nie może być pusta.</string>
     <string name="validation_empty_statistics">Wybierz przynajmniej jedną statystykę.</string>
     <string name="validation_add_task_fields">Uzupełnij wszystkie pola.</string>
     <string name="validation_date_earlier_that_start">Data końcowa nie może być wcześniejsza niż data startowa.</string>
@@ -23,6 +24,8 @@
     <string name="registration_failed">Rejestracja nie powiodła się.</string>
     <string name="success_create_task">Pomyślnie utworzono zadanie</string>
     <string name="success_category_create">Kategoria została pomyślnie utworzona!</string>
+    <string name="success_category_update">Kategoria została pomyślnie edytowana!</string>
+    <string name="success_statistic_create">Statystyka została pomyślnie utworzona!</string>
     <string name="success_password_change">Hasło zostało zmienione pomyślnie.</string>
     <string name="success_creation_statistics">Statystyka została pomyślnie utworzona.</string>
     <string name="success_registration_user">Pomyślnie zarejestrowano użytkownika</string>

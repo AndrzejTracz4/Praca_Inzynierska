@@ -10,4 +10,9 @@ class CategoryManager(private val apiClient: CategoryApi) : CategoryManagerInter
             apiClient.addCategory(category, statisticIds)
         }
     }
+    override suspend fun edit(id: Int, category: String, statisticIds: ArrayList<String>) {
+        return withContext(Dispatchers.IO) {
+            apiClient.editCategory(id, category, statisticIds)
+        }
+    }
 }

@@ -39,7 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.TaskDifficulty
 import com.example.pracainynierska.dictionary.types.TaskTypes
@@ -50,7 +49,7 @@ import com.example.pracainynierska.ui_view_components.components.CustomNumberPic
 import com.example.pracainynierska.ui_view_components.components.DateTimePickerDialog
 import com.example.pracainynierska.ui_view_components.components.NumberPickerDialog
 import com.example.pracainynierska.ui_view_components.components.SelectTaskButton
-import com.example.pracainynierska.ui_view_components.components.TaskTextField
+import com.example.pracainynierska.ui_view_components.components.GeneralTextField
 import com.example.pracainynierska.view_model.TaskViewModel
 
 class AddTaskView(taskViewModel: TaskViewModel,
@@ -162,7 +161,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
                             .background(Color(0x4DFFFFFF)),
                         contentAlignment = Alignment.Center
                     ) {
-                        TaskTextField(
+                        GeneralTextField(
                             string = taskName,
                             onStringChange = { taskName = it },
                             singleLine = true
@@ -188,7 +187,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
                             .background(Color(0x4DFFFFFF)),
                         contentAlignment = Alignment.Center
                     ) {
-                        TaskTextField(
+                        GeneralTextField(
                             string = taskDescription,
                             onStringChange = { taskDescription = it },
                             singleLine = false
