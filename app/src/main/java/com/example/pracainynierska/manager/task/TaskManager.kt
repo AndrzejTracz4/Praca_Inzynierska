@@ -1,3 +1,4 @@
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.pracainynierska.API.api_client.TaskApi
@@ -50,4 +51,16 @@ class TaskManager(
             _tasks.postValue(tasksList)
         }
     }
+
+    override suspend fun completeTask(id: Int) {
+        return withContext(Dispatchers.IO) {
+            val response = apiClient.completeTask(id)
+            Log.d("TaskManager", "response: $response")
+//            if (response.isSuccessful) {
+//                val updatedTasks = _tasks.value?.filter { task -> task.id != id } ?: emptyList()
+//                _tasks.postValue(updatedTasks)
+//            }
+        }
+    }
+
 }

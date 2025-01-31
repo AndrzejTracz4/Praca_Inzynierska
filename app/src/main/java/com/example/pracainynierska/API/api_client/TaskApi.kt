@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
 
 
 class TaskApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext) {
-    private val createPath : String = "api/tasks"
+    private val taskPath : String = "api/tasks"
 
     fun addTask(
         type: String,
@@ -29,7 +29,7 @@ class TaskApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext)
         return request(Request
             .Builder()
             .addHeader("Authorization", "Bearer ${this.getToken()}")
-            .url(buildPath(createPath))
+            .url(buildPath(taskPath))
             .post(body)
             .build()
         )
@@ -39,7 +39,7 @@ class TaskApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext)
         val tasksRequest = Request
             .Builder()
             .addHeader("Authorization", "Bearer ${this.getToken()}")
-            .url(buildPath(createPath))
+            .url(buildPath(taskPath))
             .get()
             .build()
 
@@ -53,6 +53,24 @@ class TaskApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext)
             emptyList()
         }
     }
+
+    fun completeTask(id: Int) {
+        val taskRequest = Request
+            .Builder()
+            .addHeader("Authorization", "Bearer ${this.getToken()}")
+            .url(buildPath("$taskPath/$id/complete"))
+            .patch(RequestBody.create(null, ByteArray(0)))
+            .build()
+
+        val response = apiClient.newCall(taskRequest).execute()
+
+        if (response.isSuccessful) {
+            Log.d("Task API", "Task $id marked as complete")
+        } else {
+            Log.e("Task API", "Failed to complete task $id: ${response.code}")
+        }
+    }
+
 
 
     private fun getCreateRequestBody(

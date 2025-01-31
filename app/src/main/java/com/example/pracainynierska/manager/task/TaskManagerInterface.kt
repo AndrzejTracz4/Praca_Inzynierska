@@ -18,4 +18,5 @@ interface TaskManagerInterface {
     fun getTasks(): List<Task>
 
     suspend fun getTasksViaApi()
+    suspend fun completeTask(id: Int)
 }

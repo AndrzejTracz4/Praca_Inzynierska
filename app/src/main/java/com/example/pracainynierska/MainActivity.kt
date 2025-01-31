@@ -86,7 +86,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
 
                     val loginViewModel: LoginViewModel = viewModel(
-                        factory = LoginViewModelFactory(playerContext)
+                        factory = LoginViewModelFactory(playerContext, taskManager)
                     )
                     val registrationViewModel : RegistrationViewModel = viewModel(
                         factory = RegistrationViewModelFactory(playerContext)
