@@ -1,7 +1,7 @@
 package com.example.pracainynierska.model;
 
 import com.example.pracainynierska.API.model.Category;
-import com.example.pracainynierska.API.model.Statistics;
+import com.example.pracainynierska.API.model.Statistic;
 import com.example.pracainynierska.API.model.Task;
 import com.example.pracainynierska.dictionary.types.TaskTypes;
 
@@ -15,7 +15,7 @@ public class FakeData {
             TaskTypes.ONE_TIME,
             "Maraton Warszawski",
             "Siema",
-            new Category(1,"Test", new ArrayList<>(Collections.singleton(new Statistics(1, "Statistic", "knowledge_bar", 80, 1)))
+            new Category(1,"Test", new ArrayList<>(Collections.singleton(new Statistic(1, "Statistic", "knowledge_bar", 80, 1)))
             ),
             "Trudny",
             7,

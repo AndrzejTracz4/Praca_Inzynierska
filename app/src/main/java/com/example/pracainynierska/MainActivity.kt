@@ -38,6 +38,7 @@ import com.example.pracainynierska.ui_view_components.view.LoginView
 import com.example.pracainynierska.ui_view_components.view.ShopView
 import com.example.pracainynierska.ui_view_components.view.CategoryView
 import com.example.pracainynierska.ui_view_components.view.EditCategoryView
+import com.example.pracainynierska.ui_view_components.view.EditStatisticView
 import com.example.pracainynierska.view_model.AddCategoryViewModel
 import com.example.pracainynierska.view_model.AddCategoryViewModelFactory
 import com.example.pracainynierska.view_model.AddStatisticViewModel
@@ -57,6 +58,8 @@ import com.example.pracainynierska.view_model.CategoryViewModel
 import com.example.pracainynierska.view_model.CategoryViewModelFactory
 import com.example.pracainynierska.view_model.EditCategoryViewModel
 import com.example.pracainynierska.view_model.EditCategoryViewModelFactory
+import com.example.pracainynierska.view_model.EditStatisticViewModel
+import com.example.pracainynierska.view_model.EditStatisticViewModelFactory
 import com.example.pracainynierska.view_model.TaskViewModel
 import com.example.pracainynierska.view_model.TaskViewModelFactory
 
@@ -107,11 +110,14 @@ class MainActivity : ComponentActivity() {
                     val addCategoryViewModel : AddCategoryViewModel = viewModel(
                         factory = AddCategoryViewModelFactory(playerContext)
                     )
+                    val editCategoryViewModel : EditCategoryViewModel = viewModel(
+                        factory = EditCategoryViewModelFactory(playerContext)
+                    )
                     val addStatisticViewModel : AddStatisticViewModel = viewModel(
                         factory = AddStatisticViewModelFactory(playerContext)
                     )
-                    val editCategoryViewModel : EditCategoryViewModel = viewModel(
-                        factory = EditCategoryViewModelFactory(playerContext)
+                    val editStatisticViewModel : EditStatisticViewModel = viewModel(
+                        factory = EditStatisticViewModelFactory(playerContext)
                     )
                     val profileViewModel : ProfileViewModel = viewModel(
                         factory = ProfileViewModelFactory(playerContext, context)
@@ -125,8 +131,9 @@ class MainActivity : ComponentActivity() {
                         shopViewModel = shopViewModel,
                         categoryViewModel = categoryViewModel,
                         addCategoryViewModel = addCategoryViewModel,
-                        addStatisticViewModel = addStatisticViewModel,
                         editCategoryViewModel = editCategoryViewModel,
+                        addStatisticViewModel = addStatisticViewModel,
+                        editStatisticViewModel = editStatisticViewModel,
                         profileViewModel = profileViewModel
                     )
                 }
@@ -147,8 +154,9 @@ fun SetupNavGraph(
     shopViewModel: ShopViewModel,
     categoryViewModel: CategoryViewModel,
     addCategoryViewModel: AddCategoryViewModel,
-    addStatisticViewModel : AddStatisticViewModel,
     editCategoryViewModel: EditCategoryViewModel,
+    addStatisticViewModel : AddStatisticViewModel,
+    editStatisticViewModel: EditStatisticViewModel,
     profileViewModel: ProfileViewModel
 ) {
     NavHost(
@@ -197,6 +205,10 @@ fun SetupNavGraph(
         }
         composable(ViewRoutes.ADDSTATISTIC.viewName) {
             AddStatisticView(navController = navController, viewModel = addStatisticViewModel)
+                .renderView()
+        }
+        composable(ViewRoutes.EDITSTATISTIC.viewName) {
+            EditStatisticView(navController = navController, viewModel = editStatisticViewModel)
                 .renderView()
         }
         composable("{${ViewRoutes.EDITTASK.viewName}}/{taskId}") { backStackEntry ->

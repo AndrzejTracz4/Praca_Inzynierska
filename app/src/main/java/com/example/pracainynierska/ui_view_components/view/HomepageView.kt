@@ -196,7 +196,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
                             Spacer(modifier = Modifier.height(4.dp))
 
-                            Row {
+                            Row(modifier = Modifier.fillMaxWidth()) {
                                 Text(
                                     text = stringResource(R.string.experience),
                                     fontSize = 12.sp,
@@ -210,7 +210,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                                     )
                                 )
 
-                                Spacer(modifier = Modifier.width(105.dp))
+                                Spacer(modifier = Modifier.weight(1f))
 
                                 Text(
                                     text = "${playerExperience.toInt()}/100",
@@ -246,7 +246,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                             GradientStatProgressBar(
                                 iconResId = StatIcon.fromIconPath(stat.iconPath)?.rawResId ?: R.raw.intelligence_bar,
                                 name = stat.name,
-                                experience = stat.experience,
+                                experience = stat.experience ?: 0,
                                 gradient = gradient
                             )
 

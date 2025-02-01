@@ -11,17 +11,25 @@ class AddStatisticViewModel(
     pc: PlayerContextInterface,
     private val statisticManager: StatisticManagerInterface
 ) : AbstractViewModel(pc) {
-    fun addStatistic(name: String, iconPath: String) {
+    fun addStatistic(name: String, iconPath: String, onSuccess: () -> Unit, onError: () -> Unit) {
         viewModelScope.launch {
             try {
                 Log.d("AddStatisticViewModel", "Adding statistic")
-                statisticManager.add(name, iconPath)
+
+                val newStatistic = statisticManager.add(name, iconPath)
+
+                Log.d("AddStatisticViewModel", "Statistic added: $newStatistic")
+
+                if (newStatistic != null) {
+                    playerContext.addPlayerStatistic(newStatistic)
+                    onSuccess()
+                }
             } catch (e: RequestValidationException) {
                 Log.e("AddStatisticViewModel", "CreationError - validation exception")
-                throw e
+                onError()
             } catch (e: Exception) {
                 Log.e("AddStatisticViewModel - Creation failed", e.message.toString())
-                throw e
+                onError()
             }
         }
     }

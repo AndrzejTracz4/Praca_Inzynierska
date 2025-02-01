@@ -29,13 +29,20 @@ class ShopViewModel(
         return purchaseHandler.canAfford(currentPlayer, price)
     }
 
+    private fun calculateNewBalance(price: Int): Int? {
+        val currentPlayer = playerContext.getPlayer() ?: return null
+        return calculator.calculateNewBalance(currentPlayer, price)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun buyBooster(
         type: String,
         validForDays: Int,
         multiplier: Int,
         category: String,
-        price: Int
+        price: Int,
+        onSuccess: () -> Unit,
+        onError: () -> Unit
     ) {
         if (!checkIfCanAfford(price)) {
             throw Exception("Insufficient funds")
@@ -43,12 +50,23 @@ class ShopViewModel(
         }
 
         viewModelScope.launch {
-            purchaseHandler.handle(
+            val newAugment = purchaseHandler.handle(
                 type = type,
                 category = category,
                 multiplier = if (type == AugmentTypes.BOOSTER) (multiplier / 10) else 2,
                 validForDays = validForDays,
             )
+
+            if(newAugment != null) {
+                playerContext.addPlayerAugment(newAugment)
+                val balance = calculateNewBalance(price)
+                if(balance != null) {
+                    playerContext.setPlayerBalance(balance)
+                }
+                onSuccess()
+            } else {
+                onError()
+            }
         }
     }
 }

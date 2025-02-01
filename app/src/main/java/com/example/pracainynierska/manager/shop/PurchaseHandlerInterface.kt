@@ -1,5 +1,6 @@
 package com.example.pracainynierska.manager.shop
 
+import com.example.pracainynierska.API.model.Augment
 import com.example.pracainynierska.API.model.Player
 
 interface PurchaseHandlerInterface {
@@ -9,5 +10,5 @@ interface PurchaseHandlerInterface {
         multiplier : Int,
         validForDays : Int,
         category : String,
-    )
+    ): Augment?
 }

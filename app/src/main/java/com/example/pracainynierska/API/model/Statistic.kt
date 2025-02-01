@@ -4,10 +4,10 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class Statistics(
+data class Statistic(
     val id: Int,
     val name: String,
     val iconPath: String,
-    val experience: Int,
-    val level: Int,
+    var experience: Int? = 0,
+    var level: Int? = 1,
 )

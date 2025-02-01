@@ -1,5 +1,6 @@
 package com.example.pracainynierska.ui_view_components.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -8,16 +9,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,7 +29,7 @@ import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.types.TaskTypes
 import com.example.pracainynierska.view_model.TaskViewModel
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 @Composable
 fun CreateTaskButton(
@@ -45,10 +47,9 @@ fun CreateTaskButton(
     taskViewModel: TaskViewModel,
     taskDescription: String
 ) {
-    var showDialog by remember { mutableStateOf(false) }
+    val showDialog = remember { mutableStateOf(false) }
+    var dialogTitleId by remember { mutableStateOf(0) }
     var dialogMessageId by remember { mutableStateOf(0) }
-    var showErrorDialog by remember { mutableStateOf(false) }
-    var showDateErrorDialog by remember { mutableStateOf(false) }
     var taskList by remember { mutableStateOf(emptyList<Task>()) }
 
     taskViewModel.tasks.observeForever { tasks ->
@@ -87,18 +88,20 @@ fun CreateTaskButton(
                 }
 
                 if (!isValid) {
+                    dialogTitleId = R.string.error
                     dialogMessageId = R.string.validation_add_task_fields
-                    showErrorDialog = true
+                    showDialog.value = true
                 } else if (isEndDateBeforeStartDate(selectedStartDate, selectedEndDate)) {
+                    dialogTitleId = R.string.invalid_date
                     dialogMessageId = R.string.validation_date_earlier_that_start
-                    showDateErrorDialog = true
+                    showDialog.value = true
                 } else {
                     val lastTaskId = taskList.maxOfOrNull { it.id } ?: 0
                     val task = Task(
                         id = lastTaskId + 1,
                         name = taskName,
                         difficulty = selectedDifficulty,
-                        category = selectedCategory ?: Category(0, "", emptyList()),
+                        category = selectedCategory ?: Category(0, "", mutableListOf()),
                         startDate = selectedStartDate,
                         endDate = selectedEndDate,
                         interval = if (selectedAddTaskMode == TaskTypes.RECURRING) interval else 0,
@@ -120,8 +123,9 @@ fun CreateTaskButton(
                         endsAt = selectedEndDate
                     )
 
+                    dialogTitleId = R.string.success
                     dialogMessageId = R.string.success_create_task
-                    showDialog = true
+                    showDialog.value = true
                 }
             }
             .padding(horizontal = 16.dp),
@@ -149,68 +153,30 @@ fun CreateTaskButton(
         }
     }
 
-    // TODO: MAKE ONE FUNCTION FOR DIALOGS
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text(text = stringResource(R.string.success)) },
-            text = { Text(text = stringResource(dialogMessageId)) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onTaskCreated()
-                        showDialog = false
-                    }
-                ) {
-                    Text(stringResource(R.string.ok))
-                }
-            }
-        )
-    }
-
-    if (showErrorDialog) {
-        AlertDialog(
-            onDismissRequest = { showErrorDialog = false },
-            title = { Text(text = stringResource(R.string.error)) },
-            text = { Text(text = stringResource(dialogMessageId)) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showErrorDialog = false
-                    }
-                ) {
-                    Text(stringResource(R.string.ok))
-                }
-            }
-        )
-    }
-
-    if (showDateErrorDialog) {
-        AlertDialog(
-            onDismissRequest = { showDateErrorDialog = false },
-            title = { Text(text = stringResource(R.string.invalid_date)) },
-            text = { Text(text = stringResource(dialogMessageId)) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showDateErrorDialog = false
-                    }
-                ) {
-                    Text(stringResource(R.string.ok))
-                }
-            }
-        )
-    }
+    CustomAlertDialog(
+        showAlert = showDialog,
+        alertTitleId = dialogTitleId,
+        alertMessageId = dialogMessageId,
+        toForward = dialogTitleId == R.string.success,
+        onConfirmClick = { onTaskCreated() }
+    )
 }
 
 // Function that checks if the end date is earlier than the start date
 fun isEndDateBeforeStartDate(startDate: String, endDate: String): Boolean {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault())
     return try {
         val start = dateFormat.parse(startDate)
         val end = dateFormat.parse(endDate)
-        end.before(start)
+        if (start == null || end == null) {
+            true
+        } else {
+            end.before(start)
+        }
     } catch (e: Exception) {
-        false
+        Log.e("DEBUG", "Błąd parsowania daty: ${e.message}")
+        true
     }
 }
+
+

@@ -72,7 +72,8 @@ fun GradientStatProgressBar(
 
                     LottieAnimation(
                         composition = composition,
-                        iterations = LottieConstants.IterateForever
+                        iterations = 1
+                        //IterateForever
                     )
                 }
 

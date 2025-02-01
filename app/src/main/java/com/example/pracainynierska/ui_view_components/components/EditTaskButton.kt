@@ -100,7 +100,7 @@ fun EditTaskButton(
                     val updatedTask = taskToEdit.copy(
                         name = taskName,
                         difficulty = selectedDifficulty,
-                        category = selectedCategory ?: Category(0, "", emptyList()),
+                        category = selectedCategory ?: Category(0, "", mutableListOf()),
                         startDate = selectedStartDate,
                         endDate = selectedEndDate,
                         interval = if (selectedEditTaskMode == TaskTypes.RECURRING) interval else 0,

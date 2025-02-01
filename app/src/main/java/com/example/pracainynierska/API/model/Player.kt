@@ -9,11 +9,11 @@ data class Player(
     val email: String,
     val enabled: Boolean,
     val roles: List<String>,
-    val playerLevel: Int,
-    val playerExperience: Int,
+    var playerLevel: Int,
+    var playerExperience: Int,
     var userPhotoPath: String,
-    val balance: Int,
-    val playerStatistics: PlayerStatistics,
-    val activeAugments: List<Augment>,
-    val categories: List<Category>
+    var balance: Int,
+    var playerStatistics: PlayerStatistics,
+    var activeAugments: MutableList<Augment> = mutableListOf(),
+    var categories: MutableList<Category> = mutableListOf()
 )
