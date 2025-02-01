@@ -6,5 +6,5 @@
     <string name="version">Wersja: %1$s</string>
     <string name="select_statistic">Wybierz statystykę %1$s</string>
     <string name="multiplier_variable">Mnożnik: x%1$s</string>
-    <string name="end_date_variable">Data zakończenia: %1$s</string>
+    <string name="end_date_variable">Zakończenie: %1$s</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.pracainynierska.ui_view_components.components
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,22 +24,31 @@ import com.example.pracainynierska.dictionary.types.AugmentTypes
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import com.example.pracainynierska.API.model.Augment
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AugmentCard(
     augment: Augment,
-    showNext: Boolean,
-    showPrevious: Boolean,
-    onClickNext: () -> Unit,
-    onClickPrevious: () -> Unit
 ) {
 
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val dateOnly = augment.createdAt.substringBefore("T")
-    val startDate = LocalDate.parse(dateOnly, formatter)
-    val endDate = startDate.plusDays(augment.validForDays.toLong())
-    val endDateFormatted = endDate.format(formatter)
+    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
+    val outputFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
+
+    var endDateFormatted = ""
+
+    try {
+        val startDateTime = ZonedDateTime.parse(augment.createdAt, inputFormatter)
+        val localStartDateTime = startDateTime.withZoneSameInstant(ZoneId.systemDefault())
+        val endDateTime = localStartDateTime.plusDays(augment.validForDays.toLong())
+        endDateFormatted = endDateTime.format(outputFormatter)
+    } catch (e: Exception) {
+        Log.e("DateParsing", "Error parsing date: ${e.message}")
+        endDateFormatted = "---"
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -46,7 +56,7 @@ fun AugmentCard(
                 color = Color(0x14FFFFFF),
                 shape = RoundedCornerShape(12.dp)
             )
-            .padding(4.dp)
+            .padding(horizontal = 4.dp, vertical = 12.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth()
@@ -61,7 +71,7 @@ fun AugmentCard(
                         .align(Alignment.CenterVertically)
                         .padding(10.dp)
                 )
-            }else if (augment.type == AugmentTypes.BOOSTER){
+            } else if (augment.type == AugmentTypes.BOOSTER) {
                 Icon(
                     painter = painterResource(R.drawable.timeout),
                     contentDescription = stringResource(R.string.icon_booster_description),
@@ -80,16 +90,16 @@ fun AugmentCard(
                     text = augment.categoryName,
                     color = Color.White,
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.ExtraBold,
                     modifier = Modifier
                         .background(
-                            Color(0xFF3CB043),
+                            Color(0x14FFFFFF),
                             shape = RoundedCornerShape(8.dp)
                         )
                         .padding(horizontal = 20.dp, vertical = 2.dp)
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(6.dp))
                 if (augment.type == AugmentTypes.BOOSTER) {
                     Text(
                         text = stringResource(R.string.multiplier_variable, augment.multiplier),
@@ -103,40 +113,6 @@ fun AugmentCard(
                     color = Color.White,
                     fontSize = 14.sp
                 )
-            }
-
-            Box(
-                modifier = Modifier.fillMaxHeight(),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                ) {
-                    if (showPrevious) {
-                        Icon(
-                            painter = painterResource(R.drawable.next_previous_arrow),
-                            contentDescription = stringResource(R.string.icon_previous_booster_description),
-                            modifier = Modifier
-                                .size(32.dp)
-                                .rotate(180f)
-                                .clickable { onClickPrevious() },
-                            tint = Color.White
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(5.dp))
-                    if (showNext) {
-                        Icon(
-                            painter = painterResource(R.drawable.next_previous_arrow),
-                            contentDescription = stringResource(R.string.icon_next_booster_description),
-                            modifier = Modifier
-                                .size(32.dp)
-                                .clickable { onClickNext() },
-                            tint = Color.White
-                        )
-                    }
-                }
             }
         }
     }
