@@ -73,15 +73,16 @@ fun AugmentCarousel(augments: List<Augment>) {
             .fillMaxHeight()
             .pointerInput(Unit) {
                 detectHorizontalDragGestures { _, dragAmount ->
-                    if (!isAnimating && augments.isNotEmpty()) {
+                    if (!isAnimating) {
                         coroutineScope.launch {
                             isAnimating = true
-                            currentIndex = if (dragAmount > 0) {
-                                (currentIndex - 1 + augments.size) % augments.size
+                            if (dragAmount > 0) {
+                                currentIndex = (currentIndex - 1 + augments.size) % augments.size
+                                dragDirection = -1
                             } else {
-                                (currentIndex + 1) % augments.size
+                                currentIndex = (currentIndex + 1) % augments.size
+                                dragDirection = 1
                             }
-                            dragDirection = if (dragAmount > 0) -1 else 1
                             delay(300)
                             isAnimating = false
                         }
@@ -117,6 +118,7 @@ fun AugmentCarousel(augments: List<Augment>) {
                             color = if (index == currentIndex) Color(0xAAFFFFFF) else Color(0x50FFFFFF),
                             shape = CircleShape
                         )
+                        .padding(4.dp)
                 )
             }
         }
