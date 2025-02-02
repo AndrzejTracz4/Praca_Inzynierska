@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,8 +40,29 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AugmentCarousel(augments: List<Augment>) {
+    if (augments.isEmpty()) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(
+                    color = Color(0x14FFFFFF),
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .padding(horizontal = 4.dp, vertical = 12.dp)
+                .padding(bottom = 10.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+            }
+        }
+        return
+    }
+
     var currentIndex by remember { mutableStateOf(0) }
-    var previousIndex by remember { mutableStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
     var isAnimating by remember { mutableStateOf(false) }
     var dragDirection by remember { mutableStateOf(0) }
@@ -51,16 +73,15 @@ fun AugmentCarousel(augments: List<Augment>) {
             .fillMaxHeight()
             .pointerInput(Unit) {
                 detectHorizontalDragGestures { _, dragAmount ->
-                    if (!isAnimating) {
+                    if (!isAnimating && augments.isNotEmpty()) {
                         coroutineScope.launch {
                             isAnimating = true
-                            if (dragAmount > 0) {
-                                currentIndex = (currentIndex - 1 + augments.size) % augments.size
-                                dragDirection = -1
+                            currentIndex = if (dragAmount > 0) {
+                                (currentIndex - 1 + augments.size) % augments.size
                             } else {
-                                currentIndex = (currentIndex + 1) % augments.size
-                                dragDirection = 1
+                                (currentIndex + 1) % augments.size
                             }
+                            dragDirection = if (dragAmount > 0) -1 else 1
                             delay(300)
                             isAnimating = false
                         }
@@ -96,7 +117,6 @@ fun AugmentCarousel(augments: List<Augment>) {
                             color = if (index == currentIndex) Color(0xAAFFFFFF) else Color(0x50FFFFFF),
                             shape = CircleShape
                         )
-                        .padding(4.dp)
                 )
             }
         }
