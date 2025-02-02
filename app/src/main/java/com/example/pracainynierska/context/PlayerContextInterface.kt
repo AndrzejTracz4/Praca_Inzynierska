@@ -5,6 +5,7 @@ import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.API.model.Player
 import com.example.pracainynierska.API.model.PlayerStatistics
 import com.example.pracainynierska.API.model.Statistic
+import com.example.pracainynierska.API.model.Task
 
 interface PlayerContextInterface {
     fun getToken(): String?

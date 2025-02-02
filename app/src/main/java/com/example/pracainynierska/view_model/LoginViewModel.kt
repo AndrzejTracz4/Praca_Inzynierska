@@ -12,13 +12,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.pracainynierska.API.handler.authorization.AuthorizationHandlerInterface
 import com.example.pracainynierska.R
 import com.example.pracainynierska.context.PlayerContextInterface
+import com.example.pracainynierska.manager.task.TaskManagerInterface
 import com.example.pracainynierska.model.User
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
 
 class LoginViewModel(
     pc: PlayerContextInterface,
-    private val playerAuthorizationHandler: AuthorizationHandlerInterface
+    private val playerAuthorizationHandler: AuthorizationHandlerInterface,
+    private val taskManager: TaskManagerInterface
 ) : AbstractViewModel(pc) {
 
     var username by mutableStateOf("")
@@ -147,6 +149,7 @@ class LoginViewModel(
                 Log.d("LoginViewModel", "Player: $player")
                 loginSuccess = true
                 onLoginResult(true)
+                taskManager.getTasksViaApi()
             } else {
                 Log.d("LoginViewModel", "Player is null")
                 emailErrorMessageId = R.string.invalid_username_or_password
