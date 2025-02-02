@@ -2,14 +2,17 @@ package com.example.pracainynierska.API.api_client
 
 import android.util.Log
 import com.example.pracainynierska.API.ApiDetails
+import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.context.PlayerContextInterface
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import kotlinx.serialization.json.Json
+
 
 class TaskApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext) {
-    private val createPath : String = "api/tasks"
+    private val taskPath : String = "api/tasks"
 
     fun addTask(
         type: String,
@@ -26,11 +29,49 @@ class TaskApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext)
         return request(Request
             .Builder()
             .addHeader("Authorization", "Bearer ${this.getToken()}")
-            .url(buildPath(createPath))
+            .url(buildPath(taskPath))
             .post(body)
             .build()
         )
     }
+
+    fun getTasks(): List<Task> {
+        val tasksRequest = Request
+            .Builder()
+            .addHeader("Authorization", "Bearer ${this.getToken()}")
+            .url(buildPath(taskPath))
+            .get()
+            .build()
+
+        val tasksResponse = apiClient.newCall(tasksRequest).execute()
+        val tasksResponseBody = tasksResponse.body?.string()
+        Log.d("Task API", tasksResponseBody.toString())
+
+        return if (tasksResponse.isSuccessful && tasksResponseBody != null) {
+            Json.decodeFromString<List<Task>>(tasksResponseBody)
+        } else {
+            emptyList()
+        }
+    }
+
+    fun completeTask(id: Int) {
+        val taskRequest = Request
+            .Builder()
+            .addHeader("Authorization", "Bearer ${this.getToken()}")
+            .url(buildPath("$taskPath/$id/complete"))
+            .patch(RequestBody.create(null, ByteArray(0)))
+            .build()
+
+        val response = apiClient.newCall(taskRequest).execute()
+
+        if (response.isSuccessful) {
+            Log.d("Task API", "Task $id marked as complete")
+        } else {
+            Log.e("Task API", "Failed to complete task $id: ${response.code}")
+        }
+    }
+
+
 
     private fun getCreateRequestBody(
         type: String,

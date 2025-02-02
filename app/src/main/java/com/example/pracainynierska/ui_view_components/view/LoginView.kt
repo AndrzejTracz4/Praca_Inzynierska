@@ -202,8 +202,6 @@ fun LoginView(navController: NavController, loginViewModel: LoginViewModel){
                             loginResult = false
                         }
                     }
-
-                    //loginViewModel.loginAPI()
                 },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier

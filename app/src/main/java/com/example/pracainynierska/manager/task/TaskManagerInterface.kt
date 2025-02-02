@@ -16,4 +16,7 @@ interface TaskManagerInterface {
 
     fun getTasksList(): LiveData<List<Task>>
     fun getTasks(): List<Task>
+
+    suspend fun getTasksViaApi()
+    suspend fun completeTask(id: Int)
 }
