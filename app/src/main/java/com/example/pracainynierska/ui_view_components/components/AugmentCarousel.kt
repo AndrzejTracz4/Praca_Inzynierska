@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,8 +40,29 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AugmentCarousel(augments: List<Augment>) {
+    if (augments.isEmpty()) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(
+                    color = Color(0x14FFFFFF),
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .padding(horizontal = 4.dp, vertical = 12.dp)
+                .padding(bottom = 10.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+            }
+        }
+        return
+    }
+
     var currentIndex by remember { mutableStateOf(0) }
-    var previousIndex by remember { mutableStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
     var isAnimating by remember { mutableStateOf(false) }
     var dragDirection by remember { mutableStateOf(0) }
