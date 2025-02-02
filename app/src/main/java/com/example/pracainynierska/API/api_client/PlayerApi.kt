@@ -1,5 +1,6 @@
 package com.example.pracainynierska.API.api_client
 
+import TaskManager
 import android.util.Log
 import com.example.pracainynierska.API.model.Token
 import com.example.pracainynierska.API.ApiDetails
@@ -14,6 +15,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.IOException
 
 class PlayerApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext) {
     private val loginCheckPath : String = "api/auth"
@@ -115,13 +117,23 @@ class PlayerApi(playerContext: PlayerContextInterface) : ApiDetails(playerContex
         val body = getUpdatePhotoPathRequestBody(userPhotoPath)
         Log.d("Player API", "Created body")
 
-        return request(Request
+        val userPhotoRequest = Request
             .Builder()
             .addHeader("Authorization", "Bearer ${this.getToken()}")
             .url(buildPath(updatePlayerPath + "/${getPlayer()?.id}"))
             .patch(body)
             .build()
-        )
+
+        try {
+            val response = apiClient.newCall(userPhotoRequest).execute()
+            if (!response.isSuccessful) {
+                throw IOException("Unexpected code: ${response.code}")
+            }
+        } catch (e: IOException) {
+            Log.e("Player API", "Error during request", e)
+            throw e
+        }
+
     }
 
     private fun getLoginRequestBody(email: String, password: String): RequestBody {

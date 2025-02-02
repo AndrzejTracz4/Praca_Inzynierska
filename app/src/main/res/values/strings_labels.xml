@@ -51,4 +51,9 @@
     <string name="calendar">Kalendarz</string>
     <string name="shop">Sklep</string>
     <string name="vacation_mode">Tryb wakacyjny</string>
+    <string name="confirm_action">Potwierdź akcję</string>
+    <string name="confirm_delete_category">Czy na pewno chcesz usunąć kategorię?</string>
+    <string name="confirm_delete_statistic">Czy na pewno chcesz usunąć statystykę?</string>
+    <string name="delete_category">Usuń kategorię</string>
+    <string name="delete_statistic">Usuń statystykę</string>
 </resources>

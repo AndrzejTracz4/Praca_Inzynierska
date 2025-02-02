@@ -8,8 +8,8 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.IOException
 import kotlinx.serialization.json.Json
-
 
 class TaskApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext) {
     private val taskPath : String = "api/tasks"
@@ -26,13 +26,35 @@ class TaskApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext)
         val body = getCreateRequestBody(type, name, description, category, difficulty, startsAt, endsAt)
         Log.d("Task API", "Created body")
 
-        return request(Request
+        val taskRequest = Request
             .Builder()
             .addHeader("Authorization", "Bearer ${this.getToken()}")
             .url(buildPath(taskPath))
             .post(body)
             .build()
-        )
+
+        try {
+            val response = apiClient.newCall(taskRequest).execute()
+            if (!response.isSuccessful) {
+                throw IOException("Unexpected code: ${response.code}")
+            }
+        } catch (e: IOException) {
+            Log.e("Task API", "Error during request", e)
+            throw e
+        }
+
+        // TODO: WAITING FOR SERVER TO ADD THIS CODE
+//        return suspendCoroutine { continuation ->
+//            request(taskRequest, Task.serializer()) { result ->
+//                result.onSuccess { task ->
+//                    Log.d("Task API", "Received task: $task")
+//                    continuation.resume(task)
+//                }.onFailure { error ->
+//                    Log.e("Task API", "Error: ${error.message}")
+//                    continuation.resumeWithException(error)
+//                }
+//            }
+//        }
     }
 
     fun getTasks(): List<Task> {
@@ -82,7 +104,6 @@ class TaskApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext)
         startsAt: String,
         endsAt: String
     ): RequestBody {
-
         val json = """
                 {
                     "type": "$type",

@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PlayerStatistics (
-    val statistics: List<Statistics>?
+    var statistics: MutableList<Statistic> = mutableListOf()
 )

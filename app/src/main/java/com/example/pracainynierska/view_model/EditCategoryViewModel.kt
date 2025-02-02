@@ -11,17 +11,48 @@ class EditCategoryViewModel (
     pc: PlayerContextInterface,
     private val categoryManager: CategoryManagerInterface
 ) : AbstractViewModel(pc) {
-    fun editCategory(id: Int, category: String, statisticIds: ArrayList<String>) {
+    fun editCategory(id: Int, category: String, statisticIds: ArrayList<String>, onSuccess: () -> Unit, onError: () -> Unit) {
         viewModelScope.launch {
             try {
                 Log.d("EditCategoryViewModel", "Editing category")
-                categoryManager.edit(id, category, statisticIds)
+
+                val updatedCategory = categoryManager.edit(id, category, statisticIds)
+
+                Log.d("EditCategoryViewModel", "Category updated: $updatedCategory")
+
+                if (updatedCategory != null) {
+                    playerContext.editPlayerCategory(updatedCategory)
+                    onSuccess()
+                }
             } catch (e: RequestValidationException) {
                 Log.e("EditCategoryViewModel", "EditingError - validation exception")
-                throw e
+                onError()
             } catch (e: Exception) {
                 Log.e("EditCategoryViewModel - Editing failed", e.message.toString())
-                throw e
+                onError()
+            }
+        }
+    }
+
+    fun deleteCategory(id: Int, onSuccess: () -> Unit, onError: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                Log.d("EditCategoryViewModel", "Deleting category")
+
+                val deletedCategory = categoryManager.delete(id)
+
+                Log.d("EditCategoryViewModel", "Category deleted: $deletedCategory")
+
+                if (deletedCategory) {
+                    playerContext.removePlayerCategory(id)
+                    onSuccess()
+                }
+            } catch (e: RequestValidationException) {
+                Log.e("EditCategoryViewModel", "DeletingError - validation exception")
+                onError()
+            } catch (e: Exception) {
+                Log.e("EditCategoryViewModel - Deleting failed", e.message.toString())
+                onError()
             }
         }
     }

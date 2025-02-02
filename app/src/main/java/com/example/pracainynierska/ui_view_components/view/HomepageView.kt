@@ -46,7 +46,7 @@ import com.example.pracainynierska.dictionary.RankDictionary
 import com.example.pracainynierska.dictionary.StatGradient
 import com.example.pracainynierska.dictionary.StatIcon
 import com.example.pracainynierska.model.FakeData
-import com.example.pracainynierska.ui_view_components.components.AugmentList
+import com.example.pracainynierska.ui_view_components.components.AugmentCarousel
 import com.example.pracainynierska.ui_view_components.components.DailyTaskCard
 import com.example.pracainynierska.ui_view_components.components.DailyTaskDetailsDialog
 import com.example.pracainynierska.ui_view_components.components.GradientLevelProgressBar
@@ -196,7 +196,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
 
                             Spacer(modifier = Modifier.height(4.dp))
 
-                            Row {
+                            Row(modifier = Modifier.fillMaxWidth()) {
                                 Text(
                                     text = stringResource(R.string.experience),
                                     fontSize = 12.sp,
@@ -210,7 +210,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                                     )
                                 )
 
-                                Spacer(modifier = Modifier.width(105.dp))
+                                Spacer(modifier = Modifier.weight(1f))
 
                                 Text(
                                     text = "${playerExperience.toInt()}/100",
@@ -246,7 +246,7 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                             GradientStatProgressBar(
                                 iconResId = StatIcon.fromIconPath(stat.iconPath)?.rawResId ?: R.raw.intelligence_bar,
                                 name = stat.name,
-                                experience = stat.experience,
+                                experience = stat.experience ?: 0,
                                 gradient = gradient
                             )
 
@@ -299,13 +299,10 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .fillMaxHeight(0.9f)
+                                    .fillMaxHeight()
                                     .clip(RoundedCornerShape(10.dp))
                             ){
-                                if (false == (viewModel is HomepageViewModel)) {
-                                    throw Exception("Invalid View Model")
-                                }
-                                AugmentList(playerAugments)
+                                AugmentCarousel(playerAugments)
                             }
 
                         }

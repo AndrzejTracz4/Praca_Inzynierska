@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,7 +44,9 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.StatIcon
-import com.example.pracainynierska.ui_view_components.components.CustomCreateStatisticButton
+import com.example.pracainynierska.dictionary.ViewRoutes
+import com.example.pracainynierska.ui_view_components.components.CustomAlertDialog
+import com.example.pracainynierska.ui_view_components.components.CustomSubmitStatisticButton
 import com.example.pracainynierska.ui_view_components.components.GeneralTextField
 import com.example.pracainynierska.view_model.AddStatisticViewModel
 
@@ -58,10 +61,17 @@ class AddStatisticView(
         innerPadding: PaddingValues
     ) {
 
+        if (false == viewModel is AddStatisticViewModel) {
+            throw IllegalStateException("Invalid view model type")
+        }
+
         var statisticName by remember { mutableStateOf("") }
         var isStatValid by remember { mutableStateOf(false) }
         val showAlert = remember { mutableStateOf(false) }
-        val showSuccessAlert = remember { mutableStateOf(false) }
+        val alertTitleId = remember { mutableIntStateOf(R.string.error) }
+        val alertMessageId = remember { mutableIntStateOf(R.string.validation_required_name_statistic) }
+        val isValid = remember { mutableStateOf(false) }
+        val forward = remember { mutableStateOf(false) }
 
         var selectedIcon by remember { mutableStateOf(StatIcon.DETERMINATION_BAR.iconPath) }
 
@@ -165,21 +175,44 @@ class AddStatisticView(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            CustomCreateStatisticButton(
-                onCreateClick = {
-                    if (false == viewModel is AddStatisticViewModel) {
-                        throw IllegalStateException("Invalid view model type")
+            CustomSubmitStatisticButton(
+                validate = {
+                    isValid.value = statisticName.isNotEmpty()
+                    alertMessageId.intValue = when {
+                        !isValid.value -> R.string.validation_required_name_statistic
+                        else -> alertMessageId.intValue
                     }
-                    viewModel.addStatistic(statisticName, selectedIcon)
                 },
-                isStatValid = isStatValid,
+                label = stringResource(R.string.create),
+                icon = R.drawable.plus_square,
+                onCreateClick = {
+                    viewModel.addStatistic(
+                        statisticName,
+                        selectedIcon,
+                        onSuccess = {
+                            forward.value = true
+                            alertMessageId.intValue = R.string.success_statistic_create
+                            alertTitleId.intValue = R.string.success
+                            showAlert.value = true
+                        },
+                        onError = {
+                            forward.value = false
+                            alertMessageId.intValue = R.string.error_statistic_create
+                            alertTitleId.intValue = R.string.error
+                            showAlert.value = true
+                        }
+                    )
+                },
                 showAlert = showAlert,
-                showSuccessAlert = showSuccessAlert,
-                alertMessage = when {
-                    !isStatValid -> stringResource(R.string.validation_invalid_statistic)
-                    else -> ""
-                },
-                successMessage = stringResource(R.string.success_statistic_create)
+                isStatValid = statisticName.isNotEmpty(),
+            )
+
+            CustomAlertDialog(
+                showAlert = showAlert,
+                alertTitleId = alertTitleId.intValue,
+                alertMessageId = alertMessageId.intValue,
+                toForward = forward.value && isValid.value,
+                onConfirmClick = { navController.navigate(ViewRoutes.CATEGORIES.viewName) }
             )
 
             Spacer(modifier = Modifier.height(75.dp))

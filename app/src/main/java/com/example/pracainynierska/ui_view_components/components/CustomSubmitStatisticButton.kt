@@ -10,10 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -27,14 +25,15 @@ import androidx.compose.ui.unit.sp
 import com.example.pracainynierska.R
 
 @Composable
-fun CustomCreateStatisticButton(
+fun CustomSubmitStatisticButton(
+    label: String,
+    icon: Int,
     onCreateClick: () -> Unit,
+    validate: () -> Unit,
     isStatValid: Boolean,
     showAlert: MutableState<Boolean>,
-    showSuccessAlert: MutableState<Boolean>,
-    alertMessage: String,
-    successMessage: String
 ) {
+
     Box(
         modifier = Modifier
             .height(75.dp)
@@ -44,9 +43,9 @@ fun CustomCreateStatisticButton(
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable {
+                validate()
                 if (isStatValid) {
                     onCreateClick()
-                    showSuccessAlert.value = true
                 } else {
                     showAlert.value = true
                 }
@@ -58,51 +57,19 @@ fun CustomCreateStatisticButton(
             modifier = Modifier.fillMaxSize()
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.plus_square),
+                painter = painterResource(id = icon),
                 contentDescription = stringResource(R.string.icon_statistic_description),
                 modifier = Modifier.size(24.dp),
                 tint = Color.White
             )
 
             Text(
-                text = stringResource(R.string.create),
+                text = label,
                 color = Color.White,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.ExtraBold,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
-    }
-
-    if (showAlert.value) {
-        AlertDialog(
-            onDismissRequest = { showAlert.value = false },
-            title = { Text(stringResource(R.string.validation_error)) },
-            text = { Text(alertMessage) },
-            confirmButton = {
-                TextButton(
-                    onClick = { showAlert.value = false }
-                ) {
-                    Text(stringResource(R.string.ok))
-                }
-            }
-        )
-    }
-
-    if (showSuccessAlert.value) {
-        AlertDialog(
-            onDismissRequest = { showSuccessAlert.value = false },
-            title = { Text("Sukces!") },
-            text = { Text(successMessage) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showSuccessAlert.value = false
-                    }
-                ) {
-                    Text("OK")
-                }
-            }
-        )
     }
 }

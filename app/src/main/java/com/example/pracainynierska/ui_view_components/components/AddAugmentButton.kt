@@ -38,10 +38,6 @@ import com.example.pracainynierska.view_model.ShopViewModel
 fun AddAugmentButton(
     onClick: () -> Unit = {}
 ) {
-    var showDialog by remember { mutableStateOf(false) }
-    var dialogMessage by remember { mutableStateOf("") }
-    var dialogTitle by remember { mutableStateOf("") }
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -79,22 +75,5 @@ fun AddAugmentButton(
                     .padding(start = 8.dp)
             )
         }
-    }
-
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text(text = dialogTitle) },
-            text = { Text(text = dialogMessage) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showDialog = false
-                    }
-                ) {
-                    Text(stringResource(R.string.ok))
-                }
-            }
-        )
     }
 }

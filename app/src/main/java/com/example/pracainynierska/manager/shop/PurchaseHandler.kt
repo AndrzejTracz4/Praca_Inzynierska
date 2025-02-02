@@ -1,5 +1,6 @@
 package com.example.pracainynierska.manager.shop
 
+import com.example.pracainynierska.API.model.Augment
 import com.example.pracainynierska.API.model.Player
 import com.example.pracainynierska.manager.augment.AugmentManager
 import kotlinx.coroutines.Dispatchers
@@ -14,11 +15,11 @@ class PurchaseHandler(
     }
 
     override suspend fun handle(
-        type : String,
-        multiplier : Int,
-        validForDays : Int,
-        category : String,
-    ) {
+        type: String,
+        multiplier: Int,
+        validForDays: Int,
+        category: String,
+    ): Augment? {
         return withContext(Dispatchers.IO) {
             augmentManager.addAugment(
                 type = type,
@@ -27,5 +28,6 @@ class PurchaseHandler(
                 category = category
             )
         }
+
     }
 }

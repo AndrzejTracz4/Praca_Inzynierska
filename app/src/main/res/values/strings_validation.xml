@@ -26,7 +26,16 @@
     <string name="success_category_create">Kategoria została pomyślnie utworzona!</string>
     <string name="success_category_update">Kategoria została pomyślnie edytowana!</string>
     <string name="success_statistic_create">Statystyka została pomyślnie utworzona!</string>
+    <string name="success_statistic_update">Statystyka została pomyślnie edytowana!</string>
     <string name="success_password_change">Hasło zostało zmienione pomyślnie.</string>
     <string name="success_creation_statistics">Statystyka została pomyślnie utworzona.</string>
     <string name="success_registration_user">Pomyślnie zarejestrowano użytkownika</string>
+    <string name="success_augment_purchase">Pomyślnie zakupiono booster!</string>
+    <string name="error_augment_purchase">Nie zakupiono boostera!</string>
+    <string name="error_category_create">Nie udało się utworzyć kategorii!</string>
+    <string name="error_category_update">Nie udało się edytować kategorii!</string>
+    <string name="error_category_delete">Nie udało się usunąć kategorii!</string>
+    <string name="error_statistic_create">Nie udało się utworzyć statystyki!</string>
+    <string name="error_statistic_update">Nie udało się edytować statystyki!</string>
+    <string name="error_statistic_delete">Nie udało się usunąć statystyki!</string>
 </resources>

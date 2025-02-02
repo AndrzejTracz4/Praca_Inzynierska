@@ -3,12 +3,15 @@ package com.example.pracainynierska.API
 import android.util.Log
 import com.example.pracainynierska.API.Exception.RequestFailedException
 import com.example.pracainynierska.API.model.Player
-import com.example.pracainynierska.API.model.error_response.ValidationErrorResponse
 import com.example.pracainynierska.context.PlayerContextInterface
+import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.json.Json
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import com.example.pracainynierska.API.factory.RequestValidationExceptionFactory
+import okhttp3.Response
+import java.io.IOException
 
 
 open class ApiDetails(private var playerContext: PlayerContextInterface) {
@@ -16,37 +19,38 @@ open class ApiDetails(private var playerContext: PlayerContextInterface) {
 
     protected val apiClient = OkHttpClient()
 
-    private val RequestValidationExceptionFactory = RequestValidationExceptionFactory()
+    fun <T> request(request: Request, responseType: DeserializationStrategy<T>, callback: (Result<T>) -> Unit) {
+        Log.d("API Details", "Created request")
 
-    fun request (request: Request) {
-        Log.d("Category API", "Created request")
-        val response = apiClient.newCall(request).execute()
-
-        Log.d("Category API", "Sent request")
-        val responseBody = response.body?.string()
-        Log.d("Category API", responseBody.toString())
-
-
-        if (response.isSuccessful && responseBody != null) {
-            Log.d("Category API Success", responseBody.toString())
-            val jsonBuilder = Json { ignoreUnknownKeys = true }
-            return jsonBuilder.decodeFromString(responseBody)
-        }
-
-        if (!response.isSuccessful) {
-            val json = responseBody.toString();
-            Log.d("Category API Failed", json)
-            val jsonBuilder = Json { ignoreUnknownKeys = true }
-            if (422 == response.code) {
-                val errorResponse = jsonBuilder.decodeFromString<ValidationErrorResponse>(json)
-                val exception = RequestValidationExceptionFactory.create(errorResponse)
-                throw exception
+        apiClient.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("API Details", "Request failed: ${e.message}")
+                callback(Result.failure(e))
             }
 
-            Log.d("Category API Failed", response.code.toString())
-            throw RequestFailedException(responseBody.toString());
-        }
+            override fun onResponse(call: Call, response: Response) {
+                response.use {
+                    val responseBody = response.body?.string()
+                    Log.d("API Details", "Response: $responseBody")
+
+                    if (!response.isSuccessful || responseBody.isNullOrEmpty()) {
+                        val error = RequestFailedException(response.code.toString())
+                        callback(Result.failure(error))
+                        return
+                    }
+
+                    try {
+                        val jsonBuilder = Json { ignoreUnknownKeys = true }
+                        val result = jsonBuilder.decodeFromString(responseType, responseBody)
+                        callback(Result.success(result))
+                    } catch (e: Exception) {
+                        callback(Result.failure(e))
+                    }
+                }
+            }
+        })
     }
+
 
     fun reinitializeApiClient() {
         val token = getToken()

@@ -6,15 +6,14 @@ import androidx.lifecycle.ViewModel
 import com.example.pracainynierska.API.model.Augment
 import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.API.model.Player
-import com.example.pracainynierska.API.model.PlayerStatistics
-import com.example.pracainynierska.API.model.Statistics
+import com.example.pracainynierska.API.model.Statistic
 import com.example.pracainynierska.context.PlayerContextInterface
 
 abstract class AbstractViewModel(protected val playerContext: PlayerContextInterface) : ViewModel() {
     private val _player = MutableLiveData<Player>()
     val player: LiveData<Player> get() = _player
 
-    fun getPlayerStatistics(): List<Statistics>? {
+    fun getPlayerStatistics(): List<Statistic> {
         return playerContext.getPlayerStatistics().statistics
     }
 

@@ -32,6 +32,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,16 +49,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.API.model.Category
-import com.example.pracainynierska.API.model.Statistics
+import com.example.pracainynierska.API.model.Statistic
 import com.example.pracainynierska.R
+import com.example.pracainynierska.dictionary.ViewRoutes
+import com.example.pracainynierska.ui_view_components.components.CustomAlertDialog
+import com.example.pracainynierska.ui_view_components.components.CustomDeleteButton
 import com.example.pracainynierska.ui_view_components.components.CustomSubmitCategoryButton
 import com.example.pracainynierska.ui_view_components.components.GeneralTextField
-import com.example.pracainynierska.view_model.AddCategoryViewModel
 import com.example.pracainynierska.view_model.EditCategoryViewModel
 
-class EditCategoryView (private var categoryToEdit: Category,
-                        viewModel: EditCategoryViewModel,
-                        navController: NavController,
+class EditCategoryView(
+    private var categoryToEdit: Category,
+    viewModel: EditCategoryViewModel,
+    navController: NavController,
 ) : AbstractView(viewModel, navController) {
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -66,15 +70,21 @@ class EditCategoryView (private var categoryToEdit: Category,
         innerPadding: PaddingValues
     ) {
 
+        if (false == viewModel is EditCategoryViewModel) {
+            throw IllegalStateException("Invalid view model type")
+        }
+
         var categoryName by remember { mutableStateOf(categoryToEdit.name) }
         var searchQuery by remember { mutableStateOf("") }
         var isCategoryValid by remember { mutableStateOf(true) }
         var isStatsValid by remember { mutableStateOf(true) }
         var activeDialogIndex by remember { mutableStateOf(-1) }
         val showAlert = remember { mutableStateOf(false) }
-        val showSuccessAlert = remember { mutableStateOf(false) }
+        val showDeleteAlert = remember { mutableStateOf(false) }
+        val alertTitleId = remember { mutableIntStateOf(R.string.error) }
+        val alertMessageId = remember { mutableIntStateOf(R.string.validation_invalid_category) }
         val selectedStats = remember {
-            mutableStateListOf<Statistics?>().apply {
+            mutableStateListOf<Statistic?>().apply {
                 addAll(categoryToEdit.statistics)
                 while (size < 4) {
                     add(null)
@@ -213,7 +223,7 @@ class EditCategoryView (private var categoryToEdit: Category,
 
                                 Spacer(modifier = Modifier.height(8.dp))
 
-                                val filteredStats = availableStats?.filter {
+                                val filteredStats = availableStats.filter {
                                     it.id.toString().contains(searchQuery, ignoreCase = true) &&
                                             !selectedStats.contains(it)
                                 }
@@ -223,7 +233,7 @@ class EditCategoryView (private var categoryToEdit: Category,
                                         .fillMaxWidth()
                                         .heightIn(max = 200.dp)
                                 ) {
-                                    itemsIndexed(filteredStats ?: emptyList()) { index, stat ->
+                                    itemsIndexed(filteredStats) { index, stat ->
                                         TextButton(
                                             onClick = {
                                                 selectedStats[activeDialogIndex] = stat
@@ -257,29 +267,76 @@ class EditCategoryView (private var categoryToEdit: Category,
 
             Spacer(modifier = Modifier.weight(1f))
 
+            CustomDeleteButton(
+                label = stringResource(R.string.delete_category),
+                message = stringResource(R.string.confirm_delete_category),
+                onDeleteClick = {
+                    viewModel.deleteCategory(
+                        id = categoryToEdit.id,
+                        onSuccess = {
+                            navController.navigate(ViewRoutes.CATEGORIES.viewName) {
+                                popUpTo(
+                                    navController.currentBackStackEntry?.destination?.id
+                                        ?: return@navigate
+                                ) {
+                                    inclusive = true
+                                }
+                            }
+                        },
+                        onError = {
+                            alertMessageId.intValue = R.string.error_category_delete
+                            alertTitleId.intValue = R.string.error
+                            showAlert.value = true
+                        }
+                    )
+                },
+                showAlert = showDeleteAlert
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             CustomSubmitCategoryButton(
+                validate = {
+                    alertMessageId.intValue = when {
+                        !isCategoryValid -> R.string.validation_invalid_category
+                        !isStatsValid -> R.string.validation_empty_statistics
+                        else -> alertMessageId.intValue
+                    }
+                },
                 label = stringResource(R.string.edit),
                 icon = R.drawable.edit,
                 onCreateClick = {
-                    if (false == viewModel is EditCategoryViewModel) {
-                        throw IllegalStateException("Invalid view model type")
-                    }
                     val list = ArrayList(selectedStats
                         .filterNotNull()
                         .map { it.id.toString() }
                     )
-                    viewModel.editCategory(categoryToEdit.id, categoryName, list)
+                    viewModel.editCategory(
+                        categoryToEdit.id,
+                        categoryName,
+                        list,
+                        onSuccess = {
+                            alertMessageId.intValue = R.string.success_category_update
+                            alertTitleId.intValue = R.string.success
+                            showAlert.value = true
+                        },
+                        onError = {
+                            alertMessageId.intValue = R.string.error_category_update
+                            alertTitleId.intValue = R.string.error
+                            showAlert.value = true
+                        }
+                    )
                 },
                 isCategoryValid = isCategoryValid,
                 isStatsValid = isStatsValid,
                 showAlert = showAlert,
-                showSuccessAlert = showSuccessAlert,
-                alertMessage = when {
-                    !isCategoryValid -> stringResource(R.string.validation_invalid_category)
-                    !isStatsValid -> stringResource(R.string.validation_empty_statistics)
-                    else -> ""
-                },
-                successMessage = stringResource(R.string.success_category_update)
+            )
+
+            CustomAlertDialog(
+                showAlert = showAlert,
+                alertTitleId = alertTitleId.intValue,
+                alertMessageId = alertMessageId.intValue,
+                toForward = isCategoryValid && isStatsValid,
+                onConfirmClick = { navController.navigate(ViewRoutes.CATEGORIES.viewName) }
             )
 
             Spacer(modifier = Modifier.height(75.dp))

@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -42,8 +44,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
+import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.dictionary.types.AugmentTypes
 import com.example.pracainynierska.ui_view_components.components.AddAugmentButton
+import com.example.pracainynierska.ui_view_components.components.CustomAlertDialog
 import com.example.pracainynierska.ui_view_components.components.CustomSlider
 import com.example.pracainynierska.ui_view_components.components.CustomSliderDefaults
 import com.example.pracainynierska.ui_view_components.components.ShopSelectButton
@@ -63,18 +67,21 @@ class ShopView(shopViewModel: ShopViewModel,
         innerPadding: PaddingValues
     ) {
 
-        var selectedCategory by remember { mutableIntStateOf(0) }
-        var selectedShopMode by remember { mutableStateOf(AugmentTypes.SHIELD) }
-        var sliderValueTime by remember { mutableFloatStateOf(10f) }
-        var validForDays by remember { mutableStateOf((sliderValueTime / 10).toInt()) }
-        var sliderValueMultiplier by remember { mutableFloatStateOf(20f) }
-        var costValue by remember { mutableIntStateOf(0) }
-        var isHidden by remember { mutableStateOf(true) }
-        val playerCategories = viewModel.getPlayerCategories()
-
         if (false == (viewModel is ShopViewModel)){
             throw Exception("Invalid View Model")
         }
+
+        var selectedCategory by remember { mutableIntStateOf(0) }
+        var selectedShopMode by remember { mutableStateOf(AugmentTypes.SHIELD) }
+        var sliderValueTime by remember { mutableFloatStateOf(10f) }
+        var sliderValueMultiplier by remember { mutableFloatStateOf(20f) }
+        var costValue by remember { mutableIntStateOf(0) }
+        var isHidden by remember { mutableStateOf(true) }
+        val showAlert = remember { mutableStateOf(false) }
+        val alertTitleId = remember { mutableIntStateOf(R.string.error) }
+        val forward = remember { mutableStateOf(false) }
+        val alertMessageId = remember { mutableIntStateOf(0) }
+        val playerCategories = viewModel.getPlayerCategories()
 
         costValue = viewModel.calculateCost(
             type = selectedShopMode,
@@ -259,19 +266,27 @@ class ShopView(shopViewModel: ShopViewModel,
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Column {
-                    playerCategories.forEach{category ->
-                        ShopSelectButton(
-                            text = category.name,
-                            isSelected = selectedCategory == category.id,
-                            onClick = {
-                                selectedCategory = category.id },
-                            iconResId = null
-                        )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Column {
+                        playerCategories.forEach { category ->
+                            ShopSelectButton(
+                                text = category.name,
+                                isSelected = selectedCategory == category.id,
+                                onClick = {
+                                    selectedCategory = category.id
+                                },
+                                iconResId = null
+                            )
+                        }
                     }
                 }
 
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
                     modifier = Modifier
@@ -296,18 +311,36 @@ class ShopView(shopViewModel: ShopViewModel,
                     )
                 }
 
-
                 AddAugmentButton(
                     onClick = {
-                        require(viewModel is ShopViewModel) { "Invalid View Model" }
                         viewModel.buyBooster(
                             type = selectedShopMode,
                             validForDays = (sliderValueTime / 10).toInt(),
                             multiplier = sliderValueMultiplier.toInt(),
                             category = "/api/categories/$selectedCategory",
-                            price = costValue
+                            price = costValue,
+                            onSuccess = {
+                                forward.value = true
+                                alertTitleId.intValue = R.string.success
+                                alertMessageId.intValue = R.string.success_augment_purchase
+                                showAlert.value = true
+                            },
+                            onError = {
+                                forward.value = false
+                                alertTitleId.intValue = R.string.error
+                                alertMessageId.intValue = R.string.error_augment_purchase
+                                showAlert.value = true
+                            }
                         )
                     }
+                )
+
+                CustomAlertDialog(
+                    showAlert = showAlert,
+                    alertTitleId = alertTitleId.intValue,
+                    alertMessageId = alertMessageId.intValue,
+                    toForward = forward.value,
+                    onConfirmClick = { navController.navigate(ViewRoutes.HOMEPAGE.viewName) }
                 )
 
                 Spacer(modifier = Modifier.height(75.dp))
