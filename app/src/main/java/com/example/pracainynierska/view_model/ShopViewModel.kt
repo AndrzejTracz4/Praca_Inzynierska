@@ -45,8 +45,13 @@ class ShopViewModel(
         onError: () -> Unit
     ) {
         if (!checkIfCanAfford(price)) {
-            throw Exception("Insufficient funds")
-            //todo add insufficient funds message
+            onError()
+            return
+        }
+
+        if(category == "/api/categories/0") {
+            onError()
+            return
         }
 
         viewModelScope.launch {

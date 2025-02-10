@@ -1,6 +1,8 @@
 package com.example.pracainynierska.ui_view_components.components
 
 import TaskDetailsButton
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,19 +23,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.navigation.NavController
-import com.example.pracainynierska.R
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pracainynierska.API.model.Task
-import com.example.pracainynierska.view_model.TaskViewModel
+import com.example.pracainynierska.R
+import com.example.pracainynierska.dictionary.TaskDifficulty
+import com.example.pracainynierska.dictionary.TaskStatus
+import com.example.pracainynierska.dictionary.types.TaskType
+import com.example.pracainynierska.view_model.CalendarsViewModel
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TaskDetailsDialog(
-    navController: NavController,
-    taskViewModel: TaskViewModel,
+    calendarsViewModel: CalendarsViewModel,
     task: Task,
     onDismiss: () -> Unit,
     onEdit: () -> Unit
 ) {
+
+    val type = TaskType.fromKey(task.type) ?: TaskType.ONE_TIME
+    val difficulty = TaskDifficulty.fromKey(task.difficulty) ?: TaskDifficulty.EASY
+    val status = TaskStatus.fromKey(task.status) ?: TaskStatus.NEW
+
     Dialog(onDismissRequest = { onDismiss() }) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -73,7 +86,7 @@ fun TaskDetailsDialog(
                             fontWeight = FontWeight.Normal
                         )
                         Text(
-                            text = task.difficulty,
+                            text = difficulty.displayName,
                             color = Color.White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
@@ -122,7 +135,7 @@ fun TaskDetailsDialog(
                             fontWeight = FontWeight.Normal
                         )
                         Text(
-                            text = task.startDate,
+                            text = formatDate(task.startsAt),
                             color = Color.White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
@@ -137,43 +150,57 @@ fun TaskDetailsDialog(
                             fontWeight = FontWeight.Normal
                         )
                         Text(
-                            text = task.endDate,
+                            text = formatDate(task.endsAt),
                             color = Color.White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    if ((status == TaskStatus.NEW || status == TaskStatus.ACCEPTED) && type != TaskType.CHALLENGE) {
+                        Spacer(modifier = Modifier.height(24.dp))
 
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        TaskDetailsButton(
-                            text = stringResource(R.string.execute),
-                            color = Color(0xFF3CB043),
-                            onClick = { /* TODO: TASK EXECUTION */ }
-                        )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            TaskDetailsButton(
+                                text = stringResource(R.string.execute),
+                                color = Color(0xFF3CB043),
+                                onClick = {
+                                    calendarsViewModel.completeTask(task.id)
+                                }
+                            )
 
-                        TaskDetailsButton(
-                            text = stringResource(R.string.edit),
-                            color = Color(0xFFFFFF00),
-                            onClick = onEdit
-                        )
+                            if (status == TaskStatus.ACCEPTED) {
+                                TaskDetailsButton(
+                                    text = stringResource(R.string.edit),
+                                    color = Color.Yellow,
+                                    onClick = onEdit
+                                )
 
-                        TaskDetailsButton(
-                            text = stringResource(R.string.cancel),
-                            color = Color(0xFFFF0000),
-                            onClick = {
-                                taskViewModel.deleteTask(task.id)
-                                //navController.navigate("CalendarsView")
-                                onDismiss()
+                                TaskDetailsButton(
+                                    text = stringResource(R.string.cancel),
+                                    color = Color.Red,
+                                    onClick = onDismiss
+                                )
                             }
-                        )
+                        }
                     }
+
                 }
             }
         }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun formatDate(dateString: String): String {
+    return try {
+        val zonedDateTime = ZonedDateTime.parse(dateString)
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
+        zonedDateTime.format(formatter)
+    } catch (e: DateTimeParseException) {
+        "Invalid date"
     }
 }

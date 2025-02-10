@@ -1,7 +1,15 @@
 package com.example.pracainynierska.dictionary.types
 
-object TaskTypes {
-    const val RECURRING = "recurring"
-    const val ONE_TIME = "one_time"
-    const val CHALLENGE = "challenge"
+import com.example.pracainynierska.R
+
+enum class TaskType(val key: String, val displayName: String, val iconResId: Int) {
+    RECURRING("recurring", "Cykliczne", R.drawable.repeat),
+    ONE_TIME("one_time", "Jednorazowe", R.drawable.repeat_single),
+    CHALLENGE("challenge", "Wyzwanie", R.drawable.daily_task);
+
+    companion object {
+        fun fromKey(key: String): TaskType? {
+            return entries.find { it.key == key }
+        }
+    }
 }

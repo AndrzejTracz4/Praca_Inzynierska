@@ -29,7 +29,7 @@
     <string name="end_date">Data zakończenia</string>
     <string name="interval">Interwał</string>
     <string name="measure">Miara</string>
-    <string name="difficulty_level">Poziom trudności</string>
+    <string name="difficulty_level">"Poziom trudności "</string>
     <string name="categories">Kategorie</string>
     <string name="select_statistics">Wybierz statystyki</string>
     <string name="select_statistic_label">Wybierz statystykę</string>
@@ -37,6 +37,8 @@
     <string name="Close">Zamknij</string>
     <string name="Achievements">Osiągnięcia</string>
     <string name="pick_up">Odbierz</string>
+    <string name="already_claimed">Odebrane</string>
+    <string name="incomplete">Nieukończone</string>
     <string name="confirm">Potwierdź</string>
     <string name="minute">Minuta</string>
     <string name="hour">Godzina</string>

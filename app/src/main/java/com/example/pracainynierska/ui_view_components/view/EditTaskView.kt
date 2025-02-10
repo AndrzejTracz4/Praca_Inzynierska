@@ -43,22 +43,23 @@ import androidx.navigation.NavController
 import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.TaskDifficulty
+import com.example.pracainynierska.dictionary.TaskUnit
 import com.example.pracainynierska.dictionary.ViewRoutes
-import com.example.pracainynierska.dictionary.types.TaskTypes
+import com.example.pracainynierska.dictionary.types.TaskType
 import com.example.pracainynierska.ui_view_components.components.CustomDatePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomMeasurePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomNumberPickerField
 import com.example.pracainynierska.ui_view_components.components.DateTimePickerDialog
 import com.example.pracainynierska.ui_view_components.components.EditTaskButton
+import com.example.pracainynierska.ui_view_components.components.GeneralTextField
 import com.example.pracainynierska.ui_view_components.components.NumberPickerDialog
 import com.example.pracainynierska.ui_view_components.components.SelectTaskButton
-import com.example.pracainynierska.ui_view_components.components.GeneralTextField
-import com.example.pracainynierska.view_model.TaskViewModel
+import com.example.pracainynierska.view_model.EditTaskViewModel
 
-class EditTaskView(taskViewModel: TaskViewModel,
+class EditTaskView(editTaskViewModel: EditTaskViewModel,
                    navController: NavController,
                    private var taskToEdit: Task
-) : AbstractView(taskViewModel, navController) {
+) : AbstractView(editTaskViewModel, navController) {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -70,17 +71,17 @@ class EditTaskView(taskViewModel: TaskViewModel,
         val focusManager = LocalFocusManager.current
 
         var selectedEditTaskMode by remember { mutableStateOf(taskToEdit.type) }
-        var isHidden by remember { mutableStateOf(selectedEditTaskMode == TaskTypes.ONE_TIME) }
+        var isHidden by remember { mutableStateOf(selectedEditTaskMode == TaskType.ONE_TIME.key) }
         var taskName by remember { mutableStateOf(taskToEdit.name) }
-        var selectedDifficulty by remember { mutableStateOf(taskToEdit.difficulty) }
+        var selectedDifficulty by remember { mutableStateOf(TaskDifficulty.fromKey(taskToEdit.difficulty)) }
         var selectedCategoryId by remember { mutableIntStateOf(taskToEdit.category.id) }
         var showStartDatePicker by remember { mutableStateOf(false) }
         var showEndDatePicker by remember { mutableStateOf(false) }
         var showNumberPicker by remember { mutableStateOf(false) }
-        var selectedMeasureUnit by remember { mutableStateOf(taskToEdit.measureUnit) }
+        var selectedMeasureUnit by remember { mutableStateOf(TaskUnit.fromKey(taskToEdit.measureUnit)) }
         var showMeasurePicker by remember { mutableStateOf(false) }
-        var selectedStartDate by remember { mutableStateOf(taskToEdit.startDate) }
-        var selectedEndDate by remember { mutableStateOf(taskToEdit.endDate) }
+        var selectedStartDate by remember { mutableStateOf(taskToEdit.startsAt) }
+        var selectedEndDate by remember { mutableStateOf(taskToEdit.endsAt) }
         var interval by remember { mutableIntStateOf(taskToEdit.interval) }
         var taskDescription by remember { mutableStateOf(taskToEdit.description) }
 
@@ -88,7 +89,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
 
         val playerCategories = viewModel.getPlayerCategories()
 
-        if (false == (viewModel is TaskViewModel)){
+        if (false == (viewModel is EditTaskViewModel)){
             throw Exception("Invalid View Model")
         }
 
@@ -126,9 +127,9 @@ class EditTaskView(taskViewModel: TaskViewModel,
                 ) {
                     SelectTaskButton(
                         text = stringResource(R.string.daily_task),
-                        isSelected = selectedEditTaskMode == TaskTypes.ONE_TIME,
+                        isSelected = selectedEditTaskMode == TaskType.ONE_TIME.key,
                         onClick = {
-                            selectedEditTaskMode = TaskTypes.ONE_TIME
+                            selectedEditTaskMode = TaskType.ONE_TIME.key
                             isHidden = true
                         },
                         iconResId = R.drawable.repeat_single,
@@ -140,9 +141,9 @@ class EditTaskView(taskViewModel: TaskViewModel,
 
                     SelectTaskButton(
                         text = stringResource(R.string.cyclical_task),
-                        isSelected = selectedEditTaskMode == TaskTypes.RECURRING,
+                        isSelected = selectedEditTaskMode == TaskType.RECURRING.key,
                         onClick = {
-                            selectedEditTaskMode = TaskTypes.RECURRING
+                            selectedEditTaskMode = TaskType.RECURRING.key
                             isHidden = false
                         },
                         iconResId = R.drawable.repeat,
@@ -273,7 +274,7 @@ class EditTaskView(taskViewModel: TaskViewModel,
                             Spacer(modifier = Modifier.height(4.dp))
 
                             CustomMeasurePickerField(
-                                selectedMeasureUnit = selectedMeasureUnit,
+                                selectedMeasureUnit = selectedMeasureUnit ?: TaskUnit.MINUTES,
                                 onMeasureUnitSelected = { unit -> selectedMeasureUnit = unit },
                                 showMeasurePicker = showMeasurePicker,
                                 setShowMeasurePicker = { showMeasurePicker = it },
@@ -300,8 +301,8 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         TaskDifficulty.entries.forEach { difficulty ->
                             SelectTaskButton(
                                 text = difficulty.displayName,
-                                isSelected = selectedDifficulty == difficulty.displayName,
-                                onClick = { selectedDifficulty = difficulty.displayName },
+                                isSelected = selectedDifficulty == difficulty,
+                                onClick = { selectedDifficulty = difficulty },
                                 iconResId = difficulty.iconResId,
                                 modifier = Modifier.weight(1f),
                                 color = true
@@ -337,14 +338,14 @@ class EditTaskView(taskViewModel: TaskViewModel,
                         text = stringResource(R.string.save_changes),
                         taskToEdit = taskToEdit,
                         taskName = taskName,
-                        selectedDifficulty = selectedDifficulty,
+                        selectedDifficulty = selectedDifficulty ?: TaskDifficulty.EASY,
                         selectedCategory = playerCategories.find { it.id == selectedCategoryId },
                         selectedStartDate = selectedStartDate,
                         selectedEndDate = selectedEndDate,
                         interval = interval,
-                        selectedMeasureUnit = selectedMeasureUnit,
+                        selectedMeasureUnit = selectedMeasureUnit ?: TaskUnit.MINUTES,
                         selectedEditTaskMode = selectedEditTaskMode,
-                        taskViewModel = viewModel,
+                        editTaskViewModel = viewModel,
                         taskDescription = taskDescription,
                         onTaskUpdated = {
                             Log.d("TaskUpdated", "Zadanie zostało zaktualizowane.")

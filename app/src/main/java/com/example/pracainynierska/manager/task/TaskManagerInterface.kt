@@ -1,22 +1,28 @@
 package com.example.pracainynierska.manager.task
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.API.model.Task
+import com.example.pracainynierska.dictionary.TaskDifficulty
+import com.example.pracainynierska.dictionary.types.TaskType
 
 interface TaskManagerInterface {
-    suspend fun addTask(
-        type: String,
+    suspend fun add(
         name: String,
-        description: String,
-        category: String,
-        difficulty: String,
+        difficulty: TaskDifficulty,
+        category: Category,
         startsAt: String,
-        endsAt: String
+        endsAt: String,
+        interval: Int,
+        measureUnit: String,
+        type: TaskType,
+        description: String
     )
 
-    fun getTasksList(): LiveData<List<Task>>
-    fun getTasks(): List<Task>
+    fun get(): LiveData<List<Task>>
 
-    suspend fun getTasksViaApi()
-    suspend fun completeTask(id: Int)
+    suspend fun getByDate(date: String): List<Task>
+
+    suspend fun complete(id: Int)
 }

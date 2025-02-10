@@ -41,20 +41,21 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.TaskDifficulty
-import com.example.pracainynierska.dictionary.types.TaskTypes
+import com.example.pracainynierska.dictionary.TaskUnit
+import com.example.pracainynierska.dictionary.types.TaskType
 import com.example.pracainynierska.ui_view_components.components.CreateTaskButton
 import com.example.pracainynierska.ui_view_components.components.CustomDatePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomMeasurePickerField
 import com.example.pracainynierska.ui_view_components.components.CustomNumberPickerField
 import com.example.pracainynierska.ui_view_components.components.DateTimePickerDialog
+import com.example.pracainynierska.ui_view_components.components.GeneralTextField
 import com.example.pracainynierska.ui_view_components.components.NumberPickerDialog
 import com.example.pracainynierska.ui_view_components.components.SelectTaskButton
-import com.example.pracainynierska.ui_view_components.components.GeneralTextField
-import com.example.pracainynierska.view_model.TaskViewModel
+import com.example.pracainynierska.view_model.AddTaskViewModel
 
-class AddTaskView(taskViewModel: TaskViewModel,
+class AddTaskView(addTaskViewModel: AddTaskViewModel,
                   navController: NavController,
-) : AbstractView(taskViewModel, navController) {
+) : AbstractView(addTaskViewModel, navController) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
@@ -63,16 +64,16 @@ class AddTaskView(taskViewModel: TaskViewModel,
     ) {
 
         val focusManager = LocalFocusManager.current
-        var selectedAddTaskMode by remember { mutableStateOf(TaskTypes.ONE_TIME) }
+        var selectedTaskType by remember { mutableStateOf(TaskType.ONE_TIME) }
         var isHidden by remember { mutableStateOf(true) }
         var taskName by remember { mutableStateOf("") }
         var taskDescription by remember { mutableStateOf("") }
-        var selectedDifficulty by remember { mutableStateOf("") }
+        var selectedDifficulty by remember { mutableStateOf(TaskDifficulty.EASY) }
         var selectedCategoryId by remember { mutableIntStateOf(0) }
         var showStartDatePicker by remember { mutableStateOf(false) }
         var showEndDatePicker by remember { mutableStateOf(false) }
         var showNumberPicker by remember { mutableStateOf(false) }
-        var selectedMeasureUnit by remember { mutableStateOf("") }
+        var selectedMeasureUnit by remember { mutableStateOf(TaskUnit.MINUTES) }
         var showMeasurePicker by remember { mutableStateOf(false) }
         var selectedStartDate by remember { mutableStateOf("") }
         var selectedEndDate by remember { mutableStateOf("") }
@@ -81,7 +82,7 @@ class AddTaskView(taskViewModel: TaskViewModel,
 
         val playerCategories = viewModel.getPlayerCategories()
 
-        if (false == (viewModel is TaskViewModel)){
+        if (false == (viewModel is AddTaskViewModel)){
             throw Exception("Invalid View Model")
         }
 
@@ -119,9 +120,9 @@ class AddTaskView(taskViewModel: TaskViewModel,
                 ) {
                     SelectTaskButton(
                         text = stringResource(R.string.daily_task),
-                        isSelected = selectedAddTaskMode == TaskTypes.ONE_TIME,
+                        isSelected = selectedTaskType == TaskType.ONE_TIME,
                         onClick = {
-                            selectedAddTaskMode = TaskTypes.ONE_TIME
+                            selectedTaskType = TaskType.ONE_TIME
                             isHidden = true
                         },
                         iconResId = R.drawable.repeat_single,
@@ -133,9 +134,9 @@ class AddTaskView(taskViewModel: TaskViewModel,
 
                     SelectTaskButton(
                         text = stringResource(R.string.cyclical_task),
-                        isSelected = selectedAddTaskMode == TaskTypes.RECURRING,
+                        isSelected = selectedTaskType == TaskType.RECURRING,
                         onClick = {
-                            selectedAddTaskMode = TaskTypes.RECURRING
+                            selectedTaskType = TaskType.RECURRING
                             isHidden = false
                         },
                         iconResId = R.drawable.repeat,
@@ -298,8 +299,8 @@ class AddTaskView(taskViewModel: TaskViewModel,
                         TaskDifficulty.entries.forEach { difficulty ->
                             SelectTaskButton(
                                 text = difficulty.displayName,
-                                isSelected = selectedDifficulty == difficulty.displayName,
-                                onClick = { selectedDifficulty = difficulty.displayName },
+                                isSelected = selectedDifficulty == difficulty,
+                                onClick = { selectedDifficulty = difficulty },
                                 iconResId = difficulty.iconResId,
                                 modifier = Modifier.weight(1f),
                                 color = true
@@ -340,19 +341,19 @@ class AddTaskView(taskViewModel: TaskViewModel,
                         selectedEndDate = selectedEndDate,
                         interval = interval,
                         selectedMeasureUnit = selectedMeasureUnit,
-                        selectedAddTaskMode = selectedAddTaskMode,
+                        taskType = selectedTaskType,
                         modifier = Modifier.fillMaxWidth(),
-                        taskViewModel = viewModel,
+                        addTaskViewModel = viewModel,
                         taskDescription = taskDescription,
                         onTaskCreated = {
                             taskName = ""
                             taskDescription = ""
-                            selectedDifficulty = ""
+                            selectedDifficulty = TaskDifficulty.EASY
                             selectedCategoryId = 0
                             selectedStartDate = ""
                             selectedEndDate = ""
                             interval = 0
-                            selectedMeasureUnit = ""
+                            selectedMeasureUnit = TaskUnit.MINUTES
                         }
                     )
                 }

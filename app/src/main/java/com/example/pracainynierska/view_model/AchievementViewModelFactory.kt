@@ -3,23 +3,16 @@ package com.example.pracainynierska.view_model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.pracainynierska.API.api_client.PlayerApi
-import com.example.pracainynierska.API.handler.authorization.PlayerAuthorizationHandler
 import com.example.pracainynierska.context.PlayerContextInterface
-import com.example.pracainynierska.manager.achievement.AchievementManager
 import com.example.pracainynierska.manager.achievement.AchievementManagerInterface
-import com.example.pracainynierska.manager.task.TaskManagerInterface
 
-class LoginViewModelFactory(
+class AchievementViewModelFactory(
     private val playerContext: PlayerContextInterface,
-    private val taskManager: TaskManagerInterface,
     private val achievementManager: AchievementManagerInterface
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-            val playerApi = PlayerApi(playerContext)
-            val playerAuthorizationHandler = PlayerAuthorizationHandler(playerApi)
-
-            return LoginViewModel(playerContext, playerAuthorizationHandler, taskManager, achievementManager) as T
+        if (modelClass.isAssignableFrom(AchievementViewModel::class.java)) {
+            return AchievementViewModel(playerContext, achievementManager) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

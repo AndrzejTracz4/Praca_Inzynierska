@@ -8,12 +8,15 @@ data class Player(
     val name: String,
     val email: String,
     val enabled: Boolean,
+    val vacations: Boolean,
     val roles: List<String>,
     var playerLevel: Int,
     var playerExperience: Int,
+    var completedTasks: Int,
     var userPhotoPath: String,
-    var balance: Int,
     var playerStatistics: PlayerStatistics,
-    var activeAugments: MutableList<Augment> = mutableListOf(),
-    var categories: MutableList<Category> = mutableListOf()
+    var categories: MutableList<Category> = mutableListOf(),
+    var balance: Int,
+    var achievements: MutableList<Achievement> = mutableListOf(),
+    var activeAugments: MutableList<Augment> = mutableListOf()
 )

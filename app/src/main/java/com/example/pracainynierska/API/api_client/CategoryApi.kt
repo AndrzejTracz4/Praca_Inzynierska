@@ -77,7 +77,8 @@ class CategoryApi(playerContext: PlayerContextInterface) : ApiDetails(playerCont
                     Log.d("Category API", "Category deleted successfully")
                     continuation.resume(true)
                 }.onFailure { error ->
-                    if (error.message == "204") {
+                    val statusCode = error.message?.toIntOrNull()
+                    if (statusCode == 204) {
                         Log.d("Category API", "Category deleted successfully (204 No Content)")
                         continuation.resume(true)
                     } else {
