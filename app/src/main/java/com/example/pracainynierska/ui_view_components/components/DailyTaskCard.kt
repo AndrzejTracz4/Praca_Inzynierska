@@ -48,9 +48,9 @@ fun DailyTaskCard(
     onClick: (Task) -> Unit
 ) {
 
-    val taskDifficulty = TaskDifficulty.fromDisplayName(task.difficulty)
+    val taskDifficulty = TaskDifficulty.fromKey(task.difficulty)
 
-    val endDateTime = LocalDateTime.parse(task.endDate, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+    val endDateTime = LocalDateTime.parse(task.endsAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
 
     var timeRemaining by remember { mutableStateOf(getTimeRemaining(endDateTime)) }
 
@@ -68,11 +68,12 @@ fun DailyTaskCard(
                 color = Color(0x14FFFFFF),
                 shape = RoundedCornerShape(12.dp)
             )
-            .padding(4.dp)
             .clickable { onClick(task) }
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -130,7 +131,7 @@ fun DailyTaskCard(
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = task.difficulty,
+                            text = taskDifficulty?.displayName ?: "",
                             color = Color.White,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.ExtraBold

@@ -29,23 +29,25 @@ import androidx.compose.ui.unit.sp
 import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
-import com.example.pracainynierska.dictionary.types.TaskTypes
-import com.example.pracainynierska.view_model.TaskViewModel
+import com.example.pracainynierska.dictionary.TaskDifficulty
+import com.example.pracainynierska.dictionary.TaskUnit
+import com.example.pracainynierska.dictionary.types.TaskType
+import com.example.pracainynierska.view_model.EditTaskViewModel
 
 @Composable
 fun EditTaskButton(
     text: String,
     taskName: String,
     taskToEdit: Task,
-    selectedDifficulty: String,
+    selectedDifficulty: TaskDifficulty,
     selectedCategory: Category?,
     selectedStartDate: String,
     selectedEndDate: String,
     interval: Int,
-    selectedMeasureUnit: String,
+    selectedMeasureUnit: TaskUnit,
     selectedEditTaskMode: String,
     modifier: Modifier = Modifier,
-    taskViewModel: TaskViewModel,
+    editTaskViewModel: EditTaskViewModel,
     taskDescription: String,
     onTaskUpdated: () -> Unit
 ) {
@@ -56,7 +58,7 @@ fun EditTaskButton(
 
     var taskList by remember { mutableStateOf(emptyList<Task>()) }
 
-    taskViewModel.tasks.observeForever { tasks ->
+    editTaskViewModel.tasks.observeForever { tasks ->
         taskList = tasks
     }
 
@@ -71,19 +73,16 @@ fun EditTaskButton(
             )
             .clickable {
                 val isValid = when (selectedEditTaskMode) {
-                    TaskTypes.ONE_TIME -> {
-                        selectedDifficulty.isNotBlank() &&
+                    TaskType.ONE_TIME.key -> {
                                 selectedCategory != null &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank()
                     }
 
-                    TaskTypes.RECURRING -> {
-                        selectedDifficulty.isNotBlank() &&
+                    TaskType.RECURRING.key -> {
                                 selectedCategory != null &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank() &&
-                                selectedMeasureUnit.isNotBlank() &&
                                 interval > 0
                     }
                     else -> false
@@ -97,18 +96,18 @@ fun EditTaskButton(
                     showDateErrorDialog = true
                 } else {
                     // Task update
-                    val updatedTask = taskToEdit.copy(
-                        name = taskName,
-                        difficulty = selectedDifficulty,
-                        category = selectedCategory ?: Category(0, "", mutableListOf()),
-                        startDate = selectedStartDate,
-                        endDate = selectedEndDate,
-                        interval = if (selectedEditTaskMode == TaskTypes.RECURRING) interval else 0,
-                        measureUnit = if (selectedEditTaskMode == TaskTypes.RECURRING) selectedMeasureUnit else "",
-                        type = selectedEditTaskMode,
-                        description = taskDescription
-                    )
-                    taskViewModel.updateTask(updatedTask)
+//                    val updatedTask = taskToEdit.copy(
+//                        name = taskName,
+//                        difficulty = selectedDifficulty,
+//                        category = selectedCategory ?: Category(0, "", mutableListOf()),
+//                        startDate = selectedStartDate,
+//                        endDate = selectedEndDate,
+//                        interval = if (selectedEditTaskMode == TaskType.RECURRING.key) interval else 0,
+//                        measureUnit = if (selectedEditTaskMode == TaskType.RECURRING.key) selectedMeasureUnit else "",
+//                        type = selectedEditTaskMode,
+//                        description = taskDescription
+//                    )
+//                    editTaskViewModel.updateTask(updatedTask)
 
                     dialogMessageId = R.string.success_create_task
                     showDialog = true

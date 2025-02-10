@@ -1,6 +1,5 @@
 package com.example.pracainynierska
 
-import TaskManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -17,12 +16,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.pracainynierska.API.api_client.AchievementApi
 import com.example.pracainynierska.API.api_client.AugmentApi
 import com.example.pracainynierska.API.api_client.TaskApi
 import com.example.pracainynierska.context.PlayerContext
 import com.example.pracainynierska.context.PlayerContextInterface
 import com.example.pracainynierska.dictionary.ViewRoutes
+import com.example.pracainynierska.manager.achievement.AchievementManager
 import com.example.pracainynierska.manager.augment.AugmentManager
+import com.example.pracainynierska.manager.task.TaskManager
 import com.example.pracainynierska.ui.theme.PracaInżynierskaTheme
 import com.example.pracainynierska.ui_view_components.ProfileView
 import com.example.pracainynierska.ui_view_components.view.AchievementsView
@@ -30,22 +32,36 @@ import com.example.pracainynierska.ui_view_components.view.AddCategoryView
 import com.example.pracainynierska.ui_view_components.view.AddStatisticView
 import com.example.pracainynierska.ui_view_components.view.AddTaskView
 import com.example.pracainynierska.ui_view_components.view.CalendarsView
+import com.example.pracainynierska.ui_view_components.view.CategoryView
 import com.example.pracainynierska.ui_view_components.view.ChangeForgotPasswordView
+import com.example.pracainynierska.ui_view_components.view.EditCategoryView
+import com.example.pracainynierska.ui_view_components.view.EditStatisticView
 import com.example.pracainynierska.ui_view_components.view.EditTaskView
 import com.example.pracainynierska.ui_view_components.view.ForgotPasswordView
 import com.example.pracainynierska.ui_view_components.view.HomepageView
 import com.example.pracainynierska.ui_view_components.view.LoginView
+import com.example.pracainynierska.ui_view_components.view.RegisterView
 import com.example.pracainynierska.ui_view_components.view.ShopView
-import com.example.pracainynierska.ui_view_components.view.CategoryView
-import com.example.pracainynierska.ui_view_components.view.EditCategoryView
-import com.example.pracainynierska.ui_view_components.view.EditStatisticView
+import com.example.pracainynierska.view_model.AchievementViewModel
+import com.example.pracainynierska.view_model.AchievementViewModelFactory
 import com.example.pracainynierska.view_model.AddCategoryViewModel
 import com.example.pracainynierska.view_model.AddCategoryViewModelFactory
 import com.example.pracainynierska.view_model.AddStatisticViewModel
 import com.example.pracainynierska.view_model.AddStatisticViewModelFactory
+import com.example.pracainynierska.view_model.AddTaskViewModel
+import com.example.pracainynierska.view_model.AddTaskViewModelFactory
+import com.example.pracainynierska.view_model.CalendarsViewModel
+import com.example.pracainynierska.view_model.CalendarsViewModelFactory
+import com.example.pracainynierska.view_model.CategoryViewModel
+import com.example.pracainynierska.view_model.CategoryViewModelFactory
+import com.example.pracainynierska.view_model.EditCategoryViewModel
+import com.example.pracainynierska.view_model.EditCategoryViewModelFactory
+import com.example.pracainynierska.view_model.EditStatisticViewModel
+import com.example.pracainynierska.view_model.EditStatisticViewModelFactory
+import com.example.pracainynierska.view_model.EditTaskViewModel
+import com.example.pracainynierska.view_model.EditTaskViewModelFactory
 import com.example.pracainynierska.view_model.HomepageViewModel
 import com.example.pracainynierska.view_model.HomepageViewModelFactory
-import com.example.pracainynierska.ui_view_components.view.RegisterView as RegisterView
 import com.example.pracainynierska.view_model.LoginViewModel
 import com.example.pracainynierska.view_model.LoginViewModelFactory
 import com.example.pracainynierska.view_model.ProfileViewModel
@@ -54,20 +70,13 @@ import com.example.pracainynierska.view_model.RegistrationViewModel
 import com.example.pracainynierska.view_model.RegistrationViewModelFactory
 import com.example.pracainynierska.view_model.ShopViewModel
 import com.example.pracainynierska.view_model.ShopViewModelFactory
-import com.example.pracainynierska.view_model.CategoryViewModel
-import com.example.pracainynierska.view_model.CategoryViewModelFactory
-import com.example.pracainynierska.view_model.EditCategoryViewModel
-import com.example.pracainynierska.view_model.EditCategoryViewModelFactory
-import com.example.pracainynierska.view_model.EditStatisticViewModel
-import com.example.pracainynierska.view_model.EditStatisticViewModelFactory
-import com.example.pracainynierska.view_model.TaskViewModel
-import com.example.pracainynierska.view_model.TaskViewModelFactory
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var playerContext: PlayerContextInterface
     private lateinit var augmentManager: AugmentManager
     private lateinit var taskManager: TaskManager
+    private lateinit var achievementManager: AchievementManager
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -77,6 +86,7 @@ class MainActivity : ComponentActivity() {
         playerContext = PlayerContext()
         augmentManager = AugmentManager(AugmentApi(playerContext))
         taskManager = TaskManager(TaskApi(playerContext))
+        achievementManager = AchievementManager(AchievementApi(playerContext))
 
         setContent {
             val context = LocalContext.current
@@ -89,52 +99,68 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
 
                     val loginViewModel: LoginViewModel = viewModel(
-                        factory = LoginViewModelFactory(playerContext, taskManager)
+                        factory = LoginViewModelFactory(
+                            playerContext,
+                            taskManager,
+                            achievementManager
+                        )
                     )
-                    val registrationViewModel : RegistrationViewModel = viewModel(
+                    val registrationViewModel: RegistrationViewModel = viewModel(
                         factory = RegistrationViewModelFactory(playerContext)
                     )
-                    val homepageViewModel : HomepageViewModel = viewModel(
+                    val homepageViewModel: HomepageViewModel = viewModel(
                         factory = HomepageViewModelFactory(playerContext, context)
                     )
-                    val taskViewModel : TaskViewModel = viewModel(
-                        factory = TaskViewModelFactory(playerContext, taskManager)
+                    val addTaskViewModel: AddTaskViewModel = viewModel(
+                        factory = AddTaskViewModelFactory(playerContext, taskManager)
                     )
-                    val shopViewModel : ShopViewModel = viewModel(
+                    val editTaskViewModel: EditTaskViewModel = viewModel(
+                        factory = EditTaskViewModelFactory(playerContext, taskManager)
+                    )
+                    val shopViewModel: ShopViewModel = viewModel(
                         factory = ShopViewModelFactory(playerContext, augmentManager)
                     )
 
-                    val categoryViewModel : CategoryViewModel = viewModel(
+                    val categoryViewModel: CategoryViewModel = viewModel(
                         factory = CategoryViewModelFactory(playerContext, context)
                     )
-                    val addCategoryViewModel : AddCategoryViewModel = viewModel(
+                    val addCategoryViewModel: AddCategoryViewModel = viewModel(
                         factory = AddCategoryViewModelFactory(playerContext)
                     )
-                    val editCategoryViewModel : EditCategoryViewModel = viewModel(
+                    val editCategoryViewModel: EditCategoryViewModel = viewModel(
                         factory = EditCategoryViewModelFactory(playerContext)
                     )
-                    val addStatisticViewModel : AddStatisticViewModel = viewModel(
+                    val addStatisticViewModel: AddStatisticViewModel = viewModel(
                         factory = AddStatisticViewModelFactory(playerContext)
                     )
-                    val editStatisticViewModel : EditStatisticViewModel = viewModel(
+                    val editStatisticViewModel: EditStatisticViewModel = viewModel(
                         factory = EditStatisticViewModelFactory(playerContext)
                     )
-                    val profileViewModel : ProfileViewModel = viewModel(
+                    val profileViewModel: ProfileViewModel = viewModel(
                         factory = ProfileViewModelFactory(playerContext, context)
+                    )
+                    val calendarsViewModel: CalendarsViewModel = viewModel(
+                        factory = CalendarsViewModelFactory(playerContext, taskManager)
+                    )
+                    val achievementViewModel: AchievementViewModel = viewModel(
+                        factory = AchievementViewModelFactory(playerContext, achievementManager)
                     )
                     SetupNavGraph(
                         navController = navController,
                         loginViewModel = loginViewModel,
                         registrationViewModel = registrationViewModel,
                         homepageViewModel = homepageViewModel,
-                        taskViewModel = taskViewModel,
+                        addTaskViewModel = addTaskViewModel,
+                        editTaskViewModel = editTaskViewModel,
                         shopViewModel = shopViewModel,
                         categoryViewModel = categoryViewModel,
                         addCategoryViewModel = addCategoryViewModel,
                         editCategoryViewModel = editCategoryViewModel,
                         addStatisticViewModel = addStatisticViewModel,
                         editStatisticViewModel = editStatisticViewModel,
-                        profileViewModel = profileViewModel
+                        profileViewModel = profileViewModel,
+                        calendarsViewModel = calendarsViewModel,
+                        achievementViewModel = achievementViewModel
                     )
                 }
             }
@@ -150,14 +176,17 @@ fun SetupNavGraph(
     loginViewModel: LoginViewModel,
     registrationViewModel: RegistrationViewModel,
     homepageViewModel: HomepageViewModel,
-    taskViewModel: TaskViewModel,
+    addTaskViewModel: AddTaskViewModel,
+    editTaskViewModel: EditTaskViewModel,
     shopViewModel: ShopViewModel,
     categoryViewModel: CategoryViewModel,
     addCategoryViewModel: AddCategoryViewModel,
     editCategoryViewModel: EditCategoryViewModel,
-    addStatisticViewModel : AddStatisticViewModel,
+    addStatisticViewModel: AddStatisticViewModel,
     editStatisticViewModel: EditStatisticViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    calendarsViewModel: CalendarsViewModel,
+    achievementViewModel: AchievementViewModel
 ) {
     NavHost(
         navController = navController,
@@ -167,7 +196,10 @@ fun SetupNavGraph(
             LoginView(navController = navController, loginViewModel = loginViewModel)
         }
         composable(ViewRoutes.REGISTER.viewName) {
-            RegisterView(navController = navController, registrationViewModel = registrationViewModel)
+            RegisterView(
+                navController = navController,
+                registrationViewModel = registrationViewModel
+            )
         }
         composable(ViewRoutes.HOMEPAGE.viewName) {
             HomepageView(navController = navController, homepageViewModel = homepageViewModel)
@@ -188,11 +220,11 @@ fun SetupNavGraph(
                 .renderView()
         }
         composable(ViewRoutes.ADDTASK.viewName) {
-            AddTaskView(navController = navController, taskViewModel = taskViewModel)
+            AddTaskView(navController = navController, addTaskViewModel = addTaskViewModel)
                 .renderView()
         }
         composable(ViewRoutes.CALENDAR.viewName) {
-            CalendarsView(navController = navController, taskViewModel = taskViewModel)
+            CalendarsView(navController = navController, calendarsViewModel = calendarsViewModel)
                 .renderView()
         }
         composable(ViewRoutes.CATEGORIES.viewName) {
@@ -211,19 +243,18 @@ fun SetupNavGraph(
             EditStatisticView(navController = navController, viewModel = editStatisticViewModel)
                 .renderView()
         }
-        composable("{${ViewRoutes.EDITTASK.viewName}}/{taskId}") { backStackEntry ->
+        composable("${ViewRoutes.EDITTASK.viewName}/{taskId}") { backStackEntry ->
             val taskId = backStackEntry.arguments?.getString("taskId")
-            val taskToEdit = taskViewModel.getTaskById(taskId)
+            val taskToEdit = editTaskViewModel.getTaskById(taskId)
             if (taskToEdit != null) {
                 EditTaskView(
                     taskToEdit = taskToEdit,
                     navController = navController,
-                    taskViewModel = taskViewModel
-                )
-                    .renderView()
+                    editTaskViewModel = editTaskViewModel
+                ).renderView()
             }
         }
-        composable("{${ViewRoutes.EDITCATEGORY.viewName}}/{categoryId}") { backStackEntry ->
+        composable("${ViewRoutes.EDITCATEGORY.viewName}/{categoryId}") { backStackEntry ->
             val categoryId = backStackEntry.arguments?.getString("categoryId")
             val categoryToEdit = categoryViewModel.getCategoryById(categoryId)
             if (categoryToEdit != null) {
@@ -231,12 +262,15 @@ fun SetupNavGraph(
                     categoryToEdit = categoryToEdit,
                     viewModel = editCategoryViewModel,
                     navController = navController
-                )
-                    .renderView()
+                ).renderView()
             }
         }
+
         composable(ViewRoutes.ACHIEVEMENTS.viewName) {
-            AchievementsView(navController = navController, loginViewModel = loginViewModel)
+            AchievementsView(
+                navController = navController,
+                achievementViewModel = achievementViewModel
+            )
                 .renderView()
         }
 

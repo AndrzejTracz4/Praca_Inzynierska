@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="achieve_10_tasks">Początkujący Wykonawca</string>
+    <string name="achieve_20_tasks">Średniozaawansowany Wykonawca</string>
+    <string name="achieve_50_tasks">Ekspert Zadań</string>
+    <string name="achieve_100_tasks">Mistrz Produktywności</string>
+    <string name="achieve_200_tasks">Arcymistrz Zadań</string>
+
+    <string name="complete_x_tasks">Ukończ %1$d zadań.</string>
+
+    <string name="unknown_achievement">Nieznane osiągnięcie</string>
+    <string name="unknown_description">Brak opisu</string>
+</resources>

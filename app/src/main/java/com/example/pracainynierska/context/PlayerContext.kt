@@ -1,5 +1,6 @@
 package com.example.pracainynierska.context
 
+import com.example.pracainynierska.API.model.Achievement
 import com.example.pracainynierska.API.model.Augment
 import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.API.model.Player
@@ -10,6 +11,10 @@ class PlayerContext : PlayerContextInterface {
 
     private var token: String? = null
     private var player: Player? = null
+
+    override fun getPlayerAchievements(): List<Achievement> {
+        return getPlayer().achievements
+    }
 
     override fun getPlayerStatistics(): PlayerStatistics {
         return getPlayer().playerStatistics
@@ -119,6 +124,19 @@ class PlayerContext : PlayerContextInterface {
 
     override fun setPlayerBalance(balance: Int) {
         this.player?.balance = balance
+    }
+
+    override fun claimPlayerAchievement(achievementId: Int) {
+        val playerAchievements = player?.achievements ?: return
+
+        val index = playerAchievements.indexOfFirst { it.id == achievementId }
+
+        if (index != -1) {
+            val achievement = playerAchievements[index]
+            playerAchievements[index] = achievement.copy(completed = true)
+        } else {
+            throw Exception("Achievement with ID $achievementId not found")
+        }
     }
 
 }

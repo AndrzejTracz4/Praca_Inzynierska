@@ -26,8 +26,10 @@ import androidx.compose.ui.unit.sp
 import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
-import com.example.pracainynierska.dictionary.types.TaskTypes
-import com.example.pracainynierska.view_model.TaskViewModel
+import com.example.pracainynierska.dictionary.TaskDifficulty
+import com.example.pracainynierska.dictionary.TaskUnit
+import com.example.pracainynierska.dictionary.types.TaskType
+import com.example.pracainynierska.view_model.AddTaskViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -35,16 +37,16 @@ import java.util.Locale
 fun CreateTaskButton(
     text: String,
     taskName: String,
-    selectedDifficulty: String,
+    selectedDifficulty: TaskDifficulty,
     selectedCategory: Category?,
     selectedStartDate: String,
     selectedEndDate: String,
     interval: Int,
-    selectedMeasureUnit: String,
-    selectedAddTaskMode: String,
+    selectedMeasureUnit: TaskUnit,
+    taskType: TaskType,
     modifier: Modifier = Modifier,
     onTaskCreated: () -> Unit,
-    taskViewModel: TaskViewModel,
+    addTaskViewModel: AddTaskViewModel,
     taskDescription: String
 ) {
     val showDialog = remember { mutableStateOf(false) }
@@ -52,7 +54,7 @@ fun CreateTaskButton(
     var dialogMessageId by remember { mutableStateOf(0) }
     var taskList by remember { mutableStateOf(emptyList<Task>()) }
 
-    taskViewModel.tasks.observeForever { tasks ->
+    addTaskViewModel.tasks.observeForever { tasks ->
         taskList = tasks
     }
 
@@ -65,25 +67,21 @@ fun CreateTaskButton(
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable {
-                val isValid = when (selectedAddTaskMode) {
-                    TaskTypes.ONE_TIME -> {
+                val isValid = when (taskType) {
+                    TaskType.ONE_TIME -> {
                         taskName.isNotBlank() &&
-                                selectedDifficulty.isNotBlank() &&
                                 selectedCategory != null &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank()
                     }
 
-                    TaskTypes.RECURRING -> {
+                    TaskType.RECURRING -> {
                         taskName.isNotBlank() &&
-                                selectedDifficulty.isNotBlank() &&
                                 selectedCategory != null &&
                                 selectedStartDate.isNotBlank() &&
                                 selectedEndDate.isNotBlank() &&
-                                selectedMeasureUnit.isNotBlank() &&
                                 interval > 0
                     }
-
                     else -> false
                 }
 
@@ -96,32 +94,42 @@ fun CreateTaskButton(
                     dialogMessageId = R.string.validation_date_earlier_that_start
                     showDialog.value = true
                 } else {
-                    val lastTaskId = taskList.maxOfOrNull { it.id } ?: 0
-                    val task = Task(
-                        id = lastTaskId + 1,
+//                    val lastTaskId = taskList.maxOfOrNull { it.id } ?: 0
+//                    val task = Task(
+//                        id = lastTaskId + 1,
+//                        name = taskName,
+//                        difficulty = selectedDifficulty,
+//                        category = selectedCategory ?: Category(0, "", mutableListOf()),
+//                        startDate = selectedStartDate,
+//                        endDate = selectedEndDate,
+//                        interval = if (selectedAddTaskMode == TaskType.RECURRING.key) interval else 0,
+//                        measureUnit = if (selectedAddTaskMode == TaskType.RECURRING.key) selectedMeasureUnit else "",
+//                        type = selectedAddTaskMode,
+//                        status = "Pending",
+//                        description = taskDescription
+//                    )
+
+                    addTaskViewModel.add(
                         name = taskName,
                         difficulty = selectedDifficulty,
                         category = selectedCategory ?: Category(0, "", mutableListOf()),
-                        startDate = selectedStartDate,
-                        endDate = selectedEndDate,
-                        interval = if (selectedAddTaskMode == TaskTypes.RECURRING) interval else 0,
-                        measureUnit = if (selectedAddTaskMode == TaskTypes.RECURRING) selectedMeasureUnit else "",
-                        type = selectedAddTaskMode,
-                        status = "Pending",
+                        startsAt = selectedStartDate,
+                        endsAt = selectedEndDate,
+                        interval = if (taskType == TaskType.RECURRING) interval else 0,
+                        measureUnit = if (taskType == TaskType.RECURRING) selectedMeasureUnit.key else "",
+                        type = taskType,
                         description = taskDescription
                     )
 
-                    taskViewModel.addLocalTask(task)
-
-                    taskViewModel.addTaskViaApi(
-                        type = selectedAddTaskMode,
-                        name = taskName,
-                        description = taskDescription,
-                        category = selectedCategory?.let { "/api/categories/${it.id}" } ?: "0",
-                        difficulty = selectedDifficulty,
-                        startsAt = selectedStartDate,
-                        endsAt = selectedEndDate
-                    )
+//                    taskViewModel.addTaskViaApi(
+//                        type = selectedAddTaskMode,
+//                        name = taskName,
+//                        description = taskDescription,
+//                        category = selectedCategory?.let { "/api/categories/${it.id}" } ?: "0",
+//                        difficulty = selectedDifficulty,
+//                        startsAt = selectedStartDate,
+//                        endsAt = selectedEndDate
+//                    )
 
                     dialogTitleId = R.string.success
                     dialogMessageId = R.string.success_create_task

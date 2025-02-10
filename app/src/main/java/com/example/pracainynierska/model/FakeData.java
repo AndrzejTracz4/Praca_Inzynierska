@@ -5,9 +5,10 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.example.pracainynierska.API.model.Category;
+import com.example.pracainynierska.API.model.Reward;
 import com.example.pracainynierska.API.model.Statistic;
 import com.example.pracainynierska.API.model.Task;
-import com.example.pracainynierska.dictionary.types.TaskTypes;
+import com.example.pracainynierska.dictionary.types.TaskType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,16 +22,19 @@ public class FakeData {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static final Task fakeTask = new Task(
             1,
-            TaskTypes.ONE_TIME,
+            TaskType.ONE_TIME.getKey(),
             "Maraton Warszawski",
-            "Siema",
-            new Category(1, "Test", new ArrayList<>(Collections.singleton(new Statistic(1, "Statistic", "knowledge_bar", 80, 1)))),
-            "Trudny",
-            7,
-            "dni",
+            "Maraton Warszawski",
+            new Category(1, "Test", new ArrayList<Statistic>()),
+            "HARD",
+            "NEW",
+            new Reward(100, 20),
+            getStartDateTime(),
             getStartDateTime(),
             getEndDateTime(),
-            "Nowe"
+            "",
+            "dni",
+            0
     );
 
     @RequiresApi(api = Build.VERSION_CODES.O)

@@ -1,5 +1,6 @@
 package com.example.pracainynierska.context
 
+import com.example.pracainynierska.API.model.Achievement
 import com.example.pracainynierska.API.model.Augment
 import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.API.model.Player
@@ -13,6 +14,8 @@ interface PlayerContextInterface {
 
     fun getPlayer(): Player?
     fun setPlayer(player: Player)
+
+    fun getPlayerAchievements(): List<Achievement>
 
     fun getPlayerStatistics(): PlayerStatistics
 
@@ -35,4 +38,6 @@ interface PlayerContextInterface {
     fun addPlayerAugment(augment: Augment)
 
     fun setPlayerBalance(balance: Int)
+
+    fun claimPlayerAchievement(achievementId: Int)
 }

@@ -10,9 +10,12 @@ data class Task(
     val description: String,
     val category: Category,
     val difficulty: String,
-    val interval: Int,
+    val status: String,
+    val reward: Reward? = null,
+    val createdAt: String,
+    val startsAt: String,
+    val endsAt: String,
+    val completedAt: String? = null,
     val measureUnit: String,
-    val startDate: String,
-    val endDate: String,
-    val status: String
+    val interval: Int,
 )
