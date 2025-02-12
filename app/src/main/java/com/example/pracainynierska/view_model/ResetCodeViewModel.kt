@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pracainynierska.API.Exception.RequestValidationException
-import com.example.pracainynierska.manager.reset_code.ResetCodeManagerInterface
+import com.example.pracainynierska.manager.password_reset.PasswordResetManagerInterface
 import kotlinx.coroutines.launch
 
 class ResetCodeViewModel(
-    private val resetCodeManager: ResetCodeManagerInterface
+    private val resetCodeManager: PasswordResetManagerInterface
 ) : ViewModel() {
 
     fun verifyResetCode(code: String, onSuccess: () -> Unit, onError: () -> Unit) {

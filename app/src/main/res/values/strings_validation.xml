@@ -38,5 +38,6 @@
     <string name="error_statistic_create">Nie udało się utworzyć statystyki!</string>
     <string name="error_statistic_update">Nie udało się edytować statystyki!</string>
     <string name="error_statistic_delete">Nie udało się usunąć statystyki!</string>
+    <string name="error_password_change">Nie udało się zmienić hasła!</string>
     <string name="reset_password_code_failed">Wystąpił błąd poczas wysyłania kodu resetującego</string>
 </resources>

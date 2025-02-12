@@ -9,11 +9,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pracainynierska.API.Exception.RequestValidationException
 import com.example.pracainynierska.R
-import com.example.pracainynierska.manager.reset_code.ResetCodeManagerInterface
+import com.example.pracainynierska.manager.password_reset.PasswordResetManagerInterface
 import kotlinx.coroutines.launch
 
 class ForgotPasswordViewModel (
-    private val resetCodeManager: ResetCodeManagerInterface
+    private val resetCodeManager: PasswordResetManagerInterface
 ) : ViewModel() {
 
     var email by mutableStateOf("")
@@ -44,11 +44,13 @@ class ForgotPasswordViewModel (
             try {
                 Log.d("ForgotPasswordViewModel", "Sending reset code")
 
-                resetCodeManager.get(email)
+                resetCodeManager.send(email)
 
                 Log.d("ForgotPasswordViewModel", "Reset code sent successfully")
 
                 onSuccess()
+
+                email = ""
 
             } catch (e: RequestValidationException) {
                 Log.e("ForgotPasswordViewModel", "Validation error: ${e.message}")
