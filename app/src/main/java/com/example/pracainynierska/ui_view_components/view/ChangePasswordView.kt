@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -33,18 +34,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.ViewRoutes
-import com.example.pracainynierska.view_model.LoginViewModel
+import com.example.pracainynierska.view_model.ChangePasswordViewModel
 
 @Composable
-fun ChangeForgotPasswordView(navController: NavController, loginViewModel: LoginViewModel) {
+fun ChangePasswordView(navController: NavController, changePasswordViewModel: ChangePasswordViewModel) {
 
     var showDialog by remember { mutableStateOf(false) }
-    var passwordMessage by remember { mutableStateOf("") }
+    var passwordMessageId by remember { mutableIntStateOf(0) }
     var isDialogError by remember { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
@@ -92,11 +94,12 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
             Spacer(modifier = Modifier.height(30.dp))
 
             OutlinedTextField(
-                value = loginViewModel.newPassword,
-                onValueChange = { loginViewModel.onNewPasswordChange(it) },
+                value = changePasswordViewModel.password,
+                onValueChange = { changePasswordViewModel.onPasswordChange(it) },
                 label = { Text(text = stringResource(R.string.new_password)) },
-                isError = loginViewModel.newPasswordErrorMessageId != 0,
+                isError = changePasswordViewModel.passwordErrorMessageId != 0,
                 singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Black,
                     unfocusedBorderColor = Color.Gray,
@@ -105,18 +108,19 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                 shape = RoundedCornerShape(16.dp)
             )
 
-            if (loginViewModel.newPasswordErrorMessageId != 0) {
-                Text(text = stringResource(loginViewModel.newPasswordErrorMessageId), color = Color.Red, fontSize = 12.sp)
+            if (changePasswordViewModel.passwordErrorMessageId != 0) {
+                Text(text = stringResource(changePasswordViewModel.passwordErrorMessageId), color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = loginViewModel.confirmNewPassword,
-                onValueChange = { loginViewModel.onConfirmNewPasswordChange(it) },
+                value = changePasswordViewModel.confirmPassword,
+                onValueChange = { changePasswordViewModel.onConfirmPasswordChange(it) },
                 label = { Text(text = stringResource(R.string.reset_password)) },
-                isError = loginViewModel.confirmNewPasswordErrorMessageId != 0,
+                isError = changePasswordViewModel.confirmPasswordErrorMessageId != 0,
                 singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Black,
                     unfocusedBorderColor = Color.Gray,
@@ -125,24 +129,22 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
                 shape = RoundedCornerShape(16.dp)
             )
 
-            if (loginViewModel.confirmNewPasswordErrorMessageId != 0) {
-                Text(text = stringResource(loginViewModel.confirmNewPasswordErrorMessageId), color = Color.Red, fontSize = 12.sp)
+            if (changePasswordViewModel.confirmPasswordErrorMessageId != 0) {
+                Text(text = stringResource(changePasswordViewModel.confirmPasswordErrorMessageId), color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
-                    loginViewModel.changePasswordByEmail(
-                        email = loginViewModel.email,
-                        newPassword = loginViewModel.newPassword,
+                    changePasswordViewModel.changePassword(
                         onSuccess = {
-                            passwordMessage = R.string.success_password_change.toString()
+                            passwordMessageId = R.string.success_password_change
                             isDialogError = false
                             showDialog = true
                         },
                         onError = {
-                            passwordMessage = it
+                            passwordMessageId = R.string.error_password_change
                             isDialogError = true
                             showDialog = true
                         }
@@ -162,12 +164,14 @@ fun ChangeForgotPasswordView(navController: NavController, loginViewModel: Login
         AlertDialog(
             onDismissRequest = { showDialog = false },
             title = { Text(text = if (isDialogError) stringResource(R.string.error) else stringResource(R.string.success)) },
-            text = { Text(text = passwordMessage) },
+            text = { Text(stringResource(passwordMessageId)) },
             confirmButton = {
                 TextButton(onClick = {
                     showDialog = false
-                    navController.navigate(ViewRoutes.LOGIN.viewName){
-                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                    if (!isDialogError) {
+                        navController.navigate(ViewRoutes.LOGIN.viewName){
+                            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                        }
                     }
                 }) {
                     Text(stringResource(R.string.ok))

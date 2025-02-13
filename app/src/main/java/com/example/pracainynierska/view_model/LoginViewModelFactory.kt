@@ -12,14 +12,13 @@ import com.example.pracainynierska.manager.task.TaskManagerInterface
 class LoginViewModelFactory(
     private val playerContext: PlayerContextInterface,
     private val taskManager: TaskManagerInterface,
-    private val achievementManager: AchievementManagerInterface
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             val playerApi = PlayerApi(playerContext)
             val playerAuthorizationHandler = PlayerAuthorizationHandler(playerApi)
 
-            return LoginViewModel(playerContext, playerAuthorizationHandler, taskManager, achievementManager) as T
+            return LoginViewModel(playerContext, playerAuthorizationHandler, taskManager) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

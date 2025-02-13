@@ -15,6 +15,7 @@ enum class ViewRoutes(val viewName: String) {
     EDITSTATISTIC("EditStatisticView"),
     LOGIN("LoginView"),
     REGISTER("RegisterView"),
+    RESETCODE("ResetCodeView"),
     FORGOTPASSWORD("ForgotPasswordView"),
-    CHANGEFORGOTPASSWORD("ChangeForgotPasswordView")
+    CHANGEPASSWORD("ChangePasswordView")
 }
