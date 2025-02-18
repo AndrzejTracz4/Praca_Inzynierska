@@ -1,6 +1,7 @@
 package com.example.pracainynierska.ui_view_components.view
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,10 +24,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +44,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.pracainynierska.API.model.Challenge
+import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.RankDictionary
 import com.example.pracainynierska.dictionary.StatGradient
@@ -76,6 +81,8 @@ class HomepageView(homepageViewModel: HomepageViewModel,
         val playerModel = viewModel.getPlayerModel()
         val player = viewModel.getPlayer()
         var playerAugments = viewModel.getPlayerAugments()
+        val dailyChallenge by viewModel.dailyChallenge.observeAsState()
+        val dailyChallengeStatus by viewModel.dailyChallengeStatus.observeAsState()
 
         playerModel.observeAsState().value.let {
             if (it != null) {
@@ -347,19 +354,26 @@ class HomepageView(homepageViewModel: HomepageViewModel,
                                     .fillMaxHeight(0.9f)
                                     .clip(RoundedCornerShape(10.dp))
                             ){
-                                DailyTaskCard(
-                                    task = FakeData.fakeTask,
-                                    onClick = { showTaskDetailsDialog = true },
-                                )
+                                dailyChallenge?.let {
+                                    DailyTaskCard(
+                                        challenge = it,
+                                        onClick = { showTaskDetailsDialog = true },
+                                    )
+                                }
                             }
                         }
                     }
 
                     if (showTaskDetailsDialog) {
-                        DailyTaskDetailsDialog(
-                            task = FakeData.fakeTask,
-                            onDismiss = { showTaskDetailsDialog = false }
-                        )
+                        dailyChallenge?.let {
+                            DailyTaskDetailsDialog(
+                                challenge = it,
+                                status = dailyChallengeStatus ?: "unknown",
+                                onAccept = { viewModel.acceptDailyChallenge() },
+                                onExecute = { viewModel.completeDailyChallenge() },
+                                onDismiss = { showTaskDetailsDialog = false }
+                            )
+                        }
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                 }

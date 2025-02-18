@@ -54,7 +54,7 @@ fun BottomMenu(navController: NavController) {
 
             BottomMenuItem(
                 icon = R.drawable.achievements,
-                label = stringResource(R.string.Achievements),
+                label = stringResource(R.string.achievements),
                 onClick = { navigateIfNotCurrent(navController, ViewRoutes.ACHIEVEMENTS.viewName) },
                 modifier = Modifier.weight(1f)
             )

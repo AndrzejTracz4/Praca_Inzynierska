@@ -41,17 +41,17 @@ fun ModalDrawer(
         DrawerItem(stringResource(R.string.homepage), R.drawable.home, ViewRoutes.HOMEPAGE),
         DrawerItem(stringResource(R.string.profile), R.drawable.profile, ViewRoutes.PROFILE),
         DrawerItem(stringResource(R.string.categories), R.drawable.stats, ViewRoutes.CATEGORIES),
+        DrawerItem(stringResource(R.string.achievements), R.drawable.achievements, ViewRoutes.ACHIEVEMENTS),
         DrawerItem(stringResource(R.string.calendar), R.drawable.calendar, ViewRoutes.CALENDAR),
         DrawerItem(stringResource(R.string.shop), R.drawable.shop, ViewRoutes.SHOP),
-        DrawerItem(stringResource(R.string.settings), R.drawable.settings, ViewRoutes.HOMEPAGE),
-        DrawerItem(stringResource(R.string.logout), R.drawable.logout, ViewRoutes.LOGIN)
+        DrawerItem(stringResource(R.string.logout), R.drawable.logout, ViewRoutes.LOGOUT)
     )
 
     val selectedItemIndex = remember { mutableIntStateOf(0) }
 
     // Using LaunchedEffect to update the index of a selected item
     LaunchedEffect(currentRoute) {
-        selectedItemIndex.intValue = items.indexOfFirst { it.route.viewName == currentRoute }.takeIf { it != -1 } ?: 0
+        selectedItemIndex.intValue = items.indexOfFirst { it.route.viewName == currentRoute }.takeIf { it != -1 } ?: -1
     }
 
     ModalNavigationDrawer(
@@ -104,7 +104,7 @@ fun ModalDrawer(
                 )
 
                 // Main menu items
-                items.take(items.size - 2).forEachIndexed { index, item ->
+                items.take(items.size - 1).forEachIndexed { index, item ->
                     CustomDrawerItem(
                         text = item.title,
                         isSelected = selectedItemIndex.intValue == index,
@@ -131,13 +131,14 @@ fun ModalDrawer(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                // Footer items (last 2)
-                items.takeLast(2).forEachIndexed { index, item ->
+                // Footer item
+                items.takeLast(1).forEachIndexed { index, item ->
                     CustomDrawerItem(
                         text = item.title,
                         isSelected = selectedItemIndex.intValue == (items.size - 2 + index),
                         onClick = {
                             selectedItemIndex.intValue = items.size - 2 + index
+                            navController.navigate(item.route.viewName)
                             scope.launch {
                                 drawerState.close()
                             }

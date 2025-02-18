@@ -71,12 +71,14 @@ fun TaskDetailsDialog(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(
-                        text = task.category.name,
-                        color = Color(0xFF3CB043),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    task.category?.let {
+                        Text(
+                            text = task.category.name,
+                            color = Color(0xFF3CB043),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
 
                     Row {
                         Text(

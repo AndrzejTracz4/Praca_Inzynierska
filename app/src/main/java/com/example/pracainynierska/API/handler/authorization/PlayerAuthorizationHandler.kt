@@ -29,6 +29,24 @@ class PlayerAuthorizationHandler(private val playerApi : PlayerApi) : Authorizat
         }
     }
 
+    override suspend fun authorizeFromToken(token: String): Player? {
+        return withContext(Dispatchers.IO) {
+            try {
+                playerApi.setToken(token)
+                playerApi.getPlayerFromToken()
+                return@withContext playerApi.getPlayer()
+            } catch (e: AuthorizationFailedException) {
+                Log.e("PlayerAuthorizationFailed", e.message.toString())
+                return@withContext null
+
+            } catch (e: Exception) {
+                Log.e("PlayerAuthorization::authorizeFromToken", e.message.toString())
+                throw e
+                return@withContext null
+            }
+        }
+    }
+
     override fun getCurrentPlayer(): Player? {
         return playerApi.getPlayer()
     }

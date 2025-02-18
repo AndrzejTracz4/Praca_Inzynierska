@@ -74,7 +74,7 @@ class EditTaskView(editTaskViewModel: EditTaskViewModel,
         var isHidden by remember { mutableStateOf(selectedEditTaskMode == TaskType.ONE_TIME.key) }
         var taskName by remember { mutableStateOf(taskToEdit.name) }
         var selectedDifficulty by remember { mutableStateOf(TaskDifficulty.fromKey(taskToEdit.difficulty)) }
-        var selectedCategoryId by remember { mutableIntStateOf(taskToEdit.category.id) }
+        var selectedCategoryId by remember { mutableIntStateOf(taskToEdit.category?.id ?: 1) }
         var showStartDatePicker by remember { mutableStateOf(false) }
         var showEndDatePicker by remember { mutableStateOf(false) }
         var showNumberPicker by remember { mutableStateOf(false) }

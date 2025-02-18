@@ -117,6 +117,12 @@ dependencies {
     implementation ("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     implementation ("io.kotlintest:kotlintest-assertions:3.4.2")
 
+    //JWT
+    implementation("com.auth0.android:jwtdecode:2.0.1")
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
     //Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 

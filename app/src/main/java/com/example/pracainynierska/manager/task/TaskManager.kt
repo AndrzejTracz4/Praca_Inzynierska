@@ -50,6 +50,8 @@ class TaskManager(
 
             val newTasks = apiClient.getTasksByDate(date)
 
+            Log.d("TaskManager", "New tasks: $newTasks")
+
             if (newTasks.isEmpty()) {
                 checkedDates.add(date)
                 return@withContext emptyList()
@@ -119,6 +121,12 @@ class TaskManager(
                     _tasks.postValue(it)
                 }
             }
+        }
+    }
+
+    override suspend fun getDailyChallenge(): Task? {
+        return withContext(Dispatchers.IO) {
+            apiClient.getDailyChallengeTask()
         }
     }
 

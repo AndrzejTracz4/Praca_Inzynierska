@@ -1,5 +1,6 @@
 package com.example.pracainynierska.ui_view_components.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.navigation.NavController
 import com.example.pracainynierska.API.model.Category
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.StatGradient
+import com.example.pracainynierska.dictionary.StatIcon
 import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.view_model.CategoryViewModel
 
@@ -75,11 +77,13 @@ fun CategoryItem(category: Category, navController: NavController, viewModel: Ca
                     val gradient = StatGradient.getGradientByIndex(index).gradient
 
                     GradientStatProgressBar(
-                        iconResId = viewModel.getPhotoResId(statistic.iconPath),
+                        iconResId = StatIcon.fromIconPath(statistic.iconPath)?.rawResId ?: R.raw.intelligence_bar,
                         name = statistic.name,
                         experience = statistic.experience ?: 0,
                         gradient = gradient
                     )
+
+                    Log.d("CategoryItem", "Statistic: $statistic")
 
                     if (index < category.statistics.size - 1) {
                         Spacer(modifier = Modifier.height(16.dp))

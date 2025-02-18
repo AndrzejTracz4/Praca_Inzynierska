@@ -43,15 +43,6 @@ class AchievementsView(
 
         val focusManager = LocalFocusManager.current
 
-//        val achievements by viewModel.playerAchievements.observeAsState(emptyList())
-
-//        LaunchedEffect(Unit) {
-//            if (achievements.isEmpty()) {
-//                viewModel.loadPlayerAchievements()
-//            }
-//            Log.d("AchievementsView", "Achievements: $achievements")
-//        }
-
         Box(
             modifier = Modifier
                 .fillMaxSize()

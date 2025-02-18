@@ -18,6 +18,7 @@
     <string name="forgot_password">Zapomniałem hasło</string>
     <string name="login">Zaloguj</string>
     <string name="create">Utwórz</string>
+    <string name="accept">Akceptuj</string>
     <string name="execute">Wykonaj</string>
     <string name="cancel">Anuluj</string>
     <string name="select_date">Wybierz datę</string>

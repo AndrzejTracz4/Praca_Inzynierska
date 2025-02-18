@@ -25,4 +25,7 @@ interface TaskManagerInterface {
     suspend fun getByDate(date: String): List<Task>
 
     suspend fun complete(id: Int)
+
+    suspend fun getDailyChallenge(): Task?
+
 }

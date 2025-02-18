@@ -1,7 +1,9 @@
 package com.example.pracainynierska
 
+import android.app.Application
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -9,6 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -18,13 +23,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.pracainynierska.API.api_client.AchievementApi
 import com.example.pracainynierska.API.api_client.AugmentApi
+import com.example.pracainynierska.API.api_client.DailyChallengeApi
 import com.example.pracainynierska.API.api_client.PasswordResetApi
 import com.example.pracainynierska.API.api_client.TaskApi
+import com.example.pracainynierska.API.model.Challenge
 import com.example.pracainynierska.context.PlayerContext
 import com.example.pracainynierska.context.PlayerContextInterface
 import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.manager.achievement.AchievementManager
 import com.example.pracainynierska.manager.augment.AugmentManager
+import com.example.pracainynierska.manager.daily_challenge.DailyChallengeManager
 import com.example.pracainynierska.manager.password_reset.PasswordResetManager
 import com.example.pracainynierska.manager.task.TaskManager
 import com.example.pracainynierska.ui.theme.PracaInżynierskaTheme
@@ -42,9 +50,11 @@ import com.example.pracainynierska.ui_view_components.view.EditTaskView
 import com.example.pracainynierska.ui_view_components.view.ForgotPasswordView
 import com.example.pracainynierska.ui_view_components.view.HomepageView
 import com.example.pracainynierska.ui_view_components.view.LoginView
+import com.example.pracainynierska.ui_view_components.view.LogoutView
 import com.example.pracainynierska.ui_view_components.view.RegisterView
 import com.example.pracainynierska.ui_view_components.view.ResetCodeView
 import com.example.pracainynierska.ui_view_components.view.ShopView
+import com.example.pracainynierska.ui_view_components.view.SplashScreen
 import com.example.pracainynierska.view_model.AchievementViewModel
 import com.example.pracainynierska.view_model.AchievementViewModelFactory
 import com.example.pracainynierska.view_model.AddCategoryViewModel
@@ -85,6 +95,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var playerContext: PlayerContextInterface
     private lateinit var augmentManager: AugmentManager
     private lateinit var taskManager: TaskManager
+    private lateinit var dailyChallengeManager: DailyChallengeManager
     private lateinit var achievementManager: AchievementManager
     private lateinit var passwordResetManager: PasswordResetManager
 
@@ -95,11 +106,13 @@ class MainActivity : ComponentActivity() {
         playerContext = PlayerContext()
         augmentManager = AugmentManager(AugmentApi(playerContext))
         taskManager = TaskManager(TaskApi(playerContext))
+        dailyChallengeManager = DailyChallengeManager(DailyChallengeApi(playerContext))
         achievementManager = AchievementManager(AchievementApi(playerContext))
         passwordResetManager = PasswordResetManager(PasswordResetApi(playerContext))
 
         setContent {
             val context = LocalContext.current
+            val application = LocalContext.current.applicationContext as Application
 
             PracaInżynierskaTheme {
                 Surface(
@@ -111,14 +124,21 @@ class MainActivity : ComponentActivity() {
                     val loginViewModel: LoginViewModel = viewModel(
                         factory = LoginViewModelFactory(
                             playerContext,
-                            taskManager
+                            taskManager,
+                            dailyChallengeManager,
+                            application
                         )
                     )
+
                     val registrationViewModel: RegistrationViewModel = viewModel(
                         factory = RegistrationViewModelFactory(playerContext)
                     )
                     val homepageViewModel: HomepageViewModel = viewModel(
-                        factory = HomepageViewModelFactory(playerContext, context)
+                        factory = HomepageViewModelFactory(
+                            playerContext,
+                            context,
+                            dailyChallengeManager
+                        )
                     )
                     val addTaskViewModel: AddTaskViewModel = viewModel(
                         factory = AddTaskViewModelFactory(playerContext, taskManager)
@@ -212,10 +232,23 @@ fun SetupNavGraph(
     calendarsViewModel: CalendarsViewModel,
     achievementViewModel: AchievementViewModel
 ) {
+
+    var startDestination = "splash"
+
+    if(!loginViewModel.checkIfTokenExists()) {
+        startDestination = ViewRoutes.LOGIN.viewName
+    }
+
     NavHost(
         navController = navController,
-        startDestination = ViewRoutes.LOGIN.viewName
+        startDestination = startDestination
     ) {
+        composable("splash") {
+            SplashScreen(navController = navController, loginViewModel = loginViewModel)
+        }
+        composable(ViewRoutes.LOGOUT.viewName) {
+            LogoutView(navController = navController, loginViewModel = loginViewModel)
+        }
         composable(ViewRoutes.LOGIN.viewName) {
             LoginView(navController = navController, loginViewModel = loginViewModel)
         }
@@ -236,7 +269,10 @@ fun SetupNavGraph(
             )
         }
         composable(ViewRoutes.CHANGEPASSWORD.viewName) {
-            ChangePasswordView(navController = navController, changePasswordViewModel = changePasswordViewModel)
+            ChangePasswordView(
+                navController = navController,
+                changePasswordViewModel = changePasswordViewModel
+            )
         }
         composable(ViewRoutes.RESETCODE.viewName) {
             ResetCodeView(navController = navController, resetCodeViewModel = resetCodeViewModel)

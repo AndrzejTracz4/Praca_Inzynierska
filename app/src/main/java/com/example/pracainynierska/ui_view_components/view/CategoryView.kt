@@ -125,7 +125,7 @@ class CategoryView(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     CustomButton(
-                        text = "Edytuj statystykę",
+                        text = stringResource(R.string.edit_statistics),
                         onClick = { navController.navigate(ViewRoutes.EDITSTATISTIC.viewName) },
                         iconResId = R.drawable.edit,
                         modifier = Modifier.weight(1f)

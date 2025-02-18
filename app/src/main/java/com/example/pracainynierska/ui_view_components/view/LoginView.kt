@@ -1,4 +1,6 @@
 package com.example.pracainynierska.ui_view_components.view
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -49,6 +51,7 @@ import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.ViewRoutes
 import com.example.pracainynierska.view_model.LoginViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LoginView(navController: NavController, loginViewModel: LoginViewModel){
 
