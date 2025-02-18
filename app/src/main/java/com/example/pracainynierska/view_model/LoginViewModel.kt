@@ -1,7 +1,6 @@
 package com.example.pracainynierska.view_model
 
 import android.app.Application
-import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -12,6 +11,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.auth0.android.jwt.JWT
 import com.example.pracainynierska.API.Exception.RequestValidationException
 import com.example.pracainynierska.API.handler.authorization.AuthorizationHandlerInterface
@@ -34,8 +35,15 @@ class LoginViewModel(
     private val _isUserLoggedIn = MutableLiveData(false)
     val isUserLoggedIn: LiveData<Boolean> get() = _isUserLoggedIn
 
-    private val sharedPreferences =
-        application.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+    private val encryptedSharedPreferences = EncryptedSharedPreferences.create(
+        application,
+        "secure_prefs",
+        MasterKey.Builder(application)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build(),
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
 
     var username by mutableStateOf("")
         private set
@@ -85,17 +93,17 @@ class LoginViewModel(
     }
 
     private fun saveToken(token: String) {
-        sharedPreferences.edit().putString("jwt_token", token).apply()
+        encryptedSharedPreferences.edit().putString("jwt_token", token).apply()
     }
 
     fun getToken(): String? {
-        val token = sharedPreferences.getString("jwt_token", null)
+        val token = encryptedSharedPreferences.getString("jwt_token", null)
         Log.d("LoginViewModel", "Retrieved token: $token")
         return token
     }
 
     fun removeToken() {
-        sharedPreferences.edit().remove("jwt_token").apply()
+        encryptedSharedPreferences.edit().remove("jwt_token").apply()
     }
 
     fun checkIfTokenExists(): Boolean {
@@ -179,7 +187,7 @@ class LoginViewModel(
                 Log.d("initializeUserData", "Formatted date: $formattedDate")
                 taskManager.getByDate(formattedDate)
                 val dailyTask = taskManager.getDailyChallenge()
-                if(dailyTask != null){
+                if (dailyTask != null) {
                     dailyChallengeManager.checkStatus(dailyTask)
                 }
                 dailyChallengeManager.load()
