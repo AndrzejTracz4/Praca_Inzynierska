@@ -158,6 +158,14 @@ class LoginViewModel(
     @RequiresApi(Build.VERSION_CODES.O)
     fun login(onLoginResult: (Boolean) -> Unit) {
         viewModelScope.launch {
+            if (email.isBlank() || password.isBlank()) {
+                _isUserLoggedIn.postValue(false)
+                emailErrorMessageId = R.string.invalid_username_or_password
+                passwordErrorMessageId = R.string.invalid_username_or_password
+                onLoginResult(false)
+                return@launch
+            }
+
             val player = playerAuthorizationHandler.authorize(email, password)
             if (player != null) {
                 playerContext.getToken()?.let { saveToken(it) }
@@ -166,6 +174,8 @@ class LoginViewModel(
                 onLoginResult(true)
             } else {
                 _isUserLoggedIn.postValue(false)
+                emailErrorMessageId = R.string.invalid_username_or_password
+                passwordErrorMessageId = R.string.invalid_username_or_password
                 onLoginResult(false)
             }
         }
@@ -173,6 +183,7 @@ class LoginViewModel(
 
     fun logout() {
         removeToken()
+        playerContext.setToken("")
         _isUserLoggedIn.postValue(false)
         Log.d("LoginViewModel", "User logged out, token removed")
     }
