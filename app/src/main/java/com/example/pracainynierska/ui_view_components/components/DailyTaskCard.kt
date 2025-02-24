@@ -26,12 +26,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pracainynierska.API.model.Challenge
 import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.TaskDifficulty
@@ -44,20 +48,18 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DailyTaskCard(
-    task: Task,
-    onClick: (Task) -> Unit
+    challenge: Challenge,
+    onClick: (Challenge) -> Unit
 ) {
+    val today = LocalDateTime.now()
+    val endOfDay = today.toLocalDate().atTime(23, 59, 59)
 
-    val taskDifficulty = TaskDifficulty.fromKey(task.difficulty)
+    var timeRemaining by remember { mutableStateOf(getTimeRemaining(endOfDay)) }
 
-    val endDateTime = LocalDateTime.parse(task.endsAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-
-    var timeRemaining by remember { mutableStateOf(getTimeRemaining(endDateTime)) }
-
-    LaunchedEffect(endDateTime) {
+    LaunchedEffect(Unit) {
         while (true) {
             delay(1000)
-            timeRemaining = getTimeRemaining(endDateTime)
+            timeRemaining = getTimeRemaining(endOfDay)
         }
     }
 
@@ -68,7 +70,7 @@ fun DailyTaskCard(
                 color = Color(0x14FFFFFF),
                 shape = RoundedCornerShape(12.dp)
             )
-            .clickable { onClick(task) }
+            .clickable { onClick(challenge) }
     ) {
         Row(
             modifier = Modifier
@@ -90,13 +92,35 @@ fun DailyTaskCard(
                     .padding(horizontal = 4.dp, vertical = 12.dp)
                     .weight(1f)
             ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = challenge.name,
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = "Znika za: $timeRemaining",
+                    color = Color(0xFFFFE53B),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = task.category.name,
+                        text = "${challenge.points} exp",
                         color = Color.White,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
@@ -105,63 +129,43 @@ fun DailyTaskCard(
                                 Color(0x14FFFFFF),
                                 shape = RoundedCornerShape(8.dp)
                             )
-                            .padding(horizontal = 20.dp, vertical = 2.dp)
+                            .padding(horizontal = 12.dp, vertical = 2.dp)
                     )
 
                     Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .background(
-                                color = Color(0x14FFFFFF),
+                                Color(0x14FFFFFF),
                                 shape = RoundedCornerShape(8.dp)
                             )
-                            .padding(horizontal = 12.dp, vertical = 2.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                            .padding(horizontal = 12.dp, vertical = 2.dp)
                     ) {
-
-                        if (taskDifficulty != null) {
-                            Icon(
-                                painter = painterResource(id = taskDifficulty.iconResId),
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp),
-                                tint = Color.Unspecified
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
                         Text(
-                            text = taskDifficulty?.displayName ?: "",
-                            color = Color.White,
+                            text = challenge.coins.toString(),
                             fontSize = 14.sp,
-                            fontWeight = FontWeight.ExtraBold
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                        )
+
+                        Spacer(modifier = Modifier.width(6.dp))
+
+                        Icon(
+                            painter = painterResource(id = R.drawable.coins),
+                            contentDescription = stringResource(R.string.icon_balance_description),
+                            tint = Color.Unspecified,
+                            modifier = Modifier.size(14.dp)
                         )
                     }
+
                 }
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = task.name,
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Text(
-                    text = "Znika za: $timeRemaining",
-                    color = Color(0xFFFFE53B),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
             }
         }
     }
 }
 
-@SuppressLint("DefaultLocale")
 @RequiresApi(Build.VERSION_CODES.O)
-fun getTimeRemaining(endDateTime: LocalDateTime): String {
+private fun getTimeRemaining(endDateTime: LocalDateTime): String {
     val now = LocalDateTime.now()
     val duration = Duration.between(now, endDateTime)
 

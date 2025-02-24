@@ -164,32 +164,34 @@ fun TaskCard(
                     }
                 }
 
-                Row(
-                    modifier = Modifier
-                        .background(
-                            color = Color(0x14FFFFFF),
-                            shape = RoundedCornerShape(8.dp)
+                task.category?.let {
+                    Row(
+                        modifier = Modifier
+                            .background(
+                                color = Color(0x14FFFFFF),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .padding(horizontal = 12.dp, vertical = 2.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = task.category.name,
+                            color = Color.White,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
                         )
-                        .padding(horizontal = 12.dp, vertical = 2.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = task.category.name,
-                        color = Color.White,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
-                    )
 
-                    Spacer(modifier = Modifier.width(4.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
 
-                    Icon(
-                        painter = painterResource(id = R.drawable.double_arrow),
-                        contentDescription = null,
-                        modifier = Modifier.size(12.dp),
-                        tint = Color.White
-                    )
+                        Icon(
+                            painter = painterResource(id = R.drawable.double_arrow),
+                            contentDescription = null,
+                            modifier = Modifier.size(12.dp),
+                            tint = Color.White
+                        )
 
+                    }
                 }
             }
 

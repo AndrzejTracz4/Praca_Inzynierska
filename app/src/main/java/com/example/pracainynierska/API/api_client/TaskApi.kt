@@ -23,6 +23,8 @@ class TaskApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext)
 
     private val completeTaskPath: String = "api/task"
 
+    private val dailyChallengeTask: String = "api/daily-challenge-task"
+
     suspend fun addTask(
         type: String,
         name: String,
@@ -108,6 +110,27 @@ class TaskApi(playerContext: PlayerContextInterface) : ApiDetails(playerContext)
                 }.onFailure { error ->
                     Log.e("Task API", "Error: ${error.message}")
                     continuation.resumeWithException(error)
+                }
+            }
+        }
+    }
+
+    suspend fun getDailyChallengeTask(): Task? {
+        val taskRequest = Request
+            .Builder()
+            .addHeader("Authorization", "Bearer ${this.getToken()}")
+            .url(buildPath(dailyChallengeTask))
+            .get()
+            .build()
+
+        return suspendCoroutine { continuation ->
+            request(taskRequest, Task.serializer()) { result ->
+                result.onSuccess { task ->
+                    Log.d("Task API", "Get daily challenge task")
+                    continuation.resume(task)
+                }.onFailure { error ->
+                    Log.e("Task API", "Error: ${error.message}")
+                    continuation.resume(null)
                 }
             }
         }

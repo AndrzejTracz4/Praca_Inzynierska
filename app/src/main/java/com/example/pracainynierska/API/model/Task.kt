@@ -8,7 +8,7 @@ data class Task(
     val type: String,
     val name: String,
     val description: String,
-    val category: Category,
+    val category: Category? = null,
     val difficulty: String,
     val status: String,
     val reward: Reward? = null,
@@ -16,6 +16,6 @@ data class Task(
     val startsAt: String,
     val endsAt: String,
     val completedAt: String? = null,
-    val measureUnit: String,
-    val interval: Int,
+    val measureUnit: String = "hours",
+    val interval: Int = 1,
 )

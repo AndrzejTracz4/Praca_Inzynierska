@@ -35,7 +35,7 @@
     <string name="select_statistic_label">Wybierz statystykę</string>
     <string name="search_statistic">Szukaj statystyki</string>
     <string name="Close">Zamknij</string>
-    <string name="Achievements">Osiągnięcia</string>
+    <string name="achievements">Osiągnięcia</string>
     <string name="pick_up">Odbierz</string>
     <string name="already_claimed">Odebrane</string>
     <string name="incomplete">Nieukończone</string>
@@ -58,4 +58,6 @@
     <string name="confirm_delete_statistic">Czy na pewno chcesz usunąć statystykę?</string>
     <string name="delete_category">Usuń kategorię</string>
     <string name="delete_statistic">Usuń statystykę</string>
+    <string name="log_out_from_application">Wylogowywanie z aplikacji</string>
+    <string name="edit_statistics">Edytuj statystykę</string>
 </resources>

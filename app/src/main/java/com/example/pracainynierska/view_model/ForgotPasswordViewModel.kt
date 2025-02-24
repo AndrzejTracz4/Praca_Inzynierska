@@ -42,16 +42,9 @@ class ForgotPasswordViewModel (
 
         viewModelScope.launch {
             try {
-                Log.d("ForgotPasswordViewModel", "Sending reset code")
-
                 resetCodeManager.send(email)
-
-                Log.d("ForgotPasswordViewModel", "Reset code sent successfully")
-
                 onSuccess()
-
                 email = ""
-
             } catch (e: RequestValidationException) {
                 Log.e("ForgotPasswordViewModel", "Validation error: ${e.message}")
                 onError()
