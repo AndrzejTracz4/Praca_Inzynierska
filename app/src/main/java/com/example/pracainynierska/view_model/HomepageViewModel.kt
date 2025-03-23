@@ -28,10 +28,6 @@ class HomepageViewModel(
 
     var userPhotoResId = mutableIntStateOf(0)
 
-    val dailyChallenge = dailyChallengeManager.get()
-
-    val dailyChallengeStatus = dailyChallengeManager.getStatus()
-
     fun getPhotoResId(file: String): Int {
         return photoResourceResolver.getResId(appContext, file)
     }
@@ -43,6 +39,10 @@ class HomepageViewModel(
 
         return userPhotoResId.intValue
     }
+
+    val dailyChallenge = dailyChallengeManager.get()
+
+    val dailyChallengeStatus = dailyChallengeManager.getStatus()
 
     fun acceptDailyChallenge() {
         viewModelScope.launch {

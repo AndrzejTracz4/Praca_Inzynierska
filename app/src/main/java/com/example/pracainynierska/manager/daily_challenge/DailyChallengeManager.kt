@@ -23,14 +23,6 @@ class DailyChallengeManager(
         return dailyChallenge
     }
 
-    override fun checkStatus(task: Task?) {
-        when (task?.status) {
-            "accepted" -> _status.postValue("accepted")
-            "completed" -> _status.postValue("completed")
-            else -> _status.postValue("unknown")
-        }
-    }
-
     override fun getStatus(): LiveData<String> {
         return status
     }
@@ -45,6 +37,14 @@ class DailyChallengeManager(
                 Log.e("DailyChallengeManager", "Error loading challenge", e)
                 throw e
             }
+        }
+    }
+
+    override fun checkStatus(task: Task?) {
+        when (task?.status) {
+            "accepted" -> _status.postValue("accepted")
+            "completed" -> _status.postValue("completed")
+            else -> _status.postValue("unknown")
         }
     }
 

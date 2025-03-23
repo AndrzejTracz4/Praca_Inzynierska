@@ -23,7 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pracainynierska.API.model.Task
 import com.example.pracainynierska.R
 import com.example.pracainynierska.dictionary.TaskDifficulty
@@ -46,6 +45,14 @@ fun TaskDetailsDialog(
     val type = TaskType.fromKey(task.type) ?: TaskType.ONE_TIME
     val difficulty = TaskDifficulty.fromKey(task.difficulty) ?: TaskDifficulty.EASY
     val status = TaskStatus.fromKey(task.status) ?: TaskStatus.NEW
+
+    val taskDate: ZonedDateTime? = try {
+        ZonedDateTime.parse(task.startsAt)
+    } catch (e: Exception) {
+        null
+    }
+
+    val isToday = taskDate?.toLocalDate() == ZonedDateTime.now().toLocalDate()
 
     Dialog(onDismissRequest = { onDismiss() }) {
         Column(
@@ -159,7 +166,7 @@ fun TaskDetailsDialog(
                         )
                     }
 
-                    if ((status == TaskStatus.NEW || status == TaskStatus.ACCEPTED) && type != TaskType.CHALLENGE) {
+                    if ((status == TaskStatus.NEW || status == TaskStatus.ACCEPTED) && type != TaskType.CHALLENGE && isToday) {
                         Spacer(modifier = Modifier.height(24.dp))
 
                         Row(
@@ -174,19 +181,17 @@ fun TaskDetailsDialog(
                                 }
                             )
 
-                            if (status == TaskStatus.ACCEPTED) {
-                                TaskDetailsButton(
-                                    text = stringResource(R.string.edit),
-                                    color = Color.Yellow,
-                                    onClick = onEdit
-                                )
+                            TaskDetailsButton(
+                                text = stringResource(R.string.edit),
+                                color = Color.Yellow,
+                                onClick = onEdit
+                            )
 
-                                TaskDetailsButton(
-                                    text = stringResource(R.string.cancel),
-                                    color = Color.Red,
-                                    onClick = onDismiss
-                                )
-                            }
+                            TaskDetailsButton(
+                                text = stringResource(R.string.cancel),
+                                color = Color.Red,
+                                onClick = onDismiss
+                            )
                         }
                     }
 

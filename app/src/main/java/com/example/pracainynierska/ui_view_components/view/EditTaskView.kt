@@ -211,7 +211,7 @@ class EditTaskView(editTaskViewModel: EditTaskViewModel,
                     )
                     CustomDatePickerField(
                         text = "",
-                        value = selectedStartDate,
+                        value = formatIsoDateTime(selectedStartDate),
                         onValueChange = { selectedStartDate = it },
                         onClick = { showStartDatePicker = true }
                     )
@@ -226,7 +226,7 @@ class EditTaskView(editTaskViewModel: EditTaskViewModel,
                     )
                     CustomDatePickerField(
                         text = "",
-                        value = selectedEndDate,
+                        value = formatIsoDateTime(selectedEndDate),
                         onValueChange = { selectedEndDate = it },
                         onClick = { showEndDatePicker = true }
                     )
@@ -384,5 +384,15 @@ class EditTaskView(editTaskViewModel: EditTaskViewModel,
                 onDismissRequest = { showNumberPicker = false }
             )
         }
+    }
+}
+@RequiresApi(Build.VERSION_CODES.O)
+fun formatIsoDateTime(dateTime: String): String {
+    return try {
+        val zonedDateTime = java.time.ZonedDateTime.parse(dateTime)
+        val formatter = java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
+        zonedDateTime.format(formatter)
+    } catch (e: Exception) {
+        dateTime
     }
 }
